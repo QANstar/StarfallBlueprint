@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="starfall_blueprint"
+version="0.1.0"
+displayName="星落蓝图 · 基础工业"
+description='''共同原矿、通用晶料与营地整备。基于 RE_BFL 设定的公共基础产线。'''
+[[dependencies.starfall_blueprint]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.262,21.2)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.starfall_blueprint]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"

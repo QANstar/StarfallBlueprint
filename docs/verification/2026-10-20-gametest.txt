@@ -1,0 +1,12 @@
+Actual NeoForge GameTest console excerpt. Java 21 / Minecraft 1.21.1 / NeoForge 21.1.262.
+Command: tools/run_prepared_gametests.ps1 (official prepared bootstrap arguments).
+
+[00:18:02] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.45, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.262, --fml.neoFormVersion, 20240808.144430]
+[00:18:02] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 21.0.12+7-LTS-205
+[00:18:19] [main/INFO] [minecraft/RecipeManager]: Loaded 1301 recipes
+[00:18:19] [main/INFO] [minecraft/AdvancementTree]: Loaded 1406 advancements
+[00:18:19] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server
+[00:18:20] [Server thread/INFO] [minecraft/GameTestServer]: 11 tests are now running at position -6059850, -59, 3727486!
+[00:18:20] [Server thread/INFO] [minecraft/GameTestServer]: ========= 11 GAME TESTS COMPLETE IN 761.6 ms ======================
+[00:18:20] [Server thread/INFO] [minecraft/GameTestServer]: All 11 required tests passed :)
+[00:18:21] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down

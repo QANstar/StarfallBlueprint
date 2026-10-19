@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "id": "starfall_blueprint:efficient_connector"
+    },
+    "title": {
+      "translate": "advancements.starfall_blueprint.connector.title"
+    },
+    "description": {
+      "translate": "advancements.starfall_blueprint.connector.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "obtained": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "starfall_blueprint:efficient_connector"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "starfall_blueprint:crystal"
+}

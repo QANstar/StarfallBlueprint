@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "SCS",
+    "S S"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "S": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+  "result": {
+    "id": "starfall_blueprint:preparation_bench",
+    "count": 1
+  }
+}

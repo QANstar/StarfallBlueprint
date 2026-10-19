@@ -1,0 +1,19 @@
+{
+  "criteria": {
+    "obtained": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:glass"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "starfall_blueprint:water_tank"
+    ]
+  }
+}

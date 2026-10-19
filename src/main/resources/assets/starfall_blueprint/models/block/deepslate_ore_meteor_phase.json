@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "starfall_blueprint:block/deepslate_ore_meteor_phase"
+  }
+}

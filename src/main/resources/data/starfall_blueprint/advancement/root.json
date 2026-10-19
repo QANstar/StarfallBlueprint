@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "id": "starfall_blueprint:raw_meteor_phase"
+    },
+    "title": {
+      "translate": "advancements.starfall_blueprint.root.title"
+    },
+    "description": {
+      "translate": "advancements.starfall_blueprint.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "obtained": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "starfall_blueprint:raw_meteor_phase"
+          }
+        ]
+      }
+    }
+  }
+}

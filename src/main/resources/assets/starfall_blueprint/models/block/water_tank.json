@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "starfall_blueprint:block/water_tank",
+    "top": "starfall_blueprint:block/tank_top",
+    "bottom": "starfall_blueprint:block/tank_top"
+  }
+}

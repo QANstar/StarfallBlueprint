@@ -1,0 +1,11 @@
+.gradle/
+.gradle-home/
+.tools/
+build/
+run/
+runs/
+.idea/
+*.iml
+*.log
+mdk-*
+neoforge-metadata.xml

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "starfall_blueprint:meteor_phase",
+  "step": "underground_ores"
+}

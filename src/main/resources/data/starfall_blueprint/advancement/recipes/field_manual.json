@@ -1,0 +1,19 @@
+{
+  "criteria": {
+    "obtained": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:paper"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "starfall_blueprint:field_manual"
+    ]
+  }
+}

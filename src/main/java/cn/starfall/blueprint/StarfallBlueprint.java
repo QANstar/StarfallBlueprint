@@ -1,0 +1,84 @@
+package cn.starfall.blueprint;
+
+import com.mojang.serialization.Codec;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
+import net.neoforged.neoforge.registries.*;
+
+@Mod(StarfallBlueprint.ID)
+public final class StarfallBlueprint {
+    public static final String ID = "starfall_blueprint";
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ID);
+    public static final DeferredRegister<BlockEntityType<?>> ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, ID);
+    public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, ID);
+    public static final DeferredRegister<net.minecraft.world.item.crafting.RecipeSerializer<?>> RECIPES = DeferredRegister.create(Registries.RECIPE_SERIALIZER, ID);
+    public static final DeferredRegister<DataComponentType<?>> COMPONENTS = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, ID);
+    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ID);
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<MaterialBatch>> BATCH = COMPONENTS.register("material_batch",
+            () -> DataComponentType.<MaterialBatch>builder().persistent(MaterialBatch.CODEC).networkSynchronized(MaterialBatch.STREAM_CODEC).build());
+    public static final DeferredBlock<Block> ORE = BLOCKS.register("ore_meteor_phase", () -> new MeteorOreBlock(BlockBehaviour.Properties.of().strength(3.5f, 3).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<Block> DEEP_ORE = BLOCKS.register("deepslate_ore_meteor_phase", () -> new MeteorOreBlock(BlockBehaviour.Properties.of().strength(4.5f, 3).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<PreparationBlock> PREPARATION = BLOCKS.register("preparation_bench", () -> new PreparationBlock(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops()));
+    public static final DeferredItem<BlockItem> BENCH_ITEM = ITEMS.registerSimpleBlockItem(PREPARATION);
+    public static final DeferredBlock<CampWaterBlock> WATER_TANK = BLOCKS.register("water_tank", () -> new CampWaterBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<CampWaterBlock> RAIN_COLLECTOR = BLOCKS.register("rain_collector", () -> new CampWaterBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops()));
+    public static final DeferredItem<BlockItem> TANK_ITEM = ITEMS.registerSimpleBlockItem(WATER_TANK);
+    public static final DeferredItem<BlockItem> RAIN_ITEM = ITEMS.registerSimpleBlockItem(RAIN_COLLECTOR);
+    public static final DeferredItem<Item> RAW = ITEMS.registerItem("raw_meteor_phase", p -> new MaterialItem(p, MaterialBatch.ore(12, 40)));
+    public static final DeferredItem<Item> CRYSTAL = ITEMS.registerItem("stable_crystal", p -> new MaterialItem(p, MaterialBatch.crystal(38)));
+    public static final DeferredItem<Item> TAILINGS = ITEMS.registerItem("wet_tailings", p -> new MaterialItem(p.stacksTo(16), MaterialBatch.tailings(12)));
+    public static final DeferredItem<Item> CONNECTOR = ITEMS.registerSimpleItem("efficient_connector");
+    public static final DeferredItem<Item> TOOL_BRACE = ITEMS.registerSimpleItem("tool_brace");
+    public static final DeferredItem<Item> SHIELD_LINING = ITEMS.registerSimpleItem("shield_lining");
+    public static final DeferredItem<Item> SCANNER = ITEMS.registerItem("ore_indicator", OreIndicatorItem::new);
+    public static final DeferredItem<Item> GUIDE = ITEMS.registerItem("field_manual", FieldManualItem::new);
+    public static final DeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<RainCollectorRecipe>> RAIN_RECIPE = RECIPES.register("rain_collector", () -> new net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<>(RainCollectorRecipe::new));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> REINFORCED = COMPONENTS.register("reinforced", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
+    public static final java.util.Map<String, DeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<BasicCrystalRecipe>>> BASIC_RECIPES = new java.util.LinkedHashMap<>();
+    static {
+        for (String kind : new String[]{"connector", "indicator", "tool_brace", "shield_lining", "reinforce_tool", "reinforce_shield"}) {
+            BASIC_RECIPES.put(kind, RECIPES.register(kind, () -> new net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<>(category -> new BasicCrystalRecipe(category, kind))));
+        }
+    }
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PreparationBlockEntity>> PREPARATION_ENTITY = ENTITIES.register("preparation_bench",
+            () -> BlockEntityType.Builder.of(PreparationBlockEntity::new, PREPARATION.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CampWaterBlockEntity>> WATER_ENTITY = ENTITIES.register("camp_water",
+            () -> BlockEntityType.Builder.of(CampWaterBlockEntity::new, WATER_TANK.get(), RAIN_COLLECTOR.get()).build(null));
+    public static final DeferredHolder<MenuType<?>, MenuType<PreparationMenu>> PREPARATION_MENU = MENUS.register("preparation_bench",
+            () -> new MenuType<>(PreparationMenu::new, net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS));
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("industry", () -> CreativeModeTab.builder()
+            .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint"))
+            .icon(() -> new ItemStack(CRYSTAL.get())).displayItems((parameters, output) -> {
+                output.accept(GUIDE.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get());
+                for (int grade : new int[]{6,12,24}) {
+                    ItemStack ore = new ItemStack(RAW.get()); ore.set(BATCH.get(), MaterialBatch.ore(grade, 40)); output.accept(ore);
+                }
+                output.accept(CRYSTAL.get()); output.accept(CONNECTOR.get()); output.accept(TOOL_BRACE.get()); output.accept(SHIELD_LINING.get()); output.accept(SCANNER.get()); output.accept(TAILINGS.get());
+            }).build());
+
+    public StarfallBlueprint(IEventBus bus) {
+        BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus);
+        bus.addListener(this::capabilities);
+    }
+    private void capabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PREPARATION_ENTITY.get(), (be, side) -> new SidedInvWrapper(be, side == null ? net.minecraft.core.Direction.UP : side));
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PREPARATION_ENTITY.get(), (be, side) -> be.waterPort());
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, WATER_ENTITY.get(), (be, side) -> be.tank);
+    }
+    public static ResourceLocation id(String path) { return ResourceLocation.fromNamespaceAndPath(ID, path); }
+}

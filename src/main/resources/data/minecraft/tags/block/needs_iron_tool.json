@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "starfall_blueprint:ore_meteor_phase",
+    "starfall_blueprint:deepslate_ore_meteor_phase"
+  ]
+}

@@ -50,6 +50,8 @@ public final class StarfallBlueprint {
     public static final DeferredItem<Item> SCANNER = ITEMS.registerItem("ore_indicator", OreIndicatorItem::new);
     public static final DeferredItem<Item> GUIDE = ITEMS.registerItem("field_manual", FieldManualItem::new);
     public static final DeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<RainCollectorRecipe>> RAIN_RECIPE = RECIPES.register("rain_collector", () -> new net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<>(RainCollectorRecipe::new));
+    public static final DeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<ReinforcedRepairRecipe>> REINFORCED_REPAIR_RECIPE = RECIPES.register("reinforced_repair", () -> new net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<>(ReinforcedRepairRecipe::new));
+    public static final DeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, ReinforcedSmithingRecipe.Serializer> REINFORCED_SMITHING_RECIPE = RECIPES.register("reinforced_smithing", ReinforcedSmithingRecipe.Serializer::new);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> REINFORCED = COMPONENTS.register("reinforced", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final java.util.Map<String, DeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<BasicCrystalRecipe>>> BASIC_RECIPES = new java.util.LinkedHashMap<>();
     static {
@@ -78,6 +80,7 @@ public final class StarfallBlueprint {
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus);
         bus.addListener(this::capabilities);
         NeoForge.EVENT_BUS.addListener(this::bucketInteraction);
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST, ReinforcedRepairHooks::grindstone);
     }
     private void bucketInteraction(PlayerInteractEvent.RightClickBlock event) {
         // Vanilla buckets do not bypass sneak-use, so opt into the bench's documented draw-water action.

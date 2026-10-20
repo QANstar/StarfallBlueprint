@@ -155,6 +155,9 @@ js(DATA/'recipe/water_tank.json',{'type':'minecraft:crafting_shaped','category':
 js(DATA/'recipe/rain_collector.json',{'type':f'{MOD}:rain_collector','category':'misc'})
 for kind in ['connector','indicator','tool_brace','shield_lining','reinforce_tool','reinforce_shield']:
     js(DATA/'recipe'/f'{kind}.json',{'type':f'{MOD}:{kind}','category':'misc'})
+# Replace the two vanilla entries, rather than registering competing matching recipes.
+js(RES/'data/minecraft/recipe/repair_item.json',{'type':f'{MOD}:reinforced_repair','category':'misc'})
+js(RES/'data/minecraft/recipe/netherite_pickaxe_smithing.json',{'type':f'{MOD}:reinforced_smithing'})
 for path in ['mineable/pickaxe','needs_iron_tool']:
     js(RES/'data/minecraft/tags/block'/f'{path}.json',{'replace':False,'values':[f'{MOD}:ore_meteor_phase',f'{MOD}:deepslate_ore_meteor_phase']+([f'{MOD}:preparation_bench',f'{MOD}:water_tank',f'{MOD}:rain_collector'] if path=='mineable/pickaxe' else [])})
 js(DATA/'worldgen/configured_feature/meteor_phase.json',{'type':'minecraft:ore','config':{'size':4,'discard_chance_on_air_exposure':0.5,'targets':[

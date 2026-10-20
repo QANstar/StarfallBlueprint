@@ -1,0 +1,69 @@
+StarfallBlueprint 0.1.0 — reinforcement repair and smithing verification
+Date: 2026-10-20, Asia/Shanghai (UTC+08:00)
+Environment: Windows 11, Java 21.0.12.1, Minecraft 1.21.1, NeoForge 21.1.262
+
+Command executed by the main agent from the development repository:
+  gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+  JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+  GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+  JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+Exit code: 0
+
+The ignored local init script/hosts file reuse the already prepared dependency cache.
+Default project dependency URLs were not modified. Client assets were skipped for this
+headless server test; client rendering, multiplayer and process restart are not certified.
+
+Actual Gradle/server log excerpts (intermediate progress lines omitted):
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :assemble
+> Task :build
+> Task :runGameTestServer
+[13:28:35] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 21.0.12.1+1-LTS-4
+[13:28:43] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.262, for MC 1.21.1
+[13:28:43] [main/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: [starfall_blueprint]
+[13:28:44] [main/INFO] [minecraft/RecipeManager]: Loaded 1301 recipes
+[13:28:44] [main/INFO] [minecraft/AdvancementTree]: Loaded 1406 advancements
+[13:28:46] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (31 tests)...
+[13:28:46] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++]
+[13:28:46] [Server thread/INFO] [minecraft/GameTestServer]: ========= 31 GAME TESTS COMPLETE IN 1.206 s ======================
+[13:28:46] [Server thread/INFO] [minecraft/GameTestServer]: All 31 required tests passed :)
+[13:28:46] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[13:28:47] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+BUILD SUCCESSFUL in 21s
+7 actionable tasks: 4 executed, 3 up-to-date
+
+Nonfatal environment log also recorded:
+[13:28:43] [Yggdrasil Key Fetcher/ERROR] [mojang/YggdrasilServicesKeyInfo]: Failed to request yggdrasil public key
+Caused by: java.net.UnknownHostException: api.minecraftservices.com
+This does not gate the headless GameTest server; all required tests completed and the process exited 0.
+
+New required tests, all included in the 31-test server run above:
+  grindstoneDoubleRepairPreservesUpgradeInEitherSlot
+    48 scenarios: iron pickaxe/shield x 4 reinforcement orders x 6 curse arrangements.
+    Checks nonzero repaired damage, larger maximum, either input's upgrade, top-slot name,
+    ordinary enchantment removal, top curse-level priority, distinct curse repair cost,
+    preview immutability, exact input consumption and repeated-upgrade refusal.
+  anvilDoubleRepairKeepsLeftTargetSemantics
+    8 scenarios: iron pickaxe/shield x 4 reinforcement orders.
+    Checks the left target's maximum/upgrade, absolute remaining durability plus 12%,
+    names, Unbreaking merging, displayed experience charge and exact consumption.
+  craftingDoubleRepairKeepsUpgradeAndVanillaCurseRules
+    8 scenarios: iron pickaxe/shield x 4 reinforcement orders.
+    Uses actual CraftingMenu recipe lookup and take; checks larger maximum, 5% bonus,
+    marker retention, name/ordinary enchantment removal, curse retention, no preview
+    consumption, exact input consumption, repeated-upgrade refusal and extra-input rejection.
+  smithingReinforcedDiamondPickUsesNetheriteBase
+    Actual SmithingMenu: diamond maximum 1873/damage 120 becomes netherite 2437/157.
+    Checks retained name/enchantments/curse/upgrade, missing/wrong ingredient rejection,
+    immutable preview and one template/base/ingot consumed.
+  smithingOrdinaryDiamondPickRemainsVanilla
+    Ordinary diamond remains vanilla: netherite maximum 2031/damage 100, no upgrade flag.
+
+The previous 26 required tests (including Fortune, water, hoppers and saved batches)
+were rerun unchanged in the same successful server run.
+
+Separate static resource verification:
+  PASS: 47 JSON files, all PNGs and local model/texture links.

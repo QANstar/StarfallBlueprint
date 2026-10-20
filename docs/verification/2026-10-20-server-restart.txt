@@ -1,0 +1,53 @@
+2026-10-20 StarfallBlueprint 0.1.0 / Minecraft1.21.1 / NeoForge21.1.262
+Java: C:\Program Files\Java\jdk-21.0.12.1\bin\java.exe (21.0.12.1)
+Gradle: 8.14.3, ModDevGradle2.0.148
+Artifact: build/libs/starfall_blueprint-0.1.0.jar (166198 bytes)
+SHA256: 380DCB834BA9556B13CC725BD16CB07B1AEBA3A570A907D4CADF1CCB9D80BE30
+Scope follows user correction: no separate tutorial course, enrollment, free package, or course SavedData.
+JAR inspected: no PublicResearch classes or course localization; independent terminal/ledger/runtime probe included.
+
+Command (PowerShell, repository root, after the build above):
+python tools/verify_server_restart.py --java 'C:\Program Files\Java\jdk-21.0.12.1\bin\java.exe'
+Parent tool exit code: 0. Each of the two child Java processes exited 0.
+Tool uses official prepared VM/program arguments and BootstrapLauncher, with neoforge.gameTestServer=false and neoforge.enableGameTest=false.
+This is a real dedicated server, not a GameTestServer or a serialized clone in one JVM.
+The isolated world was generated in run/restart-verification-1792484353139319500. Existing player saves were not touched.
+Bind address 127.0.0.1, ephemeral port, offline verification fixture; no remote player login.
+Probe explicitly enabled only by -Dstarfall.verifyRestart=prepare|verify; ordinary mod execution has no probe listener.
+
+Prepare process:
+- A normal G12/I30 ore with one connector, 1000mB water and 320000XH runs 73 actual processing ticks.
+- Reserved ore consumed once; progress73, energy306860, water750; pending ten I28 crystals and one composition-correct tailings, locked 180XH/t budget.
+- Output blocked with stone64 to prevent incidental real world ticks from advancing it.
+- A real ledger settles three Q0-for-iron exchanges, leaving one shared daily trade.
+- World daylight disabled at dayTime6000 to isolate same-day stock behavior.
+- Normal server saveEverything and graceful halt flush chunk and SavedData to disk; process exits.
+
+Verify process, launched after prepare exits into that exact same world directory:
+- Does not inject, deserialize, or replace a new ledger/machine fixture.
+- Loads existing chunk; validates saved progress, exact pending outputs/components, consumed input, water, energy, connector, and world date.
+- Reads SavedData with one remaining trade; one succeeds, next rejects without consuming a sample.
+- Clears output blockage and runs remaining127 processing ticks: ten I28 crystals and exactly one tailings, water750, energy284000, progress0.
+- Further20 idle ticks do not duplicate outputs or spend energy/water.
+- Normal save and graceful shutdown, process exits0.
+
+Bounds: proves the specified machine/reservation/ledger/world-time persistence across real JVM restarts.
+Does not prove all device types, player inventory/death persistence, abrupt crash recovery, remote multiplayer, client rendering, story NPC runtime, or pressure behavior.
+Existing nonfatal api.minecraftservices.com public-key DNS warnings do not affect these server assertions.
+
+Exact child-process console excerpts:
+
+prepare.log:
+[16:19:22] [Server thread/INFO] [minecraft/DedicatedServer]: Starting minecraft server version 1.21.1
+STARFALL_RESTART_STATE prepare progress=73 energy=306860 water=750 pendingCrystals=10 integrity=28 tradesRemaining=1
+[16:19:23] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+STARFALL_RESTART_PREPARED
+[16:19:23] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[16:19:23] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+verify.log:
+[16:19:33] [Server thread/INFO] [minecraft/DedicatedServer]: Starting minecraft server version 1.21.1
+STARFALL_RESTART_STATE verify progress=0 energy=284000 water=750 crystals=10 integrity=28 tailings=1 tradesRemaining=0
+[16:19:34] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+STARFALL_RESTART_VERIFIED
+[16:19:34] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[16:19:34] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved

@@ -36,5 +36,11 @@
   "item.starfall_blueprint.tool_brace": "工具加固扣",
   "item.starfall_blueprint.shield_lining": "盾面衬片",
   "item.starfall_blueprint.ore_indicator": "近距寻矿指示片",
-  "item.starfall_blueprint.field_manual": "营地工务手册"
+  "item.starfall_blueprint.field_manual": "营地工务手册",
+  "block.starfall_blueprint.supply_terminal": "安置点供应终端",
+  "message.starfall_blueprint.supply.help": "持Q0晶料交付研究，每份换1铁锭；空手查看今日剩余。全世界同一工匠今日剩余%s笔。",
+  "message.starfall_blueprint.supply.success": "交付完成。",
+  "message.starfall_blueprint.supply.inventory_full": "背包空间不足，物料和额度均未扣除。",
+  "message.starfall_blueprint.supply.invalid_sample": "研究只接收每份10M、通用路线、完整度至少I20且无污染的Q0晶料。",
+  "message.starfall_blueprint.supply.sold_out": "这位工匠今日4笔已收满；所有终端共享额度。"
 }

@@ -1,0 +1,36 @@
+2026-10-20 StarfallBlueprint 0.1.0 / Minecraft1.21.1 / NeoForge21.1.262
+Java: C:\Program Files\Java\jdk-21.0.12.1\bin\java.exe (21.0.12.1)
+Gradle: 8.14.3, ModDevGradle2.0.148
+Artifact: build/libs/starfall_blueprint-0.1.0.jar (166198 bytes)
+SHA256: 380DCB834BA9556B13CC725BD16CB07B1AEBA3A570A907D4CADF1CCB9D80BE30
+Scope follows user correction: no separate tutorial course, enrollment, free package, or course SavedData.
+JAR inspected: no PublicResearch classes or course localization; independent terminal/ledger/runtime probe included.
+
+Command (PowerShell, repository root):
+$env:JAVA_HOME='C:\Program Files\Java\jdk-21.0.12.1'
+$env:GRADLE_USER_HOME='D:\Code\Workspace\.gradle'
+$env:JAVA_TOOL_OPTIONS='-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts'
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+Exit code: 0
+Local mirror/hosts are ignored build-environment helpers, preserve TLS, and do not edit system hosts or project repositories.
+Client assets skipped; server runtime and official prepared artifacts used.
+
+New SupplyGameTests (3), plus all 39 earlier tests:
+- emptyHandAndManualOnlyDescribeStock: actual survival right-click with empty hand/manual is read-only; no free materials or trade consumed.
+- isolatedLedgerRejectsBadSamplesAndCommitsOnlyWholeRewards: missing composition, C>0, low I and non-common route rejected; full inventory has no partial commit; final main-hand sample frees reward slot; offhand reward merges into normal storage.
+- realTerminalsShareStockAcrossPlayersAndWorldDates: two survival FakePlayers, two actual terminals, four total trades; fifth click preserves inventory; exact day boundary, saved partial stock, clock rollback, skipped days, and ordinary hand isolation.
+Inventory comparisons include item components. Only full, validated Q0 samples settle one iron each.
+The supplied world account is restored after the test; tests do not masquerade as networked clients.
+
+Static validation: tools/verify_resources.py PASS: 51 JSON files, all PNGs and local model/texture links.
+Nonfatal existing warnings: deprecated NeoForge EventBusSubscriber API; Yggdrasil public-key UnknownHostException for api.minecraftservices.com. Runtime and required tests still passed.
+No client or pressure testing performed, per user instruction. Storyline NPCs/tasks are not yet implemented.
+
+Exact console excerpts:
+[16:19:10] [Server thread/INFO] [minecraft/GameTestServer]: 42 tests are now running at position -10641596, -59, -5048332!
+[16:19:11] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'public_supply:0' (3 tests)...
+[16:19:11] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'ore_indicator:0' (3 tests)...
+[16:19:11] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (36 tests)...
+[16:19:12] [Server thread/INFO] [minecraft/GameTestServer]: ========= 42 GAME TESTS COMPLETE IN 1.238 s ======================
+[16:19:12] [Server thread/INFO] [minecraft/GameTestServer]: All 42 required tests passed :)
+BUILD SUCCESSFUL in 20s

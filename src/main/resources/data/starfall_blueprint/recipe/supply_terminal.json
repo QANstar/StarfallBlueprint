@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " P ",
+    "SSS",
+    " S "
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "S": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+  "result": {
+    "id": "starfall_blueprint:supply_terminal",
+    "count": 1
+  }
+}

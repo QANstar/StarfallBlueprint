@@ -43,7 +43,10 @@ public final class PreparationBlock extends BaseEntityBlock {
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         if (stack.is(StarfallBlueprint.CONNECTOR.get()) && be.getItem(4).isEmpty()) {
-            if (!level.isClientSide) { be.setItem(4, stack.copyWithCount(1)); if (!player.isCreative()) stack.shrink(1); }
+            if (!level.isClientSide) {
+                be.setItem(4, stack.copyWithCount(1));
+                if (!player.isCreative()) stack.shrink(1);
+            }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

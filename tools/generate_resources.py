@@ -11,7 +11,7 @@ DATA = RES / 'data' / MOD
 
 def js(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
 
 def save(image, path):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -45,6 +45,7 @@ im=machine_face('top');d=ImageDraw.Draw(im);d.rectangle((3,3,12,12),fill='#485c6
 im=Image.new('RGBA',(16,16),'#79634e');d=ImageDraw.Draw(im)
 for y in [1,5,9,13]:d.line((0,y,15,y),fill='#493e36')
 d.rectangle((0,0,15,1),fill='#b4b9a8');d.rectangle((0,14,15,15),fill='#a7b8b3');textures['rain_collector']=im
+im=machine_face('front');d=ImageDraw.Draw(im);d.rectangle((3,3,12,11),fill='#b9c3aa',outline='#273d40');d.line((5,5,10,5),fill='#3a6863');d.line((5,7,10,7),fill='#3a6863');d.rectangle((7,12,9,14),fill='#d3a56c');textures['supply_terminal']=im
 for deep in [False,True]:
     im = Image.new('RGBA',(16,16)); d=ImageDraw.Draw(im); rng=random.Random(43)
     for y in range(16):
@@ -105,7 +106,8 @@ js(ART/'models/block/water_tank.json',{'parent':'minecraft:block/cube_bottom_top
 def box(start,end,texture):return {'from':start,'to':end,'faces':{side:{'texture':texture} for side in ['north','south','east','west','up','down']}}
 js(ART/'models/block/rain_collector.json',{'parent':'minecraft:block/block','textures':{'wood':f'{MOD}:block/rain_collector','metal':f'{MOD}:block/tank_top','particle':f'{MOD}:block/rain_collector'},'elements':[
     box([3,0,3],[13,4,13],'#metal'),box([1,4,1],[15,5,15],'#metal'),box([0,4,0],[16,14,2],'#wood'),box([0,4,14],[16,14,16],'#wood'),box([0,4,2],[2,14,14],'#wood'),box([14,4,2],[16,14,14],'#wood')]})
-for n in ['water_tank','rain_collector']:
+js(ART/'models/block/supply_terminal.json',{'parent':'minecraft:block/cube_all','textures':{'all':f'{MOD}:block/supply_terminal'}})
+for n in ['water_tank','rain_collector','supply_terminal']:
     js(ART/'blockstates'/f'{n}.json',{'variants':{'':{'model':f'{MOD}:block/{n}'}}})
     js(ART/'models/item'/f'{n}.json',{'parent':f'{MOD}:block/{n}'})
 
@@ -146,6 +148,22 @@ en.update({'itemGroup.starfall_blueprint':'Starfall Blueprint · Basic Industry'
 'gui.starfall_blueprint.ore':'Ore','gui.starfall_blueprint.fuel':'Fuel','gui.starfall_blueprint.product':'Crystal','gui.starfall_blueprint.tail':'Tail',
 'gui.starfall_blueprint.state.0':'Ready / batch complete','gui.starfall_blueprint.state.1':'Processing / PC-R01','gui.starfall_blueprint.state.2':'Idle: insert raw ore','gui.starfall_blueprint.state.3':'Water: use water bucket','gui.starfall_blueprint.state.4':'Energy: add coal / charcoal','gui.starfall_blueprint.state.5':'Output blocked','gui.starfall_blueprint.state.6':'Invalid raw ore quality',
 'advancements.starfall_blueprint.root.title':'Starfall Blueprint','advancements.starfall_blueprint.root.description':'Build a camp with common raw ore','advancements.starfall_blueprint.crystal.title':'First Common Crystal','advancements.starfall_blueprint.crystal.description':'Process ore with fuel and water','advancements.starfall_blueprint.connector.title':'Every Starbalance Counts','advancements.starfall_blueprint.connector.description':'Craft and install a connector to save 10% processing energy'})
+zh.update({
+ 'block.starfall_blueprint.supply_terminal':'安置点供应终端',
+ 'message.starfall_blueprint.supply.help':'持Q0晶料交付研究，每份换1铁锭；空手查看今日剩余。全世界同一工匠今日剩余%s笔。',
+ 'message.starfall_blueprint.supply.success':'交付完成。',
+ 'message.starfall_blueprint.supply.inventory_full':'背包空间不足，物料和额度均未扣除。',
+ 'message.starfall_blueprint.supply.invalid_sample':'研究只接收每份10M、通用路线、完整度至少I20且无污染的Q0晶料。',
+ 'message.starfall_blueprint.supply.sold_out':'这位工匠今日4笔已收满；所有终端共享额度。',
+})
+en.update({
+ 'block.starfall_blueprint.supply_terminal':'Settlement Supply Terminal',
+ 'message.starfall_blueprint.supply.help':'Exchange one Q0 crystal for one iron ingot, or use an empty hand to view stock. Shared craftsman trades remaining today: %s.',
+ 'message.starfall_blueprint.supply.success':'Delivery complete.',
+ 'message.starfall_blueprint.supply.inventory_full':'Inventory full. No materials or allowance consumed.',
+ 'message.starfall_blueprint.supply.invalid_sample':'Research needs one 10M common-route Q0 crystal: integrity at least 20, with no contamination.',
+ 'message.starfall_blueprint.supply.sold_out':'This craftsman has accepted all four daily samples. Every terminal shares this allowance.',
+})
 js(ART/'lang/zh_cn.json',zh);js(ART/'lang/en_us.json',en)
 
 def ingredient(item): return {'item':item if ':' in item else f'{MOD}:{item}'}
@@ -153,13 +171,14 @@ js(DATA/'recipe/preparation_bench.json',{'type':'minecraft:crafting_shaped','cat
 js(DATA/'recipe/field_manual.json',{'type':'minecraft:crafting_shapeless','category':'misc','ingredients':[ingredient('minecraft:paper'),ingredient('minecraft:cobblestone')],'result':{'id':f'{MOD}:field_manual','count':1}})
 js(DATA/'recipe/water_tank.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':[' G ','GIG',' G '],'key':{'G':ingredient('minecraft:glass'),'I':ingredient('minecraft:iron_ingot')},'result':{'id':f'{MOD}:water_tank','count':1}})
 js(DATA/'recipe/rain_collector.json',{'type':f'{MOD}:rain_collector','category':'misc'})
+js(DATA/'recipe/supply_terminal.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':[' P ','SSS',' S '],'key':{'P':ingredient('minecraft:paper'),'S':ingredient('minecraft:cobblestone')},'result':{'id':f'{MOD}:supply_terminal','count':1}})
 for kind in ['connector','indicator','tool_brace','shield_lining','reinforce_tool','reinforce_shield']:
     js(DATA/'recipe'/f'{kind}.json',{'type':f'{MOD}:{kind}','category':'misc'})
 # Replace the two vanilla entries, rather than registering competing matching recipes.
 js(RES/'data/minecraft/recipe/repair_item.json',{'type':f'{MOD}:reinforced_repair','category':'misc'})
 js(RES/'data/minecraft/recipe/netherite_pickaxe_smithing.json',{'type':f'{MOD}:reinforced_smithing'})
 for path in ['mineable/pickaxe','needs_iron_tool']:
-    js(RES/'data/minecraft/tags/block'/f'{path}.json',{'replace':False,'values':[f'{MOD}:ore_meteor_phase',f'{MOD}:deepslate_ore_meteor_phase']+([f'{MOD}:preparation_bench',f'{MOD}:water_tank',f'{MOD}:rain_collector'] if path=='mineable/pickaxe' else [])})
+    js(RES/'data/minecraft/tags/block'/f'{path}.json',{'replace':False,'values':[f'{MOD}:ore_meteor_phase',f'{MOD}:deepslate_ore_meteor_phase']+([f'{MOD}:preparation_bench',f'{MOD}:water_tank',f'{MOD}:rain_collector',f'{MOD}:supply_terminal'] if path=='mineable/pickaxe' else [])})
 js(DATA/'worldgen/configured_feature/meteor_phase.json',{'type':'minecraft:ore','config':{'size':4,'discard_chance_on_air_exposure':0.5,'targets':[
     {'target':{'predicate_type':'minecraft:tag_match','tag':'minecraft:stone_ore_replaceables'},'state':{'Name':f'{MOD}:ore_meteor_phase'}},
     {'target':{'predicate_type':'minecraft:tag_match','tag':'minecraft:deepslate_ore_replaceables'},'state':{'Name':f'{MOD}:deepslate_ore_meteor_phase'}}]}})

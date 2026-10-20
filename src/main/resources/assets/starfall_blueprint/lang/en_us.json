@@ -36,5 +36,11 @@
   "item.starfall_blueprint.tool_brace": "Tool Brace",
   "item.starfall_blueprint.shield_lining": "Shield Lining",
   "item.starfall_blueprint.ore_indicator": "Nearby Ore Indicator",
-  "item.starfall_blueprint.field_manual": "Camp Field Manual"
+  "item.starfall_blueprint.field_manual": "Camp Field Manual",
+  "block.starfall_blueprint.supply_terminal": "Settlement Supply Terminal",
+  "message.starfall_blueprint.supply.help": "Exchange one Q0 crystal for one iron ingot, or use an empty hand to view stock. Shared craftsman trades remaining today: %s.",
+  "message.starfall_blueprint.supply.success": "Delivery complete.",
+  "message.starfall_blueprint.supply.inventory_full": "Inventory full. No materials or allowance consumed.",
+  "message.starfall_blueprint.supply.invalid_sample": "Research needs one 10M common-route Q0 crystal: integrity at least 20, with no contamination.",
+  "message.starfall_blueprint.supply.sold_out": "This craftsman has accepted all four daily samples. Every terminal shares this allowance."
 }

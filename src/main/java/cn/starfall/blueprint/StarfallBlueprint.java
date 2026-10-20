@@ -41,6 +41,8 @@ public final class StarfallBlueprint {
     public static final DeferredBlock<CampWaterBlock> RAIN_COLLECTOR = BLOCKS.register("rain_collector", () -> new CampWaterBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops()));
     public static final DeferredItem<BlockItem> TANK_ITEM = ITEMS.registerSimpleBlockItem(WATER_TANK);
     public static final DeferredItem<BlockItem> RAIN_ITEM = ITEMS.registerSimpleBlockItem(RAIN_COLLECTOR);
+    public static final DeferredBlock<SupplyTerminalBlock> SUPPLY_TERMINAL = BLOCKS.register("supply_terminal", () -> new SupplyTerminalBlock(BlockBehaviour.Properties.of().strength(2f)));
+    public static final DeferredItem<BlockItem> SUPPLY_TERMINAL_ITEM = ITEMS.registerSimpleBlockItem(SUPPLY_TERMINAL);
     public static final DeferredItem<Item> RAW = ITEMS.registerItem("raw_meteor_phase", p -> new MaterialItem(p, MaterialBatch.ore(12, 40)));
     public static final DeferredItem<Item> CRYSTAL = ITEMS.registerItem("stable_crystal", p -> new MaterialItem(p, MaterialBatch.crystal(38)));
     public static final DeferredItem<Item> TAILINGS = ITEMS.registerItem("wet_tailings", p -> new MaterialItem(p.stacksTo(16), MaterialBatch.tailings(12)));
@@ -69,7 +71,7 @@ public final class StarfallBlueprint {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("industry", () -> CreativeModeTab.builder()
             .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint"))
             .icon(() -> new ItemStack(CRYSTAL.get())).displayItems((parameters, output) -> {
-                output.accept(GUIDE.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get());
+                output.accept(GUIDE.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get()); output.accept(SUPPLY_TERMINAL_ITEM.get());
                 for (int grade : new int[]{6,12,24}) {
                     ItemStack ore = new ItemStack(RAW.get()); ore.set(BATCH.get(), MaterialBatch.ore(grade, 40)); output.accept(ore);
                 }
@@ -80,6 +82,8 @@ public final class StarfallBlueprint {
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus);
         bus.addListener(this::capabilities);
         NeoForge.EVENT_BUS.addListener(this::bucketInteraction);
+        if (System.getProperty("starfall.verifyRestart") != null)
+            cn.starfall.blueprint.test.RestartVerification.register(NeoForge.EVENT_BUS);
         NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST, ReinforcedRepairHooks::grindstone);
     }
     private void bucketInteraction(PlayerInteractEvent.RightClickBlock event) {

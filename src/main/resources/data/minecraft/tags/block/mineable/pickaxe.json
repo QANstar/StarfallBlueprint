@@ -5,6 +5,7 @@
     "starfall_blueprint:deepslate_ore_meteor_phase",
     "starfall_blueprint:preparation_bench",
     "starfall_blueprint:water_tank",
-    "starfall_blueprint:rain_collector"
+    "starfall_blueprint:rain_collector",
+    "starfall_blueprint:supply_terminal"
   ]
 }

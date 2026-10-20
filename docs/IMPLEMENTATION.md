@@ -145,3 +145,17 @@ CB-04仍只扫描以玩家所在方块为中心、半径8格的闭球，先检�
 | fullViewerInventoryLeavesProductsForOtherViewer | 满背包快速取料无消耗，另一人可完整取走10份晶料和1份尾砂 |
 
 `build runGameTestServer -x downloadAssets`在本机离线依赖缓存中成功执行；14:15:45报告`All 39 required tests passed :)`，构建29秒，退出码0。原31项一同回归通过；47份JSON、全部PNG与资源引用校验通过。见[寻矿与共享菜单测试证据](verification/2026-10-20-shared-scan-gametest.txt)。这些测试覆盖服务端逻辑与交错菜单结算，不代替双客户端网络同步、客户端提示渲染、多人压力、常规独服与完整进程重启验收。
+
+## 剧情导向与独立工务交易（2026-10-20，42/42与独立重启通过）
+
+后续实现依照[战争责任与主线剧情](../../RE_BFL/02_时间线和剧情设定/02_战争责任与主线剧情.md)与[任务与支线索引](../../RE_BFL/02_时间线和剧情设定/03_任务与支线索引.md)：MAIN-00折桥救援→MAIN-01白灯安置→本星调查。加工与技术是剧情中实际修复、供水、照明和运输行动的工具；不新增平行教学/练习清单、手册入课或免费包。手册仅作可选配方参考，不是强制剧情步骤。剧情NPC与任务运行时尚未实现，不能把设计顺序记为可玩成果。
+
+`SupplyTerminalBlock`是生存可合成方块，不生成NPC实体。原版`minecraft:crafting_shaped`配方为`[" P ", "SSS", " S "]`，P纸、S圆石，共1纸4圆石。独立CB-05每份Q0晶料换1铁锭，无研究门槛；按实际交互手扣样，不重复处理副手。空手、手册和其他非交易交互不送物资。
+
+`isQ0`精确条件为：`material=meteor_phase`、`dryMilliM=10000`、`9000 <= phaseMilliM <= dryMilliM`、`integrity >= 20`、`contamination=0`、`route=common`、`form=granules`。高完整度合格料可用，低于门槛、污染、错形态/路线或缺组件的同ID晶料均不放行。
+
+`SupplyLedger`存于主世界SavedData，全世界所有玩家、终端、维度共享每天4笔；日期为主世界`floor(max(0, dayTime)/24000)`。只有新日期严格大于已记录日期才重置，回拨、返回已见日期、保存重载或重启不额外刷新；跳日不累计未用额度。交易先在背包副本模拟扣一份晶料，再向普通背包放铁，全部成功才提交并扣额度；失败保留材料与额度。主手最后一份耗尽腾出的普通背包槽可接铁；副手槽腾空不能用于收铁，奖励不进入护甲或副手槽。
+
+本轮独立交易版本完成构建与真实服务端42/42回归：16:19:12报告`All 42 required tests passed :)`，测试耗时1.238秒，`BUILD SUCCESSFUL`耗时20秒、退出码0。原39项加3项SupplyGameTests，分别覆盖非交易终端空手/手册仅读不送物、Q0品质与背包事务、真实跨终端/玩家日期共享；51份JSON、全部PNG与资源引用校验通过。见[工务交易回归](verification/2026-10-20-public-supply-gametest.txt)。历史11/23/26/31/39项记录保留；客户端与多人压力按用户要求暂缓。
+
+独立重启探针由`tools/verify_server_restart.py`启动同一隔离世界的两个真实JVM，`test/RestartVerification`仅在`starfall.verifyRestart=prepare/verify`显式属性启用。本轮在`run/restart-verification-1792484353139319500`实跑通过，两进程均正常保存关闭、成功标记齐全、退出码0：普通G12/I30原矿批次在进度73刻、306860XH、750mB水、剩余1笔交易时保存；第二JVM恢复后再运行127刻，得到284000XH、750mB水、10份I28晶料和1份尾砂。最后一笔额度仅结算一次，随后交易拒绝，空转20刻不复制产物。该探针验证机器批次与交易SavedData持久化、重启不补额度和产物不重复结算，不含课程、领取或收益归属；不扩大为所有机器、网络同步、真实玩家库存或死亡场景全覆盖。见[真实重启证据](verification/2026-10-20-server-restart.txt)。

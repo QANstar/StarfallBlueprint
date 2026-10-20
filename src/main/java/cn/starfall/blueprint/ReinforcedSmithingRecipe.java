@@ -40,7 +40,18 @@ public final class ReinforcedSmithingRecipe extends SmithingTransformRecipe {
     public static final class Serializer implements RecipeSerializer<ReinforcedSmithingRecipe> {
         private static final MapCodec<ReinforcedSmithingRecipe> CODEC = MapCodec.unit(ReinforcedSmithingRecipe::new);
         private static final StreamCodec<RegistryFriendlyByteBuf, ReinforcedSmithingRecipe> STREAM_CODEC =
-                StreamCodec.unit(new ReinforcedSmithingRecipe());
+                new StreamCodec<>() {
+                    @Override
+                    public ReinforcedSmithingRecipe decode(RegistryFriendlyByteBuf buffer) {
+                        return new ReinforcedSmithingRecipe();
+                    }
+
+                    @Override
+                    public void encode(RegistryFriendlyByteBuf buffer, ReinforcedSmithingRecipe recipe) {
+                        // This fixed recipe has no payload. Data-pack loading creates independent instances,
+                        // so StreamCodec.unit would incorrectly require object identity during login sync.
+                    }
+                };
 
         @Override
         public MapCodec<ReinforcedSmithingRecipe> codec() {

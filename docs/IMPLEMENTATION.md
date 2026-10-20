@@ -124,3 +124,24 @@ Minecraft 1.21.1、NeoForge 21.1.262、ModDevGradle 2.0.148、Gradle 8.14.3、Ja
 常压罐与集雨器都以同一水方块实体保存4000mB库存，仅接受普通水。新造空罐不送水，带水罐升级继承真实`BLOCK_ENTITY_DATA`。桶交互以1000mB为整桶单位；存档和掉落打包实际水量。
 
 集雨器逐刻用`Level.isRainingAt`检查真实雨、天空、遮挡与生物群系，每刻5mB；不离线补算。每20刻向正下方普通水接口提供至多100mB，仅扣除对方实际接收量；满仓保留原水。该出口是本地重力供水，不冒充尚未实现的共享流体管网。
+
+## 寻矿与共享菜单回归（2026-10-20，39/39通过）
+
+CB-04仍只扫描以玩家所在方块为中心、半径8格的闭球，先检查区块已加载再读方块，只反馈有无信号。抽出同一生产扫描函数用于精确球形和加载谓词验证；真实服务端另在已加载/未加载区块边缘执行扫描，确认相邻区块仍未加载、已加载区块数不增加。普通/深层矿均可检测，消息没有坐标、品位、参数或附加悬浮内容。
+
+原版`ServerPlayerGameMode.useItem`本来就拦截冷却中的正常使用；本轮为`OreIndicatorItem.use`本身补上同一检查，使直接调用也不能重复扫描或重置冷却。主副手共用40刻冷却，前39刻反复尝试被拒，第40刻可用。`useItemOn`默认不扫描，后续独立`useItem`入口才扫描；不消耗或损坏指示片。
+
+共享菜单测试使用两个生存FakePlayer、同一整备台的两个真实`PreparationMenu`，交错调用原版`clicked`处理。覆盖同时尝试取同一产物、右键分取后关闭界面返还光标、满背包/仅剩2份容量，以及竞争安装/移除单件接头。成品与尾砂数量及品质组件守恒，接头拆除不重算已锁定的36kXH批次，下一批恢复40kXH。本轮未发现需要修改整备台生产或菜单逻辑的问题。
+
+| 新增用例 | 验证内容 |
+| --- | --- |
+| scanPredicateUsesSphereAndNeverReadsUnloadedPositions | 精确半径8格闭球；(8,0,0)包含、(6,6,0)排除；不可用位置不会进入方块读取谓词 |
+| realServerUseChecksBothHandsMessagesAndFortyTickCooldown | 主副手、40刻冷却、直接调用守卫、普通/深层/无矿、方块使用后独立物品使用、消息与物品守恒 |
+| realServerScanAtLoadedChunkEdgeDoesNotLoadNeighbor | 在准备区已加载边缘真实使用，邻区仍未加载且已加载区块数不增加 |
+| twoMenusQuickMoveSettlesEachOutputOnce | 两个菜单交错快速取晶料/尾砂，只有先处理者获得对应产物，空转不重复结算 |
+| twoMenusSplitPickupAndCloseConservesOutput | 10份晶料各取5份，关闭界面各返还5份，再次关闭不重复返还 |
+| twoMenusConnectorChangesKeepReservedBatchBudget | 两人竞争安装仅占1件，另一人拆除；本批36k、下批40k，4件接头总量守恒 |
+| partialViewerCapacityLeavesExactRemainder | 原有62份只接收2份，机器剩8份由另一人取走，合计72份 |
+| fullViewerInventoryLeavesProductsForOtherViewer | 满背包快速取料无消耗，另一人可完整取走10份晶料和1份尾砂 |
+
+`build runGameTestServer -x downloadAssets`在本机离线依赖缓存中成功执行；14:15:45报告`All 39 required tests passed :)`，构建29秒，退出码0。原31项一同回归通过；47份JSON、全部PNG与资源引用校验通过。见[寻矿与共享菜单测试证据](verification/2026-10-20-shared-scan-gametest.txt)。这些测试覆盖服务端逻辑与交错菜单结算，不代替双客户端网络同步、客户端提示渲染、多人压力、常规独服与完整进程重启验收。

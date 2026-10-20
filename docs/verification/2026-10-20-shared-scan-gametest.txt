@@ -1,0 +1,94 @@
+StarfallBlueprint 0.1.0 — ore indicator and shared preparation-menu verification
+Date: 2026-10-20, Asia/Shanghai (UTC+08:00)
+Environment: Windows 11, Java 21.0.12.1, Minecraft 1.21.1, NeoForge 21.1.262
+Base commit: 65b3a58 + local ore-indicator/shared-menu changes
+
+Command executed from the development repository:
+  gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+  JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+  GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+  JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+Exit code: 0
+
+The ignored init script and hosts file reuse the prepared local dependency cache.
+Project default dependency URLs were not changed. Client assets were skipped for
+this headless GameTest server. No real clients or external multiplayer sessions ran.
+
+Actual final-run Gradle/server log excerpts (intermediate progress lines omitted):
+> Task :compileJava
+> Task :processResources UP-TO-DATE
+> Task :classes
+> Task :jar
+> Task :assemble
+> Task :build
+> Task :runGameTestServer
+[14:15:43] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'ore_indicator:0' (3 tests)...
+[14:15:44] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (36 tests)...
+[14:15:45] [Server thread/INFO] [minecraft/GameTestServer]: ========= 39 GAME TESTS COMPLETE IN 2.233 s ======================
+[14:15:45] [Server thread/INFO] [minecraft/GameTestServer]: All 39 required tests passed :)
+BUILD SUCCESSFUL in 29s
+
+Final build/libs/starfall_blueprint-0.1.0.jar SHA256:
+A118DED3E37E1B5EF4D867456411A7D0E814FC0055A6B243D0921D77B52C1260
+
+New required tests included in the final 39-test run:
+  scanPredicateUsesSphereAndNeverReadsUnloadedPositions
+    Uses the production scan helper with exact predicates. Compares every queried
+    lattice position to the inclusive radius-eight sphere; includes (8,0,0), excludes
+    (6,6,0), and verifies unavailable positions never reach the ore-reading predicate.
+  realServerUseChecksBothHandsMessagesAndFortyTickCooldown
+    Captures displayClientMessage from a survival FakePlayer and calls the real
+    ServerPlayerGameMode.useItem for both hands. Verifies shared cooldown blocks
+    repeated attempts through tick 39 without resetting it, then expires at tick 40.
+    Checks direct Item.use guarding, actual normal/deepslate ore at (8,0,0), an actual
+    ore at (6,6,0) excluded by the sphere, empty scans, useItemOn PASS before separate
+    useItem, found/empty translation only, no coordinates/grade/hover content,
+    and unchanged item stacks. Temporary elevated fixture blocks are restored.
+  realServerScanAtLoadedChunkEdgeDoesNotLoadNeighbor
+    Read-only search for a loaded east edge within 32 chunks of the prepared row;
+    uses the real server item route from that edge. The neighboring chunk remains
+    unavailable and loaded chunk count remains unchanged. No distant block is edited.
+  twoMenusQuickMoveSettlesEachOutputOnce
+    Two survival FakePlayers, two real PreparationMenus, one shared bench; interleaved
+    vanilla clicked QUICK_MOVE on the same ten crystals and one tailings parcel.
+    Each output transfers once, retains its batch component, and is not recreated idle.
+  twoMenusSplitPickupAndCloseConservesOutput
+    Right/left PICKUP split ten crystals into two cursors of five. Closing the menus
+    returns five to each inventory; repeated close cannot return the cursor twice.
+  twoMenusConnectorChangesKeepReservedBatchBudget
+    Competing shift clicks install only one connector from two inventories of two.
+    Another player removes it after 73 ticks. The first batch stays at 36kXH; the
+    next costs 40kXH. Four connectors, 20 crystals, two tailings, water and energy balance.
+  partialViewerCapacityLeavesExactRemainder
+    A viewer with 62 matching crystals and every other inventory slot full accepts
+    two of the ten output crystals; the other viewer takes exactly the remaining eight.
+    Existing stock plus the batch totals 72; quality components survive.
+  fullViewerInventoryLeavesProductsForOtherViewer
+    Shift clicks with a completely full inventory leave both outputs untouched.
+    The other viewer receives all ten crystals and one tailings parcel.
+
+The previous 31 required tests were rerun unchanged in the same successful server run.
+An earlier 14:13:35 run passed 39/39 before the real X/diagonal fixture was strengthened;
+this record and the JAR hash refer to the later 14:15:45 final-source run.
+
+Production change:
+  OreIndicatorItem.use now checks its own item cooldown before scanning. The ordinary
+  ServerPlayerGameMode.useItem route already enforced cooldown; this is consistency
+  for direct callers, not a claim that normal clients previously bypassed cooldown.
+  Scan geometry, message content, cost, 40-tick cooldown and machine rules are unchanged.
+  No preparation-menu or production-state-machine bug was found in these scenarios.
+
+Scope limits:
+  FakePlayers do not exercise actual client packets, latency, GUI rendering or multiplayer
+  load. Shared menu requests execute serially on the server, as real menu mutations do.
+  The FakePlayer cooldown tracker is advanced explicitly because FakePlayer.tick is empty.
+  The prepared-row edge is a required fixture; no missing-edge case is silently skipped.
+  Process restart, real client acceptance, ore-density calibration and play timing remain open.
+
+Nonfatal environment issue in this run:
+  Failed to request yggdrasil public key
+  Caused by: java.net.UnknownHostException: api.minecraftservices.com
+The headless GameTest suite completed and Gradle exited 0 despite that key-fetch failure.
+
+Separate resource verification:
+  PASS: 47 JSON files, all PNGs and local model/texture links.

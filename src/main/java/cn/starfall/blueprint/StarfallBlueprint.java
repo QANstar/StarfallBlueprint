@@ -14,6 +14,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import net.neoforged.neoforge.registries.*;
 
@@ -74,6 +77,15 @@ public final class StarfallBlueprint {
     public StarfallBlueprint(IEventBus bus) {
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus);
         bus.addListener(this::capabilities);
+        NeoForge.EVENT_BUS.addListener(this::bucketInteraction);
+    }
+    private void bucketInteraction(PlayerInteractEvent.RightClickBlock event) {
+        // Vanilla buckets do not bypass sneak-use, so opt into the bench's documented draw-water action.
+        if (event.getUseBlock() != TriState.FALSE && event.getEntity().isShiftKeyDown()
+                && event.getItemStack().is(Items.BUCKET)
+                && event.getLevel().getBlockState(event.getPos()).is(PREPARATION.get())) {
+            event.setUseBlock(TriState.TRUE);
+        }
     }
     private void capabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PREPARATION_ENTITY.get(), (be, side) -> new SidedInvWrapper(be, side == null ? net.minecraft.core.Direction.UP : side));

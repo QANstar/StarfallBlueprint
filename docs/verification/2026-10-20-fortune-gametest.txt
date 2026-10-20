@@ -1,0 +1,61 @@
+Starfall Blueprint 0.1.0 — Fortune ore harvesting verification
+Date: 2026-10-20 13:09 Asia/Shanghai
+Environment: Windows, Java 21.0.12.1, Gradle 8.14.3, Minecraft 1.21.1,
+             NeoForge 21.1.262, ModDevGradle 2.0.148.
+Result: final source compiled and packaged; all 26 required server GameTests passed;
+        Gradle process exit code 0.
+Artifact: build/libs/starfall_blueprint-0.1.0.jar
+SHA256: CA7FE7FAF58E0AE715FDF600B441FA5B4CAD189F9200237867AACA14DCA9CB00
+
+Rules implemented for ordinary and deepslate meteor ore:
+  Fortune   Raw count    G6/G12/G24 probabilities    Ordinary integrity
+  none      1            65% / 30% /  5%            30..40
+  I         1..2         55% / 35% / 10%            30..40
+  II        1..3         45% / 40% / 15%            30..40
+  III       1..4         35% / 45% / 20%            30..40
+Levels above III use III's budget. Count uses vanilla ore Fortune's multiplier:
+max(1, random.nextInt(level + 2)); no quantity RNG draw for level zero.
+Higher grade probability is the quality benefit; Fortune does not increase
+integrity, purity or processing route. Each dropped item is one full 1000M raw
+batch. Seed and block position make repeated queries stable with the same tool
+Fortune level. The zero-Fortune result is unchanged from the earlier implementation.
+
+New OreHarvestGameTests (3; previous 23 also reran):
+- fortuneImprovesOreYieldAndGrade: 1024 positions, all four supported tiers;
+  unchanged no-Fortune baseline; nondecreasing per-position grade as Fortune rises;
+  sampled count/grade increase for each tier; count limits and reachable maxima;
+  repeat-query stability; ordinary/deepslate equivalence; full processable batch
+  components and unchanged 30..40 integrity; tool stack and damage unchanged.
+- oreRequiresCorrectToolAndSilkCannotCreatePlaceableOre: empty hand and Fortune III
+  wooden pickaxe rejected; Silk Touch produces baseline raw ore, no placeable ore.
+- fortuneAboveThreeUsesTierThreeBudget: Fortune X and III produce identical results
+  over 64 positions.
+
+Actual command:
+  .\gradlew.bat --init-script .tools/mirror.init.gradle
+    -Dorg.gradle.internal.http.socketTimeout=30000
+    -Dorg.gradle.internal.http.connectionTimeout=10000
+    build runGameTestServer -x downloadAssets --console=plain
+  JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+  GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+  JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+
+Local ignored mirror/host configuration and the dedicated-server asset-index
+reference were reused from the previous run. Default project repositories were
+not changed. No client asset or client-rendering verification is claimed.
+See 2026-10-20-interaction-gametest.txt for these environment preparation details.
+World generation parameters are unchanged; density and survival pacing still need
+calibration accounting for Fortune yield.
+
+Exact excerpts from .tools/fortune-validation.log:
+> Task :compileJava
+> Task :jar
+> Task :build
+> Task :runGameTestServer
+[13:09:55] [main/INFO] [minecraft/RecipeManager]: Loaded 1301 recipes
+[13:09:55] [main/INFO] [minecraft/AdvancementTree]: Loaded 1406 advancements
+[13:09:56] [Server thread/INFO] [minecraft/GameTestServer]: 26 tests are now running at position -6173241, -59, -3966824!
+[13:09:56] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (26 tests)...
+[13:09:57] [Server thread/INFO] [minecraft/GameTestServer]: ========= 26 GAME TESTS COMPLETE IN 1.096 s ======================
+[13:09:57] [Server thread/INFO] [minecraft/GameTestServer]: All 26 required tests passed :)
+BUILD SUCCESSFUL in 21s

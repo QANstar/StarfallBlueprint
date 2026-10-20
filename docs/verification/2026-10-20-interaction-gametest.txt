@@ -1,0 +1,85 @@
+Starfall Blueprint 0.1.0 — interaction regression verification
+Date: 2026-10-20 11:37 Asia/Shanghai
+Environment: Windows, Java 21.0.12.1, Gradle 8.14.3, ModDevGradle 2.0.148,
+             Minecraft 1.21.1, NeoForge 21.1.262.
+Result: build succeeded; all 23 required server GameTests passed; process exit code 0.
+
+Artifact: build/libs/starfall_blueprint-0.1.0.jar
+SHA256: DA2E51B2F5D1F5792CAE650AA90A7D6A496A73A332B5BB84EE52C904E8C53189
+
+Actual Gradle invocation (local-only network configuration, not a project requirement):
+  .\gradlew.bat --init-script .tools/mirror.init.gradle
+    -Dorg.gradle.internal.http.socketTimeout=30000
+    -Dorg.gradle.internal.http.connectionTimeout=10000
+    build runGameTestServer -x downloadAssets --console=plain
+  JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+  GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+  JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+
+The ignored local init script uses the NeoForge CDN releases and mojang-meta mirrors;
+project repository defaults were not changed. Official same-version development
+artifacts and DevLaunch were used through the standard runGameTestServer task.
+Client assets (manifest totalSize 826050937 bytes) were excluded from this dedicated
+server run. The generated build/moddev/minecraft_assets.properties contained:
+  asset_index=17
+  assets_root=D:/Code/Workspace/StarfallBlueprint/build/tmp/server-assets
+The referenced directory was created empty; this does not verify a client launch.
+A clean connected environment should use .\gradlew.bat build runGameTestServer
+and let downloadAssets generate its own asset reference and content.
+
+Final run reused successful compilation and packaging from dependency preparation;
+Gradle reported compileJava/jar up-to-date, then prepared and launched the server.
+All 23 registered tests, including the new offhand/sneak routing case, ran together.
+
+New required tests (12; the original 11 also reran successfully):
+  connectorChangeOnlyAffectsNextBatchAcrossSave
+  fuelStarvationResumesWithoutReservingTwice
+  shieldUpgradePreservesComponentsAndRoundsDamageUp
+  survivalBucketsAtPreparationBench
+  survivalBucketsAtWaterTank
+  survivalBucketOffhandAndSneakRouting
+  ordinaryTankActualDropRetainsWaterWhenPlaced
+  vanillaHoppersDriveTwoContinuousBatches
+  reinforcedPickSurvivesVanillaAnvilMaterialRepair
+  reinforcedShieldSurvivesVanillaAnvilMaterialRepair
+  reinforcedPickSurvivesSingleItemGrindstoneDisenchantment
+  reinforcedShieldSurvivesSingleItemGrindstoneDisenchantment
+
+Bucket tests call ServerPlayerGameMode.useItemOn, including NeoForge interaction
+events and the vanilla sneak-routing decision. They cover the fix allowing a
+sneaking player's empty bucket to reach the preparation bench block callback,
+main/offhand conservation, and preservation of the occupied opposite hand.
+The event listener respects an existing useBlock=FALSE and does not handle
+already cancelled events. Filled buckets retain ordinary vanilla sneak routing.
+Non-sneaking main-hand capacity refusals consume the default block interaction;
+this assertion does not claim to prevent every offhand or sneak bucket fallback.
+
+Separate checks: 45 JSON documents, PNG decoding and local model/texture references
+passed; gradlew.bat propagated a deliberate invalid Java-option failure as nonzero;
+git diff --check passed in both repositories.
+
+Observed non-fatal startup logs: first-run server.properties missing, Yggdrasil
+public-key fetch unavailable, command ambiguity and union resource URL warnings.
+The GameTest server still loaded data, ran all tests and shut down normally.
+Client rendering, ordinary multiplayer, complete process-restart recovery,
+20-seed ore-density calibration and actual survival pacing remain unverified.
+
+Exact console excerpts from .tools/final-validation.log:
+> Task :createMinecraftArtifacts UP-TO-DATE
+> Task :compileJava UP-TO-DATE
+> Task :jar UP-TO-DATE
+> Task :build UP-TO-DATE
+> Task :prepareGameTestServerRun
+> Task :runGameTestServer
+[11:37:11] [main/INFO] [minecraft/RecipeManager]: Loaded 1301 recipes
+[11:37:11] [main/INFO] [minecraft/AdvancementTree]: Loaded 1406 advancements
+[11:37:13] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server
+[11:37:13] [Server thread/INFO] [minecraft/GameTestServer]: 23 tests are now running at position -6173955, -59, 9724982!
+[11:37:13] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (23 tests)...
+[11:37:14] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++]
+[11:37:14] [Server thread/INFO] [minecraft/GameTestServer]: ========= 23 GAME TESTS COMPLETE IN 1.476 s ======================
+[11:37:14] [Server thread/INFO] [minecraft/GameTestServer]: All 23 required tests passed :)
+[11:37:14] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================
+[11:37:16] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+BUILD SUCCESSFUL in 28s
+7 actionable tasks: 2 executed, 5 up-to-date

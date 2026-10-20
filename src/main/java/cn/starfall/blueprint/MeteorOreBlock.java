@@ -2,6 +2,8 @@ package cn.starfall.blueprint;
 
 import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -20,9 +22,15 @@ public final class MeteorOreBlock extends Block {
         BlockPos pos = BlockPos.containing(origin);
         RandomSource random = RandomSource.create(params.getLevel().getSeed() ^ pos.asLong());
         int roll = random.nextInt(100);
-        int grade = roll < 65 ? 6 : roll < 95 ? 12 : 24;
-        ItemStack result = new ItemStack(StarfallBlueprint.RAW.get());
-        result.set(StarfallBlueprint.BATCH.get(), MaterialBatch.ore(grade, 30 + random.nextInt(11)));
+        var fortune = params.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                .getHolderOrThrow(Enchantments.FORTUNE);
+        int level = Math.clamp(tool.getEnchantmentLevel(fortune), 0, 3);
+        int grade = roll < 65 - 10 * level ? 6 : roll < 95 - 5 * level ? 12 : 24;
+        int integrity = 30 + random.nextInt(11);
+        // Match vanilla ore's Fortune multiplier, keeping the original quality RNG draws intact.
+        int count = level == 0 ? 1 : Math.max(1, random.nextInt(level + 2));
+        ItemStack result = new ItemStack(StarfallBlueprint.RAW.get(), count);
+        result.set(StarfallBlueprint.BATCH.get(), MaterialBatch.ore(grade, integrity));
         return List.of(result);
     }
 }

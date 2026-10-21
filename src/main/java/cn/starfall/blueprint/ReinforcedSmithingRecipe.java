@@ -24,7 +24,8 @@ public final class ReinforcedSmithingRecipe extends SmithingTransformRecipe {
         ItemStack result = super.assemble(input, provider);
         ItemStack base = input.base();
         if (base.getOrDefault(StarfallBlueprint.REINFORCED.get(), false)) {
-            int maximum = new ItemStack(Items.NETHERITE_PICKAXE).getMaxDamage() * 6 / 5;
+            int percent=CatalogueEquipment.getData(base).getInt("ReinforcementPercent")==10?10:20;
+            int maximum = new ItemStack(Items.NETHERITE_PICKAXE).getMaxDamage() * (100+percent) / 100;
             result.set(DataComponents.MAX_DAMAGE, maximum);
             result.setDamageValue((int) (((long) base.getDamageValue() * maximum + base.getMaxDamage() - 1)
                     / base.getMaxDamage()));

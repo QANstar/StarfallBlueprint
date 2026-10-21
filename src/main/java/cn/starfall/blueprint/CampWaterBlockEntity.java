@@ -12,7 +12,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 public final class CampWaterBlockEntity extends BlockEntity {
-    public final FluidTank tank=new FluidTank(4000,stack->stack.is(Fluids.WATER)) { @Override protected void onContentsChanged() { setChanged(); } };
+    public final FluidTank tank=new FluidTank(4000,stack->!getBlockState().is(StarfallBlueprint.RAIN_COLLECTOR.get())||stack.is(Fluids.WATER)) { @Override protected void onContentsChanged() { setChanged(); } };
     public CampWaterBlockEntity(BlockPos pos,BlockState state) { super(StarfallBlueprint.WATER_ENTITY.get(),pos,state); }
     public static void tick(Level l,BlockPos pos,BlockState state,CampWaterBlockEntity be) {
         if (!state.is(StarfallBlueprint.RAIN_COLLECTOR.get())) return;

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "starfall_blueprint:block/energy_junction_front",
+    "side": "starfall_blueprint:block/preparation_side",
+    "top": "starfall_blueprint:block/preparation_top"
+  }
+}

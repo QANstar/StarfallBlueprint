@@ -20,6 +20,8 @@ public final class ReinforcedRepairRecipe extends RepairItemRecipe {
             for (int i = 0; i < input.size(); i++) {
                 if (input.getItem(i).getOrDefault(StarfallBlueprint.REINFORCED.get(), false)) {
                     result.set(StarfallBlueprint.REINFORCED.get(), true);
+                    int percent=0;for(int j=0;j<input.size();j++){var s=input.getItem(j);if(s.getOrDefault(StarfallBlueprint.REINFORCED.get(),false))percent=Math.max(percent,CatalogueEquipment.getData(s).getInt("ReinforcementPercent")==10?10:20);}
+                    var data=CatalogueEquipment.getData(result);data.putInt("ReinforcementPercent",percent);CatalogueEquipment.setData(result,data);
                     break;
                 }
             }

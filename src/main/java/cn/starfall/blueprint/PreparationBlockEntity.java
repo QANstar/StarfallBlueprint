@@ -14,11 +14,12 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
-public final class PreparationBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
+public final class PreparationBlockEntity extends IndustryBlockEntity implements WorldlyContainer, MenuProvider {
     private NonNullList<ItemStack> items = NonNullList.withSize(5, ItemStack.EMPTY);
     private ItemStack pendingCrystal = ItemStack.EMPTY, pendingTailings = ItemStack.EMPTY;
     public int water, progress, state;
     public long energy;
+    public boolean materialMode;
     private int batchPower = 200;
     // 0 ready; 1 processing; 2 input; 3 water; 4 fuel; 5 output; 6 invalid batch
     public final ContainerData data = new ContainerData() {
@@ -26,9 +27,19 @@ public final class PreparationBlockEntity extends BlockEntity implements Worldly
         public void set(int i, int v) { }
         public int getCount() { return 6; }
     };
-    public PreparationBlockEntity(BlockPos pos, BlockState state) { super(StarfallBlueprint.PREPARATION_ENTITY.get(), pos, state); }
+    public PreparationBlockEntity(BlockPos pos, BlockState state) { super(StarfallBlueprint.PREPARATION_ENTITY.get(), pos, state);
+        tanks[0]=new net.neoforged.neoforge.fluids.capability.templates.FluidTank(4000){
+            public FluidStack getFluid(){return water==0?FluidStack.EMPTY:new FluidStack(Fluids.WATER,water);}
+            public int getFluidAmount(){return water;}public boolean isEmpty(){return water==0;}
+            public int fill(FluidStack s,IFluidHandler.FluidAction a){if(!s.is(Fluids.WATER))return 0;int n=Math.min(s.getAmount(),4000-water);if(a.execute()&&n>0){water+=n;setChanged();}return n;}
+            public FluidStack drain(int n,IFluidHandler.FluidAction a){int amount=Math.min(n,water);if(amount<=0)return FluidStack.EMPTY;if(a.execute()){water-=amount;setChanged();}return new FluidStack(Fluids.WATER,amount);}
+        };
+    }
+    @Override public long getPower(){return energy;}
+    @Override public void setPower(long value){energy=Math.clamp(value,0L,320199L);setChanged();}
 
     public static void tick(Level level, BlockPos pos, BlockState blockState, PreparationBlockEntity be) {
+        if(be.materialMode){IndustryBlockEntity.tick(level,pos,blockState,be);return;}
         be.serverTick();
         boolean active = be.state == 1;
         if (blockState.getValue(PreparationBlock.ACTIVE) != active) level.setBlock(pos, blockState.setValue(PreparationBlock.ACTIVE, active), 3);
@@ -47,6 +58,8 @@ public final class PreparationBlockEntity extends BlockEntity implements Worldly
             if (!ore.is(StarfallBlueprint.RAW.get()) || batch == null || !batch.isProcessableOre()) { state = 6; return; }
             ItemStack crystal = new ItemStack(StarfallBlueprint.CRYSTAL.get(), batch.crystalCount());
             crystal.set(StarfallBlueprint.BATCH.get(), MaterialBatch.crystal(batch.integrity() - 2));
+            var origin=CatalogueEquipment.getData(ore);if(origin.contains("Origin"))CatalogueEquipment.setData(crystal,origin);
+            if(ore.has(CatalogueContent.QUALITY.get())){var q=MaterialQuality.of(ore);crystal.set(CatalogueContent.QUALITY.get(),new MaterialQuality(90,batch.integrity()-2,0,0,q.continuous(),"common"));}
             ItemStack tail = new ItemStack(StarfallBlueprint.TAILINGS.get());
             tail.set(StarfallBlueprint.BATCH.get(), MaterialBatch.tailings(batch.phaseMilliM() / 10_000));
             if (!fits(2, crystal) || !fits(3, tail)) { state = 5; return; }
@@ -88,9 +101,11 @@ public final class PreparationBlockEntity extends BlockEntity implements Worldly
         if (!pendingCrystal.isEmpty()) tag.put("PendingCrystal", pendingCrystal.save(provider));
         if (!pendingTailings.isEmpty()) tag.put("PendingTailings", pendingTailings.save(provider));
         tag.putInt("RecipeVersion", 1);
+        tag.putBoolean("MaterialMode",materialMode);
     }
     @Override protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider); items = NonNullList.withSize(5, ItemStack.EMPTY); ContainerHelper.loadAllItems(tag, items, provider);
+        materialMode=tag.getBoolean("MaterialMode");
         water = Math.clamp(tag.getInt("Water"), 0, 4000); energy = Math.clamp(tag.getLong("EnergyXH"), 0L, 320_199L);
         progress = Math.clamp(tag.getInt("Progress"), 0, 199); batchPower = tag.getInt("BatchPower") == 180 ? 180 : 200;
         pendingCrystal = ItemStack.parseOptional(provider, tag.getCompound("PendingCrystal"));

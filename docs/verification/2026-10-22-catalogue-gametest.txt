@@ -1,0 +1,4 @@
+Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21
+[00:31:36] [Server thread/INFO] [minecraft/GameTestServer]: ========= 78 GAME TESTS COMPLETE IN 1.584 s ======================
+[00:31:36] [Server thread/INFO] [minecraft/GameTestServer]: All 78 required tests passed :)
+Static verification: 363 JSON files, PNG/model references, 108 discrete recipes and 16 vanilla recipe bindings passed.

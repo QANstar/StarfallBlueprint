@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": {
+    "item": "minecraft:clay_ball"
+  },
+  "result": {
+    "id": "starfall_blueprint:ceramic"
+  },
+  "experience": 0.0,
+  "cookingtime": 200
+}

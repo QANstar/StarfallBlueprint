@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:steel_fasteners",
+    "count": 1
+  }
+}

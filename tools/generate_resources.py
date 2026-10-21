@@ -218,4 +218,8 @@ for idx,(name,im) in enumerate(list(textures.items())+[(n,item(n)) for n in name
     for line,part in enumerate([label[:16],label[16:]]):d.text((x,y+88+line*18),part,font=font,fill='#9db8b8')
 save(sheet,ROOT/'docs/art-preview.png')
 save(gui.crop((0,0,176,240)).resize((528,720),Image.Resampling.NEAREST),ROOT/'docs/gui-preview.png')
+import runpy
+runpy.run_path(str(ROOT/'tools/generate_structural_resources.py'), run_name='__main__')
+runpy.run_path(str(ROOT/'tools/sync_catalogue.py'), run_name='__main__')
+runpy.run_path(str(ROOT/'tools/generate_catalogue_resources.py'), run_name='__main__')
 print('Generated textures, models, recipes, languages, advancements, worldgen and test template.')

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:ceramic"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:ceramic_sheath",
+    "count": 1
+  }
+}

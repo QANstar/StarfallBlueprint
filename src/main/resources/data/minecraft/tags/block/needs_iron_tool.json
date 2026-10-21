@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "starfall_blueprint:ore_meteor_phase",
-    "starfall_blueprint:deepslate_ore_meteor_phase"
+    "starfall_blueprint:deepslate_ore_meteor_phase",
+    "starfall_blueprint:rutile_ore",
+    "starfall_blueprint:borate_ore",
+    "starfall_blueprint:moon_ore"
   ]
 }

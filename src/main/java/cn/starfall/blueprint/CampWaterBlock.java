@@ -28,6 +28,9 @@ public final class CampWaterBlock extends BaseEntityBlock {
     @Override public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level l,BlockState s,BlockEntityType<T> t) { return l.isClientSide ? null : createTickerHelper(t,StarfallBlueprint.WATER_ENTITY.get(),CampWaterBlockEntity::tick); }
     @Override protected ItemInteractionResult useItemOn(ItemStack stack,BlockState s,Level l,BlockPos pos,Player p,InteractionHand hand,BlockHitResult hit) {
         if (!(l.getBlockEntity(pos) instanceof CampWaterBlockEntity be)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        boolean otherFluid=!be.tank.isEmpty()&&!be.tank.getFluid().is(net.minecraft.world.level.material.Fluids.WATER)
+                ||stack.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.ITEM)!=null&&!stack.is(Items.WATER_BUCKET)&&!stack.is(Items.BUCKET);
+        if(otherFluid){return net.neoforged.neoforge.fluids.FluidUtil.interactWithFluidHandler(p,hand,l,pos,hit.getDirection())?ItemInteractionResult.sidedSuccess(l.isClientSide):ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;}
         if (stack.is(Items.WATER_BUCKET) && be.tank.getFluidAmount()<=3000) {
             if (!l.isClientSide) { be.tank.fill(new FluidStack(net.minecraft.world.level.material.Fluids.WATER,1000),FluidAction.EXECUTE); if (!p.isCreative()) p.setItemInHand(hand,new ItemStack(Items.BUCKET)); }
             return ItemInteractionResult.sidedSuccess(l.isClientSide);

@@ -1,0 +1,32 @@
+2026-10-21 L02 structural/electrical materials verification (Asia/Shanghai)
+Runtime: Java 21, Minecraft 1.21.1, NeoForge 21.1.262, Gradle 8.14.3.
+Build: existing local Gradle executable, GRADLE_USER_HOME=<project>/.gradle-home, --offline build.
+Engine: tools/run_prepared_gametests.ps1 -JavaExecutable D:\Code\SDK\Java\jdk-21\bin\java.exe
+Prepared from same-version official userdev configuration using the existing .tools/local-run-config.init.gradle.
+Standard offline runGameTestServer could not resolve moddev-config / DevLaunch; actual tests ran through the repository's existing official BootstrapLauncher script instead.
+Both final build and engine process exited 0. Relevant raw excerpts follow.
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :createMinecraftArtifacts UP-TO-DATE
+> Task :compileJava
+> Task :processResources UP-TO-DATE
+> Task :classes
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :assemble
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+
+BUILD SUCCESSFUL in 26s
+4 actionable tasks: 2 executed, 2 up-to-date
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.262 (neoforge)
+[22:00:48] [Server thread/INFO] [minecraft/GameTestServer]: ========= 48 GAME TESTS COMPLETE IN 2.053 s ======================
+[22:00:48] [Server thread/INFO] [minecraft/GameTestServer]: All 48 required tests passed :)
+[22:00:49] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+Static: PASS: 95 JSON files, all PNGs and local model/texture links.

@@ -18,6 +18,7 @@ public final class SupplyLedger extends SavedData {
     public static final int DAILY_TRADES = 4;
     private long supplyDay = -1;
     private int trades;
+    private int lunarTrades;
     public enum Result { SUCCESS, INVENTORY_FULL, INVALID_SAMPLE, SOLD_OUT }
 
     public static SupplyLedger get(ServerLevel level) {
@@ -29,6 +30,7 @@ public final class SupplyLedger extends SavedData {
         SupplyLedger ledger = new SupplyLedger();
         ledger.supplyDay = Math.max(-1, tag.getLong("SupplyDay"));
         ledger.trades = Math.clamp(tag.getInt("Trades"), 0, DAILY_TRADES);
+        ledger.lunarTrades=Math.clamp(tag.getInt("LunarTrades"),0,8);
         return ledger;
     }
 
@@ -36,16 +38,25 @@ public final class SupplyLedger extends SavedData {
         tag.putInt("SchemaVersion", 1);
         tag.putLong("SupplyDay", supplyDay);
         tag.putInt("Trades", trades);
+        tag.putInt("LunarTrades",lunarTrades);
         return tag;
     }
 
     private void advanceDay(ServerLevel level) {
         long day = Math.floorDiv(Math.max(0L, level.getServer().overworld().getDayTime()), 24_000L);
         // Time rollback must not refill stock. Only a new, previously unseen world date can do so.
-        if (day > supplyDay) { supplyDay = day; trades = 0; setDirty(); }
+        if (day > supplyDay) { supplyDay = day; trades = 0; lunarTrades=0; setDirty(); }
     }
 
     public int remaining(ServerLevel level) { advanceDay(level); return DAILY_TRADES - trades; }
+    public int lunarRemaining(ServerLevel level){advanceDay(level);return 8-lunarTrades;}
+    public Result importLunar(ServerPlayer player,InteractionHand hand){
+        var sample=player.getItemInHand(hand);if(!sample.is(Items.IRON_INGOT))return Result.INVALID_SAMPLE;
+        if(lunarRemaining(player.serverLevel())==0)return Result.SOLD_OUT;
+        var plan=snapshot(player.getInventory());plan.get(hand==InteractionHand.MAIN_HAND?player.getInventory().selected:40).shrink(1);
+        var reward=CatalogueContent.stack("lunar",1);var data=CatalogueEquipment.getData(reward);data.putString("Origin","chenghai_import");CatalogueEquipment.setData(reward,data);
+        if(!insert(plan,reward))return Result.INVENTORY_FULL;commit(player,plan);lunarTrades++;setDirty();return Result.SUCCESS;
+    }
 
     public Result exchange(ServerPlayer player, InteractionHand hand) {
         ItemStack sample = player.getItemInHand(hand);

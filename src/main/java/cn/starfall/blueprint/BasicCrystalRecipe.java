@@ -16,9 +16,9 @@ public final class BasicCrystalRecipe extends CustomRecipe {
         for (int i = 0; i < input.size(); i++) {
             ItemStack s = input.getItem(i); if (s.isEmpty()) continue;
             if (upgrade()) {
-                boolean pick = kind.equals("reinforce_tool");
+                boolean pick = !kind.equals("reinforce_shield");
                 if ((pick ? s.getItem() instanceof PickaxeItem : s.is(Items.SHIELD)) && s.isDamageableItem() && !s.getOrDefault(StarfallBlueprint.REINFORCED.get(), false)) tool++;
-                else if (s.is(pick ? StarfallBlueprint.TOOL_BRACE.get() : StarfallBlueprint.SHIELD_LINING.get())) attachment++;
+                else if (s.is(kind.equals("reinforce_wear")?CatalogueContent.item("wear"):pick ? StarfallBlueprint.TOOL_BRACE.get() : StarfallBlueprint.SHIELD_LINING.get())) attachment++;
                 else return false;
             } else if (s.is(StarfallBlueprint.CRYSTAL.get())) {
                 MaterialBatch b = s.get(StarfallBlueprint.BATCH.get()); if (b == null || !b.isQ0()) return false; crystal++;
@@ -42,10 +42,12 @@ public final class BasicCrystalRecipe extends CustomRecipe {
             ItemStack s = input.getItem(i);
             if (s.isDamageableItem()) {
                 ItemStack result = s.copyWithCount(1);
-                int oldMax = s.getMaxDamage(), newMax = oldMax * 6 / 5;
+                int percent=kind.equals("reinforce_wear")?10:20;
+                int oldMax = s.getMaxDamage(), newMax = oldMax * (100+percent) / 100;
                 result.set(DataComponents.MAX_DAMAGE, newMax);
                 result.setDamageValue((int)(((long)s.getDamageValue() * newMax + oldMax - 1) / oldMax));
                 result.set(StarfallBlueprint.REINFORCED.get(), true);
+                var data=CatalogueEquipment.getData(result);data.putInt("ReinforcementPercent",percent);CatalogueEquipment.setData(result,data);
                 return result;
             }
         }

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "starfall_blueprint:block/boroglass"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": {
+    "item": "starfall_blueprint:mixed_steel_billet"
+  },
+  "result": {
+    "id": "starfall_blueprint:ordinary_steel"
+  },
+  "experience": 0.0,
+  "cookingtime": 200
+}

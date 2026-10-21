@@ -1,0 +1,38 @@
+2026-10-21 MC whole-item crafting and alloy mixing verification (Asia/Shanghai)
+Java 21 / Minecraft 1.21.1 / NeoForge 21.1.262 / Gradle 8.14.3.
+Build: local Gradle 8.14.3, GRADLE_USER_HOME=<project>/.gradle-home, --offline build.
+GameTest: existing tools/run_prepared_gametests.ps1 using Java 21 and same-version official prepared BootstrapLauncher runtime.
+Final build and engine exit codes: 0.
+New AlloyGameTests: integer inputs and independent coal/charcoal fuel, shortages and backpressure with NBT reload, sided capabilities, real dropped-machine BlockItem placement, real menu Shift input/fuel/output routing.
+Structural tests updated for whole substrates, no workbench steel, nine-item frames and no fragment refunds. Legacy fragment compatibility remains covered.
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :createMinecraftArtifacts UP-TO-DATE
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :assemble
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+
+BUILD SUCCESSFUL in 30s
+4 actionable tasks: 3 executed, 1 up-to-date
+
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.262 (neoforge)
+[22:45:13] [Server thread/INFO] [minecraft/GameTestServer]: ========= 53 GAME TESTS COMPLETE IN 6.314 s ======================
+[22:45:13] [Server thread/INFO] [minecraft/GameTestServer]: All 53 required tests passed :)
+[22:45:15] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+
+PASS: 108 discrete catalogue recipes; 16 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+PASS: 104 JSON files, all PNGs and local model/texture links.
+PASS: Both offline HTML entries show 26 PNG sprites, nine whole-item frame slots, machine steel route and planned/live labels.
+PASS: Mobile width and no JavaScript errors; desktop/mobile screenshots inspected.
+Not exercised: live Minecraft client rendering, multiplayer network sync or independent two-JVM restart for the new machine.

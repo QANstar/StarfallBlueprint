@@ -32,6 +32,7 @@ public final class ReinforcedRepairHooks {
         result.set(DataComponents.MAX_DAMAGE, maximum);
         result.setDamageValue((int) Math.max(maximum - remaining, 0));
         result.set(StarfallBlueprint.REINFORCED.get(), true);
+        var data=CatalogueEquipment.getData(result);data.putInt("ReinforcementPercent",CatalogueEquipment.getData(bottom).getInt("ReinforcementPercent")==10?10:20);CatalogueEquipment.setData(result,data);
 
         // As in vanilla, top-slot curses win if both stacks carry the same curse.
         ItemEnchantments curses = EnchantmentHelper.updateEnchantments(result, mutable -> {

@@ -52,7 +52,10 @@ public final class PreparationBlock extends BaseEntityBlock {
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
     @Override protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof PreparationBlockEntity be) player.openMenu(be);
+        if (!level.isClientSide && level.getBlockEntity(pos) instanceof PreparationBlockEntity be) {
+            be.materialMode=player.isShiftKeyDown();be.setChanged();level.invalidateCapabilities(pos);
+            if(be.materialMode)player.openMenu(new net.minecraft.world.SimpleMenuProvider((id,inv,p)->new IndustryMenu(id,inv,be.workInventory(),be.processData),net.minecraft.network.chat.Component.literal("整备台 · 材料加工")));else player.openMenu(be);
+        }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
     @Override public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {

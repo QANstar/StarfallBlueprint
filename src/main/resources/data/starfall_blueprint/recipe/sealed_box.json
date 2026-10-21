@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:glass"
+    },
+    {
+      "item": "starfall_blueprint:insulation"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:sealed_box",
+    "count": 1
+  }
+}

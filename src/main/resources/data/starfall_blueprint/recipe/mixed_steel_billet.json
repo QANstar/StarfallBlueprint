@@ -1,0 +1,16 @@
+{
+  "type": "starfall_blueprint:alloy_mixing",
+  "base": {
+    "item": "minecraft:iron_ingot"
+  },
+  "base_count": 3,
+  "additive": {
+    "tag": "minecraft:coals"
+  },
+  "additive_count": 1,
+  "result": {
+    "id": "starfall_blueprint:mixed_steel_billet",
+    "count": 3
+  },
+  "duration": 200
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "starfall_blueprint:block/rescue_rope"
+  }
+}

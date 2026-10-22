@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 /** Upgrading a previously filled tank transfers the real water instead of erasing it. */
-public final class RainCollectorRecipe extends CustomRecipe {
+public final class RainCollectorRecipe extends CustomRecipe implements AutomaticCraftingLayout {
     public RainCollectorRecipe(CraftingBookCategory category) { super(category); }
     @Override public boolean matches(CraftingInput in,Level level) {
         return in.width()==3 && in.height()==3 && in.getItem(0).is(Items.IRON_INGOT) && in.getItem(1).is(Items.GLASS)
@@ -20,6 +20,11 @@ public final class RainCollectorRecipe extends CustomRecipe {
         var data=in.getItem(4).get(DataComponents.BLOCK_ENTITY_DATA);
         if (data!=null) output.set(DataComponents.BLOCK_ENTITY_DATA,data);
         return output;
+    }
+    public AutomaticCraftingLayout.Layout automaticCraftingLayout() {
+        return new AutomaticCraftingLayout.Layout(3,3,java.util.List.of(Ingredient.of(Items.IRON_INGOT),Ingredient.of(Items.GLASS),Ingredient.of(Items.IRON_INGOT),
+                Ingredient.of(Items.GLASS),Ingredient.of(StarfallBlueprint.TANK_ITEM.get()),Ingredient.EMPTY,
+                Ingredient.of(ItemTags.PLANKS),Ingredient.of(ItemTags.PLANKS),Ingredient.of(ItemTags.PLANKS)));
     }
     @Override public boolean canCraftInDimensions(int w,int h) { return w>=3 && h>=3; }
     @Override public RecipeSerializer<?> getSerializer() { return StarfallBlueprint.RAIN_RECIPE.get(); }

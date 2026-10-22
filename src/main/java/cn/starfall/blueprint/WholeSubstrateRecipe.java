@@ -6,7 +6,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 /** One whole plate + one quartz -> two substrates. Legacy fractional plates cannot enter. */
-public final class WholeSubstrateRecipe extends CustomRecipe {
+public final class WholeSubstrateRecipe extends CustomRecipe implements AutomaticCraftingLayout {
     public WholeSubstrateRecipe(CraftingBookCategory category) { super(category); }
     public boolean matches(CraftingInput input, Level level) {
         int plate = 0, quartz = 0;
@@ -24,6 +24,7 @@ public final class WholeSubstrateRecipe extends CustomRecipe {
     public net.minecraft.core.NonNullList<Ingredient> getIngredients() {
         return net.minecraft.core.NonNullList.of(Ingredient.EMPTY, Ingredient.of(StarfallBlueprint.structural("copper_plate")), Ingredient.of(Items.QUARTZ));
     }
+    public AutomaticCraftingLayout.Layout automaticCraftingLayout() { return new AutomaticCraftingLayout.Layout(2,1,getIngredients()); }
     public boolean canCraftInDimensions(int width, int height) { return width * height >= 2; }
     public RecipeSerializer<?> getSerializer() { return StarfallBlueprint.SUBSTRATE_RECIPE.get(); }
 }

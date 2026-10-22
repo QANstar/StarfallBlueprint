@@ -45,7 +45,10 @@ public final class IndustryNetworks {
         for(boolean reserve:new boolean[]{false,true})for(End source:ends){
             boolean battery=level.getBlockEntity(source.pos)instanceof IndustryBlockEntity b&&b.kind().equals("s02");if(battery!=reserve)continue;
             var from=level.getCapability(Capabilities.EnergyStorage.BLOCK,source.pos,source.side);if(from==null||!from.canExtract())continue;
-            for(End target:directedEnds(source,nodes,POWER)){if(budget==0)return;if(source.pos.equals(target.pos))continue;
+            // Rotate reachable consumers too: rotating only sources can fill one large
+            // idle buffer forever while other connected workstations receive no power.
+            var targets=directedEnds(source,nodes,POWER);if(!targets.isEmpty())Collections.rotate(targets,(int)Math.floorMod(level.getGameTime(),targets.size()));
+            for(End target:targets){if(budget==0)return;if(source.pos.equals(target.pos))continue;
                 if(reserve&&level.getBlockEntity(target.pos)instanceof IndustryBlockEntity t&&t.kind().equals("s02"))continue;
                 var to=level.getCapability(Capabilities.EnergyStorage.BLOCK,target.pos,target.side);if(to==null||!to.canReceive())continue;budget-=transfer(from,to,budget);
             }

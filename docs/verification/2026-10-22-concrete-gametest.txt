@@ -1,0 +1,69 @@
+星落蓝图：原版混凝土组合产线阶段验证
+日期：2026-10-22（Asia/Shanghai）
+
+环境
+- Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21.0.12.1 / Gradle 8.14.3
+- Windows 11；开发原型0.1.0
+- JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+- GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+- JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+- 继续使用已准备的官方NeoForge开发运行环境、本地依赖缓存与ignored镜像init；未改系统DNS/hosts，未关闭TLS校验。
+
+最终集中构建/服务端回归命令（开发仓库根目录）
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+
+最终控制台摘录（.tools/concrete-final-validation.log）
+[13:18:44] [Server thread/INFO] [minecraft/GameTestServer]: ========= 97 GAME TESTS COMPLETE IN 3.087 s ======================
+[13:18:44] [Server thread/INFO] [minecraft/GameTestServer]: All 97 required tests passed :)
+BUILD SUCCESSFUL in 22s
+进程退出码：0
+
+阶段范围
+- 既有94项服务端测试继续通过，新增ConcreteProductionGameTests三项。
+- CatalogueGameTests.everyIndustrialProcessSurvivesReloadAndConservesInputs从12条扩为28条开放工业工序；新增16色各自检查输入预留、NBT续作、工时能耗、成品数量及空闲无复制。
+- RE_BFL图册：24条产线、124条配方、仍100项模组图鉴；新增VC-01—VC-16。
+- 32项粉末与成品仅标记为vanilla:true数据定义，不额外注册模组同名物品，不增加贴图。
+
+新增测试和具体边界
+1. allSixteenColoursUseRealVanillaPowderRecipesAndWetPreparation
+   - 每色调用真实已加载的minecraft:<颜色>_concrete_powder配方。
+   - 无序、堆叠原料并使用自动台最后一页：4沙+4砾+1染料→8粉末，40刻/4000XH。
+   - 通过真实ItemHandler顶面和FluidHandler水入口投入prep材料模式。
+   - 每色8粉末+1000mB水→8同色原版混凝土，40刻/4000XH；无水或容器回流，不改变原版世界硬化机制。
+2. hydrationPausesWithoutMixingColoursOrReservingTwiceAcrossReload
+   - 7红+1蓝不能凑成一批；999mB水不足；满输出时不预留。
+   - 1700XH处理17刻，水与8红粉末仅预留一次；蓝粉末保留。
+   - NBT重载后在制输出堵塞不继续扣能；清堵补2300XH后23刻完成。
+   - 材料模式保留，后续80空闲刻不复制成品、不重染蓝粉末。
+3. coalPoweredPumpAndHoppersRunTwoCompleteConcreteBatches
+   - 真实游戏刻推进500刻，未手工调用加工tick来替代机器工作。
+   - 原料箱8沙/8沙砾/2红染料，经水平抽取器进入自动台。
+   - 自动台→朝下漏斗→整备台顶部→底部漏斗→成品箱，最终16红混凝土。
+   - 一份煤由真实余烬机组发电，电缆供应自动台、整备台和泵；实际水源/取水泵/两段流体管供水。
+   - 所有原料与中间漏斗清空，两批均完成；输出箱只含红混凝土。
+   - 完成时核算“一煤320000XH=所有保留电/燃料+两次合成8000+两次硬化8000+实际泵水耗能”，泵水按实际整桶产量核对，包括缓存水。
+
+首次失败与修复（未隐去）
+- 首次集中运行97项中96项通过，唯一失败为整线测试。
+- 读取该测试实际保存世界的region NBT，发现16份粉末留在侧向漏斗，prep水与能量为0，而自动台缓存312000XH。
+- 粉末漏斗错误地指向prep侧面燃料口；现有材料原料仅UP开放0—8，侧面仅燃料13。修正为纵向朝下漏斗送UP入口，不改经典5槽容器或其菜单。
+- 供电网络原本仅旋转源端集合，可达目标顺序却固定；有限煤电全部进入自动台大缓存，使同网泵与prep长期等电。IndustryNetworks.power改为每源按gameTime轮换可达目标；保留方向规则、共享预算和电量守恒。
+- 上述修正后集中完整复验97/97通过。本记录不把初跑描述为通过，也不声称仅执行一次。
+
+资源/映射检查（本阶段一次）
+python tools/verify_resources.py
+PASS: 360 JSON files, all PNGs and local model/texture links.
+python tools/verify_mc_catalogue.py
+PASS: 124 discrete catalogue recipes; 16 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+
+构建产物
+build/libs/starfall_blueprint-0.1.0.jar
+SHA256: AD7A4CE2FB9ACDBCC69E8933FF304A3F64E6AC5D417523B1EEFB7852CC19ABF6
+
+已知边界
+- 没有客户端视觉或交互验收，没有压力/网络并发测试，没有重复独立两JVM探针。
+- 以既有材料加工提供罐内湿法硬化，不增加自动采砂、种植染料或世界放置/破坏设备；原料与煤由外部供应。
+- 机器理论240件/分钟；最简单漏斗线受2.5件/秒限制，上限150件/分钟。实际还受原料、网络预算和缓存限制。
+- 现有抽取器仍为水平朝向，远送需机器底漏斗过箱后接水平抽取器，最终接prep顶部。
+- 有限水源规则下泵会消耗真实水源；本次实际链默认可再生水源，有限水源行为由既有回归继续覆盖。
+- 服务端有Failed to request yggdrasil public key / java.net.UnknownHostException: api.minecraftservices.com历史网络警告，本次未造成测试失败。

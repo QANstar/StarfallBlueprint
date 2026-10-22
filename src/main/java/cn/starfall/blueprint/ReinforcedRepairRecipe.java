@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RepairItemRecipe;
 
 /** Retain the upgrade slot when vanilla combines durability into a new stack. */
-public final class ReinforcedRepairRecipe extends RepairItemRecipe {
+public final class ReinforcedRepairRecipe extends RepairItemRecipe implements AutomaticCraftingLayout {
     public ReinforcedRepairRecipe(CraftingBookCategory category) {
         super(category);
     }
@@ -27,6 +27,12 @@ public final class ReinforcedRepairRecipe extends RepairItemRecipe {
             }
         }
         return result;
+    }
+
+    public AutomaticCraftingLayout.Layout automaticCraftingLayout() {
+        var damageable=net.minecraft.world.item.crafting.Ingredient.of(net.minecraft.core.registries.BuiltInRegistries.ITEM.stream()
+                .map(ItemStack::new).filter(ItemStack::isDamageableItem));
+        return new AutomaticCraftingLayout.Layout(2,1,java.util.List.of(damageable,damageable));
     }
 
     @Override

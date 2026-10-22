@@ -58,7 +58,7 @@ public final class CatalogueGameTests {
             for(var out:r.getAsJsonArray("outputs")){String key=CatalogueContent.key(out);int n=CatalogueContent.qty(out);if(CatalogueContent.FLUID_KEYS.contains(key)){int actual=Arrays.stream(be.tanks).filter(t->t.getFluid().is(CatalogueFluids.fluid(key))).mapToInt(t->t.getFluidAmount()).sum();h.assertTrue(actual==n,"Fluid conservation: "+id+" "+key);}else h.assertTrue(count(be,key)==n,"Solid conservation: "+id+" "+key);}
             int total=be.stock.subList(9,13).stream().mapToInt(ItemStack::getCount).sum();process(be,duration);h.assertTrue(total==be.stock.subList(9,13).stream().mapToInt(ItemStack::getCount).sum(),"Idle duplicate: "+id);verified++;
         }
-        h.assertTrue(active.size()==12&&verified==active.size(),"Every active industrial process must survive reload and conserve inputs: expected="+active.size()+" verified="+verified);h.succeed();
+        h.assertTrue(active.size()==28&&verified==active.size(),"All 12 material processes and 16 concrete colours must survive reload and conserve inputs: expected="+active.size()+" verified="+verified);h.succeed();
     }
     @GameTest(template="empty")
     public static void mixedLowQualityCannotBeLaunderedAndBackpressureConsumesNothing(GameTestHelper h){

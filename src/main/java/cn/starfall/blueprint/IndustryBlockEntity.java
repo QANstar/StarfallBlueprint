@@ -20,6 +20,9 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer,MenuProvider {
     public NonNullList<ItemStack> stock=NonNullList.withSize(27,ItemStack.EMPTY),pending=NonNullList.withSize(4,ItemStack.EMPTY);
+    private NonNullList<ItemStack> extraCraftingInputs=NonNullList.withSize(45,ItemStack.EMPTY);
+    /** Logical input indices; the original nine slots remain compatible with existing saves. */
+    public int[] craftingInputSlots(){return java.util.stream.IntStream.concat(java.util.stream.IntStream.range(0,9),java.util.stream.IntStream.range(27,72)).toArray();}
     public final SimpleContainer filters=new SimpleContainer(9){public void setChanged(){super.setChanged();IndustryBlockEntity.this.setChanged();}};
     public final FluidTank[] tanks=new FluidTank[3];
     public FluidStack pendingFluid1=FluidStack.EMPTY,pendingFluid2=FluidStack.EMPTY;
@@ -32,7 +35,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     private long inputTick=-1,outputTick=-1,peakCountedTick=-1;
     private int inputThisTick,outputThisTick;
     public static final List<String> KINDS=java.util.stream.Stream.concat(CatalogueContent.MACHINE_KEYS.stream(),java.util.stream.Stream.of("prep")).sorted().toList();
-    private int templateNumber(){if(kind().equals("autocrafter")&&level!=null){var list=level.getRecipeManager().getAllRecipesFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING).stream().map(r->r.id().toString()).sorted().toList();return list.indexOf(template);}return new ArrayList<>(CatalogueContent.RECIPES.keySet()).indexOf(template);}
+    private int templateNumber(){if(kind().equals("autocrafter")&&level!=null){var list=AutomaticCrafting.recipes(level).stream().map(r->r.id().toString()).toList();return list.indexOf(template);}return new ArrayList<>(CatalogueContent.RECIPES.keySet()).indexOf(template);}
     public final ContainerData processData=new ContainerData(){
         public int get(int i){return switch(i){case 0->(int)(getPower()&65535);case 1->(int)(getPower()>>>16);case 2->progressTicks;case 3->processTicks;case 4->status;case 5->retain;case 6->stopped?1:0;case 7->filterMode;case 8->KINDS.indexOf(kind());case 9,10,11->tanks[i-9].getFluidAmount();case 12->templateNumber();case 13->faceMask;case 14->List.of("","water","warm","wastewater","bio","returnwater").indexOf(fluidFilter);default->0;};}
         public void set(int i,int v){} public int getCount(){return 15;}
@@ -95,6 +98,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     }
     protected void saveAdditional(CompoundTag tag,HolderLookup.Provider provider){
         super.saveAdditional(tag,provider);CompoundTag inv=new CompoundTag();ContainerHelper.saveAllItems(inv,stock,provider);tag.put("IndustryInventory",inv);
+        CompoundTag extra=new CompoundTag();ContainerHelper.saveAllItems(extra,extraCraftingInputs,provider);tag.put("ExtraCraftingInputs",extra);
         CompoundTag output=new CompoundTag();ContainerHelper.saveAllItems(output,pending,provider);tag.put("IndustryPending",output);
         tag.putLong("Power",getPower());tag.putLong("Cost",processCost);tag.putLong("Paid",processPaid);tag.putLong("HeatCredit",heatCredit);tag.putInt("FuelHeat",fuelHeat);tag.putInt("ChargeRemainder",chargeRemainder);
         tag.putInt("WorkProgress",progressTicks);tag.putInt("Duration",processTicks);tag.putString("ActiveRecipe",activeRecipe);tag.putString("Template",template);tag.putBoolean("Stopped",stopped);
@@ -107,6 +111,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     protected void loadAdditional(CompoundTag tag,HolderLookup.Provider provider){
         super.loadAdditional(tag,provider);stock=NonNullList.withSize(27,ItemStack.EMPTY);pending=NonNullList.withSize(4,ItemStack.EMPTY);
         ContainerHelper.loadAllItems(tag.getCompound("IndustryInventory"),stock,provider);ContainerHelper.loadAllItems(tag.getCompound("IndustryPending"),pending,provider);
+        extraCraftingInputs=NonNullList.withSize(45,ItemStack.EMPTY);ContainerHelper.loadAllItems(tag.getCompound("ExtraCraftingInputs"),extraCraftingInputs,provider);
         powerStored=Math.clamp(tag.getLong("Power"),0L,capacity());processCost=Math.clamp(tag.getLong("Cost"),0L,10_000_000L);processPaid=Math.clamp(tag.getLong("Paid"),0L,processCost);heatCredit=Math.clamp(tag.getLong("HeatCredit"),0L,10_000_000L);fuelHeat=Math.clamp(tag.getInt("FuelHeat"),0,320000);chargeRemainder=Math.clamp(tag.getInt("ChargeRemainder"),0,99);
         processTicks=Math.clamp(tag.getInt("Duration"),1,12000);progressTicks=Math.clamp(tag.getInt("WorkProgress"),0,processTicks-1);activeRecipe=tag.getString("ActiveRecipe");template=tag.getString("Template");stopped=tag.getBoolean("Stopped");faceMask=tag.contains("FaceMask")?tag.getInt("FaceMask")&63:63;
         retain=Math.clamp(tag.getInt("Retain"),0,64);filterMode=Math.clamp(tag.getInt("FilterMode"),0,5);rotationCursor=Math.max(0,tag.getInt("Cursor"));peakTicks=Math.clamp(tag.getInt("PeakTicks"),0,100);peakCooldown=Math.clamp(tag.getInt("PeakCooldown"),0,200);efficientCharge=tag.getBoolean("EfficientCharge");fluidFilter=tag.getString("FluidFilter");
@@ -117,10 +122,14 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     }
     public Component getDisplayName(){return Component.translatable("block.starfall_blueprint."+kind());}
     public AbstractContainerMenu createMenu(int id,Inventory inv,Player p){return new IndustryMenu(id,inv,this,processData);}
-    public int getContainerSize(){return 27;}public boolean isEmpty(){return stock.stream().allMatch(ItemStack::isEmpty);}public ItemStack getItem(int i){return stock.get(i);}
-    public ItemStack removeItem(int i,int n){ItemStack s=ContainerHelper.removeItem(stock,i,n);if(!s.isEmpty())setChanged();return s;}
-    public ItemStack removeItemNoUpdate(int i){return ContainerHelper.takeItem(stock,i);}public void setItem(int i,ItemStack s){stock.set(i,s);setChanged();}
-    public boolean stillValid(Player p){return Container.stillValidBlockEntity(this,p);}public void clearContent(){stock=NonNullList.withSize(27,ItemStack.EMPTY);setChanged();}
+    public int getContainerSize(){return kind().equals("autocrafter")?72:27;}
+    public boolean isEmpty(){return stock.stream().allMatch(ItemStack::isEmpty)&&extraCraftingInputs.stream().allMatch(ItemStack::isEmpty);}
+    public ItemStack getItem(int i){return i<27?stock.get(i):extraCraftingInputs.get(i-27);}
+    public ItemStack removeItem(int i,int n){ItemStack s=ContainerHelper.removeItem(i<27?stock:extraCraftingInputs,i<27?i:i-27,n);if(!s.isEmpty())setChanged();return s;}
+    public ItemStack removeItemNoUpdate(int i){return ContainerHelper.takeItem(i<27?stock:extraCraftingInputs,i<27?i:i-27);}
+    public void setItem(int i,ItemStack s){if(i<27)stock.set(i,s);else extraCraftingInputs.set(i-27,s);setChanged();}
+    public boolean stillValid(Player p){return Container.stillValidBlockEntity(this,p);}
+    public void clearContent(){stock=NonNullList.withSize(27,ItemStack.EMPTY);extraCraftingInputs=NonNullList.withSize(45,ItemStack.EMPTY);setChanged();}
     public static boolean nested(ItemStack s){return s.has(DataComponents.CONTAINER)||s.has(DataComponents.BUNDLE_CONTENTS)||s.getItem()instanceof BlockItem b&&b.getBlock()instanceof EntityBlock||s.is(CatalogueContent.item("sample_case"));}
     public boolean canPlaceItem(int i,ItemStack s){
         return workCanPlace(i,s);
@@ -132,10 +141,11 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         if(i==16)return idle()&&(s.is(CatalogueContent.item("speed_1"))||s.is(CatalogueContent.item("speed_2")));
         if(i==17)return idle()&&(s.is(CatalogueContent.item("bulk_1"))||s.is(CatalogueContent.item("bulk_2")));
         if(i==18)return s.is(CatalogueContent.item("s01"));
-        return i<9&&(!nested(s)||kind().equals("autocrafter")&&SealedSampleItem.isBox(s));
+        if(kind().equals("autocrafter"))return i>=0&&i<9||i>=27&&i<72;
+        return i>=0&&i<9&&!nested(s);
     }
     public int[]getSlotsForFace(Direction d){return workSlots(d);}
-    public int[]workSlots(Direction d){if(kind().equals("supply_crate"))return java.util.stream.IntStream.range(0,27).toArray();if(d==Direction.DOWN)return new int[]{9,10,11,12};if(d==Direction.UP)return generator()?new int[]{13}:new int[]{0,1,2,3,4,5,6,7,8};return new int[]{13};}
+    public int[]workSlots(Direction d){if(kind().equals("supply_crate"))return java.util.stream.IntStream.range(0,27).toArray();if(d==Direction.DOWN)return new int[]{9,10,11,12};if(kind().equals("autocrafter"))return craftingInputSlots();if(d==Direction.UP)return generator()?new int[]{13}:new int[]{0,1,2,3,4,5,6,7,8};return new int[]{13};}
     public boolean canPlaceItemThroughFace(int i,ItemStack s,Direction d){return !redstoneStopped()&&canPlaceItem(i,s);}
     public boolean canTakeItemThroughFace(int i,ItemStack s,Direction d){return !redstoneStopped()&&(kind().equals("supply_crate")||d==Direction.DOWN&&i>=9&&i<=12);}
     public void awardExperience(Player player){if(player.level()instanceof net.minecraft.server.level.ServerLevel server&&experience>0){int amount=(int)experience;if(server.random.nextFloat()<experience-amount)amount++;experience=0;setChanged();if(amount>0)net.minecraft.world.entity.ExperienceOrb.award(server,player.position(),amount);}}

@@ -547,7 +547,23 @@
         "PM-06",
         "PM-07",
         "PM-08",
-        "BIO-R01"
+        "BIO-R01",
+        "VC-01",
+        "VC-02",
+        "VC-03",
+        "VC-04",
+        "VC-05",
+        "VC-06",
+        "VC-07",
+        "VC-08",
+        "VC-09",
+        "VC-10",
+        "VC-11",
+        "VC-12",
+        "VC-13",
+        "VC-14",
+        "VC-15",
+        "VC-16"
       ],
       "primary_recipe": "RUN-P01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -3160,7 +3176,7 @@
       "name": "自动合成台",
       "unit": "件",
       "icon": "machine",
-      "note": "保存一张九宫格模板，2秒／4kXH自动执行一批已学配方。",
+      "note": "按选定配方汇总54格库存材料，不需摆九宫格；每批2秒／4kXH，支持显式数量及扩展布局配方。",
       "external": false,
       "mass": null,
       "implementation": "设计配方",
@@ -3722,6 +3738,614 @@
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdElEQVR4nGNgGGjACGNMXLrsPyka86OjwHpZkAWd/x1leKsbj1ej8OWFDHuZrOF8FmTJ4Fk3GBgYKgnanpWBwwAYuHl4L9xryEDd1hnDm0wMFAKmUQMYWIgNbaICcW2aBkEN6GpQXABKYciJBBvYS6zT6AYAjhYYTXYFnuQAAAAASUVORK5CYII="
+    },
+    "white_concrete_powder": {
+      "id": "white_concrete_powder",
+      "name": "白色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:white_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-01"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "white_concrete": {
+      "id": "white_concrete",
+      "name": "白色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:white_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-01"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "orange_concrete_powder": {
+      "id": "orange_concrete_powder",
+      "name": "橙色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:orange_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-02"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "orange_concrete": {
+      "id": "orange_concrete",
+      "name": "橙色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:orange_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-02"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "magenta_concrete_powder": {
+      "id": "magenta_concrete_powder",
+      "name": "品红色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:magenta_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-03"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "magenta_concrete": {
+      "id": "magenta_concrete",
+      "name": "品红色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:magenta_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-03"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-03",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "light_blue_concrete_powder": {
+      "id": "light_blue_concrete_powder",
+      "name": "淡蓝色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:light_blue_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-04"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "light_blue_concrete": {
+      "id": "light_blue_concrete",
+      "name": "淡蓝色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:light_blue_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-04"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-04",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "yellow_concrete_powder": {
+      "id": "yellow_concrete_powder",
+      "name": "黄色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:yellow_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-05"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "yellow_concrete": {
+      "id": "yellow_concrete",
+      "name": "黄色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:yellow_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-05"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-05",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "lime_concrete_powder": {
+      "id": "lime_concrete_powder",
+      "name": "黄绿色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:lime_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-06"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "lime_concrete": {
+      "id": "lime_concrete",
+      "name": "黄绿色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:lime_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-06"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-06",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "pink_concrete_powder": {
+      "id": "pink_concrete_powder",
+      "name": "粉红色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:pink_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-07"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "pink_concrete": {
+      "id": "pink_concrete",
+      "name": "粉红色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:pink_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-07"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-07",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "gray_concrete_powder": {
+      "id": "gray_concrete_powder",
+      "name": "灰色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:gray_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-08"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "gray_concrete": {
+      "id": "gray_concrete",
+      "name": "灰色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:gray_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-08"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-08",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "light_gray_concrete_powder": {
+      "id": "light_gray_concrete_powder",
+      "name": "淡灰色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:light_gray_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-09"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "light_gray_concrete": {
+      "id": "light_gray_concrete",
+      "name": "淡灰色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:light_gray_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-09"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-09",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "cyan_concrete_powder": {
+      "id": "cyan_concrete_powder",
+      "name": "青色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:cyan_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-10"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "cyan_concrete": {
+      "id": "cyan_concrete",
+      "name": "青色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:cyan_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-10"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-10",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "purple_concrete_powder": {
+      "id": "purple_concrete_powder",
+      "name": "紫色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:purple_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-11"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "purple_concrete": {
+      "id": "purple_concrete",
+      "name": "紫色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:purple_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-11"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-11",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "blue_concrete_powder": {
+      "id": "blue_concrete_powder",
+      "name": "蓝色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:blue_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-12"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "blue_concrete": {
+      "id": "blue_concrete",
+      "name": "蓝色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:blue_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-12"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-12",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "brown_concrete_powder": {
+      "id": "brown_concrete_powder",
+      "name": "棕色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:brown_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-13"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "brown_concrete": {
+      "id": "brown_concrete",
+      "name": "棕色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:brown_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-13"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-13",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "green_concrete_powder": {
+      "id": "green_concrete_powder",
+      "name": "绿色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:green_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-14"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "green_concrete": {
+      "id": "green_concrete",
+      "name": "绿色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:green_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-14"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-14",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "red_concrete_powder": {
+      "id": "red_concrete_powder",
+      "name": "红色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:red_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-15"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "red_concrete": {
+      "id": "red_concrete",
+      "name": "红色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:red_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-15"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-15",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "black_concrete_powder": {
+      "id": "black_concrete_powder",
+      "name": "黑色混凝土粉末",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:black_concrete_powder；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "VC-16"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "black_concrete": {
+      "id": "black_concrete",
+      "name": "黑色混凝土",
+      "unit": "件",
+      "icon": "raw",
+      "note": "原版minecraft:black_concrete；沿用原版物品，不新增贴图或模组图鉴条目。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "VC-16"
+      ],
+      "uses": [],
+      "primary_recipe": "VC-16",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
     }
   },
   "recipes": [
@@ -7977,7 +8601,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "一台保存一张模板。9格过滤进料、4格成品缓冲、1工具位、1返还容器位；每批2秒／4kXH，功率100XH/t。手动合成继续可用；不要求精制晶料或PUB-13。",
+      "note": "一台保存一个配方ID。54格输入分6页，按库存汇总配料；4格输出容纳全部成品和余物；每批2秒／4kXH，功率100XH/t。手动合成继续可用；不要求精制晶料或PUB-13。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -8431,7 +9055,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "九宫格模板是虚拟过滤条件，不消耗一套样品。欠电、缺料、工具耗尽或出料受阻暂停，完工只结算一次。固体按投料表中的完整物品数量处理。",
+      "note": "选择CB-01后汇总库存取料，不需摆放九宫格或消耗样品。每批实际扣1份晶料和1铜；欠电、缺料、工具耗尽或出料受阻暂停，完工只结算一次。",
       "quality": "与CB-01完全相同的Q0来料和产品，不额外加品质。",
       "inherited": false,
       "balance": false,
@@ -9726,6 +10350,502 @@
         "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
       },
       "automatic": true
+    },
+    {
+      "id": "VC-01",
+      "name": "白色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "white_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "white_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-02",
+      "name": "橙色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "orange_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "orange_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-03",
+      "name": "品红色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "magenta_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "magenta_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-04",
+      "name": "淡蓝色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "light_blue_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "light_blue_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-05",
+      "name": "黄色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "yellow_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "yellow_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-06",
+      "name": "黄绿色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "lime_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "lime_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-07",
+      "name": "粉红色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "pink_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "pink_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-08",
+      "name": "灰色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "gray_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "gray_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-09",
+      "name": "淡灰色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "light_gray_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "light_gray_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-10",
+      "name": "青色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "cyan_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "cyan_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-11",
+      "name": "紫色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "purple_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "purple_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-12",
+      "name": "蓝色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "blue_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "blue_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-13",
+      "name": "棕色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "brown_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "brown_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-14",
+      "name": "绿色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "green_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "green_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-15",
+      "name": "红色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "red_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "red_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "VC-16",
+      "name": "黑色混凝土水化",
+      "station": "prep",
+      "unlock": "PUB-03；材料加工模式",
+      "inputs": [
+        {
+          "item": "black_concrete_powder",
+          "qty": 8
+        },
+        {
+          "item": "water",
+          "qty": 1000
+        }
+      ],
+      "outputs": [
+        {
+          "item": "black_concrete",
+          "qty": 8
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 4000,
+      "tools": [],
+      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
     }
   ],
   "catalogue": [

@@ -1,0 +1,52 @@
+库存式自动合成阶段验证（2026-10-22）
+
+环境
+Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21.0.12.1 / Gradle 8.14.3。
+本地已有官方开发依赖缓存；沿用忽略目录中的镜像初始化脚本、进程专用域名解析与服务端资源准备。未修改系统DNS/hosts，未下载或运行客户端。
+
+集中命令（PowerShell）
+$env:JAVA_HOME='C:\Program Files\Java\jdk-21.0.12.1'
+$env:GRADLE_USER_HOME='D:\Code\Workspace\.gradle'
+$env:JAVA_TOOL_OPTIONS='-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts'
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+
+构建及服务器日志摘录
+[12:45:11] [Server thread/INFO] [minecraft/GameTestServer]: ========= 94 GAME TESTS COMPLETE IN 2.416 s ======================
+[12:45:11] [Server thread/INFO] [minecraft/GameTestServer]: All 94 required tests passed :)
+BUILD SUCCESSFUL in 23s
+7 actionable tasks: 3 executed, 4 up-to-date
+进程退出码：0。
+本地完整日志：.tools/automatic-crafting-validation.log（忽略目录，不提交）。
+
+新增9项（原85项同轮完整回归）
+AutomaticCraftingGameTests.extractorAndDuctFeedRepeatedShapedCrafts
+  真实箱子→抽取器→导管持续补27铁，未摆九宫格，自动完成3铁块，消耗12000XH，原料无剩余/复制。
+AutomaticCraftingGameTests.shapedRecipeUsesUnorderedInventoryAndLeavesUnrelatedItems
+  多堆乱序木板和木棍构造逻辑定形输入，制成木镐；无关圆石不消耗。
+AutomaticCraftingGameTests.componentCandidatesBacktrackAndDynamicAssemblyKeepsToolData
+  不合格晶料候选回溯到合格组件，低品质不能用同ID替代；实际强化装配保留名称、比例损伤和标记，规划不修改源物品。
+AutomaticCraftingGameTests.overlappingIngredientsAndFourByFourLayoutUseRealMatching
+  重叠Ingredient不抢专用材料；显式4×4布局通过真实机器完成16铁配方。
+AutomaticCraftingGameTests.countedRecipeConsumesBeyondOneStackAndNineIngredients
+  临时加载数量配方：128铁分两堆、另加10种材料，跨54输入格一次预留；13刻保存后27刻完成，后续空转不复制。
+AutomaticCraftingGameTests.containerRemaindersReserveSpaceAndSurviveReloadOnce
+  蛋糕及3空桶须一并有输出空间才开工；满输出不扣料扣能；17刻保存后23刻完成，余物只结算一次。
+AutomaticCraftingGameTests.hopperCanFillExtendedInputsWithoutAccessingOutputs
+  真实原版漏斗插入API在前9格满后继续写扩展格；扩展格NBT独立保存；底部只暴露输出，不能误抽原料。
+AutomaticCraftingGameTests.countedRecipeCodecAndNetworkPreserveCountsAndComponents
+  Bulk数据与网络编解码保留128数量、成品数量和名称组件；最大流重分配宽泛/特定原料，避免先占唯一铁锭。
+AutocraftingMenuGameTests.craftingPagesArePerViewerAndPreserveReservedWork
+  两个服务端菜单独立翻页、各自当前页Shift输入输出、0..5循环；设备容器可作原料；在制翻页不改进度/功率账；旧NBT兼容。
+
+静态资源
+运行 tools/verify_resources.py：PASS: 360 JSON files, all PNGs and local model/texture links.
+
+产物
+build/libs/starfall_blueprint-0.1.0.jar
+SHA256 ECBD2E39E509769250813682BE55BAEB6DEAC914F99F8183C8064DF5431FC73C
+
+范围
+普通shaped/shapeless和本模组显式布局通过原配方matches/assemble/getRemainingItems执行；大数量用新bulk类型，大尺寸特殊配方用明确接口，不改变全局原版工作台大小。
+最多54输入格、54逻辑格、数量配方3456份、4输出格，仍按物品堆叠上限及组件规则。未知特殊配方、流体和世界副作用不自动推断，第三方需实现接口；未声称实测所有外部模组。
+客户端画面/点击网络往返、多人网络压力、扩容库存跨独立JVM重启未在本轮验证；已覆盖实际服务端菜单、NBT和机器续作。按用户偏好本阶段集中构建验证一次，不为文档或推送重复跑测试。
+日志仍有非致命“Failed to request yggdrasil public key”联网错误，未阻止完整94项测试与正常保存退出。

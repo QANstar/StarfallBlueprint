@@ -135,16 +135,20 @@ public final class IndustryProcessing {
     private static void reserve(IndustryBlockEntity be,String id,List<ItemStack> outputs,int ticks,long cost){be.activeRecipe=id;be.progressTicks=0;be.processTicks=Math.max(1,ticks);be.processCost=cost;be.processPaid=0;be.pending=NonNullList.withSize(4,ItemStack.EMPTY);for(int i=0;i<outputs.size();i++)be.pending.set(i,outputs.get(i));be.setChanged();}
     private static boolean startCraft(IndustryBlockEntity be){
         if(be.template.isEmpty()){be.status=2;return false;}
-        var holder=be.getLevel().getRecipeManager().byKey(net.minecraft.resources.ResourceLocation.tryParse(be.template));
-        if(holder.isEmpty()||!(holder.get().value()instanceof CraftingRecipe recipe)){be.status=2;return false;}
-        List<ItemStack>actual=new ArrayList<>();for(int i=0;i<9;i++)actual.add(be.stock.get(i));
-        var input=CraftingInput.of(3,3,actual);if(!recipe.matches(input,be.getLevel())){be.status=2;return false;}
-        ItemStack result=recipe.assemble(input,be.getLevel().registryAccess());
-        List<ItemStack>out=new ArrayList<>();out.add(result);recipe.getRemainingItems(input).stream().filter(s->!s.isEmpty()).forEach(s->{var found=out.stream().filter(a->ItemStack.isSameItemSameComponents(a,s)&&a.getCount()+s.getCount()<=a.getMaxStackSize()).findFirst();if(found.isPresent())found.get().grow(s.getCount());else out.add(s.copy());});
-        if(out.size()>4||!be.outputFits(out)){be.status=5;return false;}
+        var key=net.minecraft.resources.ResourceLocation.tryParse(be.template);
+        if(key==null){be.status=2;return false;}
+        var holder=be.getLevel().getRecipeManager().byKey(key);
+        if(holder.isEmpty()){be.status=2;return false;}
+        int[] slots=be.craftingInputSlots();
+        List<ItemStack> actual=Arrays.stream(slots).mapToObj(be::getItem).toList();
+        var plan=AutomaticCrafting.plan(holder.get().value(),actual,be.getLevel());
+        if(plan.isEmpty()){be.status=2;return false;}
+        if(plan.get().outputs().stream().anyMatch(s->CatalogueContent.RESERVED_ITEMS.contains(CatalogueContent.key(s)))){be.status=8;return false;}
+        var outputs=AutomaticCrafting.packOutputs(plan.get().outputs());
+        if(outputs.isEmpty()||!be.outputFits(outputs.get())){be.status=5;return false;}
         if(be.getPower()==0){be.status=4;return false;}
-        for(int i=0;i<9;i++)if(!be.stock.get(i).isEmpty())be.stock.get(i).shrink(1);
-        reserve(be,"craft:"+be.template,out,40,4000);return true;
+        for(int i=0;i<slots.length;i++)be.getItem(slots[i]).shrink(plan.get().consumed().get(i));
+        reserve(be,"craft:"+be.template,outputs.get(),40,4000);return true;
     }
     private static boolean startSmelting(IndustryBlockEntity be){
         int speed=be.stock.get(16).is(CatalogueContent.item("speed_2"))?2:be.stock.get(16).is(CatalogueContent.item("speed_1"))?1:0;

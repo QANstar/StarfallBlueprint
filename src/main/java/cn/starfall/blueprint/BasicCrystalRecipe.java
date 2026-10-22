@@ -7,7 +7,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 /** Real component checks also apply when a recipe is invoked by automated crafting. */
-public final class BasicCrystalRecipe extends CustomRecipe {
+public final class BasicCrystalRecipe extends CustomRecipe implements AutomaticCraftingLayout {
     private final String kind;
     public BasicCrystalRecipe(CraftingBookCategory category, String kind) { super(category); this.kind = kind; }
     private boolean upgrade() { return kind.startsWith("reinforce_"); }
@@ -52,6 +52,21 @@ public final class BasicCrystalRecipe extends CustomRecipe {
             }
         }
         return ItemStack.EMPTY;
+    }
+    public AutomaticCraftingLayout.Layout automaticCraftingLayout() {
+        if (upgrade()) {
+            Ingredient tool = kind.equals("reinforce_shield") ? Ingredient.of(Items.SHIELD)
+                    : Ingredient.of(net.minecraft.core.registries.BuiltInRegistries.ITEM.stream().filter(i -> i instanceof PickaxeItem).map(ItemStack::new));
+            Ingredient attachment = Ingredient.of(kind.equals("reinforce_wear") ? CatalogueContent.item("wear")
+                    : kind.equals("reinforce_shield") ? StarfallBlueprint.SHIELD_LINING.get() : StarfallBlueprint.TOOL_BRACE.get());
+            return new AutomaticCraftingLayout.Layout(2, 1, java.util.List.of(tool, attachment));
+        }
+        var ingredients = new java.util.ArrayList<Ingredient>();
+        ingredients.add(Ingredient.of(StarfallBlueprint.CRYSTAL.get()));
+        ingredients.add(Ingredient.of(kind.equals("tool_brace") || kind.equals("shield_lining") ? Items.IRON_INGOT : Items.COPPER_INGOT));
+        if (kind.equals("indicator")) ingredients.add(Ingredient.of(Items.REDSTONE));
+        return new AutomaticCraftingLayout.Layout(kind.equals("tool_brace") ? 1 : ingredients.size(),
+                kind.equals("tool_brace") ? 2 : 1, ingredients);
     }
     @Override public boolean canCraftInDimensions(int width, int height) { return width * height >= (kind.equals("indicator") ? 3 : 2); }
     @Override public RecipeSerializer<?> getSerializer() { return StarfallBlueprint.BASIC_RECIPES.get(kind).get(); }

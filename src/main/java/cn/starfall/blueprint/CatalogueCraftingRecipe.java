@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 /** Real 3x3 recipe, including material checks and inherited quality for composite assemblies. */
-public final class CatalogueCraftingRecipe extends CustomRecipe {
+public final class CatalogueCraftingRecipe extends CustomRecipe implements AutomaticCraftingLayout {
     public final String id;
     private final JsonObject definition;
     public CatalogueCraftingRecipe(String id){super(CraftingBookCategory.MISC);this.id=id;definition=CatalogueContent.recipe(id);}
@@ -58,6 +58,16 @@ public final class CatalogueCraftingRecipe extends CustomRecipe {
     }
     public ItemStack getResultItem(HolderLookup.Provider provider){var o=definition.getAsJsonArray("outputs").get(0);return CatalogueContent.stack(CatalogueContent.key(o),CatalogueContent.qty(o));}
     public NonNullList<Ingredient> getIngredients(){var out=NonNullList.<Ingredient>create();for(var in:definition.getAsJsonArray("inputs"))for(int i=0;i<CatalogueContent.qty(in);i++)out.add(Ingredient.of(CatalogueContent.item(CatalogueContent.key(in))));return out;}
+    public AutomaticCraftingLayout.Layout automaticCraftingLayout(){
+        var craft=definition.getAsJsonObject("craft");
+        if(craft.get("mode").getAsString().startsWith("定形")){
+            java.util.List<Ingredient> cells=new java.util.ArrayList<>();
+            for(var cell:craft.getAsJsonArray("cells"))cells.add(cell.isJsonNull()?Ingredient.EMPTY:Ingredient.of(CatalogueContent.item(CatalogueContent.key(cell))));
+            return new AutomaticCraftingLayout.Layout(3,3,cells);
+        }
+        var ingredients=getIngredients();
+        return new AutomaticCraftingLayout.Layout(ingredients.size(),1,ingredients);
+    }
     public boolean isSpecial(){return false;}
     public boolean canCraftInDimensions(int w,int h){return w*h>=getIngredients().size();}
     public RecipeSerializer<?> getSerializer(){return CatalogueContent.CRAFTING.get();}

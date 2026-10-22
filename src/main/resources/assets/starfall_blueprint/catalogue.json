@@ -671,10 +671,12 @@
       "name": "月络原矿",
       "unit": "块",
       "icon": "ore",
-      "note": "",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。",
       "external": true,
       "mass": null,
       "design_packet_m": 1000,
+      "implementation_status": "future_reserved",
+      "implementation": "未来预留 · 尚未开放",
       "catalogue": true,
       "category": "材料",
       "subcategory": "自然原矿",
@@ -873,11 +875,12 @@
       "name": "月络晶粒",
       "unit": "份",
       "icon": "crystal",
-      "note": "",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。",
       "external": false,
       "mass": null,
       "design_packet_m": 10,
-      "implementation": "设计配方",
+      "implementation": "未来预留 · 尚未开放",
+      "implementation_status": "future_reserved",
       "catalogue": true,
       "category": "材料",
       "subcategory": "相晶与复合材料",
@@ -991,11 +994,12 @@
       "name": "月络干尾砂",
       "unit": "份",
       "icon": "waste",
-      "note": "",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。",
       "external": false,
       "mass": null,
       "design_packet_m": 1000,
-      "implementation": "设计配方",
+      "implementation": "未来预留 · 尚未开放",
+      "implementation_status": "future_reserved",
       "catalogue": true,
       "category": "副产物与回收",
       "subcategory": "副产物／候选来料",
@@ -1240,9 +1244,11 @@
       "name": "进口月络供给",
       "unit": "笔",
       "icon": "trade",
-      "note": "共享8笔／联系人／日；缺失由安置点终端接替。固体按投料表中的完整物品数量处理。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 共享8笔／联系人／日；缺失由安置点终端接替。固体按投料表中的完整物品数量处理。",
       "external": true,
       "mass": null,
+      "implementation_status": "future_reserved",
+      "implementation": "未来预留 · 尚未开放",
       "catalogue": false,
       "category": "材料",
       "subcategory": "普通材料",
@@ -1787,10 +1793,11 @@
       "name": "月络衬料封存盒",
       "unit": "件",
       "icon": "box",
-      "note": "",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。",
       "external": false,
       "mass": 500,
-      "implementation": "设计配方",
+      "implementation": "未来预留 · 尚未开放",
+      "implementation_status": "future_reserved",
       "catalogue": true,
       "category": "功能物品",
       "subcategory": "容器",
@@ -2099,11 +2106,12 @@
       "name": "精密未激活灵相晶片",
       "unit": "份",
       "icon": "crystal",
-      "note": "MAG后续刻印；不自带魔力",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 MAG后续刻印；不自带魔力",
       "external": false,
       "mass": null,
       "design_packet_m": 12,
-      "implementation": "设计配方",
+      "implementation": "未来预留 · 尚未开放",
+      "implementation_status": "future_reserved",
       "catalogue": true,
       "category": "材料",
       "subcategory": "相晶与复合材料",
@@ -2214,11 +2222,12 @@
       "name": "初阶未激活灵相胚片",
       "unit": "份",
       "icon": "crystal",
-      "note": "MAG-02入门媒介",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 MAG-02入门媒介",
       "external": false,
       "mass": null,
       "design_packet_m": 12,
-      "implementation": "设计配方",
+      "implementation": "未来预留 · 尚未开放",
+      "implementation_status": "future_reserved",
       "catalogue": true,
       "category": "材料",
       "subcategory": "相晶与复合材料",
@@ -2245,11 +2254,12 @@
       "name": "月络隔离衬料",
       "unit": "份",
       "icon": "plate",
-      "note": "普通封存盒衬料；非活性",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 普通封存盒衬料；非活性",
       "external": false,
       "mass": null,
       "design_packet_m": 100,
-      "implementation": "设计配方",
+      "implementation": "未来预留 · 尚未开放",
+      "implementation_status": "future_reserved",
       "catalogue": true,
       "category": "材料",
       "subcategory": "相晶与复合材料",
@@ -3280,10 +3290,11 @@
       "name": "初阶灵相法杖坯",
       "unit": "件",
       "icon": "staff",
-      "note": "本人完成MAG-02后可用于已学的基础术式。 合成结果未激活。月络组成从PM-11继承，不重复收月络；自动台只制杖坯，不能激活、灌注、复制本人印记。固体按投料表中的完整物品数量处理。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 本人完成MAG-02后可用于已学的基础术式。 合成结果未激活。月络组成从PM-11继承，不重复收月络；自动台只制杖坯，不能激活、灌注、复制本人印记。固体按投料表中的完整物品数量处理。",
       "external": false,
       "mass": null,
-      "implementation": "设计配方",
+      "implementation": "未来预留 · 尚未开放",
+      "implementation_status": "future_reserved",
       "catalogue": true,
       "category": "装备与武器",
       "subcategory": "术式器具",
@@ -4546,7 +4557,7 @@
       "id": "ST-15",
       "name": "月络衬料安装",
       "station": "workbench",
-      "unlock": "PUB-03",
+      "unlock": "未来预留／尚未开放；原设计：PUB-03",
       "inputs": [
         {
           "item": "box",
@@ -4567,7 +4578,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -4593,7 +4604,8 @@
         "tools": [],
         "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
       },
-      "automatic": true
+      "automatic": true,
+      "implementation_status": "future_reserved"
     },
     {
       "id": "ST-16",
@@ -6609,7 +6621,7 @@
       "id": "AUX-R03",
       "name": "月络原矿整备",
       "station": "prep",
-      "unlock": "PUB-03",
+      "unlock": "未来预留／尚未开放；原设计：PUB-03",
       "inputs": [
         {
           "item": "moon",
@@ -6630,17 +6642,18 @@
       "seconds": 10,
       "energy": 40000,
       "tools": [],
-      "note": "干式预设，不扣水；共用整备台换方占用同一份工时。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 干式预设，不扣水；共用整备台换方占用同一份工时。",
       "quality": "",
       "inherited": true,
       "balance": false,
-      "automatic": false
+      "automatic": false,
+      "implementation_status": "future_reserved"
     },
     {
       "id": "TRADE-MOON",
       "name": "固定进口月络",
       "station": "workbench",
-      "unlock": "MAG-01",
+      "unlock": "未来预留／尚未开放；原设计：MAG-01",
       "inputs": [
         {
           "item": "iron",
@@ -6657,11 +6670,12 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "每联系人共享8笔／日；按世界补货日期，不通过重开界面刷新；备援终端共用库存。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 每联系人共享8笔／日；按世界补货日期，不通过重开界面刷新；备援终端共用库存。",
       "quality": "",
       "inherited": true,
       "balance": false,
-      "automatic": false
+      "automatic": false,
+      "implementation_status": "future_reserved"
     },
     {
       "id": "CB-01",
@@ -6903,7 +6917,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "工匠共享限4笔／日；实际扣样品。不另造样品匣；不是工业变铁配方。",
+      "note": "当前由纸1＋圆石4合成的工务终端交易；Q0晶料每份换铁1，全世界每日共享4笔。背包事务失败不扣料或额度，时间回拨不刷新，主副手分别处理。不另造样品匣。",
       "quality": "",
       "inherited": true,
       "balance": false,
@@ -7166,7 +7180,7 @@
       "id": "PM-07",
       "name": "精密灵相双料刻面",
       "station": "refiner",
-      "unlock": "PUB-08、PUB-09",
+      "unlock": "未来预留／尚未开放；原设计：PUB-08、PUB-09",
       "inputs": [
         {
           "item": "refined",
@@ -7197,11 +7211,12 @@
       "tools": [
         "facet_jig"
       ],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。刻面磨头扣1；固体按投料表中的完整物品数量处理。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 沿用材料组成；本次补齐工时、夹具和工位。刻面磨头扣1；固体按投料表中的完整物品数量处理。",
       "quality": "陨相嵌料P≥99%、连续输入I≥81→成品I≥80、O≥80，C0；未激活。",
       "inherited": false,
       "balance": false,
-      "automatic": false
+      "automatic": false,
+      "implementation_status": "future_reserved"
     },
     {
       "id": "PM-08",
@@ -7310,7 +7325,7 @@
       "id": "PM-11",
       "name": "初阶灵相胚片",
       "station": "prep",
-      "unlock": "PUB-03、MAG-02有限试制",
+      "unlock": "未来预留／尚未开放；原设计：PUB-03、MAG-02有限试制",
       "inputs": [
         {
           "item": "common",
@@ -7333,17 +7348,18 @@
       "tools": [
         "basic_jig"
       ],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。基础夹具扣1次；无PUB-08、PUB-09、钻石或跨星工程前置。潜行空手右键整备台打开材料加工页；原料放上排，夹具放附件格，按整件投料。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 沿用材料组成；本次补齐工时、夹具和工位。基础夹具扣1次；无PUB-08、PUB-09、钻石或跨星工程前置。潜行空手右键整备台打开材料加工页；原料放上排，夹具放附件格，按整件投料。",
       "quality": "陨相P≥90%、输入I≥21→成品I≥20、O≥40，C0；未激活。",
       "inherited": false,
       "balance": false,
-      "automatic": false
+      "automatic": false,
+      "implementation_status": "future_reserved"
     },
     {
       "id": "PM-12",
       "name": "月络隔离衬料",
       "station": "prep",
-      "unlock": "PUB-02、PUB-03",
+      "unlock": "未来预留／尚未开放；原设计：PUB-02、PUB-03",
       "inputs": [
         {
           "item": "insulation",
@@ -7364,11 +7380,12 @@
       "seconds": 10,
       "energy": 40000,
       "tools": [],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。潜行空手右键整备台打开材料加工页；原料放上排，夹具放附件格，按整件投料。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 沿用材料组成；本次补齐工时、夹具和工位。潜行空手右键整备台打开材料加工页；原料放上排，夹具放附件格，按整件投料。",
       "quality": "普通非活性辅材；不充能、不自动洁净污染来料。",
       "inherited": false,
       "balance": false,
-      "automatic": false
+      "automatic": false,
+      "implementation_status": "future_reserved"
     },
     {
       "id": "CM-01",
@@ -8322,7 +8339,7 @@
       "id": "RT-08",
       "name": "初阶灵相法杖坯制作",
       "station": "workbench",
-      "unlock": "PUB-03、MAG-02有限试制",
+      "unlock": "未来预留／尚未开放；原设计：PUB-03、MAG-02有限试制",
       "inputs": [
         {
           "item": "anima_basic",
@@ -8347,15 +8364,15 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "本人完成MAG-02后可用于已学的基础术式。 合成结果未激活。月络组成从PM-11继承，不重复收月络；自动台只制杖坯，不能激活、灌注、复制本人印记。固体按投料表中的完整物品数量处理。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 本人完成MAG-02后可用于已学的基础术式。 合成结果未激活。月络组成从PM-11继承，不重复收月络；自动台只制杖坯，不能激活、灌注、复制本人印记。固体按投料表中的完整物品数量处理。",
       "quality": "保持未激活。固体按投料表中的完整物品数量处理。",
       "inherited": false,
       "balance": false,
       "reward": {
         "category": "术式器具",
-        "benefit": "使用一片PM-11的12M双料胚片作媒介，装配成可握持的入门法杖；本人完成MAG-02后可用于已学的基础术式。",
-        "limits": "合成结果未激活。月络组成从PM-11继承，不重复收月络；自动台只制杖坯，不能激活、灌注、复制本人印记。",
-        "stage": "魔法入门课程：从公共矿料走向第一件专业器具。"
+        "benefit": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 使用一片PM-11的12M双料胚片作媒介，装配成可握持的入门法杖；本人完成MAG-02后可用于已学的基础术式。",
+        "limits": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 合成结果未激活。月络组成从PM-11继承，不重复收月络；自动台只制杖坯，不能激活、灌注、复制本人印记。",
+        "stage": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 魔法入门课程：从公共矿料走向第一件专业器具。"
       },
       "craft": {
         "mode": "定形九宫格",
@@ -8386,7 +8403,8 @@
         "note": "按图排列；每个非空格每次消耗1件。"
       },
       "automatic": true,
-      "auto_note": "仅在完成MAG-02并取得正式制造许可后可自动制备；课程有限试制不开放自动批产。"
+      "auto_note": "仅在完成MAG-02并取得正式制造许可后可自动制备；课程有限试制不开放自动批产。",
+      "implementation_status": "future_reserved"
     },
     {
       "id": "AUTO-CB01",

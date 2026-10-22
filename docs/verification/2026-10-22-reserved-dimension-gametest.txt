@@ -1,0 +1,32 @@
+2026-10-22 官方未来维度内容预留：集中服务端验证
+
+环境：Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21.0.12.1 / Gradle 8.14.3。
+命令（开发仓库根目录）：
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+
+结果：退出码0；85/85 required GameTests全部通过；BUILD SUCCESSFUL in 32s。
+静态校验：360 JSON、全部PNG和本地模型/贴图引用通过。
+图鉴对照：108条整件配方、16条原版配方映射及混料炉/隔离基底约束通过。
+
+新增6项ReservedDimensionGameTests：
+- lunarHasNoWorldgenAndLegacyOreNeverDrops：资源与动态注册表均无月络feature，旧矿在各种工具/附魔下无掉落。
+- reservedWorkbenchRecipesNeverLoadOrAssembleDirectly：预留配方不加载，直接调用也拒绝且输入不变。
+- reservedIndustrialBatchesCannotReserveInputsOrEnergy：4条预留工业工艺不启动、不扣料或能量。
+- reservedActiveRecipesFreezeEvenWithoutReservedPendingItems：按旧activeRecipe冻结，跨重载保留所有状态。
+- reservedPendingItemsFreezeLegacyAutocraftingAcrossReload：8种待产预留物品独立触发冻结，跨重载不消耗/不结算。
+- lunarImportRejectsBothHandsWithoutInventoryOrLedgerMutation：主副手、容量、报价、重复操作均不可进口，库存和账本不变，旧计数保留。
+
+现有用例调整：43条当前开放catalogue工作台配方、12条当前开放工业工艺逐条执行；不再期待预留进口/法杖/衬里成功；普通封存盒继续验证守恒。辅矿时运仍覆盖赤钛与灰硼各1024位置、等级0/I/II/III/X及重复查询，不再允许采收月络。
+
+边界：未运行客户端与压力测试；未重新运行独立两JVM探针；新增旧批次验证为真实服务端BlockEntity NBT保存/重载。旧区块矿块与存档物品不自动删除，注册ID保留。
+非致命启动警告：Failed to request yggdrasil public key / java.net.UnknownHostException: api.minecraftservices.com；不影响测试完成。
+
+JAR SHA256: 4BCDBFC54DF92132BD3401FC29D8D82C04B8605734F45FA940D11F5F26504C10
+
+原始控制台摘录：
+[10:54:21] [Server thread/INFO] [minecraft/GameTestServer]: ========= 85 GAME TESTS COMPLETE IN 3.744 s ======================
+[10:54:21] [Server thread/INFO] [minecraft/GameTestServer]: All 85 required tests passed :)
+BUILD SUCCESSFUL in 32s

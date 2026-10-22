@@ -1,4 +1,9 @@
 {
   "type": "starfall_blueprint:catalogue_crafting",
-  "recipe": "ST-15"
+  "recipe": "ST-15",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:false"
+    }
+  ]
 }

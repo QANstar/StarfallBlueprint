@@ -8,6 +8,10 @@ catalogue=json.loads((ART/'catalogue.json').read_text(encoding='utf-8'))
 machines={'refiner','recycler','g01','g02','g03','g04','pump','dew','cable','pipe','s02','bio_processor','g05','autocrafter','auto_furnace','supply_crate','energy_junction','item_duct','item_extractor','item_router','fluid_valve','terminal','busjoint','damper'}
 existing={'ore','common','tail','joint','brace','shield','finder','prep','tank','rain_collector','alloy_furnace','iron_plate','copper_plate','fix','steel_pre','steel','ceramic','insulation','binder','substrate','board','breaker','sheath','steel_fix','box','machine_frame'}
 fluids={'warm':'#bca88a','wastewater':'#837a61','bio':'#a6bf59','returnwater':'#699997'}
+# Keep these registry assets as placeholders; official dimension content is not released yet.
+reserved={'moon','lunar','moon_tail','liner','lined_box','anima','anima_basic','staff_blank'}
+def recipe_enabled(recipe):
+ return not any(entry['item'] in reserved for side in ['inputs','outputs'] for entry in recipe[side])
 def write(path,data):
  path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
 def save(im,path):path.parent.mkdir(parents=True,exist_ok=True);im.save(path)
@@ -83,22 +87,35 @@ write(RES/'data/minecraft/tags/block/dampens_vibrations.json',{'replace':False,'
 for r in catalogue['recipes']:
  if r['station']=='workbench' and r['kind']!='贸易' and not r['id'].startswith('V-'):
   filename=f"catalogue_{r['id'].lower()}";recipe_file=DATA/'recipe'/f'{filename}.json'
-  if recipe_file.exists():write(DATA/'advancement/recipes'/f'{filename}.json',{'criteria':{'materials':{'trigger':'minecraft:inventory_changed','conditions':{'items':[{'items':'minecraft:iron_ingot'}]}}},'rewards':{'recipes':[f'{MOD}:{filename}']}})
+  if recipe_file.exists():
+   recipe_data=json.loads(recipe_file.read_text(encoding='utf-8'))
+   discovery={'criteria':{'materials':{'trigger':'minecraft:inventory_changed','conditions':{'items':[{'items':'minecraft:iron_ingot'}]}}},'rewards':{'recipes':[f'{MOD}:{filename}']}}
+   if not recipe_enabled(r):
+    recipe_data['neoforge:conditions']=[{'type':'neoforge:false'}]
+    discovery['neoforge:conditions']=[{'type':'neoforge:false'}]
+   write(recipe_file,recipe_data)
+   write(DATA/'advancement/recipes'/f'{filename}.json',discovery)
 print('Generated complete registered catalogue artwork, names, block models and recipe discoveries.')
 
-# Three auxiliary ores use existing Minecraft dimensions: Shuyuan=Overworld,
-# Chenghai resource region=End. Existing chunks remain unchanged.
-for key,dimension in [('rutile','overworld'),('borate','overworld'),('moon','end')]:
- im=Image.new('RGBA',(16,16),'#767977' if dimension=='overworld' else '#d9d9a6');d=ImageDraw.Draw(im)
+# Chenghai/Linhai await a future official dimension. Never substitute the End.
+# Remove only the three obsolete generated moon worldgen resources, retaining registry artwork.
+for base in [DATA,ROOT/'build/resources/main/data'/MOD]:
+ for relative in ['worldgen/configured_feature/moon.json','worldgen/placed_feature/moon.json','neoforge/biome_modifier/moon.json']:
+  obsolete=(base/relative).resolve()
+  assert obsolete.is_relative_to(base.resolve())
+  obsolete.unlink(missing_ok=True)
+for key,dimension in [('rutile','overworld'),('borate','overworld'),('moon',None)]:
+ im=Image.new('RGBA',(16,16),'#767977');d=ImageDraw.Draw(im)
  color={'rutile':'#b9775a','borate':'#bdbaa1','moon':'#a7b8dc'}[key]
  for x,y in [(2,3),(9,2),(6,8),(12,11),(2,12)]:d.rectangle((x,y,x+2,y+1),fill=color)
  save(im,ART/'textures/block'/f'{key}_ore.png')
  write(ART/'models/block'/f'{key}_ore.json',{'parent':'minecraft:block/cube_all','textures':{'all':f'{MOD}:block/{key}_ore'}})
  write(ART/'blockstates'/f'{key}_ore.json',{'variants':{'':{'model':f'{MOD}:block/{key}_ore'}}})
- targets=[{'target':{'predicate_type':'minecraft:tag_match','tag':f'minecraft:{t}'},'state':{'Name':f'{MOD}:{key}_ore'}}for t in ['stone_ore_replaceables','deepslate_ore_replaceables']] if dimension=='overworld' else [{'target':{'predicate_type':'minecraft:block_match','block':'minecraft:end_stone'},'state':{'Name':f'{MOD}:{key}_ore'}}]
- write(DATA/'worldgen/configured_feature'/f'{key}.json',{'type':'minecraft:ore','config':{'size':5 if key!='moon' else 4,'discard_chance_on_air_exposure':0.25,'targets':targets}})
- write(DATA/'worldgen/placed_feature'/f'{key}.json',{'feature':f'{MOD}:{key}','placement':[{'type':'minecraft:count','count':6},{'type':'minecraft:in_square'},{'type':'minecraft:height_range','height':{'type':'minecraft:uniform','min_inclusive':{'absolute':-32 if dimension=='overworld' else 8},'max_inclusive':{'absolute':80}}},{'type':'minecraft:biome'}]})
- write(DATA/'neoforge/biome_modifier'/f'{key}.json',{'type':'neoforge:add_features','biomes':f'#minecraft:is_{dimension}','features':f'{MOD}:{key}','step':'underground_ores'})
+ if dimension is not None:
+  targets=[{'target':{'predicate_type':'minecraft:tag_match','tag':f'minecraft:{t}'},'state':{'Name':f'{MOD}:{key}_ore'}}for t in ['stone_ore_replaceables','deepslate_ore_replaceables']]
+  write(DATA/'worldgen/configured_feature'/f'{key}.json',{'type':'minecraft:ore','config':{'size':5,'discard_chance_on_air_exposure':0.25,'targets':targets}})
+  write(DATA/'worldgen/placed_feature'/f'{key}.json',{'feature':f'{MOD}:{key}','placement':[{'type':'minecraft:count','count':6},{'type':'minecraft:in_square'},{'type':'minecraft:height_range','height':{'type':'minecraft:uniform','min_inclusive':{'absolute':-32},'max_inclusive':{'absolute':80}}},{'type':'minecraft:biome'}]})
+  write(DATA/'neoforge/biome_modifier'/f'{key}.json',{'type':'neoforge:add_features','biomes':f'#minecraft:is_{dimension}','features':f'{MOD}:{key}','step':'underground_ores'})
  for tagname in ['mineable/pickaxe','needs_iron_tool']:
   path=RES/'data/minecraft/tags/block'/f'{tagname}.json';tagdata=json.loads(path.read_text(encoding='utf8'))if path.exists()else{'replace':False,'values':[]};tagdata['values']=list(dict.fromkeys(tagdata['values']+[f'{MOD}:{key}_ore']));write(path,tagdata)
  for lang in ['zh_cn','en_us']:

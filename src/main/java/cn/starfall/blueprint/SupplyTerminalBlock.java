@@ -29,8 +29,6 @@ public final class SupplyTerminalBlock extends Block {
         if (player instanceof ServerPlayer serverPlayer) {
             if (stack.is(StarfallBlueprint.CRYSTAL.get())) {
                 feedback(serverPlayer, SupplyLedger.get(serverPlayer.serverLevel()).exchange(serverPlayer, hand));
-            } else if(stack.is(net.minecraft.world.item.Items.IRON_INGOT)){
-                var ledger=SupplyLedger.get(serverPlayer.serverLevel());var result=ledger.importLunar(serverPlayer,hand);serverPlayer.displayClientMessage(Component.literal("月络进口："+result+" · 今日余 "+ledger.lunarRemaining(serverPlayer.serverLevel())+" / 8"),false);
             } else describe(serverPlayer);
         }
         // Handle this hand once; never fall through to a second hand or consume the held manual/block.
@@ -47,7 +45,6 @@ public final class SupplyTerminalBlock extends Block {
     private static void describe(ServerPlayer player) {
         player.displayClientMessage(Component.translatable("message.starfall_blueprint.supply.help",
                 SupplyLedger.get(player.serverLevel()).remaining(player.serverLevel())), false);
-        player.displayClientMessage(Component.literal("持1铁锭右键换1月络晶粒；全部终端共享每日8笔。剩余："+SupplyLedger.get(player.serverLevel()).lunarRemaining(player.serverLevel())),false);
     }
 
     private static void feedback(ServerPlayer player, SupplyLedger.Result result) {

@@ -22,6 +22,8 @@ public final class CatalogueContent {
     public static final Map<String,DeferredBlock<IndustryBlock>> BLOCKS=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<Block>> ORES=new LinkedHashMap<>();
     public static final Set<String> MACHINE_KEYS=Set.of("refiner","recycler","g01","g02","g03","g04","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
+    // Chenghai/Linhai content awaits a future official Minecraft dimension; keep registry IDs for saves only.
+    public static final Set<String> RESERVED_ITEMS=Set.of("moon","lunar","moon_tail","liner","lined_box","anima","anima_basic","staff_blank");
     public static final Set<String> FLUID_KEYS=Set.of("warm","wastewater","bio","returnwater");
     public static final Set<String> TOOLS=Set.of("basic_jig","head","direction_jig","pressure_module","laminate_jig","clean_module","facet_jig");
     public static final DeferredHolder<DataComponentType<?>,DataComponentType<MaterialQuality>> QUALITY=StarfallBlueprint.COMPONENTS.register("material_quality",()->DataComponentType.<MaterialQuality>builder().persistent(MaterialQuality.CODEC).networkSynchronized(MaterialQuality.STREAM).build());
@@ -36,7 +38,29 @@ public final class CatalogueContent {
         DATA.getAsJsonObject("items").entrySet().forEach(e->DEFINITIONS.put(e.getKey(),e.getValue().getAsJsonObject()));
         DATA.getAsJsonArray("recipes").forEach(r->RECIPES.put(r.getAsJsonObject().get("id").getAsString(),r.getAsJsonObject()));
         for(String key:List.of("rutile","borate","moon"))ORES.put(key,StarfallBlueprint.BLOCKS.register(key+"_ore",()->new Block(BlockBehaviour.Properties.of().strength(3f,3f).requiresCorrectToolForDrops()){
-            public java.util.List<ItemStack>getDrops(net.minecraft.world.level.block.state.BlockState state,net.minecraft.world.level.storage.loot.LootParams.Builder params){var tool=params.getOptionalParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.TOOL);if(tool==null||!tool.isCorrectToolForDrops(state))return List.of();var out=stack(key,1);var data=CatalogueEquipment.getData(out);data.putString("Origin",params.getLevel().dimension().location().toString());CatalogueEquipment.setData(out,data);return List.of(out);}
+            @Override
+            public List<ItemStack> getDrops(net.minecraft.world.level.block.state.BlockState state,
+                                           net.minecraft.world.level.storage.loot.LootParams.Builder params) {
+                if (RESERVED_ITEMS.contains(key)) return List.of();
+                var tool = params.getOptionalParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.TOOL);
+                if (tool == null || !tool.isCorrectToolForDrops(state)) return List.of();
+                var fortune = params.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                        .getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.FORTUNE);
+                int level = Math.clamp(tool.getEnchantmentLevel(fortune), 0, 3);
+                int count = 1;
+                if (level > 0) {
+                    var origin = params.getOptionalParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN);
+                    if (origin == null) return List.of();
+                    var pos = net.minecraft.core.BlockPos.containing(origin);
+                    var random = net.minecraft.util.RandomSource.create(params.getLevel().getSeed() ^ pos.asLong());
+                    count = Math.max(1, random.nextInt(level + 2));
+                }
+                var out = stack(key, count);
+                var data = CatalogueEquipment.getData(out);
+                data.putString("Origin", params.getLevel().dimension().location().toString());
+                CatalogueEquipment.setData(out, data);
+                return List.of(out);
+            }
         }));
         for(var e:DEFINITIONS.entrySet()) {
             String key=e.getKey();if(isExisting(key)||key.equals("power")||FLUID_KEYS.contains(key)||e.getValue().get("vanilla")!=null&&e.getValue().get("vanilla").getAsBoolean()||Set.of("water","water_source","trade_lunar").contains(key))continue;
@@ -78,6 +102,12 @@ public final class CatalogueContent {
     }
     public static ItemStack stack(String key,int count){return new ItemStack(item(key),count);}
     public static String key(ItemStack stack){for(String k:DEFINITIONS.keySet())if(!FLUID_KEYS.contains(k)&&!Set.of("power","water","water_source","trade_lunar").contains(k)&&matches(k,stack))return k;return "";}
+    public static boolean isRecipeEnabled(JsonObject recipe) {
+        for (String side : List.of("inputs", "outputs"))
+            for (var entry : recipe.getAsJsonArray(side))
+                if (RESERVED_ITEMS.contains(key(entry))) return false;
+        return true;
+    }
     public static JsonObject recipe(String id){return Objects.requireNonNull(RECIPES.get(id),id);}
     public static int qty(JsonElement e){return e.getAsJsonObject().get("qty").getAsInt();}
     public static String key(JsonElement e){return e.getAsJsonObject().get("item").getAsString();}

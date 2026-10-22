@@ -16,6 +16,7 @@ public final class CatalogueCraftingRecipe extends CustomRecipe {
     private final JsonObject definition;
     public CatalogueCraftingRecipe(String id){super(CraftingBookCategory.MISC);this.id=id;definition=CatalogueContent.recipe(id);}
     public boolean matches(CraftingInput input,Level level) {
+        if (!CatalogueContent.isRecipeEnabled(definition)) return false;
         JsonObject craft=definition.getAsJsonObject("craft");
         if(craft.get("mode").getAsString().startsWith("定形")) {
             var cells=craft.getAsJsonArray("cells");int minX=3,minY=3,maxX=0,maxY=0;
@@ -49,6 +50,7 @@ public final class CatalogueCraftingRecipe extends CustomRecipe {
         return true;
     }
     public ItemStack assemble(CraftingInput input,HolderLookup.Provider provider) {
+        if (!CatalogueContent.isRecipeEnabled(definition)) return ItemStack.EMPTY;
         ItemStack out=getResultItem(provider).copy();
         if(id.equals("ST-15")||id.equals("ST-16"))for(int i=0;i<input.size();i++)if(SealedSampleItem.isBox(input.getItem(i)))out.set(net.minecraft.core.component.DataComponents.CONTAINER,input.getItem(i).getOrDefault(net.minecraft.core.component.DataComponents.CONTAINER,net.minecraft.world.item.component.ItemContainerContents.EMPTY));
         for(int i=0;i<input.size();i++){var s=input.getItem(i);if(s.has(CatalogueContent.QUALITY.get())){out.set(CatalogueContent.QUALITY.get(),MaterialQuality.of(s));break;}}

@@ -29,21 +29,25 @@ public final class CatalogueGameTests {
 
     @GameTest(template="empty")
     public static void everyCatalogueWorkbenchRecipeIsExecutable(GameTestHelper h){
-        int verified=0;
+        var existing=Set.of("ST-01","ST-02","ST-03","ST-04","ST-05","ST-06","ST-07","ST-08","ST-09","ST-10","ST-11","ST-12","ST-13","ST-14","MC-C01","MC-M01","PC-M03","EN-T01","SV-M03","CB-01","CB-02","CB-03","CB-04","CB-05");
+        Set<String> expected=new HashSet<>(),verified=new HashSet<>();
+        for(var r:CatalogueContent.RECIPES.values())if(r.get("station").getAsString().equals("workbench")&&r.has("craft")&&!r.get("id").getAsString().startsWith("V-")&&!existing.contains(r.get("id").getAsString())&&CatalogueContent.isRecipeEnabled(r))expected.add(r.get("id").getAsString());
         for(var holder:h.getLevel().getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING))if(holder.value()instanceof CatalogueCraftingRecipe recipe){
+            h.assertTrue(expected.contains(recipe.id),"Only enabled catalogue workbench recipes may load: "+recipe.id);
             var d=CatalogueContent.recipe(recipe.id);List<ItemStack>grid=new ArrayList<>(Collections.nCopies(9,ItemStack.EMPTY));var craft=d.getAsJsonObject("craft");
             if(craft.get("mode").getAsString().startsWith("定形")){var cells=craft.getAsJsonArray("cells");for(int i=0;i<9;i++)if(!cells.get(i).isJsonNull())grid.set(i,material(CatalogueContent.key(cells.get(i)),1));}
             else {int i=0;for(var input:d.getAsJsonArray("inputs"))for(int n=0;n<CatalogueContent.qty(input);n++)grid.set(i++,material(CatalogueContent.key(input),1));}
             var input=CraftingInput.of(3,3,grid);h.assertTrue(recipe.matches(input,h.getLevel()),"Recipe rejects its real 3x3 inputs: "+recipe.id);
-            var out=recipe.assemble(input,h.getLevel().registryAccess());var expected=d.getAsJsonArray("outputs").get(0);h.assertTrue(CatalogueContent.matches(CatalogueContent.key(expected),out)&&out.getCount()==CatalogueContent.qty(expected),"Wrong result: "+recipe.id);
-            var remaining=recipe.getRemainingItems(input);h.assertTrue(remaining.stream().allMatch(ItemStack::isEmpty),"Catalogue assembly must not duplicate containers: "+recipe.id);verified++;
+            var out=recipe.assemble(input,h.getLevel().registryAccess());var expectedOutput=d.getAsJsonArray("outputs").get(0);h.assertTrue(CatalogueContent.matches(CatalogueContent.key(expectedOutput),out)&&out.getCount()==CatalogueContent.qty(expectedOutput),"Wrong result: "+recipe.id);
+            var remaining=recipe.getRemainingItems(input);h.assertTrue(remaining.stream().allMatch(ItemStack::isEmpty),"Catalogue assembly must not duplicate containers: "+recipe.id);h.assertTrue(verified.add(recipe.id),"Duplicate catalogue recipe: "+recipe.id);
         }
-        h.assertTrue(verified>=35,"All added workbench recipes must actually load, got "+verified);h.succeed();
+        h.assertTrue(expected.size()==43&&verified.equals(expected),"All 43 active workbench recipes must load and execute: expected="+expected+" verified="+verified);h.succeed();
     }
     @GameTest(template="empty")
     public static void everyIndustrialProcessSurvivesReloadAndConservesInputs(GameTestHelper h){
+        var active=CatalogueContent.RECIPES.values().stream().filter(CatalogueContent::isRecipeEnabled).filter(r->Set.of("prep","refiner","recycler","bio_processor").contains(r.get("station").getAsString())&&!r.get("id").getAsString().equals("PC-R01")).toList();
         int verified=0;
-        for(var r:CatalogueContent.RECIPES.values())if(Set.of("prep","refiner","recycler","bio_processor").contains(r.get("station").getAsString())&&!r.get("id").getAsString().equals("PC-R01")){
+        for(var r:active){
             String id=r.get("id").getAsString();var be=machine(h,r.get("station").getAsString());be.template=id;be.setPower(320000);int slot=0;
             for(var in:r.getAsJsonArray("inputs")){String key=CatalogueContent.key(in);if(key.equals("water"))be.tanks[0].fill(new FluidStack(Fluids.WATER,CatalogueContent.qty(in)),FluidAction.EXECUTE);else be.stock.set(slot++,material(key,CatalogueContent.qty(in)));}
             int tool=14;for(var in:r.getAsJsonArray("tools"))be.stock.set(tool++,material(in.getAsString(),1));
@@ -54,7 +58,7 @@ public final class CatalogueGameTests {
             for(var out:r.getAsJsonArray("outputs")){String key=CatalogueContent.key(out);int n=CatalogueContent.qty(out);if(CatalogueContent.FLUID_KEYS.contains(key)){int actual=Arrays.stream(be.tanks).filter(t->t.getFluid().is(CatalogueFluids.fluid(key))).mapToInt(t->t.getFluidAmount()).sum();h.assertTrue(actual==n,"Fluid conservation: "+id+" "+key);}else h.assertTrue(count(be,key)==n,"Solid conservation: "+id+" "+key);}
             int total=be.stock.subList(9,13).stream().mapToInt(ItemStack::getCount).sum();process(be,duration);h.assertTrue(total==be.stock.subList(9,13).stream().mapToInt(ItemStack::getCount).sum(),"Idle duplicate: "+id);verified++;
         }
-        h.assertTrue(verified>=16,"Industrial process coverage incomplete: "+verified);h.succeed();
+        h.assertTrue(active.size()==12&&verified==active.size(),"Every active industrial process must survive reload and conserve inputs: expected="+active.size()+" verified="+verified);h.succeed();
     }
     @GameTest(template="empty")
     public static void mixedLowQualityCannotBeLaunderedAndBackpressureConsumesNothing(GameTestHelper h){
@@ -124,8 +128,8 @@ public final class CatalogueGameTests {
         var contents=bag.get(DataComponents.CONTAINER);h.assertTrue(contents!=null&&contents.stream().mapToInt(ItemStack::getCount).sum()==64&&p.getInventory().getItem(1).isEmpty()&&p.getInventory().getItem(2).is(Items.CHEST),"Bag collects minerals into persistent storage, never containers");MiningBagItem.collect(p);h.assertTrue(bag.get(DataComponents.CONTAINER).stream().mapToInt(ItemStack::getCount).sum()==64,"No duplicate collection");p.getInventory().clearContent();h.succeed();
     }
     @GameTest(template="empty")
-    public static void lunarImportIsSharedLimitedAndSaved(GameTestHelper h){
-        var p=player(h);var ledger=new SupplyLedger();p.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.IRON_INGOT,9));for(int i=0;i<8;i++)h.assertTrue(ledger.importLunar(p,InteractionHand.MAIN_HAND)==SupplyLedger.Result.SUCCESS,"Import trade succeeds");h.assertTrue(ledger.importLunar(p,InteractionHand.MAIN_HAND)==SupplyLedger.Result.SOLD_OUT&&p.getMainHandItem().getCount()==1,"Only eight trades, rejected ninth preserves iron");var restored=SupplyLedger.load(ledger.save(new net.minecraft.nbt.CompoundTag(),h.getLevel().registryAccess()),h.getLevel().registryAccess());h.assertTrue(restored.lunarRemaining(h.getLevel())==0,"Quota persists across reload");p.getInventory().clearContent();h.succeed();
+    public static void lunarImportRemainsUnavailableAfterLedgerReload(GameTestHelper h){
+        var p=player(h);var ledger=new SupplyLedger();p.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.IRON_INGOT,9));var before=ledger.save(new net.minecraft.nbt.CompoundTag(),h.getLevel().registryAccess()).copy();for(int i=0;i<9;i++)h.assertTrue(ledger.importLunar(p,InteractionHand.MAIN_HAND)==SupplyLedger.Result.UNAVAILABLE,"Future-dimension imports stay unavailable on every attempt");h.assertTrue(p.getMainHandItem().getCount()==9&&before.equals(ledger.save(new net.minecraft.nbt.CompoundTag(),h.getLevel().registryAccess())),"Rejected imports preserve iron and ledger");var restored=SupplyLedger.load(before,h.getLevel().registryAccess());h.assertTrue(restored.lunarRemaining(h.getLevel())==0&&restored.importLunar(p,InteractionHand.MAIN_HAND)==SupplyLedger.Result.UNAVAILABLE,"Reload cannot reopen import quota");p.getInventory().clearContent();h.succeed();
     }
 
     @GameTest(template="empty")
@@ -152,7 +156,7 @@ public final class CatalogueGameTests {
     @GameTest(template="empty")
     public static void auxiliaryOreHarvestRequiresRealIronTierAndNeverRerolls(GameTestHelper h){
         var pos=h.absolutePos(POS);
-        for(String key:List.of("rutile","borate","moon")){
+        for(String key:List.of("rutile","borate")){
             var state=CatalogueContent.ORES.get(key).get().defaultBlockState();var good=Block.getDrops(state,h.getLevel(),pos,null,null,new ItemStack(Items.IRON_PICKAXE));var bad=Block.getDrops(state,h.getLevel(),pos,null,null,new ItemStack(Items.STONE_PICKAXE));h.assertTrue(good.size()==1&&CatalogueContent.matches(key,good.get(0))&&good.get(0).getCount()==1&&bad.isEmpty(),"Auxiliary ore tier/count: "+key);
             var silk=new ItemStack(Items.NETHERITE_PICKAXE);var drops=Block.getDrops(state,h.getLevel(),pos,null,null,silk);h.assertTrue(drops.size()==1&&CatalogueContent.matches(key,drops.get(0)),"Always raw ore, never placeable reroll block");
         }h.assertTrue(CatalogueContent.BLOCKS.get("damper").get().defaultBlockState().is(net.minecraft.tags.BlockTags.DAMPENS_VIBRATIONS),"Damper has actual vanilla vibration absorption");h.succeed();
@@ -163,8 +167,8 @@ public final class CatalogueGameTests {
         h.assertTrue(RopeSystem.use(context).consumesAction()&&h.getLevel().getBlockState(anchor.south()).is(RopeSystem.ROPE.get())&&p.getMainHandItem().getDamageValue()==1,"Successful legal placement creates actual rope for one durability");var rope=h.getLevel().getBlockState(anchor.south());h.assertTrue(rope.isLadder(h.getLevel(),anchor.south(),p),"Rope is a real climbable block");RopeSystem.use(context);h.assertTrue(h.getLevel().getBlockState(anchor.south()).isAir()&&p.getMainHandItem().getDamageValue()==1,"Second use removes owned rope without free material or extra wear");p.getInventory().clearContent();h.succeed();
     }
     @GameTest(template="empty")
-    public static void staffBlankInheritsAnimaQualityWithoutAnActivationReward(GameTestHelper h){
-        var d=CatalogueContent.recipe("RT-08");List<ItemStack>items=new ArrayList<>();for(var input:d.getAsJsonArray("inputs"))for(int i=0;i<CatalogueContent.qty(input);i++)items.add(material(CatalogueContent.key(input),1));while(items.size()<9)items.add(ItemStack.EMPTY);var recipe=new CatalogueCraftingRecipe("RT-08");var input=CraftingInput.of(3,3,items);var out=recipe.assemble(input,h.getLevel().registryAccess());h.assertTrue(out.is(CatalogueContent.item("staff_blank"))&&MaterialQuality.of(out).route().equals("anima")&&!CatalogueEquipment.getData(out).getBoolean("Activated"),"Crafted staff is only an unactivated quality-preserving medium");h.succeed();
+    public static void staffBlankRejectsEvenValidLegacyAnimaQuality(GameTestHelper h){
+        var d=CatalogueContent.recipe("RT-08");List<ItemStack>items=new ArrayList<>();for(var cell:d.getAsJsonObject("craft").getAsJsonArray("cells")){var stack=cell.isJsonNull()?ItemStack.EMPTY:material(CatalogueContent.key(cell),1);if(CatalogueContent.matches("anima_basic",stack))stack.set(CatalogueContent.QUALITY.get(),new MaterialQuality(99,100,80,0,true,"anima"));items.add(stack);}var before=items.stream().map(ItemStack::copy).toList();var recipe=new CatalogueCraftingRecipe("RT-08");var input=CraftingInput.of(3,3,items);h.assertTrue(!recipe.matches(input,h.getLevel())&&recipe.assemble(input,h.getLevel().registryAccess()).isEmpty(),"Reserved staff rejects valid legacy material and direct assembly");for(int i=0;i<items.size();i++)h.assertTrue(ItemStack.matches(items.get(i),before.get(i)),"Rejected staff preserves every input");h.succeed();
     }
 
     @GameTest(template="empty")
@@ -175,9 +179,9 @@ public final class CatalogueGameTests {
     }
 
     @GameTest(template="empty")
-    public static void sealedSampleSurvivesLiningAndUnpacksExactlyOnce(GameTestHelper h){
+    public static void sealedSampleRejectsReservedLiningAndUnpacksExactlyOnce(GameTestHelper h){
         var p=player(h);var box=material("box",1);var sample=material("common",2);sample.set(CatalogueContent.QUALITY.get(),new MaterialQuality(90,72,60,1,true,"common"));p.setItemInHand(InteractionHand.MAIN_HAND,box);p.setItemInHand(InteractionHand.OFF_HAND,sample);box.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);h.assertTrue(p.getOffhandItem().getCount()==1&&box.get(DataComponents.CONTAINER).stream().mapToInt(ItemStack::getCount).sum()==1,"Seal exactly one specimen");
-        var recipe=new CatalogueCraftingRecipe("ST-15");var input=CraftingInput.of(2,1,List.of(box,material("liner",1)));h.assertTrue(recipe.matches(input,h.getLevel()),"Filled sample box may receive passive lining");var upgraded=recipe.assemble(input,h.getLevel().registryAccess());var sealed=upgraded.get(DataComponents.CONTAINER).stream().findFirst().orElse(ItemStack.EMPTY);h.assertTrue(sealed.getCount()==1&&MaterialQuality.of(sealed).contamination()==1&&MaterialQuality.of(sealed).integrity()==72,"Lining preserves original specimen, never purifies it");
-        p.setItemInHand(InteractionHand.MAIN_HAND,upgraded);p.setItemInHand(InteractionHand.OFF_HAND,ItemStack.EMPTY);p.setShiftKeyDown(true);upgraded.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);h.assertTrue(p.getOffhandItem().getCount()==1&&upgraded.get(DataComponents.CONTAINER).stream().allMatch(ItemStack::isEmpty),"Unpack atomically once");p.setShiftKeyDown(false);p.getInventory().clearContent();h.succeed();
+        var recipe=new CatalogueCraftingRecipe("ST-15");var liner=material("liner",1);var before=box.copy();var input=CraftingInput.of(2,1,List.of(box,liner));h.assertTrue(!recipe.matches(input,h.getLevel())&&recipe.assemble(input,h.getLevel().registryAccess()).isEmpty(),"Reserved lining cannot be crafted even around a sealed specimen");h.assertTrue(ItemStack.matches(before,box)&&liner.getCount()==1,"Rejected lining preserves box, specimen quality, and liner");
+        p.setItemInHand(InteractionHand.OFF_HAND,ItemStack.EMPTY);p.setShiftKeyDown(true);box.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);h.assertTrue(p.getOffhandItem().getCount()==1&&MaterialQuality.of(p.getOffhandItem()).contamination()==1&&MaterialQuality.of(p.getOffhandItem()).integrity()==72&&box.get(DataComponents.CONTAINER).stream().allMatch(ItemStack::isEmpty),"Unpack original specimen and its quality atomically once");p.getInventory().setItem(1,p.getOffhandItem().copy());p.setItemInHand(InteractionHand.OFF_HAND,ItemStack.EMPTY);box.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);h.assertTrue(p.getOffhandItem().isEmpty()&&p.getInventory().getItem(1).getCount()==1&&box.get(DataComponents.CONTAINER).stream().allMatch(ItemStack::isEmpty),"Repeated empty unpack cannot duplicate specimen");p.setShiftKeyDown(false);p.getInventory().clearContent();h.succeed();
     }
 }

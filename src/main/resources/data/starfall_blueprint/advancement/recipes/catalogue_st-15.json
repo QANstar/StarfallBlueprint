@@ -15,5 +15,10 @@
     "recipes": [
       "starfall_blueprint:catalogue_st-15"
     ]
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:false"
+    }
+  ]
 }

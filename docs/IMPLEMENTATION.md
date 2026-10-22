@@ -1,5 +1,15 @@
 # 基础产线实现说明
 
+## 澄海星与林海联盟预留范围
+
+两者仅保留世界观、物品注册ID和配方设计，待未来Minecraft官方新维度更新并适配后再开放；不以末地或其他已有维度代替。生成器删除月络configured feature、placed feature及biome modifier，同时清理对应旧构建资源。既有区块不会自动抹去月络矿，但采收返回空掉落。
+
+`moon/lunar/moon_tail/liner/lined_box/anima/anima_basic/staff_blank`不显示于创造栏。7条关联配方保留设计数据，工作台配方和发现进度使用`neoforge:false`条件避免加载，直接调用工作台配方亦拒绝；工业加工不启动预留工序。已锁定的旧预留批次保持库存、待产物、能量及进度，不继续耗能或结算。共用温水及其他本星配方仍开放。
+
+工务终端撤下铁锭换月络入口；兼容API返回UNAVAILABLE且不改背包或账本。旧月络交易计数保留在NBT，当前余量恒为0；普通CB-05晶料换铁及其每日额度规则不变。官方维度名称、ID和上线时间均未预设。
+
+本轮集中验证见进度和阶段证据；下文历史测试记录不代表月络当前开放。
+
 ## 锁定环境
 
 Minecraft 1.21.1、NeoForge 21.1.262、ModDevGradle 2.0.148、Gradle 8.14.3、Java 21。MOD ID为`starfall_blueprint`；客户端界面在Dist.CLIENT入口注册，共享机器逻辑不引用客户端类。

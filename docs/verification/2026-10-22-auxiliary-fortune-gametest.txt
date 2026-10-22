@@ -1,0 +1,24 @@
+三辅矿时运采收验证（2026-10-22）
+
+环境：Windows，Java 21.0.12.1，Minecraft 1.21.1，NeoForge 21.1.262。
+命令：gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+本地镜像与DNS配置仅用于构建环境。
+
+结果：退出码0，完整构建成功，79项必需GameTest全部通过（原78项及新增1项）。
+[10:19:51] [Server thread/INFO] [minecraft/GameTestServer]: All 79 required tests passed :)
+BUILD SUCCESSFUL in 31s
+
+新增测试：AuxiliaryFortuneGameTests.auxiliaryFortuneIncreasesYieldWithoutChangingOreIdentity
+通过真实Block.getDrops管线，三种辅矿各采样1024坐标，覆盖：
+- 无时运固定1份；时运I/II/III为1—2/1—3/1—4，采样总产量逐级提高，各级上限可达到。
+- 超过III（测试X）与III输出一致。
+- 重复查询一致，矿种和来源组件不变，不消耗或损坏查询工具。
+- 石镐即使附魔时运III也无掉落。
+- 真正的精准采集附魔仍仅获得1份原矿，不产生可放置矿块。
+
+仅服务端验证，未进行客户端或压力测试，未进行世界生成密度校准。
+服务端联网获取Yggdrasil公钥失败为非致命日志，不影响本次GameTest完成。
+完整本地日志：.tools/auxiliary-fortune-validation.log（忽略文件，不纳入版本管理）。

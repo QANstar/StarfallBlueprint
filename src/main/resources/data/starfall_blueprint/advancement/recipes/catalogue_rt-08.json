@@ -15,5 +15,10 @@
     "recipes": [
       "starfall_blueprint:catalogue_rt-08"
     ]
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:false"
+    }
+  ]
 }

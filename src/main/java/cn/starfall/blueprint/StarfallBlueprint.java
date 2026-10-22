@@ -94,7 +94,7 @@ public final class StarfallBlueprint {
                 output.accept(CRYSTAL.get()); output.accept(CONNECTOR.get()); output.accept(TOOL_BRACE.get()); output.accept(SHIELD_LINING.get()); output.accept(SCANNER.get()); output.accept(TAILINGS.get());
                 output.accept(ALLOY_ITEM.get());
                 STRUCTURAL_ITEMS.forEach((name, item) -> { if (!name.endsWith("_portion")) output.accept(item.get()); });
-                CatalogueContent.ITEMS.values().forEach(item -> output.accept(item.get()));
+                CatalogueContent.ITEMS.forEach((key, item) -> { if (!CatalogueContent.RESERVED_ITEMS.contains(key)) output.accept(item.get()); });
                 CatalogueFluids.ENTRIES.values().forEach(fluid -> output.accept(fluid.bucket().get()));
             }).build());
 

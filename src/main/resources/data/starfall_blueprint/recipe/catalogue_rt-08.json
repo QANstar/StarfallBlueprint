@@ -1,4 +1,9 @@
 {
   "type": "starfall_blueprint:catalogue_crafting",
-  "recipe": "RT-08"
+  "recipe": "RT-08",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:false"
+    }
+  ]
 }

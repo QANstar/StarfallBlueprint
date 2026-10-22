@@ -116,8 +116,17 @@ for key,dimension in [('rutile','overworld'),('borate','overworld'),('moon',None
   write(DATA/'worldgen/configured_feature'/f'{key}.json',{'type':'minecraft:ore','config':{'size':5,'discard_chance_on_air_exposure':0.25,'targets':targets}})
   write(DATA/'worldgen/placed_feature'/f'{key}.json',{'feature':f'{MOD}:{key}','placement':[{'type':'minecraft:count','count':6},{'type':'minecraft:in_square'},{'type':'minecraft:height_range','height':{'type':'minecraft:uniform','min_inclusive':{'absolute':-32},'max_inclusive':{'absolute':80}}},{'type':'minecraft:biome'}]})
   write(DATA/'neoforge/biome_modifier'/f'{key}.json',{'type':'neoforge:add_features','biomes':f'#minecraft:is_{dimension}','features':f'{MOD}:{key}','step':'underground_ores'})
- for tagname in ['mineable/pickaxe','needs_iron_tool']:
+ for tagname in ['mineable/pickaxe', 'needs_iron_tool']:
   path=RES/'data/minecraft/tags/block'/f'{tagname}.json';tagdata=json.loads(path.read_text(encoding='utf8'))if path.exists()else{'replace':False,'values':[]};tagdata['values']=list(dict.fromkeys(tagdata['values']+[f'{MOD}:{key}_ore']));write(path,tagdata)
  for lang in ['zh_cn','en_us']:
   path=ART/'lang'/f'{lang}.json';names=json.loads(path.read_text(encoding='utf8'));names[f'block.{MOD}.{key}_ore']=catalogue['items'][key]['name']if lang=='zh_cn'else key.title()+' Ore';write(path,names)
+# Clear the superseded stone-tier tags while retaining iron-tier harvesting requirements.
+stone_tag=RES/'data/minecraft/tags/block/needs_stone_tool.json'
+if stone_tag.exists():
+ stone_data=json.loads(stone_tag.read_text(encoding='utf8'))
+ stone_data['values']=[value for value in stone_data['values'] if value not in {f'{MOD}:rutile_ore',f'{MOD}:borate_ore'}]
+ write(stone_tag,stone_data)
+# Primitive smelting is deliberately less efficient than wet separation at the preparation bench.
+for source,result in [('rutile','titan'),('borate','boron')]:
+ write(DATA/'recipe'/f'auxiliary_smelting_{source}.json',{'type':'minecraft:smelting','category':'misc','ingredient':{'item':f'{MOD}:{source}'},'result':{'id':f'{MOD}:{result}','count':2},'experience':0.2,'cookingtime':200})
 write(DATA/'recipe/reinforce_wear.json',{'type':f'{MOD}:reinforce_wear','category':'equipment'})

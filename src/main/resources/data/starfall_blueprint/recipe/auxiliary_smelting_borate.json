@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": {
+    "item": "starfall_blueprint:borate"
+  },
+  "result": {
+    "id": "starfall_blueprint:boron",
+    "count": 2
+  },
+  "experience": 0.2,
+  "cookingtime": 200
+}

@@ -53,8 +53,21 @@ public final class CatalogueCraftingRecipe extends CustomRecipe implements Autom
         if (!CatalogueContent.isRecipeEnabled(definition)) return ItemStack.EMPTY;
         ItemStack out=getResultItem(provider).copy();
         if(id.equals("ST-15")||id.equals("ST-16"))for(int i=0;i<input.size();i++)if(SealedSampleItem.isBox(input.getItem(i)))out.set(net.minecraft.core.component.DataComponents.CONTAINER,input.getItem(i).getOrDefault(net.minecraft.core.component.DataComponents.CONTAINER,net.minecraft.world.item.component.ItemContainerContents.EMPTY));
-        for(int i=0;i<input.size();i++){var s=input.getItem(i);if(s.has(CatalogueContent.QUALITY.get())){out.set(CatalogueContent.QUALITY.get(),MaterialQuality.of(s));break;}}
+        MaterialQuality inherited=null;
+        for(int i=0;i<input.size();i++) {
+            var s=input.getItem(i);
+            if(!isPhaseCarrier(s))continue;
+            var q=MaterialQuality.of(s);
+            inherited=inherited==null?q:new MaterialQuality(Math.min(inherited.purity(),q.purity()),Math.min(inherited.integrity(),q.integrity()),Math.min(inherited.orientation(),q.orientation()),Math.max(inherited.contamination(),q.contamination()),inherited.continuous()&&q.continuous(),inherited.route());
+        }
+        if(inherited!=null)out.set(CatalogueContent.QUALITY.get(),inherited);
         return out;
+    }
+    private static boolean isPhaseCarrier(ItemStack stack) {
+        if(stack.has(StarfallBlueprint.BATCH.get()))return true;
+        for(String key:java.util.List.of("refined","conductor","load","laminar","sensor","directed","coating","liner","lunar","anima","anima_basic"))
+            if(CatalogueContent.matches(key,stack))return true;
+        return false;
     }
     public ItemStack getResultItem(HolderLookup.Provider provider){var o=definition.getAsJsonArray("outputs").get(0);return CatalogueContent.stack(CatalogueContent.key(o),CatalogueContent.qty(o));}
     public NonNullList<Ingredient> getIngredients(){var out=NonNullList.<Ingredient>create();for(var in:definition.getAsJsonArray("inputs"))for(int i=0;i<CatalogueContent.qty(in);i++)out.add(Ingredient.of(CatalogueContent.item(CatalogueContent.key(in))));return out;}

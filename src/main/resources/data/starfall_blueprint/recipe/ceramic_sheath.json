@@ -4,10 +4,13 @@
   "ingredients": [
     {
       "item": "starfall_blueprint:ceramic"
+    },
+    {
+      "item": "starfall_blueprint:titan"
     }
   ],
   "result": {
     "id": "starfall_blueprint:ceramic_sheath",
-    "count": 1
+    "count": 2
   }
 }

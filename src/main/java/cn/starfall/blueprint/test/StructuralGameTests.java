@@ -21,6 +21,11 @@ public final class StructuralGameTests {
     private static ItemStack portion(String name, int mass) {
         ItemStack s = item(name); s.set(StarfallBlueprint.PORTION_MASS.get(), mass); return s;
     }
+    private static ItemStack crystal() {
+        var stack = CatalogueContent.stack("common", 1);
+        stack.set(StarfallBlueprint.BATCH.get(), MaterialBatch.crystal(100));
+        return stack;
+    }
     private static CraftingInput input(ItemStack... stacks) { return CraftingInput.of(stacks.length, 1, List.of(stacks)); }
     private static CraftingRecipe recipe(GameTestHelper h, String name) {
         return (CraftingRecipe)h.getLevel().getRecipeManager().byKey(StarfallBlueprint.id(name)).orElseThrow().value();
@@ -32,11 +37,11 @@ public final class StructuralGameTests {
             {"iron_plate", 2, CraftingInput.of(1, 2, List.of(new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT)))},
             {"copper_plate", 1, input(new ItemStack(Items.COPPER_INGOT))},
             {"iron_fasteners", 3, input(new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT))},
-            {"insulation", 2, input(new ItemStack(Items.PAPER), new ItemStack(Items.GLASS))},
-            {"binder", 2, input(new ItemStack(Items.WHEAT), new ItemStack(Items.SLIME_BALL))},
-            {"control_board", 1, input(new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.REDSTONE), new ItemStack(Items.GLASS), item("insulation"))},
+            {"insulation", 2, input(new ItemStack(Items.PAPER), CatalogueContent.stack("boron", 1))},
+            {"binder", 2, input(new ItemStack(Items.WHEAT), new ItemStack(Items.CLAY_BALL))},
+            {"control_board", 1, input(new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.REDSTONE), new ItemStack(Items.GLASS), item("insulation"), crystal())},
             {"circuit_breaker", 1, input(new ItemStack(Items.IRON_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.REDSTONE), item("insulation"))},
-            {"ceramic_sheath", 1, input(item("ceramic"))},
+            {"ceramic_sheath", 2, input(item("ceramic"), CatalogueContent.stack("titan",1))},
             {"steel_fasteners", 1, input(item("ordinary_steel"))},
             {"sealed_box", 1, input(new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.GLASS), item("insulation"))}
         };
@@ -48,18 +53,18 @@ public final class StructuralGameTests {
             h.assertTrue(out.is(StarfallBlueprint.structural(name)) && out.getCount() == (int)c[1], name + " output budget");
         }
         h.assertTrue(!recipe(h, "iron_plate").matches(input(new ItemStack(Items.IRON_INGOT)), h.getLevel()), "Single ingot remains the vanilla nugget recipe");
-        h.assertTrue(!recipe(h, "control_board").matches(input(new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.REDSTONE), new ItemStack(Items.GLASS)), h.getLevel()), "Missing insulation cannot make a board");
+        h.assertTrue(!recipe(h, "control_board").matches(input(new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.REDSTONE), new ItemStack(Items.GLASS), crystal()), h.getLevel()), "Valid Q0 cannot replace the missing insulation in a board");
         h.succeed();
     }
 
     @GameTest(template = "empty")
     public static void wholeSubstratesRejectLegacyPortions(GameTestHelper h) {
         var sub = recipe(h, "isolation_substrate");
-        var in = input(item("copper_plate"), new ItemStack(Items.QUARTZ));
-        h.assertTrue(sub.matches(in, h.getLevel()), "One whole plate and quartz must match");
+        var in = input(item("copper_plate"), CatalogueContent.stack("boron", 1));
+        h.assertTrue(sub.matches(in, h.getLevel()), "One whole plate and boron must match");
         h.assertTrue(sub.assemble(in, h.getLevel().registryAccess()).getCount() == 2, "Whole ingredients make two substrates");
         h.assertTrue(sub.getRemainingItems(in).stream().allMatch(ItemStack::isEmpty), "No partial-item remainders");
-        h.assertTrue(!sub.matches(input(portion("copper_plate", 50), new ItemStack(Items.QUARTZ)), h.getLevel()), "Old half plates cannot become whole ingredients");
+        h.assertTrue(!sub.matches(input(portion("copper_plate", 50), CatalogueContent.stack("boron", 1)), h.getLevel()), "Old half plates cannot become whole ingredients");
         h.assertTrue(h.getLevel().getRecipeManager().getRecipeFor(RecipeType.CRAFTING,
             input(new ItemStack(Items.IRON_INGOT, 3), new ItemStack(Items.COAL)), h.getLevel()).isEmpty(), "A workbench cannot produce steel billets");
         var frame = recipe(h, "machine_frame");
@@ -77,19 +82,19 @@ public final class StructuralGameTests {
         var menu = new CraftingMenu(1, p.getInventory(), ContainerLevelAccess.create(h.getLevel(), h.absolutePos(pos)));
         try {
             menu.getSlot(1).set(new ItemStack(StarfallBlueprint.structural("copper_plate"), 2));
-            menu.getSlot(2).set(new ItemStack(Items.QUARTZ, 2));
+            menu.getSlot(2).set(CatalogueContent.stack("boron", 2));
             h.assertTrue(menu.getSlot(0).getItem().is(StarfallBlueprint.structural("isolation_substrate")), "Real workbench resolves custom recipe");
             h.assertTrue(menu.getSlot(1).getItem().getCount() == 2 && p.getInventory().isEmpty(), "Preview never consumes or returns portions");
             menu.clicked(0, 0, ClickType.QUICK_MOVE, p);
         } finally { menu.removed(p); }
-        int copper = 0, quartz = 0, output = 0;
+        int copper = 0, boron = 0, output = 0;
         for (ItemStack s : p.getInventory().items) {
             if (s.is(StarfallBlueprint.structural("copper_plate"))) copper += s.getCount() * StructuralMaterialItem.mass(s);
-            if (s.is(Items.QUARTZ) || s.is(StarfallBlueprint.structural("quartz_portion"))) quartz += s.getCount() * StructuralMaterialItem.mass(s);
+            if (CatalogueContent.matches("boron",s) || s.is(StarfallBlueprint.structural("quartz_portion"))) boron += s.getCount() * StructuralMaterialItem.mass(s);
             if (s.is(StarfallBlueprint.structural("isolation_substrate"))) output += s.getCount();
         }
-        h.assertTrue(output == 4 && copper == 0 && quartz == 0,
-            "Shift-click consumes two whole plates and quartz for four substrates, without fragments; actual outputs=" + output + ", copper=" + copper + ", quartz=" + quartz);
+        h.assertTrue(output == 4 && copper == 0 && boron == 0,
+            "Shift-click consumes two whole plates and boron for four substrates, without fragments; actual outputs=" + output + ", copper=" + copper + ", boron=" + boron);
         p.getInventory().clearContent(); h.succeed();
     }
 
@@ -115,7 +120,7 @@ public final class StructuralGameTests {
         ItemStack restored = ItemStack.parse(h.getLevel().registryAccess(), s.save(h.getLevel().registryAccess())).orElseThrow();
         h.assertTrue(ItemStack.matches(s, restored) && restored.getBurnTime(RecipeType.SMELTING) == 480, "Persisted carbon retains actual mass and fuel");
         h.assertTrue(h.getLevel().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input(restored), h.getLevel()).isEmpty(), "Fragment cannot enter whole-coal vanilla crafting");
-        h.assertTrue(h.getLevel().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input(portion("quartz_portion", 50)), h.getLevel()).isEmpty(), "Half quartz cannot enter whole-quartz recipes");
+        h.assertTrue(h.getLevel().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input(portion("quartz_portion", 50)), h.getLevel()).isEmpty(), "Legacy half quartz cannot enter whole-item recipes");
         h.succeed();
     }
 }

@@ -162,12 +162,12 @@
       "subcategory": "普通材料",
       "recipes": [],
       "uses": [
-        "ST-09",
         "FX-01",
         "FX-03",
         "FX-06",
         "FX-07",
-        "CM-01"
+        "PM-06",
+        "PM-08"
       ],
       "primary_recipe": "",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -208,7 +208,6 @@
         "SF-V-GLASS"
       ],
       "uses": [
-        "ST-07",
         "ST-10",
         "ST-14",
         "PC-M15",
@@ -218,15 +217,10 @@
         "EN-P02",
         "EN-T01",
         "EN-FL01",
-        "EN-S01",
-        "EN-S02",
         "EN-F01",
-        "FX-04",
         "FX-06",
+        "CB-04",
         "PM-10",
-        "PC-M17",
-        "RT-02",
-        "RT-03",
         "SV-M03",
         "LG-I01",
         "SF-PM-10"
@@ -337,7 +331,8 @@
       "subcategory": "普通材料",
       "recipes": [],
       "uses": [
-        "ST-08"
+        "ST-08",
+        "ST-08-SLIME"
       ],
       "primary_recipe": "",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -356,7 +351,8 @@
       "subcategory": "普通材料",
       "recipes": [],
       "uses": [
-        "ST-08"
+        "CM-04",
+        "ST-08-SLIME"
       ],
       "primary_recipe": "",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -376,6 +372,7 @@
       "recipes": [],
       "uses": [
         "ST-06",
+        "ST-08",
         "SF-ST-06"
       ],
       "primary_recipe": "",
@@ -629,23 +626,25 @@
       "name": "赤钛原矿",
       "unit": "块",
       "icon": "ore",
-      "note": "",
+      "note": "起步矿物，普通铁镐可采；普通熔炉每块出2份，整备台工业预设出10份。",
       "external": true,
       "mass": null,
       "design_packet_m": 1000,
+      "mining_tier": "iron",
       "catalogue": true,
       "category": "材料",
       "subcategory": "自然原矿",
       "recipes": [],
       "uses": [
-        "AUX-R01"
+        "AUX-R01",
+        "AUX-S01"
       ],
       "primary_recipe": "",
       "acquisition": "自然矿床采收。曙原星独有。",
       "purpose": {
-        "summary": "提取赤钛陶粉，制作耐磨件",
-        "benefit": "为工具耐磨与工程陶材提供辅料。",
-        "operation": "在整备台走赤钛支线，产物用于PM-09。",
+        "summary": "取得起步钛质陶粉",
+        "benefit": "先做采矿准备与普通机件，后与陨相制高级复材。",
+        "operation": "铁镐可采；普通炉每矿2份，整备台每矿10份，后者需水250mB。",
         "targets": [
           "titan",
           "rutile_tail"
@@ -658,23 +657,25 @@
       "name": "灰硼原矿",
       "unit": "块",
       "icon": "ore",
-      "note": "",
+      "note": "起步矿物，普通铁镐可采；普通熔炉每块出2份，整备台工业预设出10份。",
       "external": true,
       "mass": null,
       "design_packet_m": 1000,
+      "mining_tier": "iron",
       "catalogue": true,
       "category": "材料",
       "subcategory": "自然原矿",
       "recipes": [],
       "uses": [
-        "AUX-R02"
+        "AUX-R02",
+        "AUX-S02"
       ],
       "primary_recipe": "",
       "acquisition": "自然矿床采收。曙原星独有。",
       "purpose": {
-        "summary": "提取硼料，制作耐温观察材料",
-        "benefit": "解锁低膨胀玻璃，不必把所有矿都送进精密加工。",
-        "operation": "整备后用硼料和普通玻璃进行PM-10重熔。",
+        "summary": "取得起步硼酸盐精料",
+        "benefit": "供应绝缘、铜硼基底、耐温玻璃和精密封装。",
+        "operation": "铁镐可采；普通炉每矿2份，整备台每矿10份，干式不耗水。",
         "targets": [
           "boron",
           "borate_tail"
@@ -730,21 +731,20 @@
         "PC-R01"
       ],
       "uses": [
+        "ST-10",
         "PC-M09",
+        "EN-G01",
+        "EN-G02",
+        "EN-G03",
+        "EN-G04",
         "CB-01",
         "CB-02",
         "CB-03",
-        "CB-04",
         "CB-05",
         "PC-R03",
         "PM-05",
         "PM-11",
-        "RT-02",
-        "RT-03",
-        "RT-04",
-        "RT-07",
         "AUTO-CB01",
-        "SV-M01",
         "SV-SP01",
         "SV-SP02",
         "SV-BK01",
@@ -754,24 +754,23 @@
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "制作前期工具、模块与公共复合材料",
-        "benefit": "第一批矿就能转化成省能、收纳和设备升级收益。",
+        "benefit": "第一批陨相开启控制板、四类发电、Ⅰ级模块、省能与20%加固；Ⅱ级继续增加晶料与金锭。",
         "operation": "工作台按配方消耗，或进一步精制；普通入门配方只需Q0、C0。",
         "targets": [
+          "board",
           "refiner",
+          "g01",
+          "g02",
+          "g03",
+          "g04",
           "joint",
           "brace",
           "shield",
-          "finder",
           "refined",
           "refine_tail",
           "warm",
           "coating",
           "anima_basic",
-          "sample_pick",
-          "work_goggles",
-          "rescue_hook",
-          "sample_case",
-          "auto_furnace",
           "speed_1",
           "speed_2",
           "bulk_1",
@@ -837,19 +836,55 @@
       "category": "材料",
       "subcategory": "相晶与复合材料",
       "recipes": [
-        "AUX-R01"
+        "AUX-R01",
+        "AUX-S01"
       ],
       "uses": [
-        "PM-09"
+        "ST-12",
+        "EN-G02",
+        "EN-G03",
+        "EN-P01",
+        "FX-03",
+        "FX-04",
+        "FX-05",
+        "PM-02",
+        "PM-03",
+        "PM-04",
+        "PM-09",
+        "PC-M17",
+        "RT-04",
+        "SV-M01",
+        "SV-SP01",
+        "SV-SP02",
+        "SV-BK01",
+        "LG-I02"
       ],
       "primary_recipe": "AUX-R01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "制作赤钛耐磨镶片",
-        "benefit": "让辅矿进入工具耐磨改装路线。",
-        "operation": "与普通陶料、粘结剂按PM-09配料。",
+        "summary": "制作耐磨件、护套与复合结构",
+        "benefit": "起步采矿准备和中后期工程都持续消耗。",
+        "operation": "先按ST-12、PM-09制件，再按PM-02／03／04与精制陨相复合。",
         "targets": [
-          "wear"
+          "sheath",
+          "g02",
+          "g03",
+          "pump",
+          "direction_jig",
+          "pressure_module",
+          "laminate_jig",
+          "conductor",
+          "warm",
+          "load",
+          "laminar",
+          "wear",
+          "autocrafter",
+          "rescue_hook",
+          "auto_furnace",
+          "speed_1",
+          "speed_2",
+          "bulk_1",
+          "item_extractor"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqUlEQVR4nGNgGNRA1dHjPwjjU8OCT7NbYTdDnP4/hpgEBrght/fvYMRrgCrUxiULOhkYGP4xLLrIBGUzgNkMDBDDYAax4LIVqpjhwbmVDIsYwsFskDhDYTfDrv5SuB4mfJrRATZxJmIUoQOQRTCvMjFQCJjwSYL8r2AUTpwBt/fvYEQOHKq4ABcAWQSLRiZskvg0ImsGAZR0gCQBT3mwMEDXSDQgJj9QBABMZk/jnyuRUAAAAABJRU5ErkJggg=="
@@ -868,20 +903,42 @@
       "category": "材料",
       "subcategory": "相晶与复合材料",
       "recipes": [
-        "AUX-R02"
+        "AUX-R02",
+        "AUX-S02"
       ],
       "uses": [
+        "ST-07",
+        "ST-09",
+        "CB-04",
+        "PM-02",
+        "PM-04",
+        "PM-08",
         "PM-10",
+        "RT-03",
+        "RT-07",
+        "SV-SP01",
+        "SV-SP02",
         "SF-PM-10"
       ],
       "primary_recipe": "AUX-R02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "制作低膨胀耐温玻璃",
-        "benefit": "为观察窗和温度变化环境提供材料。",
-        "operation": "与普通玻璃按PM-10重熔。",
+        "summary": "制作普通绝缘、基底与耐温玻璃",
+        "benefit": "支撑陨相前的寻矿设备与后续精密封装。",
+        "operation": "按ST-07／09和PM-10加工，后与精制陨相共同配料。",
         "targets": [
-          "boroglass"
+          "insulation",
+          "substrate",
+          "finder",
+          "conductor",
+          "warm",
+          "laminar",
+          "directed",
+          "boroglass",
+          "work_goggles",
+          "sample_case",
+          "speed_1",
+          "speed_2"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAo0lEQVR4nGNgGNRA1dHjPwjjU8OCT7NFmTVDjpYfQ0wCA9yQ2/t3MOI1QBVq45IFnWD+lGubUNgMDBDDYAax4LIVqpjh3cmfDFMYIGyQOEMZA8OJrqNwPUz4NKMDbOJMxChCByCLYF5lYqAQMOGTBPlfyJydOANu79/BiBw4VHEBLgCyCBaNTNgk8WlE1gwCKOkASQKe8izMrTFsJQkQkx8oAgD4GVFfnuHDfwAAAABJRU5ErkJggg=="
@@ -1401,7 +1458,7 @@
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "制作Ⅱ级模块和高负载普通结构",
-        "benefit": "不用特矿也能完成前期设备升级。",
+        "benefit": "与钛硼、陨相共同参与Ⅱ级升级和后续结构。",
         "operation": "用于钢制紧固件、熔炉Ⅱ级模块等配方。",
         "targets": [
           "steel_fix",
@@ -1435,13 +1492,10 @@
       ],
       "uses": [
         "ST-12",
-        "EN-P02",
-        "FX-04",
         "FX-05",
         "PM-04",
         "PM-09",
         "CM-02",
-        "CM-03",
         "SV-BK01",
         "SV-BK02"
       ],
@@ -1453,14 +1507,11 @@
         "operation": "1黏土球烧成1份陶瓷，后续配方整份消耗。",
         "targets": [
           "sheath",
-          "dew",
-          "pressure_module",
           "laminate_jig",
           "laminar",
           "warm",
           "wear",
           "busjoint",
-          "guide",
           "bulk_1",
           "bulk_2"
         ]
@@ -1472,7 +1523,7 @@
       "name": "普通绝缘基材",
       "unit": "份",
       "icon": "plate",
-      "note": "",
+      "note": "纸基与硼酸盐绝缘，1纸＋1硼料出2份；无陨相、石英或下界前置。",
       "external": false,
       "mass": null,
       "design_packet_m": 100,
@@ -1499,7 +1550,7 @@
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "制作控制板、导线绝缘和封存衬层",
-        "benefit": "让起步电路与供能不被稀有材料卡住。",
+        "benefit": "起步先以纸和硼料制成，再与陨相共同装配控制板。",
         "operation": "按ST-07制造，再作为普通配料使用。",
         "targets": [
           "board",
@@ -1521,7 +1572,7 @@
       "name": "普通粘结剂",
       "unit": "份",
       "icon": "plate",
-      "note": "",
+      "note": "1小麦＋1黏土球出2份普通粘结剂；不要求黏液或战斗掉落。可选黏液高效路线ST-08-SLIME每批出4份。",
       "external": false,
       "mass": null,
       "design_packet_m": 100,
@@ -1530,7 +1581,8 @@
       "category": "材料",
       "subcategory": "常规部件",
       "recipes": [
-        "ST-08"
+        "ST-08",
+        "ST-08-SLIME"
       ],
       "uses": [
         "PM-04",
@@ -1552,10 +1604,10 @@
     },
     "substrate": {
       "id": "substrate",
-      "name": "铜／石英隔离基底",
+      "name": "铜／硼隔离基底",
       "unit": "份",
       "icon": "plate",
-      "note": "",
+      "note": "1铜板＋1硼料出2隔离基底；普通机电不要求下界石英，石英用于后续精密工序。",
       "external": false,
       "mass": null,
       "design_packet_m": 100,
@@ -1572,7 +1624,7 @@
       "primary_recipe": "ST-09",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "作为铜／石英隔离基底",
+        "summary": "作为铜／硼隔离基底",
         "benefit": "为感相计量预坯提供电路承载结构。",
         "operation": "按PM-06投料，不可直接用于人体适配。",
         "targets": [
@@ -1665,7 +1717,7 @@
       "name": "基础控制板",
       "unit": "件",
       "icon": "board",
-      "note": "",
+      "note": "铜、红石、玻璃、硼绝缘与1份Q0陨相共同装配控制板；作为自动化与后续设备的统一陨相节点，制作本身不要求供电。",
       "external": false,
       "mass": 400,
       "implementation": "已实装",
@@ -1694,7 +1746,7 @@
       "purpose": {
         "summary": "控制自动合成、定向抽取和基础设备",
         "benefit": "让生产与物流能够按规则自动运行。",
-        "operation": "在工作台用普通电路材料制作，装配进设备。",
+        "operation": "在工作台按ST-10实耗铜、红石、玻璃、硼绝缘与1份Q0陨相，设备继承门槛。",
         "targets": [
           "s02",
           "bio_processor",
@@ -1751,7 +1803,7 @@
       "name": "陶瓷护套",
       "unit": "件",
       "icon": "part",
-      "note": "",
+      "note": "1陶瓷＋1钛质陶粉出2护套；耐磨绝缘部件重复进入机电设备。",
       "external": false,
       "mass": 100,
       "implementation": "已实装",
@@ -1761,14 +1813,22 @@
       "recipes": [
         "ST-12"
       ],
-      "uses": [],
+      "uses": [
+        "EN-G01",
+        "EN-G04",
+        "EN-P02"
+      ],
       "primary_recipe": "ST-12",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "提供普通陶瓷绝缘护套",
         "benefit": "为洁净计量等工程接口预留保护结构。",
         "operation": "按对应工程装配使用；当前没有独立手持效果。",
-        "targets": []
+        "targets": [
+          "g01",
+          "g04",
+          "dew"
+        ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkklEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhD4+fAymGaX12XwjqthgBnCiK5xXXM4WBGyJnSAbAgLsgTMRlwa0V0DAkzoEoQ05845QXwg4tJE0IBcNA2TUyxIM4CQJmTARI7moNqVDFjTgbaT939QNBLSRDAhwQzBpYkgwJXuaQIA+8tHg9czBXYAAAAASUVORK5CYII="
     },
@@ -2181,7 +2241,7 @@
       "name": "赤钛耐磨镶片",
       "unit": "份",
       "icon": "plate",
-      "note": "镐最大耐久＋10%；与CB-02同槽不叠加",
+      "note": "普通镐耐久＋10%；可用CB-02晋升20%，再以本镶片＋耐温玻璃＋烈焰粉复合晋升30%；同槽分级替换，不相乘，保留损耗比例。",
       "external": false,
       "mass": null,
       "design_packet_m": 100,
@@ -2192,13 +2252,16 @@
       "recipes": [
         "PM-09"
       ],
-      "uses": [],
+      "uses": [
+        "RT-02",
+        "UP-COMPOSITE"
+      ],
       "primary_recipe": "PM-09",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "作为赤钛支线的工具耐磨镶片",
-        "benefit": "为普通镐提供另一种耐久改装选择。",
-        "operation": "装同一工具升级槽，耐久上限＋10%，与加固扣择一。",
+        "summary": "制作采样镐与分级耐磨强化",
+        "benefit": "先提供10%耐久，后参与20%镐晋升30%的复合。",
+        "operation": "同槽分级替换：10%可用CB-02升20%，再加镶片、耐温玻璃与烈焰粉升30%，保持损耗比例。",
         "targets": [
           "sample_pick"
         ]
@@ -2222,14 +2285,51 @@
         "PM-10",
         "SF-PM-10"
       ],
-      "uses": [],
+      "uses": [
+        "EN-G04",
+        "EN-P02",
+        "EN-S01",
+        "EN-S02",
+        "FX-04",
+        "FX-06",
+        "PM-03",
+        "PM-06",
+        "CM-01",
+        "CM-03",
+        "PC-M17",
+        "RT-02",
+        "RT-03",
+        "SV-M01",
+        "SV-BK01",
+        "SV-BK02",
+        "UP-COMPOSITE"
+      ],
       "primary_recipe": "PM-10",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "制作可观察内部的耐温玻璃结构",
         "benefit": "在温度变化环境保留透明观察面。",
         "operation": "可放置为观察窗；不自动赋予整台机器更高耐温等级。",
-        "targets": []
+        "targets": [
+          "g04",
+          "dew",
+          "s01",
+          "s02",
+          "pressure_module",
+          "clean_module",
+          "load",
+          "warm",
+          "sensor",
+          "wastewater",
+          "terminal",
+          "guide",
+          "autocrafter",
+          "sample_pick",
+          "work_goggles",
+          "auto_furnace",
+          "bulk_1",
+          "bulk_2"
+        ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnElEQVR4nGNgGNRA1dHjPwjjU8OCT7NWbwZDlbAiQ0wCA9yQ2/t3MOI1QBVq45IFnWB+29v7KGyGYohhMIMYcdkKVszAwPBn0xkGFj8TMBsmfq14BtwAJnya0QE2cSZiFKEDkEUwrzIxUAiY8Eki+5+gAbf372AEBQ5VXYALYI0FBiRJfBqRNYMASjqAAeTkCwpxdFtJAsTkB4oAAPkfU5+QCjlIAAAAAElFTkSuQmCC"
     },
@@ -3124,10 +3224,12 @@
       "category": "装备与武器",
       "subcategory": "原版工具",
       "recipes": [
-        "V-PICKAXE"
+        "V-PICKAXE",
+        "UP-COMPOSITE"
       ],
       "uses": [
-        "RT-02"
+        "RT-02",
+        "UP-COMPOSITE"
       ],
       "primary_recipe": "V-PICKAXE",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -3738,6 +3840,68 @@
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdElEQVR4nGNgGGjACGNMXLrsPyka86OjwHpZkAWd/x1leKsbj1ej8OWFDHuZrOF8FmTJ4Fk3GBgYKgnanpWBwwAYuHl4L9xryEDd1hnDm0wMFAKmUQMYWIgNbaICcW2aBkEN6GpQXABKYciJBBvYS6zT6AYAjhYYTXYFnuQAAAAASUVORK5CYII="
+    },
+    "gold_ingot": {
+      "id": "gold_ingot",
+      "name": "金锭",
+      "unit": "件",
+      "icon": "metal",
+      "note": "",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "FX-06",
+        "PM-06",
+        "PM-08",
+        "CM-02",
+        "SV-SP02",
+        "SV-BK02"
+      ],
+      "primary_recipe": ""
+    },
+    "blaze_powder": {
+      "id": "blaze_powder",
+      "name": "烈焰粉",
+      "unit": "件",
+      "icon": "raw",
+      "note": "",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "UP-COMPOSITE"
+      ],
+      "primary_recipe": ""
+    },
+    "netherite_scrap": {
+      "id": "netherite_scrap",
+      "name": "下界合金碎片",
+      "unit": "件",
+      "icon": "metal",
+      "note": "",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CM-04"
+      ],
+      "primary_recipe": ""
     },
     "white_concrete_powder": {
       "id": "white_concrete_powder",
@@ -4740,7 +4904,7 @@
           "qty": 1
         },
         {
-          "item": "glass",
+          "item": "boron",
           "qty": 1
         }
       ],
@@ -4754,7 +4918,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "玻璃纤维／纸基隔离材料的简化配方；不含陨相组分。",
+      "note": "纸基与硼酸盐绝缘，1纸＋1硼料出2份；无陨相、石英或下界前置。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -4766,7 +4930,7 @@
             "qty": 1
           },
           {
-            "item": "glass",
+            "item": "boron",
             "qty": 1
           },
           null,
@@ -4793,7 +4957,7 @@
           "qty": 1
         },
         {
-          "item": "slime",
+          "item": "clay",
           "qty": 1
         }
       ],
@@ -4807,7 +4971,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "常规可再生材料的简化配方；工匠采购是可选替代。",
+      "note": "1小麦＋1黏土球出2份普通粘结剂；不要求黏液或战斗掉落。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -4819,7 +4983,7 @@
             "qty": 1
           },
           {
-            "item": "slime",
+            "item": "clay",
             "qty": 1
           },
           null,
@@ -4846,7 +5010,7 @@
           "qty": 1
         },
         {
-          "item": "quartz",
+          "item": "boron",
           "qty": 1
         }
       ],
@@ -4860,7 +5024,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "1整份铜板＋1石英出2份隔离基底，不退半份物品。",
+      "note": "1铜板＋1硼料出2隔离基底；普通机电不要求下界石英，石英用于后续精密工序。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -4872,7 +5036,7 @@
             "qty": 1
           },
           {
-            "item": "quartz",
+            "item": "boron",
             "qty": 1
           },
           null,
@@ -4909,6 +5073,10 @@
         {
           "item": "insulation",
           "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -4921,10 +5089,11 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "",
+      "note": "铜、红石、玻璃、硼绝缘与1份Q0陨相共同装配控制板；作为自动化与后续设备的统一陨相节点，制作本身不要求供电。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
@@ -4944,7 +5113,10 @@
             "item": "insulation",
             "qty": 1
           },
-          null,
+          {
+            "item": "common",
+            "qty": 1
+          },
           null,
           null,
           null,
@@ -5031,19 +5203,23 @@
         {
           "item": "ceramic",
           "qty": 1
+        },
+        {
+          "item": "titan",
+          "qty": 1
         }
       ],
       "outputs": [
         {
           "item": "sheath",
-          "qty": 1
+          "qty": 2
         }
       ],
       "kind": "部件",
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "",
+      "note": "1陶瓷＋1钛质陶粉出2护套；耐磨绝缘部件重复进入机电设备。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -5054,7 +5230,10 @@
             "item": "ceramic",
             "qty": 1
           },
-          null,
+          {
+            "item": "titan",
+            "qty": 1
+          },
           null,
           null,
           null,
@@ -5713,7 +5892,7 @@
       "inputs": [
         {
           "item": "iron",
-          "qty": 4
+          "qty": 3
         },
         {
           "item": "copper",
@@ -5725,7 +5904,15 @@
         },
         {
           "item": "stone",
-          "qty": 2
+          "qty": 1
+        },
+        {
+          "item": "sheath",
+          "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -5738,10 +5925,11 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "500 XH/t；煤／木炭320kXH／件。无晶料、电控板前置。",
+      "note": "500 XH/t；煤／木炭320kXH／件。无晶料、电控板前置。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": true,
       "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
       "craft": {
         "mode": "定形九宫格",
         "cells": [
@@ -5766,11 +5954,11 @@
             "qty": 1
           },
           {
-            "item": "stone",
+            "item": "common",
             "qty": 1
           },
           {
-            "item": "iron",
+            "item": "sheath",
             "qty": 1
           },
           {
@@ -5799,7 +5987,7 @@
         },
         {
           "item": "plank",
-          "qty": 4
+          "qty": 3
         },
         {
           "item": "wool",
@@ -5807,6 +5995,14 @@
         },
         {
           "item": "copper",
+          "qty": 1
+        },
+        {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "common",
           "qty": 1
         }
       ],
@@ -5820,19 +6016,16 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "可用地点80保底／160额定XH/t；九宫格中标明每格的批量扣量。",
+      "note": "可用地点80保底／160额定XH/t；九宫格中标明每格的批量扣量。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
           {
             "item": "machine_frame",
-            "qty": 1
-          },
-          {
-            "item": "plank",
             "qty": 1
           },
           {
@@ -5859,7 +6052,14 @@
             "item": "copper",
             "qty": 1
           },
-          null
+          {
+            "item": "titan",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          }
         ],
         "tools": [],
         "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
@@ -5883,6 +6083,14 @@
         {
           "item": "glass",
           "qty": 2
+        },
+        {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -5895,10 +6103,11 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "环境水动力100 XH/t；不按同股循环水重复增能。",
+      "note": "环境水动力100 XH/t；不按同股循环水重复增能。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
@@ -5930,8 +6139,14 @@
             "item": "glass",
             "qty": 1
           },
-          null,
-          null
+          {
+            "item": "titan",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          }
         ],
         "tools": [],
         "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
@@ -5946,15 +6161,27 @@
       "inputs": [
         {
           "item": "copper",
-          "qty": 3
+          "qty": 2
         },
         {
           "item": "glass",
-          "qty": 4
+          "qty": 2
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
         },
         {
           "item": "redstone",
           "qty": 2
+        },
+        {
+          "item": "sheath",
+          "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -5967,10 +6194,11 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "晴昼100／雨昼50／夜0 XH/t；可用储能跨夜。",
+      "note": "晴昼100／雨昼50／夜0 XH/t；可用储能跨夜。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
@@ -5983,10 +6211,6 @@
             "qty": 1
           },
           {
-            "item": "copper",
-            "qty": 1
-          },
-          {
             "item": "glass",
             "qty": 1
           },
@@ -5995,11 +6219,7 @@
             "qty": 1
           },
           {
-            "item": "glass",
-            "qty": 1
-          },
-          {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
@@ -6008,6 +6228,14 @@
           },
           {
             "item": "redstone",
+            "qty": 1
+          },
+          {
+            "item": "sheath",
+            "qty": 1
+          },
+          {
+            "item": "common",
             "qty": 1
           }
         ],
@@ -6024,7 +6252,7 @@
       "inputs": [
         {
           "item": "iron",
-          "qty": 3
+          "qty": 2
         },
         {
           "item": "copper",
@@ -6036,6 +6264,10 @@
         },
         {
           "item": "glass",
+          "qty": 1
+        },
+        {
+          "item": "titan",
           "qty": 1
         }
       ],
@@ -6049,17 +6281,13 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "1秒抽1000mB，耗1kXH；必须有有效水源。",
+      "note": "1秒抽1000mB，耗1kXH；必须有有效水源。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
       "craft": {
         "mode": "无序九宫格",
         "cells": [
-          {
-            "item": "iron",
-            "qty": 1
-          },
           {
             "item": "iron",
             "qty": 1
@@ -6082,6 +6310,10 @@
           },
           {
             "item": "glass",
+            "qty": 1
+          },
+          {
+            "item": "titan",
             "qty": 1
           },
           null,
@@ -6104,14 +6336,18 @@
         },
         {
           "item": "glass",
-          "qty": 4
+          "qty": 2
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
         },
         {
           "item": "redstone",
           "qty": 2
         },
         {
-          "item": "ceramic",
+          "item": "sheath",
           "qty": 1
         }
       ],
@@ -6125,7 +6361,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "1秒凝露1000mB，耗4kXH；无无限水规则时替代泵。",
+      "note": "1秒凝露1000mB，耗4kXH；无无限水规则时替代泵。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -6145,11 +6381,7 @@
             "qty": 1
           },
           {
-            "item": "glass",
-            "qty": 1
-          },
-          {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
@@ -6161,9 +6393,10 @@
             "qty": 1
           },
           {
-            "item": "ceramic",
+            "item": "sheath",
             "qty": 1
           },
+          null,
           null
         ],
         "tools": [],
@@ -6354,7 +6587,7 @@
           "qty": 1
         },
         {
-          "item": "glass",
+          "item": "boroglass",
           "qty": 1
         },
         {
@@ -6376,7 +6609,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "空匣出厂；容量200kXH，512 XH/t，普通充电效率90%。",
+      "note": "空匣出厂；容量200kXH，512 XH/t，普通充电效率90%。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -6396,7 +6629,7 @@
             "qty": 1
           },
           {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
@@ -6431,7 +6664,7 @@
           "qty": 2
         },
         {
-          "item": "glass",
+          "item": "boroglass",
           "qty": 1
         },
         {
@@ -6461,7 +6694,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "空仓出厂；2MXH，连续1000／峰值2000XH/t；峰100刻、恢复200刻。无CM-03仍可用。",
+      "note": "空仓出厂；2MXH，连续1000／峰值2000XH/t；峰100刻、恢复200刻。无CM-03仍可用。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -6485,7 +6718,7 @@
             "qty": 1
           },
           {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
@@ -6799,6 +7032,10 @@
         {
           "item": "quartz",
           "qty": 1
+        },
+        {
+          "item": "titan",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -6811,7 +7048,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "PM-02／PM-08用途；256次校准，单批扣1。无导相成品自依赖。",
+      "note": "PM-02／PM-08用途；256次校准，单批扣1。无导相成品自依赖。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -6834,7 +7071,10 @@
             "item": "quartz",
             "qty": 1
           },
-          null,
+          {
+            "item": "titan",
+            "qty": 1
+          },
           null,
           null,
           null,
@@ -6857,18 +7097,18 @@
         },
         {
           "item": "iron",
-          "qty": 2
+          "qty": 1
         },
         {
           "item": "redstone",
           "qty": 1
         },
         {
-          "item": "glass",
+          "item": "boroglass",
           "qty": 1
         },
         {
-          "item": "ceramic",
+          "item": "titan",
           "qty": 1
         }
       ],
@@ -6882,7 +7122,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "PM-03压稳附件；普通钢即可建造，不反向要求承相嵌材。按损伤维修，不按批烧毁。",
+      "note": "PM-03压稳附件；普通钢即可建造，不反向要求承相嵌材。按损伤维修，不按批烧毁。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -6902,21 +7142,18 @@
             "qty": 1
           },
           {
-            "item": "iron",
-            "qty": 1
-          },
-          {
             "item": "redstone",
             "qty": 1
           },
           {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
-            "item": "ceramic",
+            "item": "titan",
             "qty": 1
           },
+          null,
           null,
           null
         ],
@@ -6942,6 +7179,10 @@
         {
           "item": "wool",
           "qty": 1
+        },
+        {
+          "item": "titan",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -6954,7 +7195,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "PM-04铺层夹持；256次，单批扣1；不要求PUB-13。",
+      "note": "PM-04铺层夹持；256次，单批扣1；不要求PUB-13。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -6977,7 +7218,10 @@
             "item": "wool",
             "qty": 1
           },
-          null,
+          {
+            "item": "titan",
+            "qty": 1
+          },
           null,
           null,
           null,
@@ -6996,7 +7240,11 @@
       "inputs": [
         {
           "item": "glass",
-          "qty": 4
+          "qty": 2
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
         },
         {
           "item": "copper",
@@ -7013,6 +7261,10 @@
         {
           "item": "board",
           "qty": 1
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -7025,7 +7277,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "PM-06；内置少量漂洗水处理。只封装工业预坯，不处理人体适配。按损伤维修。",
+      "note": "PM-06；内置少量漂洗水处理。只封装工业预坯，不处理人体适配。按损伤维修。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -7041,11 +7293,7 @@
             "qty": 1
           },
           {
-            "item": "glass",
-            "qty": 1
-          },
-          {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
@@ -7066,6 +7314,10 @@
           },
           {
             "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "gold_ingot",
             "qty": 1
           }
         ],
@@ -7193,7 +7445,7 @@
       "outputs": [
         {
           "item": "titan",
-          "qty": 5
+          "qty": 10
         },
         {
           "item": "rutile_tail",
@@ -7204,7 +7456,7 @@
       "seconds": 10,
       "energy": 40000,
       "tools": [],
-      "note": "湿选水随尾砂走。",
+      "note": "工业整备每矿10份，普通炉炼每矿2份；10秒／40kXH，赤钛需水250mB，灰硼干式。辅材不是陨相，不继承P／I／O。",
       "quality": "",
       "inherited": true,
       "balance": false,
@@ -7224,7 +7476,7 @@
       "outputs": [
         {
           "item": "boron",
-          "qty": 5
+          "qty": 10
         },
         {
           "item": "borate_tail",
@@ -7235,7 +7487,7 @@
       "seconds": 10,
       "energy": 40000,
       "tools": [],
-      "note": "干式预设，不扣水；共用整备台换方占用同一份工时。",
+      "note": "工业整备每矿10份，普通炉炼每矿2份；10秒／40kXH，赤钛需水250mB，灰硼干式。辅材不是陨相，不继承P／I／O。",
       "quality": "",
       "inherited": true,
       "balance": false,
@@ -7467,15 +7719,19 @@
       "unlock": "PUB-03",
       "inputs": [
         {
-          "item": "common",
-          "qty": 1
-        },
-        {
           "item": "copper",
           "qty": 1
         },
         {
           "item": "redstone",
+          "qty": 1
+        },
+        {
+          "item": "glass",
+          "qty": 1
+        },
+        {
+          "item": "boron",
           "qty": 1
         }
       ],
@@ -7489,17 +7745,14 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "8格内有／无天然陨相信号；2秒冷却。",
-      "quality": "通用Q0；P≥90%、I≥20、C0；不检查O。",
+      "note": "8格内有／无天然陨相信号；2秒冷却。铜与红石检测、普通玻璃封装和硼料隔离；找到第一块陨相前可制造。",
+      "quality": "仅普通洁净材料；无陨相Q0、P／I／O或连续性前置。",
       "inherited": true,
       "balance": false,
+      "progression_stage": "P1：陨相采掘准备",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
-          {
-            "item": "common",
-            "qty": 1
-          },
           {
             "item": "copper",
             "qty": 1
@@ -7508,7 +7761,14 @@
             "item": "redstone",
             "qty": 1
           },
-          null,
+          {
+            "item": "glass",
+            "qty": 1
+          },
+          {
+            "item": "boron",
+            "qty": 1
+          },
           null,
           null,
           null,
@@ -7603,6 +7863,14 @@
           "qty": 1
         },
         {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "boron",
+          "qty": 1
+        },
+        {
           "item": "water",
           "qty": 250
         }
@@ -7623,7 +7891,7 @@
       "tools": [
         "direction_jig"
       ],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。",
+      "note": "钛硼或其耐温玻璃作为结构／封装辅材，与原有精制陨相共同消耗；原P／I／O、连续性和夹具损耗要求不变。",
       "quality": "P≥95%、输入I≥51→成品I≥50、O≥60，C0；铜先成形冷却。",
       "inherited": false,
       "balance": false,
@@ -7648,6 +7916,14 @@
           "qty": 1
         },
         {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
+        },
+        {
           "item": "water",
           "qty": 500
         }
@@ -7668,7 +7944,7 @@
       "tools": [
         "pressure_module"
       ],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。",
+      "note": "钛硼或其耐温玻璃作为结构／封装辅材，与原有精制陨相共同消耗；原P／I／O、连续性和夹具损耗要求不变。",
       "quality": "P≥95%、输入I≥62→成品I≥60、O≥40，C0；固体按投料表中的完整物品数量处理。",
       "inherited": false,
       "balance": false,
@@ -7697,6 +7973,14 @@
           "qty": 1
         },
         {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "boron",
+          "qty": 1
+        },
+        {
           "item": "water",
           "qty": 500
         }
@@ -7718,7 +8002,7 @@
         "laminate_jig",
         "head"
       ],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。单批含切片，主轴磨头与夹具各扣1次；不要求PUB-13。",
+      "note": "钛硼或其耐温玻璃作为结构／封装辅材，与原有精制陨相共同消耗；原P／I／O、连续性和夹具损耗要求不变。",
       "quality": "P≥95%、连续来料I≥72→成品I≥70、O≥60，C0。",
       "inherited": false,
       "balance": false,
@@ -7770,6 +8054,18 @@
           "qty": 1
         },
         {
+          "item": "boroglass",
+          "qty": 1
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
+        },
+        {
+          "item": "quartz",
+          "qty": 1
+        },
+        {
           "item": "water",
           "qty": 600
         }
@@ -7794,7 +8090,7 @@
       "tools": [
         "clean_module"
       ],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。600mB中500mB冷却、100mB漂洗；小量水处理集成在模块内。CM-05仍为后续探头候选，未补成人体接口配方。",
+      "note": "钛硼或其耐温玻璃作为结构／封装辅材，与原有精制陨相共同消耗；原P／I／O、连续性和夹具损耗要求不变。",
       "quality": "P≥99%、连续来料I≥81→成品I≥80、O≥80，C0。",
       "inherited": false,
       "balance": false,
@@ -7853,6 +8149,18 @@
           "qty": 1
         },
         {
+          "item": "boron",
+          "qty": 1
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
+        },
+        {
+          "item": "quartz",
+          "qty": 1
+        },
+        {
           "item": "water",
           "qty": 250
         }
@@ -7873,7 +8181,7 @@
       "tools": [
         "direction_jig"
       ],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。",
+      "note": "钛硼或其耐温玻璃作为结构／封装辅材，与原有精制陨相共同消耗；原P／I／O、连续性和夹具损耗要求不变。",
       "quality": "P≥99%、连续输入I≥81→成品I≥80、O≥80，C0；已合形，不重复扣切边。",
       "inherited": false,
       "balance": false,
@@ -8026,7 +8334,7 @@
           "qty": 1
         },
         {
-          "item": "quartz",
+          "item": "boroglass",
           "qty": 1
         }
       ],
@@ -8040,7 +8348,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "普通温度、液位、负载传感；不鉴定全部晶格缺陷。",
+      "note": "普通温度、液位、负载传感；不鉴定全部晶格缺陷。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": true,
       "balance": false,
@@ -8056,7 +8364,7 @@
             "qty": 1
           },
           {
-            "item": "quartz",
+            "item": "boroglass",
             "qty": 1
           },
           null,
@@ -8088,6 +8396,10 @@
         {
           "item": "fix",
           "qty": 1
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -8100,7 +8412,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "额定接口仍按工业导相网32768XH/t，不让基础铜线越级。固体按投料表中的完整物品数量处理。",
+      "note": "额定接口仍按工业导相网32768XH/t，不让基础铜线越级。固体按投料表中的完整物品数量处理。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": true,
       "balance": false,
@@ -8123,7 +8435,10 @@
             "item": "fix",
             "qty": 1
           },
-          null,
+          {
+            "item": "gold_ingot",
+            "qty": 1
+          },
           null,
           null,
           null,
@@ -8149,7 +8464,7 @@
           "qty": 2
         },
         {
-          "item": "ceramic",
+          "item": "boroglass",
           "qty": 1
         },
         {
@@ -8171,7 +8486,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "仅把EN-S02充电效率90%提高至95%，容量仍2MXH，出厂不赠电。固体按投料表中的完整物品数量处理。",
+      "note": "仅把EN-S02充电效率90%提高至95%，容量仍2MXH，出厂不赠电。固体按投料表中的完整物品数量处理。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": true,
       "balance": false,
@@ -8195,7 +8510,7 @@
             "qty": 1
           },
           {
-            "item": "ceramic",
+            "item": "boroglass",
             "qty": 1
           },
           {
@@ -8218,7 +8533,7 @@
       "id": "CM-04",
       "name": "高负载减振座装配",
       "station": "workbench",
-      "unlock": "PUB-08、PUB-09",
+      "unlock": "后期选配减振；PUB-08、PUB-09与下界合金碎片",
       "inputs": [
         {
           "item": "load",
@@ -8227,6 +8542,14 @@
         {
           "item": "steel_fix",
           "qty": 2
+        },
+        {
+          "item": "slime",
+          "qty": 1
+        },
+        {
+          "item": "netherite_scrap",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -8239,10 +8562,11 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "普通钢座仍可低负载替代。固体按投料表中的完整物品数量处理。",
+      "note": "承相嵌材、钢固定件、黏液减振层与下界合金碎片共同装配。后期高负载选配，不是精制、基础机电或普通扩产前置；普通钢座低负载替代仍保留。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": true,
       "balance": false,
+      "progression_stage": "P3",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
@@ -8266,8 +8590,14 @@
             "item": "steel_fix",
             "qty": 1
           },
-          null,
-          null,
+          {
+            "item": "slime",
+            "qty": 1
+          },
+          {
+            "item": "netherite_scrap",
+            "qty": 1
+          },
           null,
           null
         ],
@@ -8568,7 +8898,7 @@
       "inputs": [
         {
           "item": "iron",
-          "qty": 3
+          "qty": 2
         },
         {
           "item": "copper",
@@ -8587,7 +8917,11 @@
           "qty": 1
         },
         {
-          "item": "glass",
+          "item": "boroglass",
+          "qty": 1
+        },
+        {
+          "item": "titan",
           "qty": 1
         }
       ],
@@ -8601,7 +8935,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "一台保存一个配方ID。54格输入分6页，按库存汇总配料；4格输出容纳全部成品和余物；每批2秒／4kXH，功率100XH/t。手动合成继续可用；不要求精制晶料或PUB-13。",
+      "note": "一台保存一个配方ID。54格输入分6页，按库存汇总配料；4格输出容纳全部成品和余物；每批2秒／4kXH，功率100XH/t。手动合成继续可用；不要求精制晶料或PUB-13。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -8637,11 +8971,11 @@
             "qty": 1
           },
           {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
-            "item": "iron",
+            "item": "titan",
             "qty": 1
           }
         ],
@@ -8654,14 +8988,14 @@
       "id": "RT-02",
       "name": "保晶采样镐制作",
       "station": "workbench",
-      "unlock": "PUB-03、PUB-06",
+      "unlock": "PUB-02、PUB-03；采矿准备",
       "inputs": [
         {
           "item": "iron_pickaxe",
           "qty": 1
         },
         {
-          "item": "common",
+          "item": "wear",
           "qty": 1
         },
         {
@@ -8669,7 +9003,7 @@
           "qty": 1
         },
         {
-          "item": "glass",
+          "item": "boroglass",
           "qty": 1
         }
       ],
@@ -8683,28 +9017,29 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "常规模式沿用铁镐采掘等级与速度，耐久300；低冲击模式只处理天然陨相矿，10秒／块、扣4耐久，保存矿块原有I与连续形态。 只接收未附魔、无损的普通铁镐；不提升原生I，不重抽品质。低冲击不会加倍掉矿；普通模式仍执行I≤40。",
-      "quality": "通用料部分仅需Q0、C0；不要求PUB-08或精密晶片。",
+      "note": "常规模式沿用铁镐采掘等级与速度，耐久300；低冲击模式只处理天然陨相矿，10秒／块、扣4耐久，保存矿块原有I与连续形态。 只接收未附魔、无损的普通铁镐；不提升原生I，不重抽品质。低冲击不会加倍掉矿；普通模式仍执行I≤40。 不消耗陨相晶料；辅矿可先用普通熔炉取得。",
+      "quality": "仅普通洁净材料；无陨相Q0、P／I／O或连续性前置。",
       "inherited": false,
       "balance": false,
       "reward": {
         "category": "工具",
         "benefit": "常规模式沿用铁镐采掘等级与速度，耐久300；低冲击模式只处理天然陨相矿，10秒／块、扣4耐久，保存矿块原有I与连续形态。",
         "limits": "只接收未附魔、无损的普通铁镐；不提升原生I，不重抽品质。低冲击不会加倍掉矿；普通模式仍执行I≤40。",
-        "stage": "掌握计量后：用时间和磨损换取高完整来料。"
+        "stage": "陨相前：钛硼与原版材料完成采矿准备。"
       },
       "input_conditions": [
         "iron_pickaxe:damage=0,enchantments=empty"
       ],
+      "progression_stage": "P1：陨相采掘准备",
       "craft": {
         "mode": "定形九宫格",
         "cells": [
           {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
-            "item": "common",
+            "item": "wear",
             "qty": 1
           },
           {
@@ -8730,10 +9065,10 @@
       "id": "RT-03",
       "name": "勘探护目镜制作",
       "station": "workbench",
-      "unlock": "PUB-03、PUB-06",
+      "unlock": "PUB-02、PUB-03；采矿准备",
       "inputs": [
         {
-          "item": "glass",
+          "item": "boroglass",
           "qty": 2
         },
         {
@@ -8745,7 +9080,7 @@
           "qty": 1
         },
         {
-          "item": "common",
+          "item": "boron",
           "qty": 1
         }
       ],
@@ -8759,29 +9094,30 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "头部装备，护甲1、耐久120；对准4格内已暴露的天然陨相矿显示“基础／可精制／精密候选”。 只读取已加载且可见的方块，不透视、不增加矿量；不是防毒面具，也不授予自然接口。",
-      "quality": "通用料部分仅需Q0、C0；不要求PUB-08或精密晶片。",
+      "note": "头部装备，护甲1、耐久120；对准4格内已暴露的天然陨相矿显示“基础／可精制／精密候选”。 只读取已加载且可见的方块，不透视、不增加矿量；不是防毒面具，也不授予自然接口。 不消耗陨相晶料；辅矿可先用普通熔炉取得。",
+      "quality": "仅普通洁净材料；无陨相Q0、P／I／O或连续性前置。",
       "inherited": false,
       "balance": false,
       "reward": {
         "category": "装备",
         "benefit": "头部装备，护甲1、耐久120；对准4格内已暴露的天然陨相矿显示“基础／可精制／精密候选”。",
         "limits": "只读取已加载且可见的方块，不透视、不增加矿量；不是防毒面具，也不授予自然接口。",
-        "stage": "与采样镐组合：让玩家知道哪些矿值得保晶。"
+        "stage": "陨相前：钛硼与原版材料完成采矿准备。"
       },
+      "progression_stage": "P1：陨相采掘准备",
       "craft": {
         "mode": "定形九宫格",
         "cells": [
           {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
-            "item": "common",
+            "item": "boron",
             "qty": 1
           },
           {
-            "item": "glass",
+            "item": "boroglass",
             "qty": 1
           },
           {
@@ -8817,7 +9153,7 @@
           "qty": 4
         },
         {
-          "item": "common",
+          "item": "titan",
           "qty": 1
         }
       ],
@@ -8831,16 +9167,17 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "对8格内可见、可承重且许可的方块固定绳索，沿绳以2格／秒攀爬；耐久160，每次成功布绳扣1。 最多一条8格绳，不发射玩家、不瞬移、不穿墙；拆回同一条绳，不额外复制线材。",
-      "quality": "通用料部分仅需Q0、C0；不要求PUB-08或精密晶片。",
+      "note": "对8格内可见、可承重且许可的方块固定绳索，沿绳以2格／秒攀爬；耐久160，每次成功布绳扣1。 最多一条8格绳，不发射玩家、不瞬移、不穿墙；拆回同一条绳，不额外复制线材。 不消耗陨相晶料；辅矿可先用普通熔炉取得。",
+      "quality": "仅普通洁净材料；无陨相Q0、P／I／O或连续性前置。",
       "inherited": false,
       "balance": false,
       "reward": {
         "category": "工具",
         "benefit": "对8格内可见、可承重且许可的方块固定绳索，沿绳以2格／秒攀爬；耐久160，每次成功布绳扣1。",
         "limits": "最多一条8格绳，不发射玩家、不瞬移、不穿墙；拆回同一条绳，不额外复制线材。",
-        "stage": "第一批晶料后：走出矿坑、登高与救援。"
+        "stage": "陨相前：钛硼与原版材料完成采矿准备。"
       },
+      "progression_stage": "P1：陨相采掘准备",
       "craft": {
         "mode": "定形九宫格",
         "cells": [
@@ -8861,7 +9198,7 @@
             "qty": 1
           },
           {
-            "item": "common",
+            "item": "titan",
             "qty": 1
           },
           {
@@ -8899,7 +9236,7 @@
           "qty": 1
         },
         {
-          "item": "common",
+          "item": "boron",
           "qty": 1
         }
       ],
@@ -8913,16 +9250,17 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "9格便携库存，只收矿石、矿样、晶料和采样记录；3条白名单过滤，开启后自动收纳玩家正常拾取的匹配物品。 右键打开，潜行右键配置过滤与自动收纳；不吸取远处掉落物，不增加拾取距离，不代替实体矿量或矿样标签。禁止收纳其他容器；满袋留在背包，跨袋移动不复制。",
-      "quality": "通用料部分仅需Q0、C0；不要求PUB-08或精密晶片。",
+      "note": "9格便携库存，只收矿石、矿样、晶料和采样记录；3条白名单过滤，开启后自动收纳玩家正常拾取的匹配物品。 右键打开，潜行右键配置过滤与自动收纳；不吸取远处掉落物，不增加拾取距离，不代替实体矿量或矿样标签。禁止收纳其他容器；满袋留在背包，跨袋移动不复制。 不消耗陨相晶料；辅矿可先用普通熔炉取得。",
+      "quality": "仅普通洁净材料；无陨相Q0、P／I／O或连续性前置。",
       "inherited": false,
       "balance": false,
       "reward": {
         "category": "功能道具",
         "benefit": "9格便携库存，只收矿石、矿样、晶料和采样记录；3条白名单过滤，开启后自动收纳玩家正常拾取的匹配物品。",
         "limits": "右键打开，潜行右键配置过滤与自动收纳；不吸取远处掉落物，不增加拾取距离，不代替实体矿量或矿样标签。禁止收纳其他容器；满袋留在背包，跨袋移动不复制。",
-        "stage": "第一批晶料后：少被矿样占满背包，减少回营次数。"
+        "stage": "陨相前：钛硼与原版材料完成采矿准备。"
       },
+      "progression_stage": "P1：陨相采掘准备",
       "craft": {
         "mode": "定形九宫格",
         "cells": [
@@ -8943,7 +9281,7 @@
             "qty": 1
           },
           {
-            "item": "common",
+            "item": "boron",
             "qty": 1
           },
           {
@@ -9096,7 +9434,7 @@
         },
         {
           "item": "iron",
-          "qty": 3
+          "qty": 2
         },
         {
           "item": "copper",
@@ -9111,7 +9449,11 @@
           "qty": 1
         },
         {
-          "item": "common",
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "boroglass",
           "qty": 1
         }
       ],
@@ -9129,6 +9471,7 @@
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
@@ -9145,10 +9488,6 @@
             "qty": 1
           },
           {
-            "item": "iron",
-            "qty": 1
-          },
-          {
             "item": "copper",
             "qty": 1
           },
@@ -9165,7 +9504,11 @@
             "qty": 1
           },
           {
-            "item": "common",
+            "item": "titan",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
             "qty": 1
           }
         ],
@@ -9182,7 +9525,7 @@
       "inputs": [
         {
           "item": "iron",
-          "qty": 2
+          "qty": 1
         },
         {
           "item": "copper",
@@ -9190,6 +9533,14 @@
         },
         {
           "item": "redstone",
+          "qty": 1
+        },
+        {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "boron",
           "qty": 1
         },
         {
@@ -9207,17 +9558,14 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "周期÷1.25（20→16秒），每路耗能×1.10；只能装入提速槽。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
+      "note": "周期÷1.25（20→16秒），每路耗能×1.10；只能装入提速槽。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。",
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
-          {
-            "item": "iron",
-            "qty": 1
-          },
           {
             "item": "iron",
             "qty": 1
@@ -9231,10 +9579,17 @@
             "qty": 1
           },
           {
+            "item": "titan",
+            "qty": 1
+          },
+          {
+            "item": "boron",
+            "qty": 1
+          },
+          {
             "item": "common",
             "qty": 1
           },
-          null,
           null,
           null,
           null
@@ -9248,7 +9603,7 @@
       "id": "SV-SP02",
       "name": "熔炉提速模块Ⅱ合成",
       "station": "workbench",
-      "unlock": "PUB-03、PUB-05；掌握ST-05普通钢",
+      "unlock": "陨相阶段；已有Ⅰ级模块、普通钢与金锭",
       "inputs": [
         {
           "item": "speed_1",
@@ -9256,7 +9611,7 @@
         },
         {
           "item": "steel",
-          "qty": 2
+          "qty": 1
         },
         {
           "item": "board",
@@ -9264,11 +9619,23 @@
         },
         {
           "item": "copper",
-          "qty": 2
+          "qty": 1
         },
         {
           "item": "common",
           "qty": 2
+        },
+        {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "boron",
+          "qty": 1
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -9281,19 +9648,16 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "周期÷1.50（20→13⅓秒），每路耗能×1.25；消耗Ⅰ级模块升级，不与Ⅰ级叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
+      "note": "周期÷1.50（20→13⅓秒），每路耗能×1.25；消耗Ⅰ级模块升级，不与Ⅰ级叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 Ⅱ级实耗通用晶料、钛硼与金锭；不要求首领掉落。",
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
           {
             "item": "speed_1",
-            "qty": 1
-          },
-          {
-            "item": "steel",
             "qty": 1
           },
           {
@@ -9309,10 +9673,6 @@
             "qty": 1
           },
           {
-            "item": "copper",
-            "qty": 1
-          },
-          {
             "item": "common",
             "qty": 1
           },
@@ -9320,7 +9680,18 @@
             "item": "common",
             "qty": 1
           },
-          null
+          {
+            "item": "titan",
+            "qty": 1
+          },
+          {
+            "item": "boron",
+            "qty": 1
+          },
+          {
+            "item": "gold_ingot",
+            "qty": 1
+          }
         ],
         "tools": [],
         "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
@@ -9335,7 +9706,7 @@
       "inputs": [
         {
           "item": "iron",
-          "qty": 2
+          "qty": 1
         },
         {
           "item": "ceramic",
@@ -9344,6 +9715,14 @@
         {
           "item": "fix",
           "qty": 2
+        },
+        {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
         },
         {
           "item": "common",
@@ -9360,10 +9739,11 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "并列路数2→4；每路耗能×1.05；只能装入扩批槽。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
+      "note": "并列路数2→4；每路耗能×1.05；只能装入扩批槽。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。",
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
@@ -9372,10 +9752,6 @@
             "qty": 1
           },
           {
-            "item": "iron",
-            "qty": 1
-          },
-          {
             "item": "ceramic",
             "qty": 1
           },
@@ -9389,13 +9765,20 @@
           },
           {
             "item": "fix",
+            "qty": 1
+          },
+          {
+            "item": "titan",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
             "qty": 1
           },
           {
             "item": "common",
             "qty": 1
           },
-          null,
           null
         ],
         "tools": [],
@@ -9407,7 +9790,7 @@
       "id": "SV-BK02",
       "name": "熔炉扩批模块Ⅱ合成",
       "station": "workbench",
-      "unlock": "PUB-03、PUB-05；掌握ST-05普通钢",
+      "unlock": "陨相阶段；已有Ⅰ级模块、普通钢与金锭",
       "inputs": [
         {
           "item": "bulk_1",
@@ -9415,11 +9798,11 @@
         },
         {
           "item": "steel",
-          "qty": 2
+          "qty": 1
         },
         {
           "item": "ceramic",
-          "qty": 2
+          "qty": 1
         },
         {
           "item": "board",
@@ -9428,6 +9811,14 @@
         {
           "item": "common",
           "qty": 2
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -9440,10 +9831,11 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "并列路数2→6；每路耗能×1.10；消耗Ⅰ级模块升级，不与Ⅰ级叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
+      "note": "并列路数2→6；每路耗能×1.10；消耗Ⅰ级模块升级，不与Ⅰ级叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 Ⅱ级实耗通用晶料、耐温玻璃与金锭；中期扩产不强制下界。",
       "quality": "",
       "inherited": false,
       "balance": false,
+      "progression_stage": "P2",
       "craft": {
         "mode": "无序九宫格",
         "cells": [
@@ -9453,14 +9845,6 @@
           },
           {
             "item": "steel",
-            "qty": 1
-          },
-          {
-            "item": "steel",
-            "qty": 1
-          },
-          {
-            "item": "ceramic",
             "qty": 1
           },
           {
@@ -9477,6 +9861,14 @@
           },
           {
             "item": "common",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "gold_ingot",
             "qty": 1
           },
           null
@@ -9794,6 +10186,10 @@
         {
           "item": "item_duct",
           "qty": 1
+        },
+        {
+          "item": "titan",
+          "qty": 1
         }
       ],
       "outputs": [
@@ -9806,7 +10202,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "单口4标准物品／秒；背面抽取、正面送入导管或相邻许可库存，9种白名单，支持保留数量及红石启停。不耗加工电量；同网所有端口合计仍≤8标准物品／秒。固体按投料表中的完整物品数量处理。",
+      "note": "单口4标准物品／秒；背面抽取、正面送入导管或相邻许可库存，9种白名单，支持保留数量及红石启停。不耗加工电量；同网所有端口合计仍≤8标准物品／秒。固体按投料表中的完整物品数量处理。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -9837,7 +10233,10 @@
             "item": "item_duct",
             "qty": 1
           },
-          null,
+          {
+            "item": "titan",
+            "qty": 1
+          },
           null,
           null
         ],
@@ -10137,7 +10536,7 @@
       "id": "SF-PM-10",
       "name": "耐温玻璃：改用合金混料炉",
       "station": "alloy_furnace",
-      "unlock": "PUB-02、PUB-03；SV-M01",
+      "unlock": "PUB-02、PUB-03；合金混料炉迁移说明",
       "inputs": [
         {
           "item": "glass",
@@ -10350,6 +10749,163 @@
         "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
       },
       "automatic": true
+    },
+    {
+      "id": "AUX-S01",
+      "name": "赤钛原矿炉炼",
+      "station": "furnace",
+      "unlock": "原版熔炉／PUB-02",
+      "inputs": [
+        {
+          "item": "rutile",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "titan",
+          "qty": 2
+        }
+      ],
+      "kind": "加工",
+      "seconds": 10,
+      "energy": 40000,
+      "tools": [],
+      "note": "单原料普通熔炉路线，200刻、原版经验0.2；燃料另计。产2份精料；整备台对应工业路线仍产10份，不可同时结算。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "experience": 0.2,
+      "cookingtime": 200,
+      "progression_stage": "P0",
+      "automatic": false
+    },
+    {
+      "id": "AUX-S02",
+      "name": "灰硼原矿炉炼",
+      "station": "furnace",
+      "unlock": "原版熔炉／PUB-02",
+      "inputs": [
+        {
+          "item": "borate",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "boron",
+          "qty": 2
+        }
+      ],
+      "kind": "加工",
+      "seconds": 10,
+      "energy": 40000,
+      "tools": [],
+      "note": "单原料普通熔炉路线，200刻、原版经验0.2；燃料另计。产2份精料；整备台对应工业路线仍产10份，不可同时结算。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "experience": 0.2,
+      "cookingtime": 200,
+      "progression_stage": "P0",
+      "automatic": false
+    },
+    {
+      "id": "ST-08-SLIME",
+      "name": "黏液高效粘结剂",
+      "station": "workbench",
+      "unlock": "PUB-02；可选材料路线",
+      "inputs": [
+        {
+          "item": "wheat",
+          "qty": 1
+        },
+        {
+          "item": "slime",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "binder",
+          "qty": 4
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "用实际黏液球提高单批产量；小麦＋黏土的ST-08仍可满足全部普通设备，不强迫寻找黏液。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "wheat",
+            "qty": 1
+          },
+          {
+            "item": "slime",
+            "qty": 1
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "UP-COMPOSITE",
+      "name": "复合耐磨强化（30%）",
+      "station": "workbench",
+      "unlock": "中后期；已有20%加固镐及下界烈焰材料",
+      "inputs": [
+        {
+          "item": "iron_pickaxe",
+          "qty": 1
+        },
+        {
+          "item": "wear",
+          "qty": 1
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
+        },
+        {
+          "item": "blaze_powder",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "iron_pickaxe",
+          "qty": 1
+        }
+      ],
+      "kind": "强化",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "iron_pickaxe图标代表任意已经CB-02加固20%的镐，不限铁材质；结果是同一把镐升级为基础耐久＋30%。只接受20%阶段，不接受普通、10%或已30%镐；保留名称、附魔及损耗比例，不返还镶片、不重复叠加。专用reinforce_composite配方处理动态输入与输出，不注册为generic catalogue crafting。",
+      "quality": "物品实际加固等级必须为20%；钛硼不替代既有陨相加固来源。",
+      "inherited": false,
+      "balance": false,
+      "special_recipe": "starfall_blueprint:reinforce_composite",
+      "automatic": false,
+      "input_conditions": [
+        "pickaxe:reinforcement=20"
+      ],
+      "progression_stage": "P3"
     },
     {
       "id": "VC-01",

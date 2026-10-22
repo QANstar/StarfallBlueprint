@@ -35,7 +35,7 @@ public final class CatalogueEquipment {
             public InteractionResultHolder<ItemStack>use(Level l,Player player,InteractionHand hand){if(!l.isClientSide)player.displayClientMessage(Component.literal("未激活灵相媒介 · 保留材料品质与路线"),true);return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand),l.isClientSide);}
         };
         if(CatalogueContent.TOOLS.contains(key))p.durability(key.equals("head")||key.equals("basic_jig")||key.equals("facet_jig")?100:256);
-        if(Set.of("refined","conductor","load","laminar","sensor","anima","anima_basic","directed","coating","liner","lunar","titan","boron").contains(key))
+        if(Set.of("refined","conductor","load","laminar","sensor","anima","anima_basic","directed","coating","liner","lunar").contains(key))
             p.component(CatalogueContent.QUALITY.get(),new MaterialQuality(key.equals("refined")?99:100,100,key.equals("anima_basic")?40:key.equals("anima")?80:0,0,true,key.equals("refined")?"common":key.startsWith("anima")?"anima":key));
         return new Item(p){
             public boolean isBarVisible(ItemStack s){return key.equals("s01")?getData(s).getInt("Energy")>0:super.isBarVisible(s);}

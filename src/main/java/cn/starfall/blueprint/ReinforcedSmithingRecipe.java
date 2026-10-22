@@ -2,7 +2,6 @@ package cn.starfall.blueprint;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -23,12 +22,8 @@ public final class ReinforcedSmithingRecipe extends SmithingTransformRecipe {
     public ItemStack assemble(SmithingRecipeInput input, HolderLookup.Provider provider) {
         ItemStack result = super.assemble(input, provider);
         ItemStack base = input.base();
-        if (base.getOrDefault(StarfallBlueprint.REINFORCED.get(), false)) {
-            int percent=CatalogueEquipment.getData(base).getInt("ReinforcementPercent")==10?10:20;
-            int maximum = new ItemStack(Items.NETHERITE_PICKAXE).getMaxDamage() * (100+percent) / 100;
-            result.set(DataComponents.MAX_DAMAGE, maximum);
-            result.setDamageValue((int) (((long) base.getDamageValue() * maximum + base.getMaxDamage() - 1)
-                    / base.getMaxDamage()));
+        if (Reinforcement.percent(base) > 0) {
+            Reinforcement.resize(result, base, Reinforcement.percent(base), new ItemStack(Items.NETHERITE_PICKAXE).getMaxDamage());
         }
         return result;
     }

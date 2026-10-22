@@ -17,13 +17,12 @@ public final class ReinforcedRepairRecipe extends RepairItemRecipe implements Au
     public ItemStack assemble(CraftingInput input, HolderLookup.Provider provider) {
         ItemStack result = super.assemble(input, provider);
         if (!result.isEmpty()) {
+            ItemStack first = ItemStack.EMPTY;
             for (int i = 0; i < input.size(); i++) {
-                if (input.getItem(i).getOrDefault(StarfallBlueprint.REINFORCED.get(), false)) {
-                    result.set(StarfallBlueprint.REINFORCED.get(), true);
-                    int percent=0;for(int j=0;j<input.size();j++){var s=input.getItem(j);if(s.getOrDefault(StarfallBlueprint.REINFORCED.get(),false))percent=Math.max(percent,CatalogueEquipment.getData(s).getInt("ReinforcementPercent")==10?10:20);}
-                    var data=CatalogueEquipment.getData(result);data.putInt("ReinforcementPercent",percent);CatalogueEquipment.setData(result,data);
-                    break;
-                }
+                ItemStack stack = input.getItem(i);
+                if (stack.isEmpty()) continue;
+                if (first.isEmpty()) first = stack;
+                else Reinforcement.retainStrongest(result, first, stack);
             }
         }
         return result;

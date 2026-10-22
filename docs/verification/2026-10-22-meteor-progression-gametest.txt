@@ -1,0 +1,33 @@
+陨相关键节点与辅矿铁镐门槛验证 — 2026-10-22
+
+环境：Windows，Java 21.0.12.1，Minecraft 1.21.1，NeoForge 21.1.262，Gradle 8.14.3。
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+生成与静态校验：tools/generate_resources.py、tools/verify_resources.py、tools/verify_mc_catalogue.py。
+PASS: 366 JSON files, all PNGs and local model/texture links.
+PASS: 128 discrete catalogue recipes; 17 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+ST-10控制板现由catalogue_crafting验证Q0，故原版映射由18减少为17，并非丢失配方。
+
+最终命令（开发仓库目录）：
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+本机忽略的镜像及DNS配置仅用于构建环境，无系统DNS改动或跳过TLS校验。
+最终进程退出码：0
+最终控制台：
+[16:28:26] [Server thread/INFO] [minecraft/GameTestServer]: ========= 107 GAME TESTS COMPLETE IN 3.347 s ======================
+[16:28:26] [Server thread/INFO] [minecraft/GameTestServer]: All 107 required tests passed :)
+BUILD SUCCESSFUL in 22s
+
+范围：原106项回归＋EarlyMaterialsGameTests.meteorGatesConsumeQ0AndLeaveBootstrapReachable。
+- 赤钛、灰硼恢复铁镐或更高；木／石镐拒绝；时运产量规则不变。
+- 实际配方与CraftingMenu取出ST-10、EN-G01..04、SV-SP01、SV-BK01，逐条消费1份合格Q0晶料。
+- 缺晶料、无批次组件、I19反例拒绝；输出与其他材料真实消费。
+- 配方材料／站点依赖闭包核对：无陨相仍可起步整备、混料与勘探；有陨相可进入电控、发电、自动化和产能提升。闭包不是生存吞吐或时间模拟。
+- 其余强化、机器、自动合成、混凝土等原106项同时回归。
+
+首轮107项中2项夹具失败：旧用例仍以石镐为合格工具；负例通过CatalogueContent.stack生成common时保留了默认有效BATCH。修正为铁镐及显式移除BATCH后执行上述最终验证；不称首次全通过。
+已同步游戏内手册。客户端、压力测试、20种子矿量校准、完整剧情、全模组兼容及实际游玩耗时未验收；未重复两JVM探针。
+非致命环境告警：Failed to request yggdrasil public key / java.net.UnknownHostException: api.minecraftservices.com；未影响结果。
+
+产物：build/libs/starfall_blueprint-0.1.0.jar
+SHA256：38FDF7E06F252321B40E0833DBE7C584772AE29A8A36828238DD5CDB7CC17F41

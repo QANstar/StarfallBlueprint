@@ -23,7 +23,7 @@ materials = {
     'ceramic': ('普通陶瓷', 'Ordinary Ceramic', '#d8c7a0'),
     'insulation': ('普通绝缘基材', 'Insulation', '#b5b69b'),
     'binder': ('普通粘结剂', 'Binder', '#a8ad63'),
-    'isolation_substrate': ('铜／石英隔离基底', 'Isolation Substrate', '#d8b797'),
+    'isolation_substrate': ('铜／硼隔离基底', 'Isolation Substrate', '#d8b797'),
     'control_board': ('基础控制板', 'Basic Control Board', '#52968a'),
     'circuit_breaker': ('断路保护器', 'Circuit Breaker', '#ac9e78'),
     'ceramic_sheath': ('陶瓷护套', 'Ceramic Sheath', '#d9c5a2'),
@@ -98,11 +98,11 @@ write(DATA / 'recipe/isolation_substrate.json', {'type': f'{MOD}:isolation_subst
 for output, source in [('ordinary_steel', f'{MOD}:mixed_steel_billet'), ('ceramic', 'minecraft:clay_ball')]:
     write(DATA / 'recipe' / f'{output}.json', {'type': 'minecraft:smelting', 'category': 'misc',
         'ingredient': ingredient(source), 'result': {'id': f'{MOD}:{output}'}, 'experience': 0.0, 'cookingtime': 200})
-shapeless('insulation', ['minecraft:paper', 'minecraft:glass'], 2)
-shapeless('binder', ['minecraft:wheat', 'minecraft:slime_ball'], 2)
-shapeless('control_board', ['minecraft:copper_ingot', 'minecraft:redstone', 'minecraft:glass', 'insulation'])
+shapeless('insulation', ['minecraft:paper', 'boron'], 2)
+shapeless('binder', ['minecraft:wheat', 'minecraft:clay_ball'], 2)
+write(DATA / 'recipe/control_board.json', {'type': f'{MOD}:catalogue_crafting', 'recipe': 'ST-10'})
 shapeless('circuit_breaker', ['minecraft:iron_ingot', 'minecraft:copper_ingot', 'minecraft:redstone', 'insulation'])
-shapeless('ceramic_sheath', ['ceramic'])
+shapeless('ceramic_sheath', ['ceramic', 'titan'], 2)
 shapeless('steel_fasteners', ['ordinary_steel'])
 shapeless('sealed_box', ['minecraft:iron_ingot', 'minecraft:iron_ingot', 'minecraft:glass', 'insulation'])
 for name in materials:

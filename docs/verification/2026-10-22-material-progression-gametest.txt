@@ -1,0 +1,51 @@
+2026-10-22 起步辅矿、分阶段配方与有限强化验证
+
+环境：Windows；Minecraft 1.21.1；NeoForge 21.1.262；Java 21.0.12.1；Gradle 8.14.3。
+Java: C:\Program Files\Java\jdk-21.0.12.1\bin\java.exe
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+本机忽略目录内镜像与逐进程hosts配置不改变项目仓库、系统DNS或TLS验证。
+
+命令（StarfallBlueprint目录）：
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+
+执行记录：
+生成和静态校验：366份JSON、全部PNG及本地模型/贴图引用通过；128条图鉴整件配方、18条原版配方映射、合金/基底契约通过。
+初次编译失败于新增ReinforcementProgressionGameTests的StarfallBlueprint.MOD_ID不存在；修正为项目常量StarfallBlueprint.ID后完整阶段构建和实际服务端测试通过。
+以下结果来自修正后的最终代码；本轮没有在功能未改时重复跑测试。
+
+[15:41:13] [Server thread/INFO] [minecraft/GameTestServer]: ========= 106 GAME TESTS COMPLETE IN 3.435 s ======================
+[15:41:13] [Server thread/INFO] [minecraft/GameTestServer]: All 106 required tests passed :)
+BUILD SUCCESSFUL in 25s
+7 actionable tasks: 4 executed, 3 up-to-date
+
+新增9项用例（原97项同时回归）：
+EarlyMaterialsGameTests.stoneToolsAndRealFurnacesStartBothAuxiliaryMaterials
+EarlyMaterialsGameTests.preparationUpgradesYieldWithExactWaterTimeAndEnergy
+EarlyMaterialsGameTests.starterWorkbenchRecipesNeedOnlyAuxiliaryAndOrdinaryMaterials
+EarlyMaterialsGameTests.onlyPhaseCarriersContributeConservativeAssemblyQuality
+ReinforcementProgressionGameTests.finiteProgressionUsesOriginalCapacityAndPreservesComponents
+ReinforcementProgressionGameTests.legacyUpgradeRestoresBaseAndCompositePlanningRequiresEveryMaterial
+ReinforcementProgressionGameTests.realCompositeCraftingConsumesOneOfEveryIngredient
+ReinforcementProgressionGameTests.mixedLevelWorkbenchAndGrindstoneRetainHighestExistingLevel
+ReinforcementProgressionGameTests.anvilKeepsLeftLevelAndSmithingRebasesEveryLevel
+
+覆盖：
+- 两辅矿实际掉落石镐可采/木镐拒收，时运仍增产；真实原版炉200刻出2份。
+- 整备200刻40kXH出10份，赤钛250mB/灰硼0水；开工和结算守恒。
+- 起步结构件及探索装备真实CraftingMenu匹配/取出，投料不要求预先获得陨相或下界材料。
+- 普通辅料不贡献相材品质，真实相载体保守合并，不能以普通部件抬高完整度。
+- 0→10/20、10→20、20→30有限升级，禁止同级重复和10→30跳级；按原始耐久定级，损伤比例和自定义组件保持。
+- 兼容旧reinforced布尔组件与可识别旧上限；真实复合菜单精确消费、自动合成计划要求全部材料。
+- 工作台/砂轮双件修理只继承最高现有等级，铁砧按左目标；三等级锻造均按下界合金新基础重算。
+- 全量既有配方、库存自动合成、混凝土、供电/流体/物品网络、保存与预留边界回归。
+
+产物：build/libs/starfall_blueprint-0.1.0.jar
+大小：659338 bytes
+SHA256：5365CF0CB62E111BA9470DA7C3B080ED2360E0C41FA17544357D62A391983ACC
+
+边界：
+测试使用真实NeoForge服务端GameTest，包含服务端FakePlayer菜单操作，不等于已验证真实客户端画面、网络压力或实际玩家节奏。
+本轮未做客户端、压力、20种子矿量密度/稀有度校准、实际2分钟/5分钟计时、全体第三方兼容，也未重复两JVM持久化探针。
+既有api.minecraftservices.com/Yggdrasil公钥请求网络警告未阻止服务端GameTest退出0；旧ClientSetup事件总线弃用警告仍存在。
+澄海星/林海联盟和月络/灵相仍仅预留；未开放官方未来维度或虚构其名称/ID/日期。

@@ -75,7 +75,7 @@ public final class StarfallBlueprint {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> REINFORCED = COMPONENTS.register("reinforced", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final java.util.Map<String, DeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<BasicCrystalRecipe>>> BASIC_RECIPES = new java.util.LinkedHashMap<>();
     static {
-        for (String kind : new String[]{"connector", "indicator", "tool_brace", "shield_lining", "reinforce_tool", "reinforce_shield", "reinforce_wear"}) {
+        for (String kind : new String[]{"connector", "indicator", "tool_brace", "shield_lining", "reinforce_tool", "reinforce_shield", "reinforce_wear", "reinforce_composite"}) {
             BASIC_RECIPES.put(kind, RECIPES.register(kind, () -> new net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<>(category -> new BasicCrystalRecipe(category, kind))));
         }
     }

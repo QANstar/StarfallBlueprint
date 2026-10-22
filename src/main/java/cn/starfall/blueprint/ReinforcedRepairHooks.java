@@ -15,13 +15,12 @@ public final class ReinforcedRepairHooks {
     public static void grindstone(GrindstoneEvent.OnPlaceItem event) {
         ItemStack top = event.getTopItem();
         ItemStack bottom = event.getBottomItem();
-        // Vanilla copies the top stack. Only the unmarked-top/marked-bottom case loses the upgrade.
+        // Vanilla copies the top stack; mixed levels must retain the strongest complete upgrade.
         if (!event.getOutput().isEmpty() || top.isEmpty() || bottom.isEmpty()
                 || top.getCount() != 1 || bottom.getCount() != 1 || !top.is(bottom.getItem())
                 || !top.isDamageableItem() || !bottom.isDamageableItem()
                 || !top.isRepairable() || !bottom.isRepairable()
-                || top.getOrDefault(StarfallBlueprint.REINFORCED.get(), false)
-                || !bottom.getOrDefault(StarfallBlueprint.REINFORCED.get(), false)) {
+                || Reinforcement.percent(top) == 0 && Reinforcement.percent(bottom) == 0) {
             return;
         }
 
@@ -31,8 +30,7 @@ public final class ReinforcedRepairHooks {
                 + bottom.getMaxDamage() - bottom.getDamageValue() + maximum * 5L / 100;
         result.set(DataComponents.MAX_DAMAGE, maximum);
         result.setDamageValue((int) Math.max(maximum - remaining, 0));
-        result.set(StarfallBlueprint.REINFORCED.get(), true);
-        var data=CatalogueEquipment.getData(result);data.putInt("ReinforcementPercent",CatalogueEquipment.getData(bottom).getInt("ReinforcementPercent")==10?10:20);CatalogueEquipment.setData(result,data);
+        Reinforcement.retainStrongest(result, top, bottom);
 
         // As in vanilla, top-slot curses win if both stacks carry the same curse.
         ItemEnchantments curses = EnchantmentHelper.updateEnchantments(result, mutable -> {

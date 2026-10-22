@@ -1,4 +1,4 @@
 {
-  "type": "starfall_blueprint:indicator",
-  "category": "misc"
+  "type": "starfall_blueprint:catalogue_crafting",
+  "recipe": "CB-04"
 }

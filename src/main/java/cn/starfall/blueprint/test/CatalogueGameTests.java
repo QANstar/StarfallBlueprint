@@ -29,7 +29,7 @@ public final class CatalogueGameTests {
 
     @GameTest(template="empty")
     public static void everyCatalogueWorkbenchRecipeIsExecutable(GameTestHelper h){
-        var existing=Set.of("ST-01","ST-02","ST-03","ST-04","ST-05","ST-06","ST-07","ST-08","ST-09","ST-10","ST-11","ST-12","ST-13","ST-14","MC-C01","MC-M01","PC-M03","EN-T01","SV-M03","CB-01","CB-02","CB-03","CB-04","CB-05");
+        var existing=Set.of("ST-01","ST-02","ST-03","ST-04","ST-05","ST-06","ST-07","ST-08","ST-09","ST-11","ST-12","ST-13","ST-14","MC-C01","MC-M01","PC-M03","EN-T01","SV-M03","CB-01","CB-02","CB-03","CB-05");
         Set<String> expected=new HashSet<>(),verified=new HashSet<>();
         for(var r:CatalogueContent.RECIPES.values())if(r.get("station").getAsString().equals("workbench")&&r.has("craft")&&!r.get("id").getAsString().startsWith("V-")&&!existing.contains(r.get("id").getAsString())&&CatalogueContent.isRecipeEnabled(r))expected.add(r.get("id").getAsString());
         for(var holder:h.getLevel().getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING))if(holder.value()instanceof CatalogueCraftingRecipe recipe){
@@ -41,7 +41,7 @@ public final class CatalogueGameTests {
             var out=recipe.assemble(input,h.getLevel().registryAccess());var expectedOutput=d.getAsJsonArray("outputs").get(0);h.assertTrue(CatalogueContent.matches(CatalogueContent.key(expectedOutput),out)&&out.getCount()==CatalogueContent.qty(expectedOutput),"Wrong result: "+recipe.id);
             var remaining=recipe.getRemainingItems(input);h.assertTrue(remaining.stream().allMatch(ItemStack::isEmpty),"Catalogue assembly must not duplicate containers: "+recipe.id);h.assertTrue(verified.add(recipe.id),"Duplicate catalogue recipe: "+recipe.id);
         }
-        h.assertTrue(expected.size()==43&&verified.equals(expected),"All 43 active workbench recipes must load and execute: expected="+expected+" verified="+verified);h.succeed();
+        h.assertTrue(expected.size()==46&&verified.equals(expected),"All 46 active workbench recipes must load and execute: expected="+expected+" verified="+verified);h.succeed();
     }
     @GameTest(template="empty")
     public static void everyIndustrialProcessSurvivesReloadAndConservesInputs(GameTestHelper h){
@@ -119,7 +119,7 @@ public final class CatalogueGameTests {
     }
     @GameTest(template="empty")
     public static void wearUpgradeIsTenPercentAndCannotStack(GameTestHelper h){
-        var pick=new ItemStack(Items.DIAMOND_PICKAXE);pick.setDamageValue(156);var input=CraftingInput.of(2,1,List.of(pick,material("wear",1)));var recipe=new BasicCrystalRecipe(CraftingBookCategory.EQUIPMENT,"reinforce_wear");h.assertTrue(recipe.matches(input,h.getLevel()),"Wear installs on a normal pick");var out=recipe.assemble(input,h.getLevel().registryAccess());h.assertTrue(out.getMaxDamage()==pick.getMaxDamage()*110/100&&out.getDamageValue()>156,"10% durable, preserve damage proportion");h.assertTrue(!recipe.matches(CraftingInput.of(2,1,List.of(out,material("wear",1))),h.getLevel())&&!new BasicCrystalRecipe(CraftingBookCategory.EQUIPMENT,"reinforce_tool").matches(CraftingInput.of(2,1,List.of(out,material("brace",1))),h.getLevel()),"Both upgrades share one slot");
+        var pick=new ItemStack(Items.DIAMOND_PICKAXE);pick.setDamageValue(156);var input=CraftingInput.of(2,1,List.of(pick,material("wear",1)));var recipe=new BasicCrystalRecipe(CraftingBookCategory.EQUIPMENT,"reinforce_wear");h.assertTrue(recipe.matches(input,h.getLevel()),"Wear installs on a normal pick");var out=recipe.assemble(input,h.getLevel().registryAccess());h.assertTrue(out.getMaxDamage()==pick.getMaxDamage()*110/100&&out.getDamageValue()>156,"10% durable, preserve damage proportion");h.assertTrue(!recipe.matches(CraftingInput.of(2,1,List.of(out,material("wear",1))),h.getLevel())&&new BasicCrystalRecipe(CraftingBookCategory.EQUIPMENT,"reinforce_tool").matches(CraftingInput.of(2,1,List.of(out,material("brace",1))),h.getLevel()),"Wear cannot repeat but can progress to 20% phase reinforcement");
         var upgraded=new ReinforcedSmithingRecipe().assemble(new SmithingRecipeInput(new ItemStack(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),out,new ItemStack(Items.NETHERITE_INGOT)),h.getLevel().registryAccess());h.assertTrue(upgraded.getMaxDamage()==new ItemStack(Items.NETHERITE_PICKAXE).getMaxDamage()*110/100,"Smithing retains 10% instead of granting 20%");h.succeed();
     }
     @GameTest(template="empty")

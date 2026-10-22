@@ -50,7 +50,7 @@ public final class AuxiliaryFortuneGameTests {
             }
             for (int tier = 1; tier <= 3; tier++) h.assertTrue(totals[tier] > totals[tier - 1] && maximumSeen[tier], "Each Fortune tier increases sampled yield and reaches its maximum");
             var pos = h.absolutePos(new BlockPos(1, 1, 1));
-            h.assertTrue(Block.getDrops(state, h.getLevel(), pos, null, null, wrongTool).isEmpty(), "Fortune cannot bypass iron-tier requirement");
+            h.assertTrue(Block.getDrops(state, h.getLevel(), pos, null, null, wrongTool).isEmpty(), "Stone Fortune cannot bypass iron-tier requirement");
             var silkDrops = Block.getDrops(state, h.getLevel(), pos, null, null, silk);
             h.assertTrue(silkDrops.size() == 1 && CatalogueContent.matches(key, silkDrops.getFirst()) && silkDrops.getFirst().getCount() == 1, "Silk Touch still gives raw ore rather than a placeable reroll block");
         }

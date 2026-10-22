@@ -172,8 +172,9 @@ js(DATA/'recipe/field_manual.json',{'type':'minecraft:crafting_shapeless','categ
 js(DATA/'recipe/water_tank.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':[' G ','GIG',' G '],'key':{'G':ingredient('minecraft:glass'),'I':ingredient('minecraft:iron_ingot')},'result':{'id':f'{MOD}:water_tank','count':1}})
 js(DATA/'recipe/rain_collector.json',{'type':f'{MOD}:rain_collector','category':'misc'})
 js(DATA/'recipe/supply_terminal.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':[' P ','SSS',' S '],'key':{'P':ingredient('minecraft:paper'),'S':ingredient('minecraft:cobblestone')},'result':{'id':f'{MOD}:supply_terminal','count':1}})
-for kind in ['connector','indicator','tool_brace','shield_lining','reinforce_tool','reinforce_shield']:
+for kind in ['connector','tool_brace','shield_lining','reinforce_tool','reinforce_shield','reinforce_composite']:
     js(DATA/'recipe'/f'{kind}.json',{'type':f'{MOD}:{kind}','category':'misc'})
+js(DATA/'recipe/indicator.json', {'type':f'{MOD}:catalogue_crafting','recipe':'CB-04'})
 # Replace the two vanilla entries, rather than registering competing matching recipes.
 js(RES/'data/minecraft/recipe/repair_item.json',{'type':f'{MOD}:reinforced_repair','category':'misc'})
 js(RES/'data/minecraft/recipe/netherite_pickaxe_smithing.json',{'type':f'{MOD}:reinforced_smithing'})

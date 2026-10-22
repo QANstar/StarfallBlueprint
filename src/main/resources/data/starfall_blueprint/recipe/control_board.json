@@ -1,22 +1,4 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    {
-      "item": "minecraft:copper_ingot"
-    },
-    {
-      "item": "minecraft:redstone"
-    },
-    {
-      "item": "minecraft:glass"
-    },
-    {
-      "item": "starfall_blueprint:insulation"
-    }
-  ],
-  "result": {
-    "id": "starfall_blueprint:control_board",
-    "count": 1
-  }
+  "type": "starfall_blueprint:catalogue_crafting",
+  "recipe": "ST-10"
 }

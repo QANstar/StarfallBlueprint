@@ -1,0 +1,48 @@
+植物覆盖补全验证（2026-10-23）
+
+目标：尽量覆盖Minecraft 1.21.1可种植／生长植物，明确下界疣与紫颂。
+实际范围：88样本／86方案；原71样本＋紫颂花、紫颂植株与15种活珊瑚形态。
+下界疣原方案保留：灵魂沙→下界疣2。
+末地石＋紫颂花→紫颂果2＋花1；末地石＋紫颂植株→果2。
+活珊瑚／扇／块各自复制同种2，需水生基质与工艺水。
+绯红／诡异菌原产物菌2保留，另产对应菌柄2。
+工艺不变：400tick、250mB、8000XH，环境／样本保留。
+
+环境：Windows、Java21.0.12.1、Minecraft1.21.1、NeoForge21.1.262、Gradle8.14.3。
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+
+集中阶段命令：
+python tools/verify_resources.py
+python tools/verify_mc_catalogue.py
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+
+静态：384份JSON、PNG和本地引用；131条图鉴配方、17条原版映射全部通过。
+原始控制台摘录：
+[17:49:02] [Server thread/INFO] [minecraft/GameTestServer]: ========= 121 GAME TESTS COMPLETE IN 6.803 s ======================
+[17:49:02] [Server thread/INFO] [minecraft/GameTestServer]: All 121 required tests passed :)
+BUILD SUCCESSFUL in 33s
+退出码0；本轮一次集中构建／验证通过，没有重复测试。
+
+新增用例：vanillaPlantFamiliesIncludeChorusCoralsAndNetherWart
+- 原版SAPLINGS、FLOWERS（排除LEAVES）、VILLAGER_PLANTABLE_SEEDS逐成员独立要求有方案。
+- 显式要求下界疣、紫颂两形态、15活珊瑚形态全部支持；总样本数88。
+- 紫颂与下界疣环境／产物精确核对，菌类产菌柄；死珊瑚、幽匿拒绝。
+- 实际紫颂启动错误泥土环境时不扣水、不扣能。
+既有everyRegisteredSamplePreservesComponentsAndSettlesItsPendingSnapshot同步遍历全部88样本，
+逐样本实际预约、399tick无早产、400tick结算、20tick无电不重复；样本／环境全部组件保留。
+其余120项工业、能源、培养GUI、Q0、NBT和能力回归全部通过。
+
+原版源码只读审查：BushBlock、GrowingPlant和Bonemealable植物类、原版物品与标签；
+补入17项后未发现其他必要独立植物样本遗漏。无通用ItemTags.PLANTS或ItemTags.CORALS，
+没有以泛化分类承诺任意模组／未来版本都支持。
+紫颂植株和活珊瑚块是机器模拟扩展，不宣称它们可在原版独立生长或骨粉复制。
+死珊瑚、任意木材叶子、巨型菌块、菌光体、幽匿与蛙卵不作为植物样本。
+客户端、压力、第三方植物包逐项兼容和额外两JVM重启探针未执行。
+非致命外网警告：Failed to request yggdrasil public key / java.net.UnknownHostException: api.minecraftservices.com。
+
+最终JAR：build/libs/starfall_blueprint-0.1.0.jar
+大小：723423 bytes
+SHA256：BEF1E3F3F4770144D36A99F0229D6F51764EBFD5A5247752AA1DE8C9F4489179
+图鉴103项、131配方、25产线，双离线HTML与开发canonical导出一致。

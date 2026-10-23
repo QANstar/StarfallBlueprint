@@ -53,7 +53,8 @@
         "LG-I02",
         "LG-F01",
         "MC-M01",
-        "MC-C01"
+        "MC-C01",
+        "EN-G07"
       ],
       "primary_recipe": "V-IRON",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -108,7 +109,9 @@
         "LG-I03",
         "LG-F01",
         "MC-M01",
-        "MC-C01"
+        "MC-C01",
+        "EN-G06",
+        "EN-G07"
       ],
       "primary_recipe": "V-COPPER",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -748,13 +751,16 @@
         "SV-SP01",
         "SV-SP02",
         "SV-BK01",
-        "SV-BK02"
+        "SV-BK02",
+        "EN-G06",
+        "EN-G07",
+        "AG-M01"
       ],
       "primary_recipe": "PC-R01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "制作前期工具、模块与公共复合材料",
-        "benefit": "第一批陨相开启控制板、四类发电、Ⅰ级模块、省能与20%加固；Ⅱ级继续增加晶料与金锭。",
+        "benefit": "第一批陨相开启控制板、六类基础发电、Ⅰ级模块、省能与20%加固；Ⅱ级继续增加晶料与金锭。",
         "operation": "工作台按配方消耗，或进一步精制；普通入门配方只需Q0、C0。",
         "targets": [
           "board",
@@ -774,7 +780,10 @@
           "speed_1",
           "speed_2",
           "bulk_1",
-          "bulk_2"
+          "bulk_2",
+          "g06",
+          "g07",
+          "plant_cultivator"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAn0lEQVR4nGNgoDUQtw36T5HmBS+u/CfLEHGoZhD2OrEXpyFMuDR3rm5CETPuzsbqHSZcmv3FZTEMxmYIEy4vbHz5GJcUfheQCpjQBdD9jgwuLj2M3wBxLIG06sFLOPvPhUsMLw+vY8TrAlIBE7pAdesaMCYWMKILgLzBYqAH5+tH24JpkP+J8gJIAUghMsClGasL0F0CMwybZoKAmEwEAJfVU6cfxzQbAAAAAElFTkSuQmCC"
@@ -857,7 +866,8 @@
         "SV-SP01",
         "SV-SP02",
         "SV-BK01",
-        "LG-I02"
+        "LG-I02",
+        "EN-G06"
       ],
       "primary_recipe": "AUX-R01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -884,7 +894,8 @@
           "speed_1",
           "speed_2",
           "bulk_1",
-          "item_extractor"
+          "item_extractor",
+          "g06"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqUlEQVR4nGNgGNRA1dHjPwjjU8OCT7NbYTdDnP4/hpgEBrght/fvYMRrgCrUxiULOhkYGP4xLLrIBGUzgNkMDBDDYAax4LIVqpjhwbmVDIsYwsFskDhDYTfDrv5SuB4mfJrRATZxJmIUoQOQRTCvMjFQCJjwSYL8r2AUTpwBt/fvYEQOHKq4ABcAWQSLRiZskvg0ImsGAZR0gCQBT3mwMEDXSDQgJj9QBABMZk/jnyuRUAAAAABJRU5ErkJggg=="
@@ -918,7 +929,8 @@
         "RT-07",
         "SV-SP01",
         "SV-SP02",
-        "SF-PM-10"
+        "SF-PM-10",
+        "EN-G07"
       ],
       "primary_recipe": "AUX-R02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -938,7 +950,8 @@
           "work_goggles",
           "sample_case",
           "speed_1",
-          "speed_2"
+          "speed_2",
+          "g07"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAo0lEQVR4nGNgGNRA1dHjPwjjU8OCT7NFmTVDjpYfQ0wCA9yQ2/t3MOI1QBVq45IFnWD+lGubUNgMDBDDYAax4LIVqpjh3cmfDFMYIGyQOEMZA8OJrqNwPUz4NKMDbOJMxChCByCLYF5lYqAQMOGTBPlfyJydOANu79/BiBw4VHEBLgCyCBaNTNgk8WlE1gwCKOkASQKe8izMrTFsJQkQkx8oAgD4GVFfnuHDfwAAAABJRU5ErkJggg=="
@@ -1347,7 +1360,8 @@
         "ST-01"
       ],
       "uses": [
-        "PM-04"
+        "PM-04",
+        "AG-M01"
       ],
       "primary_recipe": "ST-01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1357,7 +1371,8 @@
         "operation": "2铁锭竖排出2份铁板，后续配方整份消耗。",
         "targets": [
           "laminar",
-          "warm"
+          "warm",
+          "plant_cultivator"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkklEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhA4fuMTmLbU4GPwjqthgBnCiK6xpqoMrAhZEzpANoQFWQJmIy6N6K4BASZ0CUKa5y9dSXwg4tJE0ID5aBoSo8NJM4CQJmTARI7mlrYuBqzpQNvJ+z8oGglpIpiQYIbg0kQQ4Er3NAEANrxHL+94SiUAAAAASUVORK5CYII="
@@ -1452,7 +1467,8 @@
         "FX-04",
         "PM-03",
         "SV-SP02",
-        "SV-BK02"
+        "SV-BK02",
+        "EN-G06"
       ],
       "primary_recipe": "ST-05",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1468,7 +1484,8 @@
           "load",
           "warm",
           "speed_2",
-          "bulk_2"
+          "bulk_2",
+          "g06"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAk0lEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhDYdOgZmPazk2LwjqthgBnCiK4xPSULrAhZEzpANoQFWQJmIy6N6K4BASZ0CUKat+zeSnwg4tJE0IAtaBp8XL1JM4CQJmTARI7mmXOmMWBNB9pO3v9B0UhIE8GEBDMElyaCAFe6pwkAALVMRorSkBsgAAAAAElFTkSuQmCC"
@@ -1739,7 +1756,8 @@
         "SV-SP02",
         "SV-BK02",
         "LG-I02",
-        "LG-I03"
+        "LG-I03",
+        "AG-M01"
       ],
       "primary_recipe": "ST-10",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1759,7 +1777,8 @@
           "speed_2",
           "bulk_2",
           "item_extractor",
-          "item_router"
+          "item_router",
+          "plant_cultivator"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxUlEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lRGnAdpYNIFA0abdcDFkQxjRNaqH2DP0+bmiaEIHIHnvuBoGkCEsyBIwG0EaOxQ/MnQoIuQq7vNjuAbDC0VoNvq0HAPTW2qs4GJfTj9g4DFVwG4APgDSiA2w4FSsKIhi88xwPjBdfE+IsAEgwMr4lwEZoGvEaUCv0jsGBiU+nBpA4Oaag3A2I7IEKCpB0UhIE3JCQjEA3RBcmggCXOmeJgAAyJZT+LdR6H4AAAAASUVORK5CYII="
@@ -1816,7 +1835,9 @@
       "uses": [
         "EN-G01",
         "EN-G04",
-        "EN-P02"
+        "EN-P02",
+        "EN-G06",
+        "EN-G07"
       ],
       "primary_recipe": "ST-12",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1827,7 +1848,9 @@
         "targets": [
           "g01",
           "g04",
-          "dew"
+          "dew",
+          "g06",
+          "g07"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkklEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhD4+fAymGaX12XwjqthgBnCiK5xXXM4WBGyJnSAbAgLsgTMRlwa0V0DAkzoEoQ05845QXwg4tJE0IBcNA2TUyxIM4CQJmTARI7moNqVDFjTgbaT939QNBLSRDAhwQzBpYkgwJXuaQIA+8tHg9czBXYAAAAASUVORK5CYII="
@@ -2302,7 +2325,10 @@
         "SV-M01",
         "SV-BK01",
         "SV-BK02",
-        "UP-COMPOSITE"
+        "UP-COMPOSITE",
+        "EN-G06",
+        "EN-G07",
+        "AG-M01"
       ],
       "primary_recipe": "PM-10",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -2328,7 +2354,10 @@
           "work_goggles",
           "auto_furnace",
           "bulk_1",
-          "bulk_2"
+          "bulk_2",
+          "g06",
+          "g07",
+          "plant_cultivator"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnElEQVR4nGNgGNRA1dHjPwjjU8OCT7NWbwZDlbAiQ0wCA9yQ2/t3MOI1QBVq45IFnWB+29v7KGyGYohhMIMYcdkKVszAwPBn0xkGFj8TMBsmfq14BtwAJnya0QE2cSZiFKEDkEUwrzIxUAiY8Eki+5+gAbf372AEBQ5VXYALYI0FBiRJfBqRNYMASjqAAeTkCwpxdFtJAsTkB4oAAPkfU5+QCjlIAAAAAElFTkSuQmCC"
@@ -2653,10 +2682,11 @@
       "name": "余烬供能机组",
       "unit": "件",
       "icon": "machine",
-      "note": "",
+      "note": "500XH/t；按原版／NeoForge真实燃烧API返回的燃烧ticks×200XH计量，接纳API认可的模组燃料。煤／木炭1600ticks＝320kXH；岩浆桶20000ticks＝4000000XH，燃烧余物空桶送成品槽。成品槽无法接纳余物或能量满仓时不消耗新燃料，保留已点燃燃料余额。仅g01扩燃料；整备台、混料炉及其他机器维持既有燃料范围。",
       "external": false,
       "mass": null,
-      "implementation": "设计配方",
+      "implementation": "本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
+      "implementation_status": "server_verified",
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -2667,9 +2697,9 @@
       "primary_recipe": "EN-G01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "用煤或木炭发电",
-        "benefit": "以稳定输出带动第一套电动产线。",
-        "operation": "燃料输入后接铜线；500XH/t，每煤320kXH。",
+        "summary": "用真实燃烧API认可的燃料发电",
+        "benefit": "以500XH/t稳定输出带动电动产线；煤木炭320kXH，岩浆桶4MXH。",
+        "operation": "每燃烧tick折200XH；模组燃料按NeoForge实际API接纳，空桶等余物送成品槽，输出堵塞不吞新燃料。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAwklEQVR4nGNgoBAwgggZE+v/5Gh+cuYoIwuMM3daF0mak7PKwDQL3IB5y3Aq7gthZiha8xerHAsy538qK4aC/vf/MOQYZ//GbgAInMm7wAADhxv1wLRt/SW4mMkkAwZkwMJABIAZBAKFaHJMxGiCAWSX4DXgMJGacXrBFkkxyDBcmnG6AJ9LCLrABDmU3/9jKBRkwgh5nAYwIsUvLPEwMmBPQFgNqHXlhbOL1nzGquFnjDUD+5KjCEtBBCWZiRx9KAAASd86qPj3/S4AAAAASUVORK5CYII="
@@ -2881,7 +2911,8 @@
         "EN-FL01"
       ],
       "uses": [
-        "LG-F01"
+        "LG-F01",
+        "AG-M01"
       ],
       "primary_recipe": "EN-FL01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -2890,7 +2921,8 @@
         "benefit": "把搬水改为连续供液。",
         "operation": "接许可输出和输入面，同网一种流体，共享2000mB／秒。",
         "targets": [
-          "fluid_valve"
+          "fluid_valve",
+          "plant_cultivator"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAsklEQVR4nGNgoBAwgggZE+v/5Gh+cuYoIwuMM3daF0mak7PKwDQL3IB5y8hxBAPcABAQ/c2BoeBvkA8D87otKGKvWX9gNwAEtt04ywAD7lX1cEN2tjWC2V4axgzIgImBQsCESwJmOy4+bV3gjsM2bOJM2BTCAowYcRZ0AVgo/8ViAHoMYBjwGil+GTavwTSBFVMIxYBaV144u3n3ZyxuYGD4GWPNwL7kKJxPcWYiRx8KAABFFC64WUUAHQAAAABJRU5ErkJggg=="
@@ -3821,7 +3853,10 @@
         "EN-P02",
         "EN-S02",
         "EN-F01",
-        "EN-G05"
+        "EN-G05",
+        "EN-G06",
+        "EN-G07",
+        "AG-M01"
       ],
       "primary_recipe": "MC-C01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -3836,7 +3871,10 @@
           "dew",
           "s02",
           "bio_processor",
-          "g05"
+          "g05",
+          "g06",
+          "g07",
+          "plant_cultivator"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdElEQVR4nGNgGGjACGNMXLrsPyka86OjwHpZkAWd/x1leKsbj1ej8OWFDHuZrOF8FmTJ4Fk3GBgYKgnanpWBwwAYuHl4L9xryEDd1hnDm0wMFAKmUQMYWIgNbaICcW2aBkEN6GpQXABKYciJBBvYS6zT6AYAjhYYTXYFnuQAAAAASUVORK5CYII="
@@ -3902,6 +3940,124 @@
         "CM-04"
       ],
       "primary_recipe": ""
+    },
+    "g06": {
+      "id": "g06",
+      "name": "熔流发电机",
+      "unit": "件",
+      "icon": "machine",
+      "note": "仅利用非源流动岩浆，200XH/t；同一追溯岩浆源每tick共享200XH预算，分流或多机不倍增；源方块保持，不消耗岩浆；最多追溯64个已加载上游位置，找不到真实源或追溯被截断不发电。",
+      "external": false,
+      "mass": null,
+      "implementation_status": "server_verified",
+      "implementation": "本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "供能与储能",
+      "recipes": [
+        "EN-G06"
+      ],
+      "uses": [],
+      "primary_recipe": "EN-G06",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "利用流动岩浆发电",
+        "benefit": "提供200XH/t的环境供能选择，源方块保持。",
+        "operation": "仅非源流动岩浆有效，同一追溯源每tick共享200XH预算；最多追溯64个已加载上游位置，找不到真实源或截断不发电，分流多机不倍增。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAwUlEQVR4nGNgoBAwgggZE+v/5Gh+cuYoIwuMM3daF0mak7PKwDQL3IB5y3Aq7gthZiha8xerHAsyJ0YlAUOBkcFiDLkldxZgNwAE8teXMsDA4UY9MG1bf4mBgQEiPjGwmwEZsDAQAWAGgcC5C6hyTMRoggGIS4gw4DCRmnF6wRZJMcgwXJpxugCfSwi6YCJKKC9mOHchlmFiIJEGLEGKX0TiQYgRNKDWlRfOLlrzGauGnzHWDOxLjsL5FGcmcvShAAAi/TsF8sGZ0QAAAABJRU5ErkJggg=="
+    },
+    "g07": {
+      "id": "g07",
+      "name": "地热发电机",
+      "unit": "件",
+      "icon": "machine",
+      "note": "只检测正下方热源：点燃普通篝火40、点燃灵魂篝火60、岩浆块80、岩浆源160XH/t；未点燃篝火与流动岩浆无效。热源不消耗，仅简化热源利用，不模拟温差。",
+      "external": false,
+      "mass": null,
+      "implementation_status": "server_verified",
+      "implementation": "本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "供能与储能",
+      "recipes": [
+        "EN-G07"
+      ],
+      "uses": [],
+      "primary_recipe": "EN-G07",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "利用正下方热源发电",
+        "benefit": "以不消耗热源的简化方式利用环境热量。",
+        "operation": "正下方点燃篝火40、点燃灵魂篝火60、岩浆块80、岩浆源160XH/t；熄灭或流动岩浆无效，不模拟温差。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxElEQVR4nGNgoBAwgggZE+v/5Gh+cuYoIwuMM3daF0mak7PKwDQL3IB5y3Aq7gthZiha8xerHAsyxyLTAUNB2OvDGHInph/AbgAITM6aygADhxv1wLRt/SUGBgYQZmDInZbNgAxYGIgAMINAYBWaHBMxmmAA4hIiDDhMpGacXrBFUgwyDJdmnC7A5xKCLshFDuXXhxlWidoy5E6zJc6AE0jxi0g8CDGCBtS68sLZRWs+Y9XwM8aagX3JUTif4sxEjj4UAABcQTv4SLsL0gAAAABJRU5ErkJggg=="
+    },
+    "plant_cultivator": {
+      "id": "plant_cultivator",
+      "name": "作物植物培养机",
+      "unit": "件",
+      "icon": "machine",
+      "note": "槽0放环境方块、槽1放已从正常世界取得的植物／种子样本，两者保留；槽2水桶补液，空桶送输出。每批400ticks／20秒，250mB普通水＋8000XH（20XH/t），水生植物同样耗水。上方输入0..2，底面取输出9..12，侧面接水管与能源。开始时锁定环境、样本及产物，中途不能替换环境／样本；停电、缺水或输出堵塞暂停，保存后续作。作物种子每批2件主要作物，南瓜1、西瓜片4；树苗2对应原木，竹4；仙人掌、甘蔗、花草、海带、海泡菜2。陆生用泥土／草方块／耕地等；仙人掌沙／红沙；甘蔗沙或土；水生沙／沙砾／黏土／泥土或珊瑚块；可可用丛林原木，下界疣用灵魂沙，菌类用相应菌岩。只明确支持原版样本；机器模拟生长，不修改世界、不种树、不凭空解锁新品种，不宣称完整第三方兼容。",
+      "external": false,
+      "mass": null,
+      "implementation_status": "server_verified",
+      "implementation": "本轮植物培养机已通过主代理2026-10-23 17:17:09集中服务端验证：120/120项（原114＋6项植物培养），3.697秒，完整构建24秒、退出码0；384份JSON及PNG引用、131条配方／17条原版映射静态核对通过，图鉴103项、产线25条。6项新增用例覆盖71种原版样本完整400ticks、启动拒绝（含19XH）、NBT73→327续作与两循环、停电／背压／手动和红石暂停、GUI取换、AG-M01实际Q0与8件消费、注册流体／物品能力及返桶原子性。证据：StarfallBlueprint/docs/verification/2026-10-23-plant-cultivation-gametest.txt。动态培育不逐样本登记工业配方；下方114/114为能源阶段历史。客户端、压力及全部第三方模组兼容未验收。",
+      "cultivation": {
+        "ticks": 400,
+        "seconds": 20,
+        "water_mb": 250,
+        "energy_xh": 8000,
+        "environment_slot": 0,
+        "sample_slot": 1,
+        "water_bucket_slot": 2,
+        "output_slots": [
+          9,
+          10,
+          11,
+          12
+        ],
+        "retained_slots": [
+          0,
+          1
+        ],
+        "top_inputs": [
+          0,
+          1,
+          2
+        ],
+        "bottom_outputs": [
+          9,
+          10,
+          11,
+          12
+        ],
+        "side_inputs": [
+          "water",
+          "energy"
+        ],
+        "locked_batch": true,
+        "profile_registry": "runtime",
+        "supported_scope": "explicit vanilla samples"
+      },
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "AG-M01"
+      ],
+      "uses": [],
+      "primary_recipe": "AG-M01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "保留环境和植物样本循环培育原版产物",
+        "benefit": "取得一次样本后，以供水供电接入持续生产。",
+        "operation": "槽0环境、1样本保留，2水桶补液，9..12输出产品与空桶；20秒／250mB水／8000XH，上方进料、底出料、侧接水电；开始锁定本批，中途不能换环境样本，欠电缺水堵塞暂停并保存续作。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA2ElEQVR4nGNgoBAwgggZE+v/5Gh+cuYoIwuMM3daF0mak7PKwDQL3IB5y3AqNiyWA9Pnex9hyLEgc6x/pGIo+Fa9E8UgrlZ3hqMcs7EbAAITbhcwOHdYg9l7K44ypDF4MuADTOgCMM3obKINQAdGn5/D2bMStmPIs6ALgJwNszmU+ytOjTgNgBkCAqGTDRgo9gIhwIIuUKA6AYm3AIsYHgOOcsxmcBF8AOc/XA2hOSWr4WJ73ivgNqDWlZeBgUEXzG7e/RmrjT9jrBnYl0DCCAQozkzk6EMBAJQ4OuMYuAZtAAAAAElFTkSuQmCC"
     },
     "white_concrete_powder": {
       "id": "white_concrete_powder",
@@ -5925,11 +6081,12 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "500 XH/t；煤／木炭320kXH／件。无晶料、电控板前置。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。 配方已按钛硼分阶段规则调整，以本投料表完整件数为准。",
+      "note": "500XH/t；按原版／NeoForge真实燃烧API返回的燃烧ticks×200XH计量，接纳API认可的模组燃料。煤／木炭1600ticks＝320kXH；岩浆桶20000ticks＝4000000XH，燃烧余物空桶送成品槽。成品槽无法接纳余物或能量满仓时不消耗新燃料，保留已点燃燃料余额。仅g01扩燃料；整备台、混料炉及其他机器维持既有燃料范围。 制造仍直接消耗1份Q0晶料。本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
       "quality": "",
       "inherited": true,
       "balance": false,
       "progression_stage": "P2：陨相供能与产能升级",
+      "implementation_status": "server_verified",
       "craft": {
         "mode": "定形九宫格",
         "cells": [
@@ -8608,7 +8765,7 @@
     },
     {
       "id": "RUN-G01",
-      "name": "煤／木炭发电",
+      "name": "余烬多燃料发电（煤／木炭参考批）",
       "station": "g01",
       "unlock": "ENR-02",
       "inputs": [
@@ -8627,10 +8784,17 @@
       "seconds": 32,
       "energy": 0,
       "tools": [],
-      "note": "500 XH/t连续输出32秒；满仓暂停耗煤，不按摆放次数重置燃料余额。",
+      "note": "500XH/t；按原版／NeoForge真实燃烧API返回的燃烧ticks×200XH计量，接纳API认可的模组燃料。煤／木炭1600ticks＝320kXH；岩浆桶20000ticks＝4000000XH，燃烧余物空桶送成品槽。成品槽无法接纳余物或能量满仓时不消耗新燃料，保留已点燃燃料余额。仅g01扩燃料；整备台、混料炉及其他机器维持既有燃料范围。 本条仅示例煤／木炭1件、32秒320kXH；燃料API不展开为无限配方条目。本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
       "quality": "",
       "inherited": true,
       "balance": false,
+      "implementation_status": "server_verified",
+      "fuel_rule": {
+        "api": "NeoForge burn time",
+        "xh_per_burn_tick": 200,
+        "output_xh_per_tick": 500,
+        "remainder_destination": "output"
+      },
       "automatic": false
     },
     {
@@ -10908,6 +11072,284 @@
       "progression_stage": "P3"
     },
     {
+      "id": "EN-G06",
+      "name": "熔流发电机合成",
+      "station": "workbench",
+      "unlock": "PUB-04／ENR-02；首批陨相后",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "boroglass",
+          "qty": 2
+        },
+        {
+          "item": "sheath",
+          "qty": 1
+        },
+        {
+          "item": "titan",
+          "qty": 1
+        },
+        {
+          "item": "copper",
+          "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "g06",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "仅利用非源流动岩浆，200XH/t；同一追溯岩浆源每tick共享200XH预算，分流或多机不倍增；源方块保持，不消耗岩浆；最多追溯64个已加载上游位置，找不到真实源或追溯被截断不发电。 普通工作台每格扣1整件；不要求未来预留材料。本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
+      "quality": "直接消耗1份Q0通用稳相晶料；P≥90%、I≥20、C0，不检查O。",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
+      "implementation_status": "server_verified",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "sheath",
+            "qty": 1
+          },
+          {
+            "item": "titan",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "EN-G07",
+      "name": "地热发电机合成",
+      "station": "workbench",
+      "unlock": "PUB-04／ENR-02；首批陨相后",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "copper",
+          "qty": 2
+        },
+        {
+          "item": "iron",
+          "qty": 1
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
+        },
+        {
+          "item": "sheath",
+          "qty": 1
+        },
+        {
+          "item": "boron",
+          "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "g07",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "只检测正下方热源：点燃普通篝火40、点燃灵魂篝火60、岩浆块80、岩浆源160XH/t；未点燃篝火与流动岩浆无效。热源不消耗，仅简化热源利用，不模拟温差。 普通工作台每格扣1整件；不要求未来预留材料。本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
+      "quality": "直接消耗1份Q0通用稳相晶料；P≥90%、I≥20、C0，不检查O。",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
+      "implementation_status": "server_verified",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "iron",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "sheath",
+            "qty": 1
+          },
+          {
+            "item": "boron",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          },
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "AG-M01",
+      "name": "作物植物培养机合成",
+      "station": "workbench",
+      "unlock": "PUB-05；首批陨相后",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "boroglass",
+          "qty": 2
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "pipe",
+          "qty": 1
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "common",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "plant_cultivator",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "机架1＋耐温玻璃2＋基础控制板1＋普通流体管1＋铁板2＋Q0晶料1，共8件；普通工作台九格装配，不新增矿物或配方循环。槽0放环境方块、槽1放已从正常世界取得的植物／种子样本，两者保留；槽2水桶补液，空桶送输出。每批400ticks／20秒，250mB普通水＋8000XH（20XH/t），水生植物同样耗水。上方输入0..2，底面取输出9..12，侧面接水管与能源。开始时锁定环境、样本及产物，中途不能替换环境／样本；停电、缺水或输出堵塞暂停，保存后续作。作物种子每批2件主要作物，南瓜1、西瓜片4；树苗2对应原木，竹4；仙人掌、甘蔗、花草、海带、海泡菜2。陆生用泥土／草方块／耕地等；仙人掌沙／红沙；甘蔗沙或土；水生沙／沙砾／黏土／泥土或珊瑚块；可可用丛林原木，下界疣用灵魂沙，菌类用相应菌岩。只明确支持原版样本；机器模拟生长，不修改世界、不种树、不凭空解锁新品种，不宣称完整第三方兼容。",
+      "quality": "直接消耗1份Q0通用稳相晶料；P≥90%、I≥20、C0，不检查O；控制板ST-10另继承Q0门槛。",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相供能与产能升级",
+      "implementation_status": "server_verified",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "pipe",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          },
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
       "id": "VC-01",
       "name": "白色混凝土水化",
       "station": "prep",
@@ -11504,6 +11946,9 @@
     "item_router",
     "fluid_valve",
     "alloy_furnace",
-    "machine_frame"
+    "machine_frame",
+    "g06",
+    "g07",
+    "plant_cultivator"
   ]
 }

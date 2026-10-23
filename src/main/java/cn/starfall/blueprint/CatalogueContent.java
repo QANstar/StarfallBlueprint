@@ -21,7 +21,7 @@ public final class CatalogueContent {
     public static final Map<String,DeferredItem<Item>> ITEMS=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<IndustryBlock>> BLOCKS=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<Block>> ORES=new LinkedHashMap<>();
-    public static final Set<String> MACHINE_KEYS=Set.of("refiner","recycler","g01","g02","g03","g04","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
+    public static final Set<String> MACHINE_KEYS=Set.of("plant_cultivator","refiner","recycler","g01","g02","g03","g04","g06","g07","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
     // Chenghai/Linhai content awaits a future official Minecraft dimension; keep registry IDs for saves only.
     public static final Set<String> RESERVED_ITEMS=Set.of("moon","lunar","moon_tail","liner","lined_box","anima","anima_basic","staff_blank");
     public static final Set<String> FLUID_KEYS=Set.of("warm","wastewater","bio","returnwater");

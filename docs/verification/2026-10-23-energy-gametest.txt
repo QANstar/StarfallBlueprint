@@ -1,0 +1,44 @@
+能源扩展集中服务端验证（2026-10-23）
+
+环境：Windows，Java 21.0.12.1，Minecraft 1.21.1，NeoForge 21.1.262，Gradle 8.14.3。
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+本机忽略的镜像与hosts配置用于既有下载环境；项目正常仓库配置未改，TLS校验未关闭。
+
+资源生成／静态验证：
+python tools/generate_resources.py
+python tools/verify_resources.py
+python tools/verify_mc_catalogue.py
+PASS: 378 JSON files, all PNGs and local model/texture links.
+PASS: 130 discrete catalogue recipes; 17 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+设定源图鉴102项、24条产线，原128条配方加EN-G06/07两条制造。保留未来维度内容停用。
+
+完整构建／真实服务端命令（PowerShell）：
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+完整日志：.tools/energy-expansion-validation.log（本机忽略文件）
+[16:43:16] [Server thread/INFO] [minecraft/GameTestServer]: ========= 114 GAME TESTS COMPLETE IN 3.179 s ======================
+[16:43:16] [Server thread/INFO] [minecraft/GameTestServer]: All 114 required tests passed :)
+BUILD SUCCESSFUL in 25s
+退出码0。本轮完整功能验证一次通过；原107项与新增7项共同执行。
+测试源码最后写入16:42:48，class生成16:43:01，完整构建使用冻结后的最终Java源码。
+
+新增EnergyExpansionGameTests：
+- vanillaBurnTimesAndLongResidualHeatSurviveNbt
+- lavaBucketReturnsThroughMenuAndBottomCapabilityWithoutBackpressureLoss
+- actualFuelSlotsAndShiftClickKeepLegacyCoalRestrictions
+- geothermalUsesOnlyUnconsumedHeatDirectlyBelowAndHonoursStops
+- moltenFlowTracesSharedSourcesPerTickAndDoesNotClaimWater
+- newGeneratorCapabilitiesShareSimulationBudgetsAndPersistStoppedEnergy
+- canonicalGeneratorRecipesRequireOneQ0AndConsumeActualCraftingInputs
+
+覆盖：8种真实原版燃料按getBurnTime(SMELTING)*200全量结算；煤块／岩浆桶余燃与int最大余燃跨NBT；容器通过真实菜单及已注册底部物品能力取出，模拟无消费、反复取出无复制；满输出及满缓存不扣新燃料；真实shift-click与旧机燃料限制；地热各热源与熄灭／流态／红石／手动停止；熔流真实源共享、跨刻释放、独立源、水轮隔离、孤立流与无效邻接继续；新机真实能源能力模拟、跨面预算、保存与停机；新配方Q0反例、CraftingMenu预览与实际消费。
+
+API边界：g01通过NeoForge实际燃料与余物API，不把所有可燃方块都认作燃料；未逐个实测第三方模组。超大燃烧时间总热量饱和到int最大值。g06最多64个已加载位置追溯，无法找到真实源不发电，未加载区块不强制加载。g07为不消耗热源的简化利用，不模拟温差。未执行客户端、压力、实际游玩计时或两JVM探针；NBT回归不冒充额外进程重启测试。
+
+非阻断环境日志：Failed to request yggdrasil public key；java.net.UnknownHostException: api.minecraftservices.com。测试和构建均完成通过。
+
+验证后仅更新图鉴验证状态文字与文档，从同一规范数据同步资源后执行gradlew jar增量打包；未再次运行GameTests，Java逻辑保持冻结。最终包的规范items/recipes/catalogue与设定源、开发资源逐项相同，包含新机资源与GeneratorFuel，未包含月络worldgen。两份离线HTML逐字节一致。
+交付：build/libs/starfall_blueprint-0.1.0.jar
+大小：691413 bytes
+SHA256：A965D9BE09994F3383ABDCBE05D8C112ED104CF6D86B371E00EFB9711F25D132

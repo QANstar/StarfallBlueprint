@@ -1,0 +1,51 @@
+植物培养机集中验证（2026-10-23）
+
+环境：Windows / Java 21.0.12.1 / Minecraft 1.21.1 / NeoForge 21.1.262 / Gradle 8.14.3
+项目：StarfallBlueprint 0.1.0
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+本地离线缓存、镜像init与hosts均为忽略的环境配置，不更改TLS或系统DNS。
+
+阶段命令：
+python tools/verify_resources.py
+python tools/verify_mc_catalogue.py
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+
+结果：
+PASS: 384 JSON files, all PNGs and local model/texture links.
+PASS: 131 discrete catalogue recipes; 17 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+[17:17:09] [Server thread/INFO] [minecraft/GameTestServer]: ========= 120 GAME TESTS COMPLETE IN 3.697 s ======================
+[17:17:09] [Server thread/INFO] [minecraft/GameTestServer]: All 120 required tests passed :)
+BUILD SUCCESSFUL in 24s
+退出码0。一次集中完整构建与测试通过，未发生本轮测试失败／重测。
+
+新增6项：
+- everyRegisteredSamplePreservesComponentsAndSettlesItsPendingSnapshot
+- invalidEnvironmentWaterPowerAndFourFullOutputsNeverReserveResources
+- twoAutomaticBatchesResumeAt73AfterNbtAndPauseWithoutAnotherReservation
+- realMenuLimitsFixturesToOneAndBlocksPickupShiftSwapAndThrowInFlight
+- canonicalAgM01ConsumesEightActualWorkbenchInputsAndExactlyOneQ0
+- registeredPortsAndBucketRemaindersRespectSimulationCapacityAndExtractionOnce
+
+验证范围：
+- 全部71种原版样本，环境／样本的自定义组件和数量完整保留；profile输出读取深复制，pending到400tick实际输出一致；每批250mB／8000XH，20XH/tick，无电不重复产出。
+- 错误环境、249mB水、0或19XH、四格堵塞均不预约／不扣启动资源。
+- NBT在73tick恢复后327tick完成，第二批自动循环；断电、背压、真实主ticker手动／红石停机保持进度和已付能量。
+- 真实IndustryMenu单件限制和PICKUP／QUICK_MOVE／SWAP／THROW在制锁定；完成可取。
+- AG-M01通过真实CraftingMenu：8件、实际Q0、缺失／I19拒绝、预览不变、消费一次无重复。
+- 已注册fluid／item capability的模拟无副作用、非水拒绝、满罐／满输出不耗桶、实际1000mB补液返桶与底部单次提取。
+- 原114项能源、采掘、加工、装备与物流回归同时保留。
+
+交付：
+JAR：build/libs/starfall_blueprint-0.1.0.jar
+大小：720708 bytes
+SHA256：6500FCE56D2CBC0AC40806D34C93BCBF51CB0D014F020BA4C2853D6D5D1670C0
+验收后只同步图鉴的server_verified状态与正式图标元数据，再执行jar打包。
+最终JAR的全部.class及排除验证／美术元数据的图鉴运行定义，与通过120项测试的构建逐项一致。
+103项图鉴、131配方、25产线，两份离线HTML及开发导出保持一致。
+
+边界：
+不做客户端显示、压力测试、实际游玩计时、第三方植物／配方包逐项兼容或额外两JVM重启探针。
+本轮NBT恢复不冒充真实多进程重启；未来维度、月络与灵相关联工艺仍关闭。
+日志中的Failed to request yggdrasil public key / java.net.UnknownHostException: api.minecraftservices.com为已知外部联网警告，不影响本地真实服务端测试通过。

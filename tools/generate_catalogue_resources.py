@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parents[1]; RES=ROOT/'src/main/resources'; MOD='starfall_blueprint'; ART=RES/'assets'/MOD; DATA=RES/'data'/MOD
 catalogue=json.loads((ART/'catalogue.json').read_text(encoding='utf-8'))
-machines={'refiner','recycler','g01','g02','g03','g04','pump','dew','cable','pipe','s02','bio_processor','g05','autocrafter','auto_furnace','supply_crate','energy_junction','item_duct','item_extractor','item_router','fluid_valve','terminal','busjoint','damper'}
+machines={'plant_cultivator','refiner','recycler','g01','g02','g03','g04','g06','g07','pump','dew','cable','pipe','s02','bio_processor','g05','autocrafter','auto_furnace','supply_crate','energy_junction','item_duct','item_extractor','item_router','fluid_valve','terminal','busjoint','damper'}
 existing={'ore','common','tail','joint','brace','shield','finder','prep','tank','rain_collector','alloy_furnace','iron_plate','copper_plate','fix','steel_pre','steel','ceramic','insulation','binder','substrate','board','breaker','sheath','steel_fix','box','machine_frame'}
 fluids={'warm':'#bca88a','wastewater':'#837a61','bio':'#a6bf59','returnwater':'#699997'}
 # Keep these registry assets as placeholders; official dimension content is not released yet.
@@ -20,7 +20,8 @@ def sprite(key):
  im=Image.new('RGBA',(16,16));d=ImageDraw.Draw(im)
  if key in machines:
   d.rectangle((1,1,14,14),fill='#56686b',outline='#1c343b');d.line((2,2,13,2),fill='#b9cac5');d.rectangle((3,4,12,11),fill='#213b40',outline=color)
-  if key in {'g01','g02','g03','g04','g05','s02','cable','energy_junction','busjoint'}:d.polygon([(9,3),(5,8),(8,8),(6,12),(11,6),(8,6)],fill='#e4bc6e')
+  if key in {'g01','g02','g03','g04','g06','g07','g05','s02','cable','energy_junction','busjoint'}:d.polygon([(9,3),(5,8),(8,8),(6,12),(11,6),(8,6)],fill='#e4bc6e')
+  elif key=='plant_cultivator':d.rectangle((7,7,8,11),fill='#b9ce70');d.ellipse((4,5,7,8),fill='#64c37b');d.ellipse((8,3,11,7),fill='#87db89');d.line((4,12,11,12),fill='#9a794b')
   elif key in {'pump','dew','pipe','fluid_valve'}:d.polygon([(8,4),(5,9),(6,11),(10,11),(11,9)],fill='#68b5bf')
   elif key in {'autocrafter','item_router','item_extractor','item_duct','supply_crate'}:
    for x in [4,7,10]:

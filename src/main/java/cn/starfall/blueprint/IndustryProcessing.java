@@ -11,7 +11,8 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 /** Reserve inputs once, pause under backpressure, and settle all material/fluid outputs once. */
 public final class IndustryProcessing {
     public static void tick(IndustryBlockEntity be){
-        if(!Set.of("refiner","recycler","bio_processor","autocrafter","auto_furnace","prep").contains(be.kind()))return;
+        if(!Set.of("plant_cultivator","refiner","recycler","bio_processor","autocrafter","auto_furnace","prep").contains(be.kind()))return;
+        if(be.kind().equals("plant_cultivator"))fillCultivationBucket(be);
         // Preserve legacy in-flight batches without completing or consuming more resources.
         var active = CatalogueContent.RECIPES.get(be.activeRecipe);
         if ((active != null && !CatalogueContent.isRecipeEnabled(active))
@@ -19,7 +20,8 @@ public final class IndustryProcessing {
             be.status=8; return;
         }
         if(be.idle()) {
-            if(be.kind().equals("autocrafter")){if(!startCraft(be))return;}
+            if(be.kind().equals("plant_cultivator")){if(!PlantCultivation.start(be))return;}
+            else if(be.kind().equals("autocrafter")){if(!startCraft(be))return;}
             else if(be.kind().equals("auto_furnace")){if(!startSmelting(be))return;}
             else if(!startProcess(be))return;
         }
@@ -50,6 +52,13 @@ public final class IndustryProcessing {
             be.experience+=be.pendingExperience;be.pendingExperience=0;
         }
         be.setChanged();
+    }
+    private static void fillCultivationBucket(IndustryBlockEntity be){
+        if(!be.stock.get(2).is(Items.WATER_BUCKET))return;
+        var water=new FluidStack(net.minecraft.world.level.material.Fluids.WATER,1000);
+        var empty=List.of(new ItemStack(Items.BUCKET));
+        if(be.tanks[0].fill(water,FluidAction.SIMULATE)!=1000||!be.outputFits(empty))return;
+        be.stock.get(2).shrink(1);be.tanks[0].fill(water,FluidAction.EXECUTE);be.planOutputs(empty,true);be.setChanged();
     }
     private static boolean fluidsFit(IndustryBlockEntity be){return (be.pendingFluid1.isEmpty()||be.tanks[1].fill(be.pendingFluid1,FluidAction.SIMULATE)==be.pendingFluid1.getAmount())&&(be.pendingFluid2.isEmpty()||be.tanks[2].fill(be.pendingFluid2,FluidAction.SIMULATE)==be.pendingFluid2.getAmount());}
     public static List<JsonObject> available(IndustryBlockEntity be){return CatalogueContent.RECIPES.values().stream().filter(CatalogueContent::isRecipeEnabled).filter(r->r.get("station").getAsString().equals(be.kind())&&!r.get("id").getAsString().equals("PC-R01")).toList();}

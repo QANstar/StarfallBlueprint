@@ -20,8 +20,8 @@ public final class IndustryMenu extends AbstractContainerMenu {
         checkContainerSize(this.container,27);
         for(int i=0;i<27;i++){final int index=i;addSlot(new Slot(this.container,i,8+(i%9)*18,62+(i/9)*26){
             public boolean mayPlace(ItemStack s){return server!=null?IndustryMenu.this.container.canPlaceItem(index,s):index<9||index>=13;}
-            public boolean mayPickup(Player p){return server==null||server.idle()||index<14||index>17;}
-            public int getMaxStackSize(){return !kind().equals("supply_crate")&&index>=14&&index<=18?1:64;}
+            public boolean mayPickup(Player p){if(server!=null&&server.kind().equals("plant_cultivator")&&index<2&&!server.idle())return false;return server==null||server.idle()||index<14||index>17;}
+            public int getMaxStackSize(){if(kind().equals("plant_cultivator")&&index<2)return 1;return !kind().equals("supply_crate")&&index>=14&&index<=18?1:64;}
             public boolean isActive(){return !(showFilters&&index>=18)&&visible(index);}
             public void onTake(Player p,ItemStack s){super.onTake(p,s);if(index>=9&&index<=12&&server!=null)server.awardExperience(p);}
         });}
@@ -32,8 +32,8 @@ public final class IndustryMenu extends AbstractContainerMenu {
         addDataSlots(data);addDataSlot(craftingPage);
     }
     public String kind(){int i=data.get(8);return i>=0&&i<IndustryBlockEntity.KINDS.size()?IndustryBlockEntity.KINDS.get(i):"prep";}
-    public boolean visible(int i){String k=kind();if(k.equals("supply_crate"))return true;if(i==18)return true;if(k.equals("g01"))return i==13;if(Set.of("prep","refiner","recycler","bio_processor","autocrafter","auto_furnace").contains(k))return i<14||i<16&&!k.equals("autocrafter")||i<18&&k.equals("auto_furnace");return false;}
-    public String templateLabel(net.minecraft.world.level.Level level){int i=data.get(12);if(i<0)return "自动选择";if(kind().equals("autocrafter")){var recipes=AutomaticCrafting.recipes(level);if(i>=recipes.size())return "";var recipe=recipes.get(i);var result=recipe.value().getResultItem(level.registryAccess());return result.isEmpty()?recipe.id().toString():result.getHoverName().getString();}var names=new ArrayList<>(CatalogueContent.RECIPES.keySet());return i<names.size()?names.get(i):"";}
+    public boolean visible(int i){String k=kind();if(k.equals("supply_crate"))return true;if(k.equals("plant_cultivator"))return i<3||i>=9&&i<=12||i==18;if(i==18)return true;if(k.equals("g01"))return i==13||i>=9&&i<=12;if(Set.of("prep","refiner","recycler","bio_processor","autocrafter","auto_furnace").contains(k))return i<14||i<16&&!k.equals("autocrafter")||i<18&&k.equals("auto_furnace");return false;}
+    public String templateLabel(net.minecraft.world.level.Level level){int i=data.get(12);if(kind().equals("plant_cultivator"))return "环境 / 样本 / 水桶";if(i<0)return "自动选择";if(kind().equals("autocrafter")){var recipes=AutomaticCrafting.recipes(level);if(i>=recipes.size())return "";var recipe=recipes.get(i);var result=recipe.value().getResultItem(level.registryAccess());return result.isEmpty()?recipe.id().toString():result.getHoverName().getString();}var names=new ArrayList<>(CatalogueContent.RECIPES.keySet());return i<names.size()?names.get(i):"";}
     public long energy(){return (data.get(0)&65535L)|((data.get(1)&65535L)<<16);}
     public boolean stillValid(Player p){return container.stillValid(p);}
     public void clicked(int index,int button,ClickType type,Player p){

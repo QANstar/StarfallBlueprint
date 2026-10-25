@@ -55,12 +55,12 @@ public final class ProductionGameTests {
     public static void dryAndBlockedMachineDoesNotConsume(GameTestHelper h) {
         PreparationBlockEntity b=bench(h); supply(b,12,2); b.water=0; ticks(b,20);
         h.assertTrue(b.getItem(0).getCount()==2 && b.getItem(1).getCount()==1 && b.progress==0,"No water: no inputs consumed");
-        b.water=1000; b.setItem(2,new ItemStack(StarfallBlueprint.CRYSTAL.get(),64)); ticks(b,20);
+        b.water=1000;for(int i=9;i<13;i++)b.stock.set(i,new ItemStack(Items.COBBLESTONE,64)); ticks(b,20);
         h.assertTrue(b.getItem(0).getCount()==2 && b.water==1000,"Blocked output: no reservation");
-        b.setItem(2,ItemStack.EMPTY); ticks(b,100); long energy=b.energy;
-        b.setItem(2,new ItemStack(StarfallBlueprint.CRYSTAL.get(),64)); ticks(b,20);
+        for(int i=9;i<13;i++)b.stock.set(i,ItemStack.EMPTY);ticks(b,100); long energy=b.energy;
+        for(int i=9;i<13;i++)b.stock.set(i,new ItemStack(Items.COBBLESTONE,64));ticks(b,20);
         h.assertTrue(b.progress==100 && b.energy==energy,"Backpressure pauses work without energy use");
-        b.setItem(2,ItemStack.EMPTY); ticks(b,100);
+        for(int i=9;i<13;i++)b.stock.set(i,ItemStack.EMPTY);ticks(b,100);
         h.assertTrue(b.getItem(2).getCount()==10 && b.water==750,"Resume yields exactly one batch"); h.succeed();
     }
     @GameTest(template = "empty")

@@ -1,0 +1,435 @@
+{
+  "format": "starfall_blueprint",
+  "version": 1,
+  "name": "L14 起步供电与补水线",
+  "description": "在取水泵前方的围挡槽内放入一桶水；水源不会随蓝图复制。 左侧燃料箱向余烬机组供料；机器出厂无库存、无储能，需另放燃料和工艺原料。 供水与储能起步架：泵向侧面储水罐供水，备用电源接入后方电缆。",
+  "blocks": [
+    {
+      "pos": [
+        0,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        1,
+        -4
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "east"
+      }
+    },
+    {
+      "pos": [
+        1,
+        1,
+        -4
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:g01",
+      "properties": {
+        "facing": "south"
+      }
+    },
+    {
+      "pos": [
+        0,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        0,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        0,
+        2,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        1,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pump",
+      "properties": {
+        "facing": "south"
+      }
+    },
+    {
+      "pos": [
+        1,
+        2,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        2,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        2,
+        2,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        3,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        4,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        4,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:s02"
+    },
+    {
+      "pos": [
+        4,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        4,
+        2,
+        -1
+      ],
+      "block": "starfall_blueprint:water_tank"
+    },
+    {
+      "pos": [
+        0,
+        3,
+        -4
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "down"
+      }
+    },
+    {
+      "pos": [
+        0,
+        4,
+        -4
+      ],
+      "block": "minecraft:chest"
+    }
+  ],
+  "materials": [
+    {
+      "item": "minecraft:chest",
+      "name": "原版箱子",
+      "count": 2
+    },
+    {
+      "item": "minecraft:cobblestone",
+      "name": "圆石",
+      "count": 29
+    },
+    {
+      "item": "minecraft:hopper",
+      "name": "原版漏斗",
+      "count": 2
+    },
+    {
+      "item": "starfall_blueprint:cable",
+      "name": "基础铜导线",
+      "count": 6
+    },
+    {
+      "item": "starfall_blueprint:g01",
+      "name": "余烬供能机组",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:pipe",
+      "name": "普通流体管",
+      "count": 3
+    },
+    {
+      "item": "starfall_blueprint:pump",
+      "name": "原生取水泵",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:s02",
+      "name": "公共备用电源",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:water_tank",
+      "name": "常压储水罐",
+      "count": 1
+    }
+  ]
+}

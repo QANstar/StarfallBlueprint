@@ -33,6 +33,7 @@ public final class AlloyFurnaceBlockEntity extends BlockEntity implements Worldl
     }
     private boolean fuelReady() { return fuelTicks > 0 || PreparationBlockEntity.isFuel(items.get(2)); }
     private void process() {
+        if(level.hasNeighborSignal(worldPosition)){state=5;return;}
         if (pending.isEmpty()) {
             var input = new AlloyRecipe.Input(items.get(0), items.get(1));
             var found = level.getRecipeManager().getRecipeFor(StarfallBlueprint.ALLOY_TYPE.get(), input, level);

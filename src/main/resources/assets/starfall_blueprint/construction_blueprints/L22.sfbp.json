@@ -1,0 +1,1260 @@
+{
+  "format": "starfall_blueprint",
+  "version": 1,
+  "name": "L22 三类基础物流",
+  "description": "在取水泵前方的围挡槽内放入一桶水；水源不会随蓝图复制。 左侧燃料箱向余烬机组供料；机器出厂无库存、无储能，需另放燃料和工艺原料。 左后侧为独立箱子抽取与三路分流示例；右侧演示供能、供水和并列炉。分流白名单按需设置。",
+  "blocks": [
+    {
+      "pos": [
+        0,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        7,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        8,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -9
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -8
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -7
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -6
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -5
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -4
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        9,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        1,
+        -4
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "east"
+      }
+    },
+    {
+      "pos": [
+        1,
+        1,
+        -8
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        -4
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        1,
+        -9
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        2,
+        1,
+        -8
+      ],
+      "block": "starfall_blueprint:item_router",
+      "properties": {
+        "facing": "north"
+      }
+    },
+    {
+      "pos": [
+        2,
+        1,
+        -7
+      ],
+      "block": "starfall_blueprint:item_duct"
+    },
+    {
+      "pos": [
+        2,
+        1,
+        -6
+      ],
+      "block": "starfall_blueprint:item_extractor",
+      "properties": {
+        "facing": "north"
+      }
+    },
+    {
+      "pos": [
+        2,
+        1,
+        -5
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        3,
+        1,
+        -8
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        8,
+        1,
+        -3
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "east"
+      }
+    },
+    {
+      "pos": [
+        9,
+        1,
+        -3
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        0,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:g01",
+      "properties": {
+        "facing": "south"
+      }
+    },
+    {
+      "pos": [
+        0,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        0,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        0,
+        2,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        1,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pump",
+      "properties": {
+        "facing": "south"
+      }
+    },
+    {
+      "pos": [
+        1,
+        2,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        2,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        2,
+        2,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        3,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        4,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:energy_junction",
+      "properties": {
+        "facing": "east"
+      }
+    },
+    {
+      "pos": [
+        4,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        5,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        5,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        6,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        6,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        7,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        7,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        8,
+        2,
+        -4
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        8,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:auto_furnace",
+      "properties": {
+        "facing": "south"
+      }
+    },
+    {
+      "pos": [
+        8,
+        2,
+        -2
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        8,
+        2,
+        -1
+      ],
+      "block": "starfall_blueprint:fluid_valve",
+      "properties": {
+        "facing": "south"
+      }
+    },
+    {
+      "pos": [
+        8,
+        2,
+        0
+      ],
+      "block": "starfall_blueprint:water_tank"
+    },
+    {
+      "pos": [
+        9,
+        2,
+        -3
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "west"
+      }
+    },
+    {
+      "pos": [
+        0,
+        3,
+        -4
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "down"
+      }
+    },
+    {
+      "pos": [
+        8,
+        3,
+        -3
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "down"
+      }
+    },
+    {
+      "pos": [
+        9,
+        3,
+        -3
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        0,
+        4,
+        -4
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        8,
+        4,
+        -3
+      ],
+      "block": "minecraft:chest"
+    }
+  ],
+  "materials": [
+    {
+      "item": "minecraft:chest",
+      "name": "原版箱子",
+      "count": 9
+    },
+    {
+      "item": "minecraft:cobblestone",
+      "name": "圆石",
+      "count": 104
+    },
+    {
+      "item": "minecraft:hopper",
+      "name": "原版漏斗",
+      "count": 5
+    },
+    {
+      "item": "starfall_blueprint:auto_furnace",
+      "name": "并列自动熔炉",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:cable",
+      "name": "基础铜导线",
+      "count": 9
+    },
+    {
+      "item": "starfall_blueprint:energy_junction",
+      "name": "低压配电盒",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:fluid_valve",
+      "name": "定向流体阀",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:g01",
+      "name": "余烬供能机组",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:item_duct",
+      "name": "基础物品导管",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:item_extractor",
+      "name": "定向物品抽取器",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:item_router",
+      "name": "过滤分流器",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:pipe",
+      "name": "普通流体管",
+      "count": 7
+    },
+    {
+      "item": "starfall_blueprint:pump",
+      "name": "原生取水泵",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:water_tank",
+      "name": "常压储水罐",
+      "count": 1
+    }
+  ]
+}

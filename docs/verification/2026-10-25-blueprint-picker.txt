@@ -1,0 +1,24 @@
+2026-10-25: blueprint directory picker
+
+Offline Gradle build: BUILD SUCCESSFUL; final JAR rebuilt.
+Actual NeoForge server: All 143 required tests passed, exit code 0.
+[15:18:47] 143 GAME TESTS COMPLETE IN 11.50 s.
+Log: .tools/blueprint-picker-gametest.log.
+
+New engine test uses real temporary UTF-8 files. It verifies Chinese filenames,
+sorted names and parsed titles/block counts, exclusion of subdirectories and
+unrelated files, independent malformed/oversized-file errors, validation after
+a selected file changes, and rescan after files are removed.
+
+Independent client performed actual widget actions: scan bundled 21 files,
+next page, previous page, select L01 without paper (must return to materials
+with the filename filled instead of sending an invalid import), Escape back,
+rescan. Logged 'Blueprint picker client checks passed' at 15:18:42.
+Client then captured blueprint-directory-picker.png and exited normally.
+Log: .tools/visual-client/picker-client.log.
+Saved screenshot: docs/blueprint-directory-picker.png.
+
+The picker stays within the existing container screen, preserving the server
+menu. Imports re-read bounded local UTF-8 JSON and use the existing server
+validation payload; no new remote file access or network protocol is added.
+Both generated offline HTML handbooks include the new selection instructions.

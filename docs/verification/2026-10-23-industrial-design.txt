@@ -1,0 +1,15 @@
+2026-10-23  工业界面与模型改版验证
+
+Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21
+Gradle build: BUILD SUCCESSFUL, exit code 0
+
+[22:14:45] [Server thread/INFO] [minecraft/GameTestServer]: ========= 125 GAME TESTS COMPLETE IN 4.835 s ======================
+[22:14:45] [Server thread/INFO] [minecraft/GameTestServer]: All 125 required tests passed :)
+
+125/125 real NeoForge GameTests passed. Four added usability tests cover compatible conduit arms, removal updates, thin shapes, rotated fixed ports, legacy settings migration, removed menu packets, and real redstone pause/resume for both primitive workstations.
+
+Asset validation: 91 block models; 1111 texture references; all custom cuboids inside 0..16; PNG decode and blockstate references passed.
+Catalogue validation: 131 recipes; 17 vanilla mappings passed.
+
+Independent client: actual baked item models rendered and captured, followed by the actual cultivator screen. No player world loaded. Client exited normally after both screenshots.
+Screenshots: docs/industrial-client-preview.png, docs/cultivator-interface.png

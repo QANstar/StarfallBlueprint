@@ -1,0 +1,24 @@
+2026-10-25: creative construction core and material art
+
+Offline Gradle build: BUILD SUCCESSFUL.
+Actual NeoForge server: All 142 required tests passed, exit code 0.
+[14:30:18] 142 GAME TESTS COMPLETE IN 11.30 s.
+Runtime log: .tools/creative-core-gametest.log.
+
+Two new engine tests cover no survival recipe, creative acquisition and actual
+shift-click installation, build button readiness, actual complete placement
+without material cost, retained core/design/internal/external stock, persistence,
+redstone pause, obstacles, protection rollback, invalid design, and restoration
+of normal material costs after removal (even when the player remains creative).
+
+49 material item textures + 5 ore block textures + the new core: 32px PNG.
+Original pixel source: tools/generate_material_textures.py.
+Resource validation: 446 JSON files; all PNGs and local model/texture links.
+Industrial geometry: 4 tests passed.
+Both offline HTML handbooks regenerated with the actual updated item artwork.
+
+Independent client fixture loads resources without player worlds, displays a
+material gallery and an L25 constructor with ONLY the core in its material box.
+Actual screenshot shows enabled build button, creative-core banner and infinity
+material counts. No missing mod texture/model errors; normal automatic exit.
+Screenshots: docs/material-gallery-game.png and docs/creative-blueprint-constructor.png.

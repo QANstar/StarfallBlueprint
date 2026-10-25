@@ -1,0 +1,10 @@
+Date: 2026-10-25
+Feature: workbench-only sample selection and live 3x3 recipe preview
+Real NeoForge GameTest: 162 required tests passed in 14.01 s.
+Log: .tools/autocrafter-preview-gametest.log
+New regressions: dedicated bulk recipe sharing sample output excluded; legacy bulk template corrected when sample inserted; all selectable recipes use crafting type, fit 3x3, expose nine-cell preview; furnace/blasting excluded; chest center hole; torch vertical shape and four-result count; actual menu switches resolve synchronized recipe index to server template without sample/input/power mutation.
+Client log: .tools/visual-client/recipe-preview.log
+Native isolated client screenshots: docs/autocrafter-recipe-a.png (two planks -> four sticks, 1/2), docs/autocrafter-recipe-b.png (two bamboo -> one stick, 2/2).
+Preview uses display-only ingredients/result, no container slots. Clicks inside preview panel are consumed to prevent outside-slot drops.
+Alternative ingredient representatives rotate once per second; selected preview is rebuilt on synchronized selection or level change.
+Integration-only bulk/oversized preset execution remains available, but is excluded from player sample choices and nine-grid previews.

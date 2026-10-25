@@ -1,0 +1,18 @@
+Date: 2026-10-25
+Feature: single-block electric plate press, shared atlas machine animations
+Manual iron: vertical 2 ingots -> 2 plates retained.
+Press: 1 iron/copper ingot -> 1 corresponding plate, 40 ticks, 1000 XH.
+Real NeoForge server: 160 required tests passed in 17.97 s.
+Log: .tools/press-motion-gametest.log
+New tests: manual crafting and exact material/energy conservation; ports/redstone/NBT/backpressure; crusher four-part LIT transitions; L27 real wind and vanilla hopper automation from ingots only.
+Native client: .tools/visual-client/motion-client.log; no new missing asset/animation errors.
+Two actual baked model screenshots: docs/machine-motion-a.png and machine-motion-b.png.
+Changed pixels within isolated fixture quadrants: quarry 2218, crusher 14900, wind 1694, press 2551.
+Press GUI: docs/press-interface.png.
+Animation pool: four animated sprites, frametime 2, interpolate false; decoded source RGBA 196608 bytes before mipmaps/atlas.
+No production block entity renderer, animated entities, particles or per-frame network synchronization added. Large-machine LIT sync occurs on state transition only.
+No FPS benchmark claim.
+Static verification: 147 catalogue recipes, 17 vanilla mappings; 480 JSON files, all PNG and local model/texture references pass.
+Python regression tests: 7 passed (4 geometry and 3 motion).
+Browser verification: both self-contained HTML entries download canonical L25/L26/L27 JSON; correct whole-machine material counts; reserved lines disabled; no page errors.
+Generated handbook embeds artwork for all 106 catalogue entries; 23 public blueprints.

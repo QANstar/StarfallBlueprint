@@ -1,0 +1,291 @@
+{
+  "format": "starfall_blueprint",
+  "version": 1,
+  "name": "L23 前期无电集雨与缓存",
+  "description": "无电集雨与储水：在露天放置，等待下雨；营地补给箱独立储存物品。",
+  "blocks": [
+    {
+      "pos": [
+        0,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        6,
+        1,
+        -3
+      ],
+      "block": "starfall_blueprint:supply_crate"
+    },
+    {
+      "pos": [
+        2,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:rain_collector"
+    },
+    {
+      "pos": [
+        3,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:pipe"
+    },
+    {
+      "pos": [
+        4,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:water_tank"
+    }
+  ],
+  "materials": [
+    {
+      "item": "minecraft:cobblestone",
+      "name": "圆石",
+      "count": 28
+    },
+    {
+      "item": "starfall_blueprint:pipe",
+      "name": "普通流体管",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:rain_collector",
+      "name": "营地集雨器",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:supply_crate",
+      "name": "营地补给箱",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:water_tank",
+      "name": "常压储水罐",
+      "count": 1
+    }
+  ]
+}

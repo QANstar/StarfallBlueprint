@@ -210,8 +210,8 @@ public final class EnergyExpansionGameTests {
             for (String kind : List.of("prep", "auto_furnace")) {
                 be = machine(h, POS, kind);
                 var legacy = be.createMenu(2, player.getInventory(), player);
-                int fuelSlot = kind.equals("prep") ? 1 : 13;
-                int inventorySlot = kind.equals("prep") ? 5 : 27;
+                int fuelSlot = 13;
+                int inventorySlot = 27;
                 try {
                     for (Item fuel : List.of(Items.COAL, Items.CHARCOAL)) {
                         h.assertTrue(legacy.getSlot(fuelSlot).mayPlace(new ItemStack(fuel)), "Legacy slot accepts coal/charcoal: " + kind);
@@ -383,10 +383,12 @@ public final class EnergyExpansionGameTests {
                 } else h.setBlock(pos.below(), Blocks.LAVA);
                 be.stopped = true;
                 reload(h, be);
+                h.assertTrue(!be.stopped,"Legacy manual stop is cleared during interface migration: "+kind);
+                h.setBlock(pos.west(), Blocks.REDSTONE_BLOCK);
                 long stored = be.getPower();
                 tick(be);
-                h.assertTrue(be.stopped && be.status == 8 && be.getPower() == stored
-                    && !east.canExtract() && east.extractEnergy(1000, false) == 0, "NBT-restored manual stop blocks generation and extraction: " + kind);
+                h.assertTrue(be.redstoneStopped() && be.status == 8 && be.getPower() == stored
+                    && !east.canExtract() && east.extractEnergy(1000, false) == 0, "Redstone stop blocks generation and extraction after migration: " + kind);
                 be.stopped = false;
                 h.setBlock(pos.west(), Blocks.REDSTONE_BLOCK);
                 tick(be);

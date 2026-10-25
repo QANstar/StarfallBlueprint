@@ -1,0 +1,45 @@
+2026-10-25: 2x2 quarry, general-purpose crusher, renewable concrete factory
+
+Offline Gradle build: BUILD SUCCESSFUL; final JAR refreshed with handbook pages.
+Actual NeoForge server: All 156 required tests passed, exit code 0.
+[18:25:56] 156 GAME TESTS COMPLETE IN 16.65 s.
+Log: .tools/aggregate-machines-gametest.log.
+
+[18:25:56] AFK L26 verified: 16 concrete, retained lily, no supplied energy,
+water, fuel, sand, gravel or dye.
+
+Eight new GameTests:
+- Quarry needs four stone blocks and two clear front work spaces; exact repeat
+  output and cost; substrate is not consumed and no unpowered generation.
+- All 10 crusher jobs, real vanilla items, one reservation, save/reload progress,
+  exact outputs and 2000 XH. Bones -> 6 meal; bone blocks -> 9 meal, avoiding
+  the reversible compression loop. Existing catalogue executes 51 assemblies.
+- All four footprint parts share item inventory and a 2048 XH/t input budget;
+  redstone on a shell pauses/resumes the same batch without charging twice.
+- Real survival item placement requires all four spaces; real shell mining
+  returns exactly one machine with its actual inventory and energy saved.
+- Blueprint material billing counts one machine per complete footprint; orphan
+  shells rejected; all four rotations resolve a valid controller.
+- Complete L26 constructed and ticked by the actual server, wind generators,
+  dew collector, item/fluid networks and vanilla hoppers. Only initial dirt and
+  lily sample added. Both retained, output chest contains only finished concrete.
+- Real NeoForge placement protection restores all four blocks and the item.
+- Protected blueprint shell repair rollback retains existing controller cargo;
+  later repair succeeds without charging extra machine items for shells.
+
+Existing 148 tests remain passing. Public blueprint regression now builds all
+22 layouts from their exact material bill. Catalogue/handbook: 144 recipes,
+105 entries, 26 production lines. Static resource checks: 473 JSON files, all
+PNG and model references. Geometry tests: 4 passed, including new aggregate
+models and split footprint parts, no duplicate coplanar faces.
+
+Independent client actual renders checked: docs/aggregate-machines.png and
+docs/crusher-interface.png. Normal auto-exit, no mod texture/model errors.
+Log: .tools/visual-client/aggregate-client.log.
+
+Headless Edge verified BOTH offline HTML entrypoints: exact L25/L26 downloads,
+2 quarry items / 3 crusher items for 8 / 12 footprint blocks respectively,
+reserved L05 unavailable, no browser script errors.
+Two new recipe-book discoveries use iron-plate acquisition as their trigger.
+Screenshot: docs/afk-concrete-handbook.png.
+Script: .tools/verify-blueprint-handbook.cjs.

@@ -16,9 +16,11 @@ public final class ClientSetup {
         },entry.type().get()));
     }
     @SubscribeEvent public static void setup(net.neoforged.fml.event.lifecycle.FMLClientSetupEvent event){event.enqueueWork(()->{
+        BlueprintScreen.installExamples();
+        if(Boolean.getBoolean("starfall.visualCheck"))net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(IndustryVisualCheck::tick);
         cn.starfall.blueprint.CatalogueFluids.ENTRIES.values().forEach(e->{net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(e.source().get(),net.minecraft.client.renderer.RenderType.translucent());net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(e.flowing().get(),net.minecraft.client.renderer.RenderType.translucent());});
         net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(((net.minecraft.world.item.BlockItem)cn.starfall.blueprint.CatalogueContent.item("boroglass")).getBlock(),net.minecraft.client.renderer.RenderType.translucent());
         net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(cn.starfall.blueprint.RopeSystem.ROPE.get(),net.minecraft.client.renderer.RenderType.cutout());
     });}
-    @SubscribeEvent public static void screens(RegisterMenuScreensEvent event) { event.register(StarfallBlueprint.PREPARATION_MENU.get(), PreparationScreen::new); event.register(StarfallBlueprint.ALLOY_MENU.get(), AlloyFurnaceScreen::new); event.register(cn.starfall.blueprint.CatalogueContent.MENU.get(), IndustryScreen::new); event.register(cn.starfall.blueprint.CatalogueEquipment.BAG_MENU.get(), MiningBagScreen::new); }
+    @SubscribeEvent public static void screens(RegisterMenuScreensEvent event) { event.register(cn.starfall.blueprint.Blueprints.MENU.get(),BlueprintScreen::new);event.register(StarfallBlueprint.PREPARATION_MENU.get(), PreparationScreen::new); event.register(StarfallBlueprint.ALLOY_MENU.get(), AlloyFurnaceScreen::new); event.register(cn.starfall.blueprint.CatalogueContent.MENU.get(), IndustryScreen::new); event.register(cn.starfall.blueprint.CatalogueEquipment.BAG_MENU.get(), MiningBagScreen::new); }
 }

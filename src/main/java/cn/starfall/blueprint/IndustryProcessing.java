@@ -11,7 +11,8 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 /** Reserve inputs once, pause under backpressure, and settle all material/fluid outputs once. */
 public final class IndustryProcessing {
     public static void tick(IndustryBlockEntity be){
-        if(!Set.of("plant_cultivator","refiner","recycler","bio_processor","autocrafter","auto_furnace","prep").contains(be.kind()))return;
+        if(!Set.of("press","quarry","crusher","plant_cultivator","refiner","recycler","bio_processor","autocrafter","auto_furnace","prep").contains(be.kind()))return;
+        if(AggregateMachines.large(be.kind())&&!AggregateMachines.ready(be))return;
         if(be.kind().equals("plant_cultivator"))fillCultivationBucket(be);
         // Preserve legacy in-flight batches without completing or consuming more resources.
         var active = CatalogueContent.RECIPES.get(be.activeRecipe);
@@ -65,7 +66,7 @@ public final class IndustryProcessing {
     private static boolean startProcess(IndustryBlockEntity be){
         be.status=2;
         for(JsonObject r:available(be)) {
-            if(!be.template.isEmpty()&&!r.get("id").getAsString().equals(be.template))continue;
+            if(!be.kind().equals("prep")&&!be.kind().equals("press")&&!AggregateMachines.large(be.kind())&&!be.template.isEmpty()&&!r.get("id").getAsString().equals(be.template))continue;
             int[]used=new int[9];boolean match=true;ItemStack qualitySource=ItemStack.EMPTY;int fluidNeed=0,reuse=0;
             for(var in:r.getAsJsonArray("inputs")) {
                 String key=CatalogueContent.key(in);int remaining=CatalogueContent.qty(in);
@@ -143,6 +144,7 @@ public final class IndustryProcessing {
     }
     private static void reserve(IndustryBlockEntity be,String id,List<ItemStack> outputs,int ticks,long cost){be.activeRecipe=id;be.progressTicks=0;be.processTicks=Math.max(1,ticks);be.processCost=cost;be.processPaid=0;be.pending=NonNullList.withSize(4,ItemStack.EMPTY);for(int i=0;i<outputs.size();i++)be.pending.set(i,outputs.get(i));be.setChanged();}
     private static boolean startCraft(IndustryBlockEntity be){
+        be.selectCraftingSample();
         if(be.template.isEmpty()){be.status=2;return false;}
         var key=net.minecraft.resources.ResourceLocation.tryParse(be.template);
         if(key==null){be.status=2;return false;}

@@ -7,5 +7,6 @@ runs/
 .idea/
 *.iml
 *.log
+__pycache__/
 mdk-*
 neoforge-metadata.xml

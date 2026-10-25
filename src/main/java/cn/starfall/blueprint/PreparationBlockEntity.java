@@ -19,7 +19,9 @@ public final class PreparationBlockEntity extends IndustryBlockEntity implements
     private ItemStack pendingCrystal = ItemStack.EMPTY, pendingTailings = ItemStack.EMPTY;
     public int water, progress, state;
     public long energy;
-    public boolean materialMode;
+    /** Legacy blueprint/save flag, no longer controls operation. */
+    public boolean materialMode=true;
+    private static final int[] LEGACY_SLOTS={0,13,9,10,19};
     private int batchPower = 200;
     // 0 ready; 1 processing; 2 input; 3 water; 4 fuel; 5 output; 6 invalid batch
     public final ContainerData data = new ContainerData() {
@@ -39,20 +41,41 @@ public final class PreparationBlockEntity extends IndustryBlockEntity implements
     @Override public void setPower(long value){energy=Math.clamp(value,0L,320199L);setChanged();}
 
     public static void tick(Level level, BlockPos pos, BlockState blockState, PreparationBlockEntity be) {
-        if(be.materialMode){IndustryBlockEntity.tick(level,pos,blockState,be);return;}
-        be.serverTick();
-        boolean active = be.state == 1;
+        be.migrateLegacyItems();
+        boolean oreWork=!be.pendingCrystal.isEmpty()||be.activeRecipe.isEmpty()&&be.oreInput()>=0;
+        if(oreWork){
+            be.serverTick();be.status=switch(be.state){case 6->7;case 7->8;default->be.state;};
+            // An unstartable ore batch must not prevent a different valid material job.
+            if(be.pendingCrystal.isEmpty()&&be.state!=0&&be.state!=1&&!be.redstoneStopped()){
+                int oreStatus=be.status;IndustryProcessing.tick(be);if(be.idle()&&be.status==2)be.status=oreStatus;
+            }
+            IndustryNetworks.tick(be);
+        }else{IndustryBlockEntity.tick(level,pos,blockState,be);return;}
+        boolean active = be.status == 1;
         if (blockState.getValue(PreparationBlock.ACTIVE) != active) level.setBlock(pos, blockState.setValue(PreparationBlock.ACTIVE, active), 3);
     }
-    private boolean fits(int slot, ItemStack output) {
-        ItemStack current = items.get(slot);
-        return current.isEmpty() || (ItemStack.isSameItemSameComponents(current, output) && current.getCount() + output.getCount() <= current.getMaxStackSize());
+    private int oreInput(){for(int i=0;i<9;i++)if(stock.get(i).is(StarfallBlueprint.RAW.get()))return i;return -1;}
+    private boolean fuelReady() { return energy >= batchPower || isFuel(stock.get(13)); }
+    private void migrateLegacyItems(){
+        for(int i=0;i<5;i++){
+            var stack=items.get(i);if(stack.isEmpty())continue;
+            if(i==2||i==3){if(planOutputs(java.util.List.of(stack),true))items.set(i,ItemStack.EMPTY);continue;}
+            int first=i==0?0:LEGACY_SLOTS[i],end=i==0?9:first+1;
+            for(int slot=first;slot<end&&!stack.isEmpty();slot++){
+                var target=stock.get(slot);if(target.isEmpty()){stock.set(slot,stack.copy());stack.setCount(0);setChanged();}
+                else if(ItemStack.isSameItemSameComponents(target,stack)){int n=Math.min(stack.getCount(),target.getMaxStackSize()-target.getCount());target.grow(n);stack.shrink(n);if(n>0)setChanged();}
+            }
+        }
     }
-    private boolean fuelReady() { return energy >= batchPower || isFuel(items.get(1)); }
+    private final ContainerData unifiedData=new ContainerData(){
+        public int get(int i){if(!pendingCrystal.isEmpty()){if(i==2)return progress;if(i==3)return 200;}return processData.get(i);}
+        public void set(int i,int value){}public int getCount(){return 15;}
+    };
     public static boolean isFuel(ItemStack stack) { return stack.is(Items.COAL) || stack.is(Items.CHARCOAL); }
     private void serverTick() {
+        if(redstoneStopped()){state=7;return;}
         if (pendingCrystal.isEmpty()) {
-            ItemStack ore = items.get(0);
+            int source=oreInput();ItemStack ore=source<0?ItemStack.EMPTY:stock.get(source);
             if (ore.isEmpty()) { state = 2; return; }
             MaterialBatch batch = ore.get(StarfallBlueprint.BATCH.get());
             if (!ore.is(StarfallBlueprint.RAW.get()) || batch == null || !batch.isProcessableOre()) { state = 6; return; }
@@ -62,25 +85,24 @@ public final class PreparationBlockEntity extends IndustryBlockEntity implements
             if(ore.has(CatalogueContent.QUALITY.get())){var q=MaterialQuality.of(ore);crystal.set(CatalogueContent.QUALITY.get(),new MaterialQuality(90,batch.integrity()-2,0,0,q.continuous(),"common"));}
             ItemStack tail = new ItemStack(StarfallBlueprint.TAILINGS.get());
             tail.set(StarfallBlueprint.BATCH.get(), MaterialBatch.tailings(batch.phaseMilliM() / 10_000));
-            if (!fits(2, crystal) || !fits(3, tail)) { state = 5; return; }
+            if (!outputFits(java.util.List.of(crystal,tail))) { state = 5; return; }
             if (water < 250) { state = 3; return; }
-            batchPower = items.get(4).is(StarfallBlueprint.CONNECTOR.get()) ? 180 : 200;
+            batchPower = stock.get(19).is(StarfallBlueprint.CONNECTOR.get()) ? 180 : 200;
             if (!fuelReady()) { state = 4; return; }
             // All validation precedes reservation. Reserved input survives save, unload and relocation.
             ore.shrink(1); water -= 250; pendingCrystal = crystal; pendingTailings = tail; progress = 0;
             setChanged();
         }
-        if (!fits(2, pendingCrystal) || !fits(3, pendingTailings)) { state = 5; return; }
+        if (!outputFits(java.util.List.of(pendingCrystal,pendingTailings))) { state = 5; return; }
         if (!fuelReady()) { state = 4; return; }
-        if (energy < batchPower) { items.get(1).shrink(1); energy += 320_000; }
+        if (energy < batchPower) { stock.get(13).shrink(1); energy += 320_000; }
         energy -= batchPower; progress++; state = 1;
         if (progress == 200) {
-            insertOutput(2, pendingCrystal); insertOutput(3, pendingTailings);
+            planOutputs(java.util.List.of(pendingCrystal,pendingTailings),true);
             pendingCrystal = ItemStack.EMPTY; pendingTailings = ItemStack.EMPTY; progress = 0; state = 0;
         }
         setChanged();
     }
-    private void insertOutput(int slot, ItemStack stack) { if (items.get(slot).isEmpty()) items.set(slot, stack); else items.get(slot).grow(stack.getCount()); }
     public IFluidHandler waterPort() { return new IFluidHandler() {
         public int getTanks() { return 1; }
         public FluidStack getFluidInTank(int tank) { return water == 0 ? FluidStack.EMPTY : new FluidStack(Fluids.WATER, water); }
@@ -105,7 +127,7 @@ public final class PreparationBlockEntity extends IndustryBlockEntity implements
     }
     @Override protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider); items = NonNullList.withSize(5, ItemStack.EMPTY); ContainerHelper.loadAllItems(tag, items, provider);
-        materialMode=tag.getBoolean("MaterialMode");
+        materialMode=true;migrateLegacyItems();
         water = Math.clamp(tag.getInt("Water"), 0, 4000); energy = Math.clamp(tag.getLong("EnergyXH"), 0L, 320_199L);
         progress = Math.clamp(tag.getInt("Progress"), 0, 199); batchPower = tag.getInt("BatchPower") == 180 ? 180 : 200;
         pendingCrystal = ItemStack.parseOptional(provider, tag.getCompound("PendingCrystal"));
@@ -113,15 +135,26 @@ public final class PreparationBlockEntity extends IndustryBlockEntity implements
         if (pendingCrystal.isEmpty() || pendingTailings.isEmpty()) { pendingCrystal = ItemStack.EMPTY; pendingTailings = ItemStack.EMPTY; progress = 0; }
     }
     @Override public Component getDisplayName() { return Component.translatable("block.starfall_blueprint.preparation_bench"); }
-    @Override public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) { return new PreparationMenu(id, inv, this, data); }
+    @Override public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) { migrateLegacyItems();return new IndustryMenu(id,inv,workInventory(),unifiedData); }
     @Override public int getContainerSize() { return 5; }
-    @Override public boolean isEmpty() { return items.stream().allMatch(ItemStack::isEmpty); }
-    @Override public ItemStack getItem(int slot) { return items.get(slot); }
-    @Override public ItemStack removeItem(int slot, int count) { ItemStack result = ContainerHelper.removeItem(items, slot, count); if (!result.isEmpty()) setChanged(); return result; }
-    @Override public ItemStack removeItemNoUpdate(int slot) { return ContainerHelper.takeItem(items, slot); }
-    @Override public void setItem(int slot, ItemStack stack) { items.set(slot, stack); setChanged(); }
+    @Override public boolean isEmpty() { return super.isEmpty()&&items.stream().allMatch(ItemStack::isEmpty); }
+    // Preserve the historical five-slot Java API while the UI/ports share stock through workInventory.
+    @Override public ItemStack getItem(int slot) { return stock.get(LEGACY_SLOTS[slot]); }
+    @Override public ItemStack removeItem(int slot, int count) { return super.removeItem(LEGACY_SLOTS[slot],count); }
+    @Override public ItemStack removeItemNoUpdate(int slot) { return super.removeItemNoUpdate(LEGACY_SLOTS[slot]); }
+    @Override public void setItem(int slot, ItemStack stack) { stock.set(LEGACY_SLOTS[slot],stack);setChanged(); }
     @Override public boolean stillValid(Player p) { return Container.stillValidBlockEntity(this, p); }
-    @Override public void clearContent() { items.clear(); setChanged(); }
+    @Override public void clearContent() { items=NonNullList.withSize(5,ItemStack.EMPTY);super.clearContent(); }
+    @Override public boolean workCanPlace(int slot,ItemStack stack){
+        if(slot==19)return stack.is(StarfallBlueprint.CONNECTOR.get());
+        if(slot>=0&&slot<9){
+            if(stack.is(StarfallBlueprint.RAW.get()))return true;
+            if(nested(stack))return false;
+            return IndustryProcessing.available(this).stream().flatMap(r->java.util.stream.StreamSupport.stream(r.getAsJsonArray("inputs").spliterator(),false))
+                    .map(CatalogueContent::key).filter(key->!key.equals("water")&&!key.equals("power")).anyMatch(key->CatalogueContent.matches(key,stack));
+        }
+        return super.workCanPlace(slot,stack);
+    }
     @Override public boolean canPlaceItem(int slot, ItemStack stack) { return switch(slot) { case 0 -> stack.is(StarfallBlueprint.RAW.get()); case 1 -> isFuel(stack); case 4 -> stack.is(StarfallBlueprint.CONNECTOR.get()); default -> false; }; }
     @Override public int[] getSlotsForFace(Direction direction) { return switch(direction) { case UP -> new int[]{0}; case DOWN -> new int[]{2,3}; default -> new int[]{1}; }; }
     @Override public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction direction) { return canPlaceItem(slot, stack); }

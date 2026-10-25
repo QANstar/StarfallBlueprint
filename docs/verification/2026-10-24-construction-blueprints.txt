@@ -1,0 +1,13 @@
+2026-10-24 Construction blueprints verification
+
+Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21
+Gradle build: BUILD SUCCESSFUL, exit 0.
+
+[00:17:27] [Server thread/INFO] [minecraft/GameTestServer]: ========= 137 GAME TESTS COMPLETE IN 9.269 s ======================
+[00:17:27] [Server thread/INFO] [minecraft/GameTestServer]: All 137 required tests passed :)
+
+12 added construction GameTests: malformed format and unsafe blocks, exact material deduction, obstacle/shortage preflight, protection-event rollback, redstone, orientation, persistence, genuine surveyor right-click interactions, bounded compressed import codec, nearby import menu, all four footprint rotations, all 21 bundled public layouts built, and actual L24 powder-to-concrete production.
+
+4 industrial geometry tests passed; 131 catalogue recipes and 17 vanilla recipe mappings passed.
+Both offline HTML entries were opened in headless Edge; L25 download matched its source JSON exactly, reserved L05 had no download, no JavaScript errors. All 21 source blueprint files match bundled resources byte for byte.
+Independent Minecraft client installed examples, rendered new tool models and material-complete constructor screen, captured screenshots, and exited normally without opening a player world.

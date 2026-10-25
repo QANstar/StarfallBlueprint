@@ -1,0 +1,23 @@
+Blueprint path and adjacent storage fix, 2026-10-24
+
+Root cause: --gameDir . produced ./blueprints; selected file was normalized to
+blueprints/L25.sfbp.json while parent validation compared it to ./blueprints.
+BlueprintFiles now resolves both sides against an absolute normalized root.
+Traversal, absolute filenames and symlink files remain rejected.
+
+Sources: internal material slots first, then storage touching the six faces.
+Chest (including both double-chest halves), barrel and shulker inventories
+are supported. Storage identities are deduplicated and sources are captured
+before construction. Materials are removed only after placement succeeds.
+Server inventory totals synchronize to the menu, including external changes.
+Both generated offline HTML handbook entrypoints describe this behavior.
+
+Validation:
+- Offline Gradle build: BUILD SUCCESSFUL.
+- Actual NeoForge server: All 140 required tests passed, exit code 0.
+- 01:06:51: 140 GAME TESTS COMPLETE IN 5.968 s.
+- Added regressions: relative dot path and traversal rejection; adjacent chest
+  and barrel totals, client ContainerListener synchronization, button readiness,
+  obstacle preservation, exact deduction/internal priority, external updates;
+  double-chest far-half consumption and exclusion of non-adjacent storage.
+- Runtime output: .tools/blueprint-storage-gametest.log.

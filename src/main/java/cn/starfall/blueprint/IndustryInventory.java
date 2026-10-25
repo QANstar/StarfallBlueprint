@@ -6,7 +6,7 @@ import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/** Separate material inventory for preparation benches, or a per-viewer crafting page. */
+/** Unified machine inventory view, or a per-viewer crafting page. */
 public final class IndustryInventory implements WorldlyContainer {
     public final IndustryBlockEntity owner;
     private final IntSupplier page;
@@ -19,11 +19,11 @@ public final class IndustryInventory implements WorldlyContainer {
     public ItemStack removeItem(int i,int n){int slot=logical(i);ItemStack s=slot<27?ContainerHelper.removeItem(owner.stock,slot,n):owner.removeItem(slot,n);if(!s.isEmpty())setChanged();return s;}
     public ItemStack removeItemNoUpdate(int i){int slot=logical(i);return slot<27?ContainerHelper.takeItem(owner.stock,slot):owner.removeItemNoUpdate(slot);}
     public void setItem(int i,ItemStack s){int slot=logical(i);if(slot<27)owner.stock.set(slot,s);else owner.setItem(slot,s);setChanged();}
-    public void setChanged(){owner.setChanged();}
+    public void setChanged(){owner.selectCraftingSample();owner.setChanged();}
     public boolean stillValid(Player p){return Container.stillValidBlockEntity(owner,p);}
     public void clearContent(){for(int i=0;i<getContainerSize();i++)setItem(i,ItemStack.EMPTY);setChanged();}
     public boolean canPlaceItem(int i,ItemStack s){return owner.workCanPlace(logical(i),s);}
     public int[]getSlotsForFace(Direction d){if(page==null)return owner.workSlots(d);return d==Direction.DOWN?new int[]{9,10,11,12}:new int[]{0,1,2,3,4,5,6,7,8};}
     public boolean canPlaceItemThroughFace(int i,ItemStack s,Direction d){return !owner.redstoneStopped()&&canPlaceItem(i,s);}
-    public boolean canTakeItemThroughFace(int i,ItemStack s,Direction d){return !owner.redstoneStopped()&&(owner.kind().equals("supply_crate")||d==Direction.DOWN&&i>=9&&i<=12);}
+    public boolean canTakeItemThroughFace(int i,ItemStack s,Direction d){return !owner.redstoneStopped()&&(owner.kind().equals("supply_crate")||(d==Direction.DOWN||AggregateMachines.large(owner.kind())&&d==owner.facing().getOpposite())&&i>=9&&i<=12);}
 }

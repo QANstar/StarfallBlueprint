@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "ICI",
+    "BDF",
+    "IRI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "B": {
+      "item": "starfall_blueprint:control_board"
+    },
+    "D": {
+      "item": "minecraft:dispenser"
+    },
+    "F": {
+      "item": "starfall_blueprint:machine_frame"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "id": "starfall_blueprint:blueprint_builder",
+    "count": 1
+  }
+}

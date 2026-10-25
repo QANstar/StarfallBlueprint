@@ -9,13 +9,39 @@ import net.minecraft.world.level.Level;
 public final class AutomaticCrafting {
     private AutomaticCrafting() {}
     private static final int SEARCH_LIMIT = 8192;
+    public static boolean supports(Recipe<?> recipe){return recipe instanceof AutomaticCraftingRecipe
+            ||recipe instanceof CraftingRecipe r&&(r instanceof AutomaticCraftingLayout||r instanceof ShapedRecipe||r instanceof ShapelessRecipe);}
+    public static List<RecipeHolder<?>> forResult(Level level,ItemStack sample){
+        if(sample.isEmpty())return List.of();
+        return recipes(level).stream().filter(h->{var result=h.value().getResultItem(level.registryAccess());return !result.isEmpty()&&result.is(sample.getItem());}).toList();
+    }
 
     public static List<RecipeHolder<?>> recipes(Level level) {
         return level.getRecipeManager().getRecipes().stream()
-                .filter(h -> h.value() instanceof AutomaticCraftingRecipe
-                        || h.value() instanceof CraftingRecipe r && (r instanceof AutomaticCraftingLayout
-                            || r instanceof ShapedRecipe || r instanceof ShapelessRecipe))
+                .filter(h -> isWorkbenchRecipe(h.value()))
                 .sorted(Comparator.comparing(h -> h.id().toString())).toList();
+    }
+
+    /** Player choices contain only real, supported 3x3 workbench recipes. */
+    public static boolean isWorkbenchRecipe(Recipe<?> recipe) {
+        if (!(recipe instanceof CraftingRecipe crafting) || recipe.getType()!=RecipeType.CRAFTING
+                || !supports(recipe) || !recipe.canCraftInDimensions(3,3)) return false;
+        if (recipe instanceof CatalogueCraftingRecipe catalogue
+                && !CatalogueContent.isRecipeEnabled(CatalogueContent.recipe(catalogue.id))) return false;
+        var shape=layout(crafting);
+        return shape!=null && shape.ingredients().size()<=9;
+    }
+
+    /** Read-only ghost cells; shaped holes and offsets survive, shapeless ingredients fill rows. */
+    public static List<Ingredient> previewGrid(Recipe<?> recipe) {
+        if (!isWorkbenchRecipe(recipe)) return List.of();
+        var shape=layout((CraftingRecipe)recipe);
+        List<Ingredient> grid=new ArrayList<>(Collections.nCopies(9,Ingredient.EMPTY));
+        for(int i=0;i<shape.ingredients().size();i++) {
+            int cell=shape.width()<=3&&shape.height()<=3 ? i/shape.width()*3+i%shape.width() : i;
+            grid.set(cell,shape.ingredients().get(i));
+        }
+        return List.copyOf(grid);
     }
 
     private static AutomaticCraftingLayout.Layout layout(CraftingRecipe recipe) {

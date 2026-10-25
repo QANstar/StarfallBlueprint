@@ -1,0 +1,26 @@
+2026-10-25: autocrafter output sample slot
+
+Offline Gradle build: BUILD SUCCESSFUL. Final jar rebuilt after client labels.
+Actual NeoForge server: All 146 required tests passed, exit code 0.
+[15:46:01] 146 GAME TESTS COMPLETE IN 8.347 s.
+Log: .tools/autocrafter-sample-gametest.log.
+
+Three new engine tests cover actual menu pickup (one sample, 63 items left on
+cursor), two complete torch batches with exact raw-input and 8000 XH accounting,
+retained sample/custom name, no sample-component cloning into products, sample
+and template persistence, real Shift retrieval, exclusion from all 54 consumable
+inputs and automated ports, unknown targets, incomplete bills, switching sample
+during a reserved batch, and cycling only recipes for the same output item.
+Existing 143 tests remain passing, including blueprint-configured concrete lines.
+
+Independent client loaded and rendered the real IndustryScreen with a chest
+sample in the upper-right slot, chest recipe label, raw inventory and output.
+Screenshot checked: docs/autocrafter-sample-interface.png.
+Log: .tools/visual-client/sample-client.log. Normal automatic exit at 15:50:31.
+
+Implementation uses existing saved inventory slot 19; it is not in the crafting
+input set or sided automation. A dedicated visible menu slot exposes it with a
+one-item limit. Existing slot/page indices stay compatible. Empty samples retain
+the last preset; unknown samples clear an unrelated target. In-flight output and
+cost reservations are independent of future template changes.
+Both offline HTML handbooks and the source guide now describe sample selection.

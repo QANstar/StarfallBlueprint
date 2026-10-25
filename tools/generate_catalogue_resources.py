@@ -81,7 +81,7 @@ for lang in ['zh_cn','en_us']:
   text[f'{"block" if key in machines or key=="boroglass" else "item"}.{MOD}.{key}']=name
   if key in fluids:
    text[f'fluid_type.{MOD}.{key}']=name;text[f'item.{MOD}.{key}_bucket']=name+('桶'if lang=='zh_cn'else' Bucket')
- for i,label in enumerate(['就绪','加工中','缺少原料/模板','缺少工艺水','等待供能','出料已满','缺少可用夹具','来料品质不合格','红石/手动停机']):text[f'gui.{MOD}.industry.state.{i}']=label if lang=='zh_cn' else ['Ready','Processing','Needs inputs/template','Needs water','Needs energy','Output full','Needs tool','Invalid quality','Stopped'][i]
+ for i,label in enumerate(['就绪','加工中','缺少原料/模板','缺少工艺水','等待供能','出料已满','缺少可用夹具','来料品质不合格','红石停机']):text[f'gui.{MOD}.industry.state.{i}']=label if lang=='zh_cn' else ['Ready','Processing','Needs inputs/template','Needs water','Needs energy','Output full','Needs tool','Invalid quality','Stopped'][i]
  write(path,text)
 tag=RES/'data/minecraft/tags/block/mineable/pickaxe.json';content=json.loads(tag.read_text(encoding='utf-8'));content['values']=list(dict.fromkeys(content['values']+[f'{MOD}:{k}'for k in machines]));write(tag,content)
 write(RES/'data/minecraft/tags/block/dampens_vibrations.json',{'replace':False,'values':[f'{MOD}:damper']})
@@ -131,3 +131,10 @@ if stone_tag.exists():
 for source,result in [('rutile','titan'),('borate','boron')]:
  write(DATA/'recipe'/f'auxiliary_smelting_{source}.json',{'type':'minecraft:smelting','category':'misc','ingredient':{'item':f'{MOD}:{source}'},'result':{'id':f'{MOD}:{result}','count':2},'experience':0.2,'cookingtime':200})
 write(DATA/'recipe/reinforce_wear.json',{'type':f'{MOD}:reinforce_wear','category':'equipment'})
+
+# Keep purpose-built geometry authoritative when regenerating catalogue resources.
+from generate_industrial_models import main as generate_industrial_models
+generate_industrial_models()
+import generate_blueprint_resources
+from generate_aggregate_resources import main as generate_aggregate_resources
+generate_aggregate_resources()

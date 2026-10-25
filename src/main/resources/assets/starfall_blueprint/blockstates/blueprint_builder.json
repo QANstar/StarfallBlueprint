@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "starfall_blueprint:block/blueprint_builder",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "starfall_blueprint:block/blueprint_builder",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "starfall_blueprint:block/blueprint_builder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "starfall_blueprint:block/blueprint_builder",
+      "y": 270
+    }
+  }
+}

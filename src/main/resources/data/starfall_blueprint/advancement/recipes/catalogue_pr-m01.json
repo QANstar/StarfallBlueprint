@@ -1,0 +1,19 @@
+{
+  "criteria": {
+    "plate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "starfall_blueprint:iron_plate"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "starfall_blueprint:catalogue_pr-m01"
+    ]
+  }
+}

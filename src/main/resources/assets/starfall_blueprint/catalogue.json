@@ -54,7 +54,8 @@
         "LG-F01",
         "MC-M01",
         "MC-C01",
-        "EN-G07"
+        "EN-G07",
+        "PR-R01"
       ],
       "primary_recipe": "V-IRON",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -111,7 +112,8 @@
         "MC-M01",
         "MC-C01",
         "EN-G06",
-        "EN-G07"
+        "EN-G07",
+        "PR-R02"
       ],
       "primary_recipe": "V-COPPER",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -163,7 +165,9 @@
       "catalogue": false,
       "category": "材料",
       "subcategory": "普通材料",
-      "recipes": [],
+      "recipes": [
+        "CR-R09"
+      ],
       "uses": [
         "FX-01",
         "FX-03",
@@ -172,7 +176,7 @@
         "PM-06",
         "PM-08"
       ],
-      "primary_recipe": "",
+      "primary_recipe": "CR-R09",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
     },
     "diamond": {
@@ -493,12 +497,15 @@
       "catalogue": false,
       "category": "材料",
       "subcategory": "普通材料",
-      "recipes": [],
+      "recipes": [
+        "CR-R02",
+        "CR-R06"
+      ],
       "uses": [
         "V-GLASS",
         "SF-V-GLASS"
       ],
-      "primary_recipe": "",
+      "primary_recipe": "CR-R02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
     },
     "water_source": {
@@ -622,7 +629,7 @@
           "tail"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAu0lEQVR4nGNgGGjAiE1QXMvoP4z98to5RpIMENcy+i8nLwfnK5TFMRzKbmHAZSATPtNBmkHAbmoNA8hQEEZ2HYYB4lDbQRqbVnfhMxvTAHE0p+NyDbormHBpmHf6CkOSqQ7xLiAExA8/grORXcGEz/kgV8DAyeMHGMwtHcDsRw8fwWODCZttD7oWgTEyH90QGGACESDTQKZiMwgdrF6xCCUtMBHwOlZDkAFKqsIWFuguQ0+JWJMyPg1UBwC4wE1AM9Xz1AAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACL0lEQVR4nO1WPUsDQRCdW66J+IGKIggRxKBEVAgq2qZQiNgJ/gJb/QkSLK0i9oqNjU0QFSwCqfyCgEiCEhUMBIxB/ETLyCzZsLe3u7enFoJ5sGRvdu7em3ezmwOoo47/Dss0MRSOVNj8tbEJSqdp43t1sE1JB8MD9PeoUITe5SWAOFSa398c+flcxvoVAaEqMSMVsROLQiSekK1X/AqxVAJk5Fj9SnINNjI39Po2noDJYLcrL5u7BFMhto58bKTfJWCmqwc24AYeDo/pqziSiMAeqcY8HSGqBZ68o70F1nZTtHoRVESh6IpjDAvBwfeSsQAe5ccX+ovV793f1eLogow4c5IEUxCZ/aL1qupVLsztpxwxnQvEVKlYvcwFWfXF8hMdKpCfVs92QzDQ4BKGLhQ+P7Qu2GAAuu0i+hwk0glVuUD4C7F6xOJslFaoQufUhHLNxAXCJl6HBjt8RDBxWL2qT3QuEP5ic1u+fbxc8NMfogu2n4fxRzACH9wWaKAWm/QJc4F3m5iSMxdwzIwOO6rCucwhXX9IBeRzGUv1GpgIHBfZa6M+YfYPDfbVYmfpA0evEfCJs/MraVzlAoIJfi6XXGu27Ab889lPnbrisei49lRjLvA9wkO204gYwKTV9S0lQXdHa22+MD/tWMPeYLbz5Jgnqx6h/CDRfREhvJzggeSqc8aWBblkTyE6h/ivIxUsk4eqHEEXvAi9TljLRIBOiF/CHwkAQch3CP8cvgC9GSUJ5woyvgAAAABJRU5ErkJggg=="
     },
     "rutile": {
       "id": "rutile",
@@ -653,7 +660,7 @@
           "rutile_tail"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnUlEQVR4nGNgGNRA1dHjPwjjU8OCT3NjYDmDsr8QQ0wCA9yQ2/t3MOI1QBVq45IFnWD+3Y3vUNj1DBDDYAYx4rIVpBgElr7byxAt5Axmw8Tr13fCDWDCpxkdYBNnIkYROgBZBPMqEwOFgAmfJLL/CRpwe/8ORlDgUNUFuADWWGBAksSnEVkzCKAkJJgELLGAQSAkDNA1Eg2IyQ8UAQDRs1VHE9sCNQAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACgUlEQVR4nGNgGAWjgAjgoK3zn4FGgIlhgAEjMYr+fzj339E6juHpfza42O1r54jSSwiw4JNU1TICB/2x7lowX1tLA8Vd0oy/MBwFiq4DV68wUuQAVajFIAs/XL+EVWNCpD/D7hWrMRzFwPCLgSppQBvVYDAw1VeHYxDYf3QRigNBekBiIA/APEGyA1S1jP7DLIdZBAKtAfJgH8MAiA2LGmQAEgNFDcgMYhzChEsC2XJC4PHTF2AaPbpsHazhDiHZAYTAuilRcLastARWNe9evcWZhrA6QBUa/Mi+h1l05OpnrAaAogZkydPX73Fagi8UmPC5TlSYH8MyUNwjpwVCjkJPqDgdoIrF98umzsGpUdDQA2/IgAD3m8coZQi2UGBioCLAF124ooiJ3JSPHuQg3xIC2EKBCVvZvm7bQaJzAD5HoTsQWygwIXMWLN8IpoO87LEaWr3hIUGLCTkUPRSY8BngGhHKEJSzjKBF2ByGy7GgUEAObSZcht59/gaFb6PNi8J/f34HAzUAEzIH5DJQNIDyv7KkCFYNn/nEiAoV9ND4KiILZp8+uB2lqmbCpuH1248o0QAzBMRGL3bRQwYf+PD6JYYYEzaFoBA4ffEmHMMSFIiNnpJhvgNh9JBB52NrRTGhCxBqakmLCmJY9u/XT6yh4qkqhNf3WB0AAt1TFjFcvXYDwb/Jj2IhyBEohrCx43MzOPRweYwFmyCSYnjTDB2AQgE5ccHEQAAkLqCpx8Dw5wleh+F0AHaHsDEIIMmBQuHDm8cYocHA8BHsY/PsNQxXGRgYyjccYnTY8PA/WQ4gFCIgXyJHFRioS6LroT5Qhbb1cDUySOlJERUC6ICavgMAWZ0liSf7f8UAAAAASUVORK5CYII="
     },
     "borate": {
       "id": "borate",
@@ -684,7 +691,7 @@
           "borate_tail"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAq0lEQVR4nGNgGNRA1dHjPwjjU8OCT3NUVT+Dl9ovhpgEBrght/fvYMRrgCrUxiULOhkYGH4xbLvFBmUzgNnLGCCGwQxiwWUrSDEInDm6lIGBIRrMBokzVPUzLGsrhOthwqcZHWATZyJGEToAWQTzKhMDhYAJnyTI/ybW0cQZcHv/DkbkwKGKC3ABkEWwaGTCJolPI7JmEEBJBzAJWGIBAVgYoGskGhCTHygCAKRTUHkC2NBKAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACiElEQVR4nO1WPWgUQRR+eyyICBJjPJQgHMihxuJQkWCjokXAJmijoqCNlZ11Sut0VjYKSkyj2CSYEEjskkDMFYmRIAYkRJOAZ0BEC1e+yb3hzeTN3G5sBPPBMj87u9/33nxvZ4l2sIP/HUnehdWuU5kcL87P5H42hjQv6YmuY/5tR1Cl/INGx98VFpXEiBVSizO1ozRdf2/639ffUl//bXpw/wktre4ulJ00dEMjB6kPJj9Xu0l9/WREVMrHs7xCEi16JtcIfYyPPaeRsRF6U3/mzHM2gJiQkjb5aflzkPzF0IRD/vTlQzuenKzbPrICXyCY02cvZoUEHO48GFpPVy+fd8jLe6u0urHoiJBCgI1vDcoloNpMf3t5vxl/WFk3FxMyQuT+FuzpOGn6eKdfxqoAxpFDHbbFBUKkFC2uC5eu060r94Lk3d010y6vfbVXyyqoNqPnvcdeI91Mzi7n6GLA/UZWceaaxs58Q6ahl/jk0uWYA5AFacIYQllI5UA6X9tnaa7RwVnTLnycslEDm5G70ceykHJnc7I3y2syJnOJi2ehJAePB16ZtpXJED0cfvdajyGW5G3JUlSEXxGl2GJOrySW0TwafG3Hv3/9NOTwB9qQEDynboEPZAHplc7nA0dD+66VYLXEtifxJ5CeOzd67Zg/QH41yJdz5H61MOTa6YnhfGUoIV8uK4HJY9Ui1zbWvmyZT7fMEDnnfKwaNPIYtFOxpC2am18wfThdqwaYkd0fqxZnrRK9KoDBIrRq8NHqPshD/wRJ7EGuV5zrsgKQGflRYRMCskqwjgPZlgApBCL4eGVAROeBfdYvAP8FMVr9liVUANrPqtyqPIR/JYA8Idsh/OfwB/D8lzoVkrl7AAAAAElFTkSuQmCC"
     },
     "moon": {
       "id": "moon",
@@ -715,7 +722,7 @@
           "moon_tail"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApklEQVR4nGNgGNRA1dHjPwjjU8OCT3NpVCGDvpsEQ0wCA9yQ2/t3MOI1QBVq45IFnWD+xV0vUNjdDBDDYAax4LIVpBgENj49zMCwyxbMBomXMhQydC/rh+thwqcZHWATZyJGEToAWQTzKhMDhYAJnyTI//7StsQZcHv/DkbkwKGKC3ABkEWwaGTCJolPI7JmEEBJBzAJWGIBgyhIGKBrJBoQkx8oAgCHcVHVtb85LgAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACQUlEQVR4nO1Wz0sbQRj9drooiJdGFCGkJ0NED1LBQ0Gh7cH+BxWh0JOHHhQ89K/wpv+AhYrgRXsqeFCEQgMpShGjQU8VoTUkKkhBUSNvzNTJ7Hyzk+ihoA+W3fmx89735ptvl+gRj3joCHwnpnv6K+o5fPKMtjeXvN91IfQl7e3plvdC4S+NT0zRzDRVLi5/1czfza8H9yIgXSVWpCbej3ZBgG28Uq+QgBNgI0f0cwuLlP22J9sz0x8pk2mJzNvK75CvkNBFPtCXMQRsUCZFlCWi1ZXl6lZERSBHqn2xjghuwCT/vLAhozcBEXDGBPoQCC49l7wF2IDoC/u3bbigI9HRJol/fI8K9RKQrtrvG73pQvmwJNuf5vdqnHG5IBqN3uaCLfqD4pG8OIi7Rg8gEVsTZxFhcOG03Ox0QZAHcOxs0esAkUso54LQG2b0wLu3z2WEHF69HmbHfFwQ6iGuaKjiY0KJQ/RcnrhcEHpjdv6L9cU4F+rJD9OFsJ7F9BIMYOHWxM3+y7HBrtg14ILutvAln/zwUhKr0vtiKPVvDEJsDrnywypgN78ecNtQLJ3IrcDFZbSZJ7bjmVv7GjRcioHczwJdnZ/R5lYtGeeCjuPin0hfyJHsH/ymVLIzMoboRdPNseJc0HNEh+2kCbMDk/A9V+T4wOhItj9lyZULuCNH4BQwNvLGGj3A/pC4/ogAV303AXKuzoS2Tm1yrBATpkPq74hD4LMo5whciCOMq7CBjwCXkHoJ7ySADCGNEP53uAZ2GjEToSjnlgAAAABJRU5ErkJggg=="
     },
     "common": {
       "id": "common",
@@ -786,7 +793,7 @@
           "plant_cultivator"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAn0lEQVR4nGNgoDUQtw36T5HmBS+u/CfLEHGoZhD2OrEXpyFMuDR3rm5CETPuzsbqHSZcmv3FZTEMxmYIEy4vbHz5GJcUfheQCpjQBdD9jgwuLj2M3wBxLIG06sFLOPvPhUsMLw+vY8TrAlIBE7pAdesaMCYWMKILgLzBYqAH5+tH24JpkP+J8gJIAUghMsClGasL0F0CMwybZoKAmEwEAJfVU6cfxzQbAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABdUlEQVR4nO1UPU4CURAeJ5zBtSPhCBZEKzobCxrPgScgZuMJ8ALewIQCCwoTK8GCG0BiJ9T2a4Zkkucy83bm8cg2fslmA/P3fd+btwD/yIiiP6i8Ndg2Ccw5eLWcQqsO3L2+Qe/h3uUCtqk+G4EQu/nC5QLmUj/7/vrzv5UEwglALliBTQkxFRR7nD6ptRYXsJljnMTtRffAfo8LmLrdTeqtLuAxd1tT73EBT6ne4gKm3u0m9WFtDKgFJIVMwqM+hOQCWhPrSizqGZtyAtpxolakWUwujIcj8EJbZqwnxiz2fOEY5zdX4nGqBHKD7I8tM0rqYxvOTTygflkd2JSTpD2QXEApybPhMfx8LKPnT+iEP7af72fj4ch0zzmXjyM8a45rXz/KpfgBAetWk7KwGQ+U8p9Xa4BLvV/HSyBkrw1l7OMlVBA4WheAUlHqgmnYuyAIEAnkBg2r74cJRX9QXc9eKnrzk0oi7OUqKo4YKvXL1SsrfgH+B+vPU7a+JwAAAABJRU5ErkJggg=="
     },
     "refined": {
       "id": "refined",
@@ -829,7 +836,7 @@
           "directed"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAoElEQVR4nGNgGNRA1dHjPwjjU8OCT7O/pQRDaHohQ0wCA9yQ2/t3MOI1QBVq45IFnWD+6pn9KOyNDBB5mEEsuGwFKQaB62wycDZInIGhn2Hj8RdwPUz4NKMDbOJMxChCByCLYF5lYqAQMOGTBPlf89cT4gy4vX8HI3LgUMUFuADIIlg0MmGTxKcRWTMIoKQqGEBOvqAQR7eVJEBMfqAIAAC8/E/eFeBGFwAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABYklEQVR4nGNgGAUjHTCSoljczP4/NvGXpw6SZA4yYCHFcqX6fOySjQxYHUaM4xiJtbx54ySG+efuMiQaKROjBawWBO41TsTrCCZSfA6yHGYwtQATMYqI9TU2AHI8rrRD0AGwoCcHIDsanyOYaGE5KYCJ1BRPbjrAFQpM2Cw/d3IjRfFOiiOYsCkM2baPwVtCHowpAcR4ggWXBMgRILDGywlMb33xkGQHYIsqcNQ2MvyHlQ0shAzB5hBYOkD3ITYLX+06wSDmZgHnoxdMLMT6Bt0h8xnu4rWUWMBCtEo0hyBbTqyF2IplJgYyASgkQBYTshw5+LEBJgY6AVyVEhPDAAMmeliCr0pmoqXFhOKf5g4gpkHCgi4AVgxtYuFsglERsGAThLuYDIfAgh3k8y/HTxJsE7Lgk0R2CCFHIFuMopcaJeFLHNGCXsaTYjFJDsAWLSEUWkwxEDez/4+vsTkKGIgEAOzstwP2f0peAAAAAElFTkSuQmCC"
     },
     "titan": {
       "id": "titan",
@@ -898,7 +905,7 @@
           "g06"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqUlEQVR4nGNgGNRA1dHjPwjjU8OCT7NbYTdDnP4/hpgEBrght/fvYMRrgCrUxiULOhkYGP4xLLrIBGUzgNkMDBDDYAax4LIVqpjhwbmVDIsYwsFskDhDYTfDrv5SuB4mfJrRATZxJmIUoQOQRTCvMjFQCJjwSYL8r2AUTpwBt/fvYEQOHKq4ABcAWQSLRiZskvg0ImsGAZR0gCQBT3mwMEDXSDQgJj9QBABMZk/jnyuRUAAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB6UlEQVR4nGNgGAWjgErAQVvnPzn6mKhleWuAPFmOYKKW5SBAjiOYGKgMSHUEE7EKQYaiGwzir5sSxaDpYg0XA7FJcQQjMYqOVnv/hxkelLOMwVNViGH77Xdgi/ABkHohxypGskOgM8AO7muQYbMn7gBbbqPNC7b8yNXPcLXIbBj/+p6jBEOCEZugp4vd/+/PET6EWQ6yGB8AqQNZCnMATH31hocMB65ewWoXI6GUTSqApQeYQ2AAlyOYsBni4mMA1oALoAc3MgBZjM1ykJnYABM2waNnH6E4AjmVgwC2qMDlKJjlIDOxARZs8Z+T5Avn7//DwMCA5iNsAOYoWDqA5RiQ5Yb6+sQ7ABkUlRUwvHrxkmHJouUMe7ZcYCAKwKIO6vN/DMx4lbMQY2ZMXCRxlmPRt2jRKvId8OrFSwYxCXEwTa4j4uLC8DqCiYFOAJSuQOmL6BDQ1tfCKr6yupOgZeGt5UQ7jIWBTJCa74EhBiotSQUs5DqAHMsIpgFPtDKAHoCJkAJYTqAEgHLC2YtXqBMF4SQkMHQADd3/2/ccYiTogKsXr6HkBHJDARSC+AALMgfqMng6gDmCkCHEAGN9HdIaJAyIIAM7AuQYSsCUeZvBNHLw43QANXMFLouJcgADUmiQC3BZPGgAAOsg19hAeMQ5AAAAAElFTkSuQmCC"
     },
     "boron": {
       "id": "boron",
@@ -954,7 +961,7 @@
           "g07"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAo0lEQVR4nGNgGNRA1dHjPwjjU8OCT7NFmTVDjpYfQ0wCA9yQ2/t3MOI1QBVq45IFnWD+lGubUNgMDBDDYAax4LIVqpjh3cmfDFMYIGyQOEMZA8OJrqNwPUz4NKMDbOJMxChCByCLYF5lYqAQMOGTBPlfyJydOANu79/BiBw4VHEBLgCyCBaNTNgk8WlE1gwCKOkASQKe8izMrTFsJQkQkx8oAgD4GVFfnuHDfwAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB60lEQVR4nGNgGAWjgErA1UHz/4BafvBcx39yHMFEDctr+uLBbBBNqiOYGKgMQI7omh75n+oOePl+H0YQg8RgvkcG5ub6RDuCiRhFIItv3D8FD2JYnIPE8AGQGkJmMxKyGESDLNZQNGPAZSE+uZaihQy7D1zHaQ8jNkFPF7v/f/68BltMjCWEHIPPEUzYBNEtBwFkQ0GWgDA2AFIHk4PR+HIHEzZBe3NjsKvRLUHmYwuNkycvosjBaJBZIDOJdsDRs4/AGmICszF8h0yjOxCU+tEBzHKQmUQ5wNPF7n9Oki+Dob4+WOPhlVdQ5JEtXbhiNt4oAYmBzACZhQuw4JRhYGAoKitgePXiJcOSRcsZDp48C7MWRc3ulRcwxGDA3vwKwz8GZnxWMOB1AAzExEUSowyrvkWLVpHvgFcvXjKISYiDaXIdERcXhtcRTAx0AqB0BUpfRIeAtr4WVvFVh5YQtCzMLoZoh7EwkAniI1IxxGC5ghTAQq4DyLGMYBrwhJYB9ARMhBTAcgIlAJQTzl5ELdDIjoIwEhIYOoCG7v/tew4xEnTA1YvXUHICuaEACkF8gAWZA3UZPB3AHEHIEGKAsb4OaQ0SBkSQgR0BcgwlYMq8zWAaOfhxOoCauQKXxUQ5gAEpNMgFuCweNAAA1GHiKM1c1cwAAAAASUVORK5CYII="
     },
     "lunar": {
       "id": "lunar",
@@ -992,7 +999,7 @@
           "liner"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApElEQVR4nGNgGNRA1dHjPwjjU8OCT3OhVRGDcZo4Q0wCA9yQ2/t3MOI1QBVq45IFnWD+2VkvUdj9DBDDYAax4LIVpBgEtrIeYmCYZQdmg8QLGYoY+o/1wfUw4dOMDrCJMxGjCB2ALIJ5lYmBQsCETxLkf+/fdsQZcHv/DkbkwKGKC3ABkEWwaGTCJolPI7JmEEBJVTCAnHxBIY5uK0mAmPxAEQAAw2BPUOG5CXcAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABdUlEQVR4nO1UPUsDQRAdh/wNOyFckd4ijRbWSZMmv8F0+RV2d2BjZSFCmqRW0EbQwi4BEdP5Q05GGdgkM3szmw3X+OA4kvnY997MHsA/MqLoDWpvDbZNAnMe/P46h1YduL1fw+XkyuUCtqk+G4EQz08PLhcwl/rP783/rSQQDgBywQpsSoipoNjdTJ+9xQVs5hgn0T2GHfs9LmDqdjept7qA+9xtTb3HBTykeosLmHq3m9SHtTGgFpAUMgmP+hCSC2hN3FZiUc+oyilo40StSLOYXBiPhuCFtsy4nRiz2POFY5ydX4jjVAnkBtkfW2aU1Mc2nJt4QP2yOlCV06Q9kFxAKcmz4TGsVo/R+RM64Y+P5eJoPBqa7jnn8jjCWXNc+/pRLsV3CFi3mpSFzfhAKf/tZQ3QP1H7dbwEQvbaoQyKVyXUp/25KgClotQF0/DrgiBAJJAbfy5s7ocJRW9QX9981fTmJ5VE2MtVVOxxqNQvV6+s+AEDferYNv/j9AAAAABJRU5ErkJggg=="
     },
     "tail": {
       "id": "tail",
@@ -1019,7 +1026,7 @@
         "operation": "送独立缓存；按干量记录，不直接重命名成可用晶料。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAiklEQVR4nGNgGAWMyEGgaW33v7MxB2+olNdPYbh+9BBcHwu6gl079pAUrCzItjtbajAoamjg13H8BgqXCZ/avb/+EHQBEz5JZzYWygzABkDeBHkXxmdBV3D/BqofiXbB9aOHGPeiBRAxgAVd4M6txzgVq6jJEjYAmyKYyx5icSFGSsRmM3LKozoAABT9JnSBZ8dbAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABY0lEQVR4nGNgGAWjYBSMglEwCqgExM3s/5Ojj4ValvNYmoOYYEe8PHWQka4OgAGoI0DgP7GOYGSgnu9RwJfjJ8E0IYcwUsNyMTcLMP/VrhNYHYLPEUz4DJ/1/CIY47McHwA5TKk+H28CZSHGcJAjav3zwIahA5CvsfmcWMCET3L+ubtwdvPGSWRbAvIMrlBgwud7kM86O5aCMTJINFIGY3Sfg4IchMsrojHEycqGYkiJC+QIGB/dQbgsAOmDycHKCfQEyYgv7tFTN77Ujs0xxOQKJgYKAXJw4wtqmDzIg8r5ZfD0wEhMtoIVKqQCdPNADoCFyt2JXYwoaQAaLGBHoFsor6ZGlgMeopkDCq1OtGhhRObAsgqyhQG58Xgt2TB5IfEOunULTIPKk3uNE8GeZiTkAFKBnJEJhtijc2dQHICcCBmxGYJeaJAdBVALkQuzNEl93NkQm0NgwUUuIKVtwDAiAQCnDqnqq5+opQAAAABJRU5ErkJggg=="
     },
     "rutile_tail": {
       "id": "rutile_tail",
@@ -1046,7 +1053,7 @@
         "operation": "分开缓存并保留批次信息，未设计直接再提取收益。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAd0lEQVR4nGNgGPKAEZugiYfXfxj7zI5tWNXAAAs2zRPdXeD8fAYGvIaxEHIiumHohjDhs50YwIRLM6+bMlbXIIcPhguQwedddxmwAXRDmBgoBEzEKjzK8werKxjJCcT8nXvgUcpEoosxAMkGINsOAhgJCaSArgAAcNovoW2ZPv8AAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB4UlEQVR4nO1VIU/DQBR+RyowIJagpxBkwyIYoiQIBmZD4nEkCAQJQzIcggSHRzIMDEHCQhhidmsQKDTJIOwHlHw3Xnm9XtcBA0H6mbbXu3vf+7737ohSpEiRIkWKEcHN5f3vrHNGFbw4nSGiPomG11F/SoDRJwHk/WFJKBpZ9mHUH7tULWX1e6F6oX5FAVcEX8hN6OfMUoFW9upUtpCyQQ3aHM84Kbs3B/r/ydFVQGC78abf5+dm6b7VpvLU59Kd81s1tAJuSNZwdccRQnAE/iqcpAlMZGNrmR6um0SlrA+ZZfZxqD37gQpIykbeMQealVWd8Z3XC43D18v9YiQIe09ej2qtdjB+6E6SbZ9EArYsAMjLJOIyl56bgfmcMFUYkx+QCQshMSRHcASW3prBMZctgRqBIgaw39nxeuTEdGyTB3kLUjYrkhBnoTIrnzNgCdkClhiZ2MjyuC7Uj/VxrYlDiq1weKP+QN6XEmpJDT+TKl+utbUm21TwOtEaaHgdVTl/slau9BfZSiUwjsxl9nFgRbgWlG0SfvI5zpuZ1pjkGCw9v0sL0ZpIUHaCYyOgJ5SyQ9/vkpTZBeOvL7r6g72Ni0kN2li2DCvCQOutbZ5G1sh5Mlu+OzKLuz++gelf4R0QPuty+MvFLgAAAABJRU5ErkJggg=="
     },
     "borate_tail": {
       "id": "borate_tail",
@@ -1073,7 +1080,7 @@
         "operation": "放入副产物库存，不能直接替代硼酸盐精料。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAd0lEQVR4nGNgGPKAEZugiYfXfxj7zI5tWNXAAAs2zbmGznD+ZAYGvIaxEHIiumHohjDhs50YwIRLs2GMClbXIIcPhguQwfkldxiwAXRDmBgoBEzEKnyp9BerKxjJCcTJ5/fCo5SJNAdjApINQLYdBDASEkgBXQEAMrEu/fIk9sgAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAByElEQVR4nO1Wr0tDURQ+d8xoMFksNg2iGDawKMJLCqJlBmHJJBaLBkEEgxaLLJkGL2jZEDStzCJsQRwLs1mM/g+Tc9++cXZ3731vMi2+D8Z7e7vvfD/OPZcRpUiRIkWKFGNCsDbf/cl72XGRB4UlvtUiavWO+lMBQE8Eo5tUhKLxuR9A7f4tusYIyfwGeSX8pLBa0onE7Q3lK356XdT3q8snQ+ueXy8HCjcaLU3MWMkt0EuzTTt7M/00XElkkziTLlyFmJyJJYq7+z0BBy6fZBUA53OzuUhAoUX5/GJ032h1cY/fy3e31uJbm2f08HiuWxFWS9rE9NS68goIhFtZ+Pjwia5uNpxOOO5K2B747hMHqLj4zb6yoySFET+vk4l5Ewgs5GZfAS6KFpiCmPz9ozn0Dq/B5sXGzrgcQLWtr6Z7G5k5IdxCG1SSmQY4fibjgqZQ+UzGb7YQ+wgJKElmEyEJZCqS0CXEbCEEXByV++OckUX4IY5QLmi2gXvOBHyFy1GBVmDalO8UlHNuzj5DtsOWAFIA5Bh7N2Gt3lFcyDdq5sYzhUjSyYkv/WFSNiBNZCkGe9vRMYrWEJWda0GOtThRR/l/QP8O37Tp8G0fh3Y/AAAAAElFTkSuQmCC"
     },
     "moon_tail": {
       "id": "moon_tail",
@@ -1101,7 +1108,7 @@
         "operation": "分开存放，未登记再加工前不返回晶粒库存。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdElEQVR4nGNgGPKAEZugiYfXfxj7zI5tWNXAAAs2zQrBokgi+A1jIeREdMPQDWHCbzthwIRLc51VEFbXIIcPhguQQdOxdQzYALohTAwUAiZiFZoxaGN1BSM5gfhg7Wt4lDKR6GIMQLIByLaDAEZCAimgKwAAVsQrB/n+clcAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB1klEQVR4nO1WMUsDMRjNlfwDZ510ENpVihRBQWcXRRFERJcT3bt06NKhs7coIoJYdKizBQWRIh1crtBBJ/0F+gdOXq7f8Zkmd+1ZXLwH6eXS5Mv73veSVogMGTJkyJBhTJgtrAZp1slxbZ7PL6OrSPT8W+dPCRD6JIBgWBJS/BIvvUBlXat6olxx1VitGpLARxKR3Ljqvri0Eo1/vDfE5XVTKbK2eRygjayAd/KqFrn7M8YMTEHdvQX1nJ8rqP7k1EZiEjJuc5O7bZJenO+qjU3odlujESA83N9xYxEUIar389ObsAGlgAp0QkzkpS17bB4TbAD4rt1pRO/bO2eiWJoWZNBUJixXXLUxGuTFk8xGQbEJkQUJahiDOqQQiJsuK8lfMIFnDiPZ6gpQcJACkbhMiYReipwYETDbMIB6XB2uHoejX6c0CQvR5xt6p49R1gjODah7hkzKj2a74ytv8OMtaUFflkBnyc3EEed+AOUg73DoRJ2YH5YfmVB9iaBOitefZ88JQAEAJsXdgKQHPIBB08VBQU2AGqb6hkfTj9rn14RqN1cHDhnRsQXl94Gugg46BaY5SObwqC5s17q0psUCbK23EucUS82ozxFmWk/1Z0X8C3wD6x/47vJV5ggAAAAASUVORK5CYII="
     },
     "refine_tail": {
       "id": "refine_tail",
@@ -1128,7 +1135,7 @@
         "operation": "独立缓存；后续回收必须有正式配方。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdElEQVR4nGNgGPKAEZugiYfXfxj7zI5tWNXAAAs2zR5RxchCeA1jIeREdMPQDWEiYDtBwIRLc5jxF6yuQQ4fDBcgg1VneRiwAXRDmBgoBEzEKuT7eRarKxjJCcQdy3rhUcpEoosxAMkGINsOAhgJCaSArgAA7Lcup6JY2C4AAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABdUlEQVR4nGNgGAWjYBSMglEwCqgETLU9/5Ojj4Valuuq6YOYYEecvrqdka4OgAGoI0DgP7GOYGSgnu9RwOVbF8E0IYcwUmL5iuaN8Hjfde44XrXz1ndgtYsJn8/wJSxyEx1RacAUNVjhFhVHZIDpiFp/Rpiv3YwsCVoCiw5sgBFX0CIbDgteGL93xQxwgkO23NhBE0y3983D6Qhs6YEJV9AiGw5jgywBYfRER8hyWOghpxmcDoABmGX4AChkkBNfZVESQfVJgRUojmDEFfcww84euI5iALEAPfpw5QgWdElsFuMynBhHgdQiq0FPkCy4ChTkRAhKdMSmamQ1oHhHdyCsyIYlSBaYBFQAHD9RGfkoFjEayjCQA9Adjq3EZMSWA5AtDMiNx2vJhskLiXbQ//NPwDQoZECOA3maYGVEigUgIGdkgiH26NwZDDFYFDASU8ySGwUwH8MAyOewUhQGWLBphLkOlmcvnyec6HABWPE9ChhwAAC0wKxnyF85DQAAAABJRU5ErkJggg=="
     },
     "reclaim_copper": {
       "id": "reclaim_copper",
@@ -1155,7 +1162,7 @@
         "operation": "按回收路线检验和精炼后再回普通铜材。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAd0lEQVR4nGNgGPKAEZugiYfXfxj7zI5tWNXAAAs2ze0J1XB+JQMDXsNYCDkR3TB0Q5jw2U4MYMKlWVz3DVbXIIcPhguQwcvLIgzYALohTAwUAiZiFZ7/fBSrKxjJCcTKBa3wKGUi0cUYgGQDkG0HAYyEBFJAVwAA2VExzTodHgIAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABHUlEQVR4nO2WQQ6CMBBFp6Rrr+CuCXdwjbdw6QJjPIshsnDpLXTtHUzYeQUvgBkDSaltodMRE8LbQNrQ+Z0P/QDM/BkRu0CWqrq9vz2q4PUkMFBsFKjtAW/r9WrXmesTJYGJ6nz8XK/3U2dsfwFvhwRHcbQBu2DSdKURUlkFSNtiPsU+8tcSysXzqyuu4lYBsZ6iCB1d0GABVE/NYqYYG4LLU9czfRYkPnXmDrCw74XC8ZDiSO9nONTTtohukasjgwWUBE/13epiXAjXBNXTUBLfJMXTUKRrgurpT8lSVesn5SQQY+c/SxwXEVnBIiAm/00EjJz/rH9EOSH/WQVQ8p9VQEnIiqCj2AW213ZMh+4eIQngzApJLT5nxWR4AxvqzemJvserAAAAAElFTkSuQmCC"
     },
     "reclaim_crystal": {
       "id": "reclaim_crystal",
@@ -1182,7 +1189,7 @@
         "operation": "先测P与C，再决定能否进入PM-01；不是精密片。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdElEQVR4nGNgGPKAEZugiYfXfxj7zI5tWNXAAAs2zbq2ckgi+A1jIeREdMPQDWHCbzthwIRLc2GAJ1bXIIcPhguQQf+G7QzYALohTAwUAiZiFWqKKWF1BSM5gXj58CN4lDKR6GIMQLIByLaDAEZCAimgKwAAVtQrByvbvQMAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABlElEQVR4nO1WMU4DQQw0Vt7A0SHxCESHREEBBQ3vgBcgFPEC+EA+QJMCihRIVBCK/AAkOkJNf8ggS6uV7bX3Fl2Dmyh3u+uZ8Xh9AP8xMLrd/X7IfhwbBA5NvFrOYVQFTu8fYOfyvFoFHJP9IABpfC6eq1XAmoSU6Gp+U7O1DYCWKqD1UjqM2R9vbcPdx3skVxwARYTR2/Qa1i+PG9ACQGe4fLZ6bcLeBKD1ODEkpnlsHu61A9Bl7CVzkQoe+UslRI+789BUkJKXOgO9Pa6pQEC+npaq+W6PDkyQE+lh3mKkQl7jn4RT6LXETIR9pK1FaZMUUo1LLUdEmIBWCvyLFouUEdM/pRaLXEpSGd1dMBNaTGMQHVT5GRhpMXK0B4Q2JyQVUDskbTEKdrTEIjKmczOjtIhVoF9enDraAhE1MWovOLHESgNRuiGleYEelFJNNVdLJrbuErQSl2qqXU6eOWFexelhFydnPQggSE42qKUCg9FuzQlUhvX1w3PCSuz2wPpXhTDAtIOscCvAkrLs0W8/Lb4BMz44akB7+BwAAAAASUVORK5CYII="
     },
     "residue": {
       "id": "residue",
@@ -1209,7 +1216,7 @@
         "operation": "独立存放，当前没有直接复用配方。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdklEQVR4nGNgGPKAEZugiYfXfxj7zI5tWNXAAAs2zW3B0nB+FQN+w1gIORHdMHRDmPDZTgxgwqVZwsoHq2uQwwfDBcjgxbEtDNgAuiFMDBQCJmIVXmBQxeoKRnICsWrtU3iUMpHoYgxAsgHItoMARkICKaArAADfoS6rLT33TQAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABo0lEQVR4nO1WPUsDQRDdC4v4AwxYRAiIYBO1iBIO/AmCaGPtL7C19n9Y20QE7SzFEMRG0whBODCCcP4Asbnw7vLiZN29Dz1svAfL7s3ezZs3M7uJUhUqVKhQoUJJaDRXo598p8siX6jXsYyDGAVP3p8GQEyCAKK8QXiqPPVqZ29fXZ53p2vi5PjIyVMri1xifi6/Dy/NOWZXKkneXF6Z2t5ehvHsb7VU726gFpe+9i7OTr3cPdAQztsdP2qtr6nBw2OqI5CDuCi0a0Mqk9jY3I5kjVlzW9oRFLIAAUodRjYBOquuwfMwHiD4+HQrwR7SLp8pAkG6BNVcDiUxBtJLlaZ6ScpBH4n6ZH3f733j0WnqSfwboHegHgHwspKNrYs6RFCmcoJpBpntO1sJddqZRgPJuvJY2QhsQKmur7ozR9PMgubLE0PU7vgzJLaomVJTtRkYyLNKWJMPWfd3lnIollewDWxkXnSe7aXdg+TMkpQq2dGuHkgjBEavYTLnbcLAUMzbME/j0Y6jx7L2b2+8Qj9G72EYD9M57Rg2m7QX+W+g/iXGOT3besM70XAAAAAASUVORK5CYII="
     },
     "warm": {
       "id": "warm",
@@ -1357,11 +1364,15 @@
       "category": "材料",
       "subcategory": "常规部件",
       "recipes": [
-        "ST-01"
+        "ST-01",
+        "PR-R01"
       ],
       "uses": [
         "PM-04",
-        "AG-M01"
+        "AG-M01",
+        "QM-M01",
+        "QM-M02",
+        "PR-M01"
       ],
       "primary_recipe": "ST-01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1372,10 +1383,13 @@
         "targets": [
           "laminar",
           "warm",
-          "plant_cultivator"
+          "plant_cultivator",
+          "quarry",
+          "crusher",
+          "press"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkklEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhA4fuMTmLbU4GPwjqthgBnCiK6xpqoMrAhZEzpANoQFWQJmIy6N6K4BASZ0CUKa5y9dSXwg4tJE0ID5aBoSo8NJM4CQJmTARI7mlrYuBqzpQNvJ+z8oGglpIpiQYIbg0kQQ4Er3NAEANrxHL+94SiUAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABEUlEQVR4nGNgGAWjYBRQGWia2P0H4QGz+MKDp2BMrCMYqWExiF6+ZjmGXGRIJJi+fuYQI9UdoInDYlV5KYbbD59hOASXIxgptfjImatg2sZEmyxHMFLTYmQAcgQIIDsEW5QwUttibA7BFxqMtLIYn4NAwMTUHuwIRlpZjK4P2WIQwAgBTRO7/2dOH0QJLpAh1LQ4u6IGzM4JccNMA5pQn6M7glYWY3WAjoUdw5UTh8COAAFiHIJsMcxSYizG6QAYgDkEnyNgUYQev8RYTNABxDiCEotxpgEdHI4AAZhDqGExhgNIcQi6xVM7WvBWOPgAIy4JbA4BOYJaFhN0AC6H2DvYUcXiodPSGQWjYBQw0BgAABdz1m/rtfZwAAAAAElFTkSuQmCC"
     },
     "copper_plate": {
       "id": "copper_plate",
@@ -1391,11 +1405,13 @@
       "category": "材料",
       "subcategory": "常规部件",
       "recipes": [
-        "ST-02"
+        "ST-02",
+        "PR-R02"
       ],
       "uses": [
         "ST-09",
-        "PM-02"
+        "PM-02",
+        "PR-M01"
       ],
       "primary_recipe": "ST-02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1406,10 +1422,11 @@
         "targets": [
           "substrate",
           "conductor",
-          "warm"
+          "warm",
+          "press"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAl0lEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lRGnAdpYNIHA67XT4WLIhjCia1zgL80gGpyJogkdgOS942oYQIawIEvAbMSlEd01GF54TUAjCFRfYGFoNfiD3QB8mnABFmI0INtIlAGENCEDJnI0J2x8CmczIkuAohIUjYQ0ISckFAPQDcGliSDAle5pAgA9xkcdl3dY8AAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABE0lEQVR4nGNgGAWjYBRQGbhpqv0HYWLVM1LTYhC9ZlIImB+St4Zh1/VbjDR3gBuaxcgA5AgQwOcQRmpbzGvkyPD53H4Mh+ByBCOlFj8/cwlMS5rokeUIRmpajAxAjgABZIdgixJGaluMzSH4QoORVhbjcxAIuNtkgx3BSCuL0fUhWwwCGCHgpqn2f+eRqSjBBTKEmhZPjlMDs9Urt2CmATeoz9EdQSuLsTrAU4GbYfuDr2BHgAAxDkG2GGYpMRbjdAAMwByCzxGwKEKPX2IsJugAYhxBicU404AnDkeAAMwh1LAYwwGkOATd4txFt4iq+bABRlwS2BwCcgS1LCboAFwO8bKTporFNG/pjIJRMAqGDAAACbzRYmcUBm8AAAAASUVORK5CYII="
     },
     "steel_pre": {
       "id": "steel_pre",
@@ -1441,7 +1458,7 @@
           "steel"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmElEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lRGnAdpYNIHApNnb4GLIhjCia3S3tWLIS/VC0YQOQPLecTUMIENYkCVgNuLSiO4aDC9MIqARBK48esqgIyeN3QB8mnABFmI0INtIlAGENCEDJnI07zx8DM5mRJYARSUoGglpQk5IKAagG4JLE0GAK93TBAAAtVZE7SM05BgAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABYUlEQVR4nO2WO04DMRCG7chHSLotKDlAChQpHCRKQ4HgSEQUaRAHCVKUIgegpEi3uUPQv2LQZDS2x/ugQPtLkXezXn+fZ70P58aM+W+pbm4v+Fn7+z7BaB+enpv97ealaU9fn34wgYrNlMAyEElJ+CGgmgSiifhSsBVqFfEWaFcwsljeN+3jenUlEVLgrlANPJ3N3Lmuf48HCX59e3f7j90gYC1eCqCFBFIqQtAYmM+cLoHXBKhM1mrI2fIxeOZ3C3c87PNr4FzXzQAYMCURKzPO53CAYwnan2TKJRApQvtamVPQrIAsF80wtTZKwVkBGaoGbSPWMrcWmLNBqRp8cbWF8kysHQkGOLY1OCRJtPdLQImBY8d6F9BiBWvVCW7ASKD2cAryJHTqUlIOlXcLWvlNEPjOz8FLqUgMSuBWX0SVeC9oD6jYTHNQkwAXkYDcG64k3tKJV6MP6J99849xhnwDM/bhFLByoo4AAAAASUVORK5CYII="
     },
     "steel": {
       "id": "steel",
@@ -1468,7 +1485,10 @@
         "PM-03",
         "SV-SP02",
         "SV-BK02",
-        "EN-G06"
+        "EN-G06",
+        "QM-M01",
+        "QM-M02",
+        "PR-M01"
       ],
       "primary_recipe": "ST-05",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1485,10 +1505,13 @@
           "warm",
           "speed_2",
           "bulk_2",
-          "g06"
+          "g06",
+          "quarry",
+          "crusher",
+          "press"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAk0lEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhDYdOgZmPazk2LwjqthgBnCiK4xPSULrAhZEzpANoQFWQJmIy6N6K4BASZ0CUKat+zeSnwg4tJE0IAtaBp8XL1JM4CQJmTARI7mmXOmMWBNB9pO3v9B0UhIE8GEBDMElyaCAFe6pwkAALVMRorSkBsgAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABf0lEQVR4nO2WMUrEUBCG30DOYO+WClYWiyIYPcFiZbWdIKyVtZVXEKw9gUdQEMXCStBSey+hTHCWyb+TybzsxkLywxKSnZfvfzM/SVIaNOi/abSx882/aD2tEszHy6vr6vxidlodP96fqDcDI7VTAaPYiGeC+oBaJliWEcoFR6FRIxSBLgtm7W9vVce98W7NROGBl4Va4LX1zfT1+Tb/v0Dww/Njun957QVsqcALvIBNsHKNCNQCn53PajloNMA6Oj6p2hTtBu5WwAIVcDmZLqwlfWI9wTwTVpsRytLgu9ub9hCWk+m80BoJgnVYNdTacagD5e9CMSHJFSMMtqC4W0vYAfIM4CK9WwxTG/jgcFxb547AG0nObgXaOYRlQyc8cBs0HEIpxhtY8CZoJIRFpPURqNR7UJ2lkAGcvxUmD4pAfA+wFjKgi7pkQEPlMayh+E1AeAMJomWkaRy5UNeAZ8QaidTkQLWorUDGogH61doFmmUAu7EK6J998w9KAf0AkBYArGV4R9UAAAAASUVORK5CYII="
     },
     "ceramic": {
       "id": "ceramic",
@@ -1533,7 +1556,7 @@
           "bulk_2"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkklEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhD48fgimOaQ1WfwjqthgBnCiK5xbWsoWBGyJnSAbAgLsgTMRlwa0V0DAkzoEoQ05806RXwg4tJE0IA8NA2T0sxIM4CQJmTARI7m4OrVDFjTgbaT939QNBLSRDAhwQzBpYkgwJXuaQIA9M1HgDgM9fMAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABmUlEQVR4nO2WsU7DMBCGz8gzI49AXoEOlbqiSixhAJYKxFPA0HQIT4FALMBAFqSKFYkBXqE8AiMvEHRpL7qYi3NOQweUX6qcpPZ9/10c2wC9ev03xaNBjj9tf9slGNubu2T5YJIU99nru/GNM11AK2BHZ5PEa8L8BVQygZKMmFCwFqo1YjRQDqYgoUa2d3aL9nD/pGLC+MA+iMZIdv1QtKcX0xI8HkYwf1vIBuLRIH96uYfvr091Zq4RgkpgktcAAACaQIUY4dmi6sBl/5UBKwW7vZoVnZuqIWU794DT6RFczh4rMawUGAdgAAzomnChlC2CCYrjebYIrpOVHpJTbgKrgorPj3/N6Lps11qKU2aCvxIN2C1zKwM8C14NFC81SZtxq80oZVnRd7wOlGtL25FgCMfrLuCo4O2Yg6O9g/J68fG8GQMcHAqVJqeFFtKCXSCfP7UGxsOoHNjmPdNY+nJQBOV7gGggW/6ZhxrhmUqrYasTUbzamNyySQuNtC40nQUbDXAjLqBphwuR0XTi1egCurEzfy9Q6AfExg1MeMJtdAAAAABJRU5ErkJggg=="
     },
     "insulation": {
       "id": "insulation",
@@ -1582,7 +1605,7 @@
           "energy_junction"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkklEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhC4eukMRF7PhME7roYBZggjusaukgCwImRNGJYgGcKCLAGzEZdGdNeAABO6BCHNE1efJz4QcWkiaMBENA35oYakGUBIEzJgIkdzWc8GBqzpQNvJ+z8oGglpIpiQYIbg0kQQ4Er3NAEAZStG1cXJa/wAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABWElEQVR4nGNgGAWjYDgAJV2t/+TqZaGGxQGRTgwbGBjA7HuXrzGSYgYjpRajgw3L9zGQ4hBGallMrkMYSbGcGItJdQgjMRZjE0d3TFZ8BJietnAFSQ5hJMbilu4CDPma0glkOwTZEYz4LMdmMTaHYIsaXA4h2gEtaJZPnbkKzs5ODyPKEdgcgu4AJkKWgyxGthwbAKmHxTE6wBUVOB2ADJAtfn7nGRzD4p8agIlQ0MMsRwfojsAXCkQ7AJvvsVkOA9QICSaKTRh1wFCKgpOnbxDvgGxoYSOpIoXTQGJKShCIz2kAW25uqoHfAfcuX2PElrKxOQLdcmylIchSmMWg3IReCoIA3hYRKBRg2RHZEehFMa6gBlkMsnTDnWekVcdKZNYFyBaDADYfE+UAfKUiOkC2HNliYptljPgk8VXL2NoDpLYHCToA3SHYALhFTIbFg6JPMApAIQAAL2jWFxR7NeEAAAAASUVORK5CYII="
     },
     "binder": {
       "id": "binder",
@@ -1617,7 +1640,7 @@
           "wear"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAl0lEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lRGnAdpYNIHAiZNT4GLIhjCia6zNlmCwMM9B0YQOQPLecTUMIENYkCVgNuLSiO4aDC+cIKARBOZtYWdI8vmJ3QB8mnABFmI0INtIlAGENCEDJnI0N099AWczIkuAohIUjYQ0ISckFAPQDcGliSDAle5pAgDcEUb1l+SW4QAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA2ElEQVR4nGNgGAWjYIABIz5JU2fv/9Sy6PTerVjtYiGksbQoh8HCRINsi0+cucHQ3TcFpzwLsYbQCjDRzOSh4gBGXBKuDpr/PzArUc0igb/3GHYfuM5IUhoIDeGjmgN2r6QgCkrTuqjmELIcQEvAQkhBfEQqCk0OWLhi9hAOAWzgxv1TDLiAhqIZAymAiWGAAdOoAxiGYiLUIDGhDe0QWLhiNrgoxleYDOkQYCJGUfessoF1AC0BEy4JUONh98oLVLEEZA62xggI4G2Ww1pGFDsAh+WjYFAAAAQZMpmIY4hjAAAAAElFTkSuQmCC"
     },
     "substrate": {
       "id": "substrate",
@@ -1650,7 +1673,7 @@
           "wastewater"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAwUlEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhD4cfkEmObQtWDwjqthgBnCiK5xbakPWBGyJnSAbAgLsgTMRpBGJoYnDExIcv8YZDBcAwJMyAaAJJAlfVqOgTEyyFt1mfhAxKcRrwF5qy4zTAkTZNhSYwUXmxnOB6Z//pcnbAAIsDL+ZUAG6BpxGsDO+BBsGy4NIBDcvYUBazrQdvL+D4pGQpoIJiSYIbg0EQS40j1NAAA9XlW47oX2LwAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABnElEQVR4nO2WLU8DQRCGd5J1hD+AwtAEi0aAKamvJBgkoQKBQ+EJuQaJQdc3YECgsSRXg+ofIOiS2XbI3GR2d7a0CHJv0mxuv553Pi4951q1+m/q7nZm+LPuh1WCcRxV/fDcH4zC+PRew9oMdFmkBJZCIykTsA6oZgKlGYFSsBVqNQIWaAn4/mYcxtOLXmN+c+8wjEf7Zw0TPgUuhVrAve0NN/74+ln3Evz4euc+356LwBIaA2sCaQBHNIGyGpHQGJhHnizB7fFl2GzNhow2Bh6edNz5Q90467UL8QBegBemTKTSzKNFcExemySn3ASKjFjAKWi2B4aLw5Qu6lwysix4trMVxsHVS7oHSNwIZYODLWkmKAom03wPVNcHzk2mjTnePPw9tkKLS1ChCeUwmciBY1BzCWBxgXahhOei/VUJQBhxrl4KSpLwsF5SAmuKaV0Cef9QCUAa4JukEbwwVwIO1d4W+U3g+cN8cZ4FPIzNwo3EShCDymg1QWyByqFlhIyVRFpsQJaFA3L/cCUCyyaejVVA/+ybv5Uz6BuaCzCH0L1XzwAAAABJRU5ErkJggg=="
     },
     "fix": {
       "id": "fix",
@@ -1697,7 +1720,7 @@
           "machine_frame"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAaUlEQVR4nGNgGHRgydbt/0lRzwJjGLj4/EdnX9izhZGQAUzInJLCbBSaGMCEzOnpn4pCUzUMluAQZ0EXiPH2RPE3obBhIsZV+MKGiRjn4gsbFqKdW5j9H1u0MhHrXPSwwWlADy2jcnACAOg/OJ9vtu6yAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA4ElEQVR4nGNgGAWDGWia2P0HYVrawYjLYhC9fM1yMD8yJBIud/3MIax6qAY0Tez+f/3/H+xzEL7w4Ckc0zo0wACbpchi1HYEIzZBkCWw4EcHoOigZjQw4nIAjI2eDmieBpDBlDW74FHAQAIgRQ8jIYOQ+YR8T07uYSQUAjB2TogbQcvPnD7IYGJqD+YjpyFqpxuq5h5GBioCcnIPI7UdMORyDyMtHEBK7mGkhQNIyT2jYMAbJYz4LAbRo42SCzRulDDiiwJ6NEoY8TlgyBWr5ABGQgpIbZRQ3QFTRovV4Q4APTbwQlPaSzgAAAAASUVORK5CYII="
     },
     "steel_fix": {
       "id": "steel_fix",
@@ -1715,7 +1738,10 @@
         "ST-13"
       ],
       "uses": [
-        "CM-04"
+        "CM-04",
+        "QM-M01",
+        "QM-M02",
+        "PR-M01"
       ],
       "primary_recipe": "ST-13",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1724,10 +1750,13 @@
         "benefit": "支持减振座等工位组件的安装。",
         "operation": "普通钢加工后参与对应装配，不和铁固定件重复计料。",
         "targets": [
-          "damper"
+          "damper",
+          "quarry",
+          "crusher",
+          "press"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAaklEQVR4nGNgGHSgZ+7K/6SoZ4ExDFx8/qOzL+zZwkjIACZkTkxkLApNDGBC5ixZvhiFpmoY9OAQZ0EXKEkOR/E3obBhIsZV+MKGiRjn4gsbFmKdGxMZ+x9btDIR61z0sMFpwBJaRuXgBAAKMDgb64NuHQAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA5UlEQVR4nGNgGAWDGShpWf0HYVrawYjLYhDdPGU6mF+bkwmXu3ftGFY9VANKWlb/n376D/Y5CC/ddxGOaR0aYIDNUmQxajuCEZsgyBJY8KMDUHRQMxoYcTkAxkZPBzRPA8gguXomPAoYSACk6GEkZBAyn5Dvyck9jIRCAMae25pO0PLDJ44y2FpYg/nIaYja6YaquYeRgYqAnNzDSG0HDLncw0gLB5CSe1ho4QDHwHgGYnPPKBjwRgkjPotB9GijZCmNGyWM+KKAHo0SRnwOGHLFKjmAkZACUhslpAIWQgpGi9VhDwCJXODmLOx16gAAAABJRU5ErkJggg=="
     },
     "board": {
       "id": "board",
@@ -1757,7 +1786,10 @@
         "SV-BK02",
         "LG-I02",
         "LG-I03",
-        "AG-M01"
+        "AG-M01",
+        "QM-M01",
+        "QM-M02",
+        "PR-M01"
       ],
       "primary_recipe": "ST-10",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1778,10 +1810,13 @@
           "bulk_2",
           "item_extractor",
           "item_router",
-          "plant_cultivator"
+          "plant_cultivator",
+          "quarry",
+          "crusher",
+          "press"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxUlEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lRGnAdpYNIFA0abdcDFkQxjRNaqH2DP0+bmiaEIHIHnvuBoGkCEsyBIwG0EaOxQ/MnQoIuQq7vNjuAbDC0VoNvq0HAPTW2qs4GJfTj9g4DFVwG4APgDSiA2w4FSsKIhi88xwPjBdfE+IsAEgwMr4lwEZoGvEaUCv0jsGBiU+nBpA4Oaag3A2I7IEKCpB0UhIE3JCQjEA3RBcmggCXOmeJgAAyJZT+LdR6H4AAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABgUlEQVR4nGNgGAWjgAZA3Mz+PwgTo5aRWhbik3956iAjVR0gjsfC5o2T4Oxa/zyCjmCkpoW4AMwh2BzBSIqFxFhGyBHoDmHEZzElFhLrCBZ0RedObmQwMveniuXIFoIAj6U5mP5y/CRcjAVdk11BG9gRIECOQ5AthVkIsxTZYpwOgDmC2NDA50tkC5Xq88H0vcaJKOoZ0dMAsqtB4NCEKjC99cVDMC1w7jIDMaCfgQtMbxI8Dhfze28JdwDONIArNEAOAYXG5PpUhpqmmQz4QEtdOtxikKX4AAsDkYDteCvDlQlmDPvfI8Tc/bxR1OzctBXOJmQx0Q44EQ7Jmb8sq6EhoM9ACkCPApIdYLESkkwOEechDItpGgX4wMiIgp1IiW5kRUFLXTpxrqCGAyzQogBWwpEK0Itgoh1ALkC3EFtNCAIoDoCWz+AwR68TKLUQRqO3iljQDUJSgFExUcNCoqPgJTQ00B0Bs5hcC9EBIyEFsGYarjgk1UK6dDZGAQMJAAA2nNq6Q6VvmwAAAABJRU5ErkJggg=="
     },
     "breaker": {
       "id": "breaker",
@@ -1815,7 +1850,7 @@
           "energy_junction"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAv0lEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lRGnAdpYNIHAmV0r4WLIhjCia2yM0WUwcQtH0YQOQPLecTUMIENYkCVgNoI06kkygzEMXHr+F8M1GF44g2ajT8sxML2lxgouNuvwJ4Y0Wz7sBuADII3YAAsuxVPCBFFsnhkOsfXsMyIMAAFWRoSfsWnEaYCxFMQ2XBpAoH7JZTibEVkCFJWgaCSkCTkhoRiAbgguTQQBrnRPEwAAgupVIPPJpX8AAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABVUlEQVR4nGNgGAWjgAYg2MHyPwgTo5aRWhbik1974DgjVR0QjMfCeQsb4Oyk+AaCjmCkpoW4AMwh2BzBSIqFxFhGyBHoDmHEZzElFhLrCBZ0RWu2L2MI8YyiiuXIFoKAt606mN56+CZcjAVd0/y2RrAjQIAchyBbCrMQZimyxTgdAHMEvtDgE1ODs2+WF6DIteqJgWn1zglwMZAZrfURYHZ14woU9UwMeAAsNJAthPnQ2C0NjHEBZHmY5dgACz4HwBwBAolV9WCfIAcrNQATqRqwxSNdHdCKJzjp4gBqAxZKDYg6/21gHRCYq4NVfP3kK0MjCphGvANYyA2Bs7tm4ZWv8UXloxfBFDng5olNBNWgW4itJsRwALSOBrcJSC1yCVkIo9FbRSzoBiEp+I/PEeRaSHQUrIWGBrojYBaTayE6YCSkANZMwxWHpFpIl87GKGAgAQAAkR+dA0CgIOUAAAAASUVORK5CYII="
     },
     "sheath": {
       "id": "sheath",
@@ -1853,7 +1888,7 @@
           "g07"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkklEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lREmzkiMJhD4+fAymGaX12XwjqthgBnCiK5xXXM4WBGyJnSAbAgLsgTMRlwa0V0DAkzoEoQ05845QXwg4tJE0IBcNA2TUyxIM4CQJmTARI7moNqVDFjTgbaT939QNBLSRDAhwQzBpYkgwJXuaQIA+8tHg9czBXYAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABXElEQVR4nO2XsQ4BQRCGby/eRa1DIhGtRHMNlRBPQeEUPIUQFc01Eq1IJOjUnobMxcpYc2N2XYHc39zGnf3+mb2d2fO8TJn+QUG1dHX9by4N8HjYhEs8jnZHZTOHSgH8pMFo5dkYUWmBXY0oG7gEbGtEScDU76aZfLERXy+ntZURJQHPFuHL/W47dDaCTeQ4OAU2TYERbALAh+3Z6/SHrBHWAAWPpsvHOOi1np4zTWDwu4z4VPQYDmAMpwTP6zU25ZwBEAZv9hc0DtnlsZHPRU/BzZdQkgWxASp6Cp5kwkX+xzNkBn5pCQ7bs9xAcC829Uo+cULpVpxPRjG8XCvwBqLdUVFvNmXChFPVEKAaDLvJ7AMgthBBFvR2xCZwKU6SBgMU4FbtOCAKUlIvwNHrNdappiIWGeCqoikMx2DpsUxxN7m2TJ0HbM+DIL4Z6YnaIXvsdgF/xTdBJsjADSV21S5IoNWQAAAAAElFTkSuQmCC"
     },
     "box": {
       "id": "box",
@@ -1885,7 +1920,7 @@
           "coated_box"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmElEQVR4nGNgGDJA28n7Pwiji7MQ0gRjb13UAqa94xj+X923lRGnAdpYNIHAnI1n4WLIhjCiawwMDmRI8TdG0YQOQPLecTUMIENYkCVgNuLSiO4aDC/MIaARBE6dOcdgZmKE3QB8mnABFmI0INtIlAGENCEDJnI0r1+7Hs5mRJYARSUoGglpQk5IKAagG4JLE0GAK93TBAAAy5FFyXG3mwMAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABV0lEQVR4nO2XIY8CMRCFW9I/Q4KEBLVnUSgMDr/BI+7UncATPA6DQmFZRQJyEwQKw9+4Szc3pAztdEoLmH0JKey2/d6+dtsiRK1aT1Cznf3qD6euTAWk7h8PhUxqoEkAl6vl9ftwMPSakCmBLoERmwkZAuTAfCawEUmBY4BcEwpXOuy3ot35SAI3gVqtblaV5a64XlO40Wj8VZnQesSICQUgQE2w0wCY4KZBPaUJzCefVTmf/vgN2NI4nS+sWKEEoE/KVwHSWMy+qzRigcEGsGKB0QbyRGBQQ7xZKqYxntGPpKREpDbz/s3vXr5+/RD0AqGsBMpdcbOShaTAGSbSQGm841wTFNScE6yVsNXN2CZc8eOJ6EpCuTrGa7peBakOfUDbTqh1dyCBMwHeyWyionUB8alIWnv+N2Iz4drVuEAsSd00TcBmFAsMMmAbkljgS/5s1BIB+gMBr8QuMYFTjwAAAABJRU5ErkJggg=="
     },
     "lined_box": {
       "id": "lined_box",
@@ -1912,7 +1947,7 @@
         "operation": "按ST-15装衬；不会自动净化污染或给材料充能。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAm0lEQVR4nGNgGNRA1dHjPwjjU8OCT7N2tQ5DpWosQ0wCA9yQ2/t3MOI1QBVq45IFnWB+++3FKGwGBohhMIMYcdkKVczw+wgHA6vNDzAbJn619QrcACZ8mtEBNnEmYhShA5BFMK8yMVAImPBJIvufoAG39+9gBAUOVV2AC2CNBQYkSXwakTWDAEpCQpKApzxtGx0MW0kCxOQHigAAuWdUSGJMz4AAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABWUlEQVR4nGNgGAWjgAZAUzfgPwgTo5aRWhbik79+eQMjVR2gicfCpavWw9nRYYEEHcFITQtxAZhDsDmCkRQLibGMkCPQHcKIz2JKLCTWESzois4cX89gYhlIFcuRLQQBHR1XMH3lym64GAu6poTUaWBHgAA5DkG2FGYhzFJki3E6AOYIYkMDny+RLczN6wbTkyeVEnYAttC4+Zi4YIXRMAsJARZCCmChsWB2Fjg0KLWQZAegA0otpNgBuVSyGAaYGAYYsFCiGT1FkxNKLAwUgh1zbFD4HilH6B8FHiRaSlQIXLmyG6UkIyUUiIkmvA64gpTHiXUEPkuR0wRRJaGOjivRjsAV/OgJEVdIsOAyGL1MN7HcTbQvscljqwlBAKNBAmsToNdk2AC+oMVlIXqriBGryVCHYHMErlqNWAvRASM+SWRHwCojSi0kyQHYooRSC+nS2RgFDCQAAIjuxFhUAJ/SAAAAAElFTkSuQmCC"
     },
     "coated_box": {
       "id": "coated_box",
@@ -1938,7 +1973,7 @@
         "operation": "按ST-16涂布；不替代专业屏障或洁净处理。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnklEQVR4nGNgGNRA1dHjPwjjU8OCT/PSSl2G/+oxDDEJDHBDbu/fwYisjhGbRhC9ZEEnRMHNJWBDYOzo9ssoBjHishWkGAQaj7Ez1Fv9BLNh4iBDYAYw4dOMDrCJMxGjCB2ALIJ5lYmBQsCETxLZ/wQNuL1/ByMshKnmAlwAaywwIEni04isGQRQUiJMIpoBkfIYrHQxbCUJEJMfKAIAPAJR375ipsAAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABWklEQVR4nGNgGAWjgAbAVNvzPwgTo5aRWhbikz99dTsjVR1gisfCZTMmwtlRGfkEHcFITQtxAZhDsDmCkRQLibGMkCPQHcKIz2JKLCTWESzoik4dXcJgZh1DFcuRLQQBXTV9MH351kW4GAu6puTEbrAjQIAchyBbCrMQZimyxTgdAHMEsaGBz5fIFhZHZIDp3hUzCDsAW2jcufyWqGCF0TALCQEWQgpgoTF3fik4NCi1kGQHoANKLaTYAcVUshgGmBgGGLBQohk9RZMTSiwMFII185xR+CFJe+kfBSEkWkpUCFy+dRGlJCMlFIiJJrwOuIyUx4l1BD5LkdMEUSWhrpo+0Y7AFfzoCRFXSLDgMhi9TAeVgvgMJGQhtpoQBDAaJLA2AXpNhg3gC1pcFqK3ihixmgx1CDZH4KrViLUQHTDik0R2BKwyotRCkhyALUootZAunY1RwEACAACCgsWB+TyPqQAAAABJRU5ErkJggg=="
     },
     "joint": {
       "id": "joint",
@@ -1967,7 +2002,7 @@
           "prep"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAfUlEQVR4nGNgGAWM6EFwf33hf3zBohjYj6KHBcaw0NPGqxFd3YlLV8EGMSJLpNhJwRVujstH0ei7aCKcPefQM7gBLDDBvYtK4QqWz1lKdOSywBjOcd0MyC4g2QBiQGRKNJRmYOA2SCDdgOVQr4HCAAYYSY0FGIAFIsMoYAAAXrAj6OqAHkMAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABUElEQVR4nGNgGAWjgAbATVPtPwgTo5aRWhbik991/RYjVR3ghsfCNZNC4OyQvDUEHcFITQtxAZhDsDmCkRQLibGMkCPQHcKIz2JKLCTWESzoinYemcrgbpNNFcuRLQQBTwVuML39wVe4GAu6pgkxZWBHgAA5DkG2FGYhzFJki3FGgacCN4ZCfI4gxpcwMDlOjSF30S38UQADfe2BYLqocj0Dr5Ejw+dz+4myEEbDLEM2BxtgYSACgKKlYEkXOErwWUgOYCFVg/uULgiNJv4Xic28aiLtHAACaftuMuACs5zUGUgBTAwDDJhGHcAw0qOAhRxNpKZ0shxQhKPkIiWPo5sDK4YJOsATqRIhF6BbhquOYEHmQCoISJuAVEcQshBGo7eKWNANQiiA1IzUtpDoNLALGhrojoBZTK6F6ICRkAJYMw1XHJJqIV06G6OAgQQAAO03rl/aeX/vAAAAAElFTkSuQmCC"
     },
     "brace": {
       "id": "brace",
@@ -1995,7 +2030,7 @@
           "sample_pick"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAc0lEQVR4nGNgGGjAiMwx9Q79j67g9NbVKGrQAQu6QHpyLJw9c+5igi5gQhewtjMCY2IBEwOFgIWQAkLhwoJPMyg89smywvlOj39jhAsLuqajh84RchR+A2ai2aDakES8Aaexx/l/5Kgl6AJsgJj0wDCCAQCElB3YbC8dcQAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA1klEQVR4nGNgGAUDDBixCWqa2P0npPH6mUNY9VIFaJrY/f/6/z9WPGXNrv/EOJBYwIJLYv7a3RhiicGuDNQGTFQ3cdQBJAImhgEGTKMOYBhgwEKuRkoKI+RSlIUcA7Irasi1m2FqR8sQj4JECopjbMU7C6UGEApmQtHFRIoDSLUcG5/mDiAVMBGjCOQLQj6hmQOmIllMjCPQ45xQGmDEVciANOKyEN1QUkOH4oKImm1EJnyS2IKPklKQZAegW0hty0GAqCighcVDqxwYlD0juvaUGIYzAADcDFfld063wAAAAABJRU5ErkJggg=="
     },
     "shield": {
       "id": "shield",
@@ -2021,7 +2056,7 @@
         "operation": "安装到普通盾，耐久上限＋20%，不形成主动屏障。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAf0lEQVR4nGNgGGjAiMzRdfT+T4ymy/u3wvWxoEv6BXji1bxpw3YUPgs2RUnJ7hhifXcfMggcuIEhzoLNAJBiYgET0SqHlgECWAILmxiGAZf3b2WERRM2DSA55DSA1QWXsRgCorFpxumFywRcQjQAJe3qiVP+E5vEcRpCvhOIAADOuTYE0FNYMwAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA9klEQVR4nGNgGAUjHTBiExQ3s/9PC8tenjqIYR8LLsU8luZUtfzL8ZNYxZkYBhiwEFJQXhFNkQWdHUvxyjNRYri3hDwl2il3ADUAE8NIdwALsQrnn7uLKcaAKQYDiUbKKFkQWxkAAlgFYYURrCzAlRNAiXDri4cEcwA+BzAxDDBgGnUAw2gUUKE8p0QPE7UNRFeLLwvidQBIE3odTowjSLEcrwMocQSxlhN0AKmOIKbkQweMDEQCWDsRuamGXESTYzkIEJ0IQYaihwbMUnJyCQwwkqMJuaJCBqT6HgTIKgmxpQtyLCfbAeiOINdyqgBadWIYRgwAADQwhKr6tDAIAAAAAElFTkSuQmCC"
     },
     "finder": {
       "id": "finder",
@@ -2082,7 +2117,7 @@
           "residue"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnElEQVR4nGNgGNRA1dHjPwjjU8OCT7N6XAtDrRMrQ0wCA9yQ2/t3MOI1QBVq45IFnWB+877fKGwGBohhMIMYcdkKVczw/+EGBkb5ADAbJn5zUQ3cACZ8mtEBNnEmYhShA5BFMK8yMVAImPBJIvufoAG39+9gBAUOVV2AC2CNBQYkSXwakTWDAEpCQpKApzz1OEgYoGskGhCTHygCAOh7VIqU5Y4NAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABa0lEQVR4nGNgGAWjYBRQGbhpqv0HYWLVM1LTYhC9ZlIImB+St4Zh1/VbjDR3gBuaxcgA5AgQwOcQRlpYjM0huBzBSEuLiXEEIyUWB+17D6bXOQkS7QgQQHYIIyUWIwN8jgCpR5ZHDg1GUi3m+/KG4ROPCIqByA7CJQ6T4zVyBLPdbbLBjmAkxccgy2FggZ8qhi+RLULnI1sMAhgh4Kap9n/nkakMn8/th2vkNXMG064da+A+S9h0G8VibA7ZXREC17e7JAhu8eQ4NTBbvXILZhpwg/oc2REwB3w+tRc9oFAcgu4ImD6GP/9wWozVAZ4K3AzbH3wFOwJsMVJoYAMwR8AcAAtmfD4m6AAYgDkElyOQQ2BtQxpK/BJjMQyw4JIAOQZkIK50wbDpNkUW40wDnkihAALoUYIev+RajOEAUhyCbnHuoltE1XzYACMuCWwOATmCWhYTdAAuh3jZSVPFYpq3dEbBKBgFQwYAAAQ74FnB91aQAAAAAElFTkSuQmCC"
     },
     "load": {
       "id": "load",
@@ -2113,7 +2148,7 @@
           "damper"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAoklEQVR4nGNgGNRA1dHjPwjjU8OCT7POzDCGCnZjhpgEBrght/fvYERWx4hNI4hesqATzO/4eRZsCIx9JX0VikEsuGwFKQaBX8vuMXREQeTB4jMZ4IaAABM+zegAmzgTMYrQAcgimFeZGCgETPgkQf5ni1IizoDb+3cwIgcOVVyAC4AsgkUjEzZJfBqRNYMARkICAeTkCwpxdFtJAsTkB4oAAOCMT9OSriquAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA20lEQVR4nGNgGAUDDBixCSppWf0npPHetWNY9ZIKWHBJHD5xFKt4Xecshv3rF1LDbvwOqOuchSHWVJ7GQG3ARHUTRx1AImBiGGDANOoAhgEGLORqJKa0JKYUZSHHAMfAeHLtxihFmRgGGLCQqoGS4hhb8c5CqQGEgplQdDGR4gBSLcfGp7kDSAVMxCgC+YKabQCSHLAfyWJiHIEe54TSAAuxliOLoRuKz2GEHM3CQCVAbhuRCZ8ktuCjpBQk2QHoFlLbchAgKgpoYfHQKgdoCVhwSdCq4BkFDGgAAKCPPJPpOANbAAAAAElFTkSuQmCC"
     },
     "laminar": {
       "id": "laminar",
@@ -2140,7 +2175,7 @@
         "operation": "作为机壳和防护材料使用，不等同专业装甲核心。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApElEQVR4nGNgGNRA1dHjPwjjU8OCT7OhdyxDcagOQ0wCA9yQ2/t3MOI1QBVq45IFnWB+7+orKGwGBohhMINYcNkKVczw9ct1ht7VEHmwOEMsw/mti+F6mPBpRgfYxJmIUYQOQBbBvMrEQCFgwicJ8j83jyZxBtzev4MROXCo4gJcAGQRLBqZsEni04isGQRQ0gGSBDzlGXpDwgBdI9GAmPxAEQAAvilR4JfFD5UAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABoUlEQVR4nO2WPUsDQRCGd+F+g70pNQiihSiCae3EyspOEGIlllrE8rAyYO0vSJc2gigWSkCipfb+icisNzo7zO7OxsRC7oWw3H4973wcOWNq1fpvaiysj+Gn3W+nCYbxvHvlnk/bh258e723MzPQIJEimAuMxEzYWUAlEyDJiM0Fa6FaI1YDzQFfXnTdeHTc9ua3VpfcuLm24ZkoYuBcqAY8N79oPt5fvtcLDr59uDM3j89ZYA4NgSVZbgBGMAHSGuHQEJhGHi3B7t6B26zNBo82BG7t7JtB79o7W0gXwgG4AC6MmYilmUYL4JAKaRKdUhMgNKIBx6DJHmhVhzFd2LloZFLwyfKTG7fPRvEeQFEjmA0K1qQZoaByuJLugX6nacqhP0ebh77HWmh2CfqdpngYTaTAIai6BGV1gXQhh6ei/VUJSmZk0JsMiuJwUFYJtCnGdQ6k/YMlsNwA3cSNwIWpElCo9Lbwb4KCPlSLYzwMzfJlxERL8AMdeVAerSQbWsBySBlBYzmRZhvgZaGA1D9cjqxmE83GNKB/9s1fyyj0CZt3L7z8P/6fAAAAAElFTkSuQmCC"
     },
     "coating": {
       "id": "coating",
@@ -2171,7 +2206,7 @@
           "coated_box"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnUlEQVR4nGNgGNRA1dHjPwjjU8OCT7Ofgy9DWIINQ0wCA9yQ2/t3MOI1QBVq45IFnWD+qgVHUNibGCCGwQxiwWUrSDEI3Pj/HM4GiYPApgOb4XqY8GlGB9jEmYhRhA5AFsG8ysRAIWDCJwnyvwajJHEG3N6/gxE5cKjiAlwAZBEsGpmwSeLTiKwZBFBSFQwgJ19QiKPbShIgJj9QBACHtlEI1CRfUwAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA2klEQVR4nGNgGAWjYIABIz5JU2fv/9Sy6PTerVjtYiGksbQoh8HCRINsi0+cucHQ3TcFpzwLsYbQCjDRzOSh4gBGXBKm2p7/GSSo6L4X/xhOX93OSFIa0OXTpZr9l19cxCrORIzmufNLqeYQshxAS8BCSEFlURIKTQ5o75s3hEMAGzh74DoDLmDsoMlACmBiGGDANOoAhqGYCI1JTGhDOwTa++aBi2J8hcmQDgEmYhQlJ3YPrANoCZhwSYAaD5dvYa/DSQUgc7A1RkAAb7Mc3jKiEOCyfBQMCgAA4BUzSIWIjykAAAAASUVORK5CYII="
     },
     "sensor": {
       "id": "sensor",
@@ -2198,7 +2233,7 @@
         "operation": "洁净封装后交工程验收；目前不是完整探头或觉醒道具。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAo0lEQVR4nGNgGNRA1dHjPwjjU8OCT3N3+CQGSc/vDDEJDHBDbu/fwYisjhGbRhC9ZEEnmP98OyfYEBi7dGUeikEsuGwFKQaB2S8WMaRujwOzQeLdDJPghoAAEz7N6ACbOBMxitAByCKYV5kYKARM+CTB/peII86A2/t3MCIHDlVcgAuALIJFIxM2SXwakTWDAEZCAgHk5AsKcXRbSQLE5AeKAABg9k5coybqyAAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABr0lEQVR4nGNgGAWjgAZA3Mz+PwgTo5aRWhbik3956iAjVR0gjsfC5o2T4Oxa/zyCjmCkpoW4AMwh2BzBSIqFxFhGyBHoDmHEZzElFhLrCBZ0RedObmQwMveniuXIFoIAj6U5mP5y/CRcjAVdk11BG9gRIECsQzQu7sYQC63bDLcQZimyxTgdAHMEMaEBszix/TiG3OomX7hDQECpPh9M32ucSNgB2EJj64uHKMEKsgDZYoW4cjj7waJOuBxIXflfJQZcgBE9ESIHGzI4NKEKHBog+fmeYnALQBZPiDUFswsWn0bRA3IICMyvtIQ7AhYCsETIxEAiQI9HmOXobGIBE6kakIMe5HtkX6OHACxaQOo7me9hNY+FgQoA3WKahgC1ARMlmmGJjFx5shwASs2gVE0KQM4FVE8DD6C+RC8HiAUs5FgKCQXUEhCXpfh8T7YDkB2BqyiGRRN6AUQ1ByAbDnMIMoDVAfhqQhBAcQC0eAS3CXAVybgcgu5DdAthNHqriAXdMCQFOOsFECDXQqKj4CU0NNAdAbOYXAvRASMhBbBmGq44JNVCunQ2RgEDCQAAZRvh9FPyru4AAAAASUVORK5CYII="
     },
     "anima": {
       "id": "anima",
@@ -2226,7 +2261,7 @@
         "operation": "专业训练后另行刻印和激活，成品本身未激活。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApElEQVR4nGNgGNRA1dHjPwjjU8OCT3OOSQuDRQ4rQ0wCA9yQ2/t3MOI1QBVq45IFnWD+iSm/UdhTGCCGwQxiwWUrSDEI7OLewMAwJQDMBokzTGlhmHKmBq6HCZ9mdIBNnIkYRegAZBHMq0wMFAImfJIg/7t9DSDOgNv7dzAiBw5VXIALgCyCRSMTNkl8GpE1gwBKqoIB5OQLCnF0W0kCxOQHigAAmzJPj7v+i+MAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABd0lEQVR4nO1XPUoDURAeh9zAK9hIsBFS2FkJuYHkBNtZeI4tgs0eQMJ6AsHKIiIYFCSIIF7BM6wMYeAl+2bezPOFbfy63fl53/fNvIUF+EdBTMbTzluDQ5PAkge/PN3CoA7c3Szh+rJyuYBDqi9GIMTD27PLBSyl/nv9s/XeSgJhDyAXrMBUgqaCYotmLtZaXMA0R53E0clhz36PC5i73Sn1VhfwL3dbUu9xAfep3uIC5t7tlPqwVgNKgZhCJuFRHyLmAloTd5VY1DPqtgFpnCgVSRaTC7PqCryQlhl3EzWLPV84xsXpWXScIoHSIPu1ZcaYem3DuYkH1K+oA3XbZO1BzAWMJXk2XMP6612dP2EUPqw+7g9mFZjuOefyOMJZc1z6+lEuxXsErFtNysJmfGAs//XxEwCOxX4jL4GQvXQog+J1C93ifC4KwFhR7oJJ2LjQFxAlUBobF7b3IzmCVbBgYXHK8hTIenOPyXja5fzraf1K9SqKX9iH7qOtFjUdAAAAAElFTkSuQmCC"
     },
     "directed": {
       "id": "directed",
@@ -2257,7 +2292,7 @@
           "guide"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAoklEQVR4nGNgGNRA1dHjPwjjU8OCT3OGkgeDTZ0jQ0wCA9yQ2/t3MOI1QBVq45IFnWD+kab9KOwZDBDDYAax4LIVpBgE9sm+YWCAskHiDE0MDDPu7YDrYcKnGR1gE2ciRhE6AFkE8yoTA4WACZ8kyP9Oj0WIM+D2/h2MyIFDFRfgAiCLYNHIhE0Sn0ZkzSCAkqpgADn5gkIc3VaSADH5gSIAAJkqT6zJ/rXxAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABJUlEQVR4nGNgGAWjYBRQGYib2f8H4QGzeNbzi2BMrCMYqWExiG7eOAlDrtY/D0y/PHWQkeoOEMdjMTaH4HIEIy0s9paQB9NbXzwk6AhGWlrc2bEUTJdXRMMdAQLIDmGkhcXIYP65u2D61a4TKA6BOYKR1hYnGinDxUAhcmhCFZhtZO4PdgQjtYMam8XIekAWgwBGCIib2f8/d3IjVt+QG9ToFivV54PZx72DMNOAONTn2BxBaVBjsxirA3gszRm+HD8JdgQ2CwkFNcyhxFiM0wEwAHMIuiOwBTV6/BJjMUEH4HMEelCTYzHONMCDwxEgAHMIJT7G6QBSHIJu8b3GiXgrHHyAEZcENoeAHEEtiwk6AJdDxNwsqGLx0GnpjIJRMAoYaAwA1TntgBiBnswAAAAASUVORK5CYII="
     },
     "wear": {
       "id": "wear",
@@ -2289,7 +2324,7 @@
           "sample_pick"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApUlEQVR4nGNgGNRA1dHjPwjjU8OCT3NHbCmDjLMIQ0wCA9yQ2/t3MOI1QBVq45IFnWD+k71vUNgVDBDDYAax4LIVpBgE5j3az5C01xHMBol3MJQyVCzuhuthwqcZHWATZyJGEToAWQTzKhMDhYAJnyTY/3KOxBlwe/8ORuTAoYoLcAGQRbBoZMImiU8jsmYQQEkHMAlYYgGDWEgYoGskGhCTHygCAAMeUgIgbT4wAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABNklEQVR4nGNgGAWjYBRQGTho6/wHYWLVM1LTYhC9bkoUmB+Us4zhwNUrjDR3gAOaxcgA5AgQwOcQRlpYjM0huBzBSAuLBQ09wPT78zsIOoKRlhbPngihU/M9cEYJIy0sRgbX9xwF00eufkZxCMwRjLS2WNPFGi4GCpGyBRPAbEfrOLAjGKkd1NgsRtYDshgEMELAQVvn//6ji7D6BpvFoGBEdiS2oEa3uDVAHsy2bt2KmQYcoD7H5gh0i9EByGB8QY3NYqwO8FQVYth++x3YETALYQCbxegApo8Yi3E6AAZgDiHWESC1sPglxmKCDsDlCHSHkGsxzjTgicMRIABzCChNwCwl12IMB5DiEHQfV294SFTNhw0w4pLA5hCQI6hlMUEH4HKIjTYvVSymeUtnFIyCUTBkAAAVmeZq0kpsUwAAAABJRU5ErkJggg=="
     },
     "boroglass": {
       "id": "boroglass",
@@ -2392,7 +2427,7 @@
           "staff_blank"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnElEQVR4nGNgGNRA1dHjPwjjU8OCT7OJbhlDQbEwQ0wCA9yQ2/t3MOI1QBVq45IFnWD+hN63KGwGBohhMIMYcdkKVczwSWgfA987JzAbJn7mchfcACZ8mtEBNnEmYhShA5BFMK8yMVAImPBJIvufoAG39+9gBAUOVV2AC2CNBQYkSXwakTWDAEpCQpKApzwTXUgYoGskGhCTHygCAPG+VFgKPUOLAAAAAElFTkSuQmCC"
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABW0lEQVR4nGNgGAUjHTCSothU2/M/NvHTV7eTZA4yYCHF8uKIDKxyvSsYsDqMGMcxEmv5shkTGc4euM5g7KBJjBawWojjZuB1BBMpPgdZDjOYWoCJGEXE+hobADkeV9oh6ABY0JMDkB2NzxFMtLCcFMBEaoonNx3gCgUmbJafOrqEongnxRFM2BSunHyEQUVXGIwpAcR4ggmXBMgRlDoEW1ShhwILIUNAjgCB8FwbMH3n8lt4OkD3ITYLd507zuBmZAnnoxdMLMT6Bt0hZw/gt5RYwEK0SjSHIFtOrIXYimUWBjIBKCSSE7sJqkMOfrKLYmoAXJUSE8MAAyZ6WIKvSmaipcWE4p/mDiCmQcKCLgBSDGti4aqQqAlYsAnCXEyOQ2DBDvL55VsXCbYJWfBJIjuEkCOQLUbWSwiwEKMIV7Sgl/GkWEySA7BFC6UWUwxMtT3/42tsjgIGIgEAMne0zOY46fcAAAAASUVORK5CYII="
     },
     "liner": {
       "id": "liner",
@@ -2424,7 +2459,7 @@
           "lined_box"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAoElEQVR4nGNgGNRA1dHjPwjjU8OCT3OOZhiDRbkxQ0wCA9yQ2/t3MOI1QBVq45IFnWD+ic6zKOwpDBDDYAax4LIVpBgEdondY2CA6AeLg9hTrq+C62HCpxkdYBNnIkYROgBZBPMqEwOFgAmfJMj/bq+UiDPg9v4djMiBQxUX4AIgi2DRyIRNEp9GZM0ggJKqYAA5+YJCHN1WkgAx+YEiAAAuXk7e4uP4QgAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABWUlEQVR4nGNgGAWjYDgATd2A/+TqZaGGxbl53QyTJzGA2dcvb2AkxQxGSi1GB5MnlTKQ4hBGallMrkMYSbGcGItJdQgjMRZjE0d3THykCpheuPwOSQ5hJMbipavWY8hHhwWS7RBkR7DgsxybxeiOAjkE2REwiwk5BK8DsFne3jQNzq6sy0JRh+4IUhzChM33yJaDLEa2HBsAqYfFMTogOwRAANniK1d2w9nRYbvxRg8pgAmf77FZjp4IiQkFoh2AzffYLMflCHIAE8UmjDpgKEXB/n27iHdAJbSw0dFxxWkgsVkxIXUa2HJHJzcMOUZ0AeSsiKscwGY5ttIQ5mOQxbgqIxZ8LgeFAswRyCGBXBRjA+gWgxxPUnWsiaVAwlUXIPse2WJsNR/RDsBXKqIDZMuRLSa2WcaITxJftYytPUBqexAE8KYBmEHRYYF4m93kWDwo+gSjABQCABz90Z38NJ8KAAAAAElFTkSuQmCC"
     },
     "terminal": {
       "id": "terminal",
@@ -3261,7 +3296,8 @@
       ],
       "uses": [
         "RT-02",
-        "UP-COMPOSITE"
+        "UP-COMPOSITE",
+        "QM-M01"
       ],
       "primary_recipe": "V-PICKAXE",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -3856,7 +3892,10 @@
         "EN-G05",
         "EN-G06",
         "EN-G07",
-        "AG-M01"
+        "AG-M01",
+        "QM-M01",
+        "QM-M02",
+        "PR-M01"
       ],
       "primary_recipe": "MC-C01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -3874,10 +3913,13 @@
           "g05",
           "g06",
           "g07",
-          "plant_cultivator"
+          "plant_cultivator",
+          "quarry",
+          "crusher",
+          "press"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdElEQVR4nGNgGGjACGNMXLrsPyka86OjwHpZkAWd/x1leKsbj1ej8OWFDHuZrOF8FmTJ4Fk3GBgYKgnanpWBwwAYuHl4L9xryEDd1hnDm0wMFAKmUQMYWIgNbaICcW2aBkEN6GpQXABKYciJBBvYS6zT6AYAjhYYTXYFnuQAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB4klEQVR4nO1XLU8DQRC9vZzhH6CRJKDJEURVBab9BRUkIKsIgqSEJhUEVQkJgl9ADQKFaLigIUFWY9DIkjk6l3fLzu3s3dUxSXN77cy8Nx+7O42if2lZtrbTJT59krQJynJ0fsPvy8VHZqpsTRuAJJ3+wKn7/HCfPyUipi6oBCgJEXGRMFpADShHG5INUwWqBbRtNESYhMEf3h4vCwK90yenExsUo6EAUJ908X2Yfhbr3cMLU9oFdvTz15dodHXrjNLX2WgzPjsu1l/zcYR45EfchgROxiNFJyP5HBBAyQ+Tml13/9galxNMG0fA2WASqE/ZsgFtkTJpkAAD27VDIgd7+7VB7f4QCaCx1ETTbFMdpeS/sgfAuGQYGmXju2CxIkHrYdp1Onf1hVZijRID0NnwvtErzgj63rclWyFgpzf0HmiNQIho6k+yNgIsvr6I1wVMZeJSVZGI2wSlhrybnJSa0tcvcZP6uYSiJXv0wSToIONP5TnQWd3pfGOFEMAzQRNI7KthncMlZLBJkHmnP5DGsEoSmvGN3qfZ7xr7JEElaZTCMUsCDhnfsLQJKkG9nRdQ3jzfs2gnJYfhM6OrnxLfBRRy7NYZ3xLpB182JNDQXWM0SlxrnJiagNaW0D+eGvkBwTg1Hx0L4bQAAAAASUVORK5CYII="
     },
     "gold_ingot": {
       "id": "gold_ingot",
@@ -3916,11 +3958,13 @@
       "catalogue": false,
       "category": "材料",
       "subcategory": "普通材料",
-      "recipes": [],
+      "recipes": [
+        "CR-R04"
+      ],
       "uses": [
         "UP-COMPOSITE"
       ],
-      "primary_recipe": ""
+      "primary_recipe": "CR-R04"
     },
     "netherite_scrap": {
       "id": "netherite_scrap",
@@ -4666,6 +4710,389 @@
       "uses": [],
       "primary_recipe": "VC-16",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "white_dye": {
+      "id": "white_dye",
+      "name": "白色染料",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，铃兰或骨粉制作。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "cobblestone": {
+      "id": "cobblestone",
+      "name": "圆石",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "QM-R01"
+      ],
+      "uses": [
+        "CR-R01"
+      ],
+      "primary_recipe": "QM-R01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "gravel": {
+      "id": "gravel",
+      "name": "沙砾",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "CR-R01"
+      ],
+      "uses": [
+        "CR-R02"
+      ],
+      "primary_recipe": "CR-R01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "bone": {
+      "id": "bone",
+      "name": "骨头",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CR-R03"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "bone_meal": {
+      "id": "bone_meal",
+      "name": "骨粉",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "CR-R03",
+        "CR-R05"
+      ],
+      "uses": [],
+      "primary_recipe": "CR-R03",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "blaze_rod": {
+      "id": "blaze_rod",
+      "name": "烈焰棒",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CR-R04"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "bone_block": {
+      "id": "bone_block",
+      "name": "骨块",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CR-R05"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "sandstone": {
+      "id": "sandstone",
+      "name": "砂岩",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CR-R06"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "red_sandstone": {
+      "id": "red_sandstone",
+      "name": "红砂岩",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CR-R07"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "red_sand": {
+      "id": "red_sand",
+      "name": "红沙",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "CR-R07"
+      ],
+      "uses": [],
+      "primary_recipe": "CR-R07",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "glowstone": {
+      "id": "glowstone",
+      "name": "萤石",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CR-R08"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "glowstone_dust": {
+      "id": "glowstone_dust",
+      "name": "萤石粉",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "CR-R08"
+      ],
+      "uses": [],
+      "primary_recipe": "CR-R08",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "quartz_block": {
+      "id": "quartz_block",
+      "name": "石英块",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CR-R09"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "amethyst_block": {
+      "id": "amethyst_block",
+      "name": "紫水晶块",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "CR-R10"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "amethyst_shard": {
+      "id": "amethyst_shard",
+      "name": "紫水晶碎片",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [
+        "CR-R10"
+      ],
+      "uses": [],
+      "primary_recipe": "CR-R10",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "piston": {
+      "id": "piston",
+      "name": "活塞",
+      "unit": "件",
+      "icon": "part",
+      "note": "原版物品，沿用原版获取途径。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "QM-M02",
+        "PR-M01"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "quarry": {
+      "id": "quarry",
+      "name": "电动采石机",
+      "unit": "件",
+      "icon": "machine",
+      "note": "2×2占地，四格下方须为石头、深板岩等原版基础岩层，前方两格留空；不消耗地基、不挖世界、不产矿物。每10秒耗4000XH产4圆石；满仓、红石或结构不完整暂停。后侧出料，任意外侧接电。",
+      "external": false,
+      "mass": null,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "QM-M01"
+      ],
+      "uses": [],
+      "primary_recipe": "QM-M01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "不用刷石结构，持续取得普通圆石",
+        "benefit": "给建材线提供可再生上游，不刷矿物。",
+        "operation": "2×2石质地基、前方两格留空；供电后每10秒4圆石，4000XH，后侧出料。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABqUlEQVR4nGNgGAWjYLgAGX2L/8u27fhPqj5GUhR75JT+3zGlmxHd4q72Bgy1UV4ejDRxAAMUxHk5E1RPjCMYyXUAMlDk4ATTtk5WJDuEkRiL0eN20ba9WNXhC5WyygaGJxdPMBLtABkccQsCh/cdg7Pv//hOkmPQQ4MRXQExKRnZAeQ4BDk0WEixGB8ApQNYGsAVRTAADdn/oNBgQXaVsoc7Q7q9JQOlAOZrXA6ZefA4w90dO8FsFmyS1HAEskNg5mIDLLhcCALIDtH7vQnBtsVhI5KaS6x+eC2GASZ8koQ0E9JLjH4WYgwCganYyxiKARPDAAMWYhVmHxOFs7X+Ys+x15hJKtkHaQi8OnqMQcwaf4Qj+9TF3xTOlkJSs2fjadJD4NXRY3AaxqYFQDabBcbg5eVlICc0yLEUGbDAGJ8/fwYXxegKYXxyHEJMKDKiV8G4QgMG8DmEkIUwvbB6AFQjYs03IIdgCw1sjiDVUpjFRDVIGBgYsEYLMRbisxQZMBIykJxoQQ5iQuYzElKA7BDk0MBlKbEWk+wABrRoocRSigHIITDHUAoA2VvFiL30kucAAAAASUVORK5CYII="
+    },
+    "crusher": {
+      "id": "crusher",
+      "name": "辊式破碎机",
+      "unit": "件",
+      "icon": "machine",
+      "note": "2×2占地，按来料自动破碎，不切模式。圆石→沙砾，沙砾→沙子；骨头1→骨粉6、烈焰棒1→烈焰粉3。顶部/侧面进料，底部/后侧出料；每批2秒/2000XH。骨块等可逆压缩块仅等量还原，避免合成循环增殖。",
+      "external": false,
+      "mass": null,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "QM-M02"
+      ],
+      "uses": [],
+      "primary_recipe": "QM-M02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "把圆石、沙砾、骨头等破碎成下一阶段材料",
+        "benefit": "连接可挂机沙砾、沙子、骨粉及常见粉料产线。",
+        "operation": "按来料自动加工，无模式；2秒／2000XH。骨头出6骨粉；可逆压缩块仅等量回收。顶部／侧进料，底部／后出料。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABkElEQVR4nO1WvUrEQBCeDemOgA+wnVd7rYUPIN4baG/pVQpaHEcKhbPS8np9A8UHsLCNtXYWlkKwNbIHc4x7+zOzSRq5D0I2M8l8334ThgXYYIP/Aj3abe4fnxrpd6oL4vnVbC1+eLCvehOgPaQpIlQfxBIhilMgpbc2zs5n8FG9KLYAnbhbqRuKu9ud7S14ff/yFo7lfW6oGLHB7c1itT6ZHIvzITcUtfx6L4NmPA0SuIhieRvqoYTT55+lC5krGSOn8Vie1sXrTxwsByioGz4i3G0oPxl+rsW8DlBQtT5LMe7Lu8gpsmCWWIckod4ashihWEDIDXN39RZFcMTkIACSmH9jWdz6oSi4TmQSAbaQLpDbgbIawHT0zS7wdnThjA/vLuUOlNVgdcd1H6C1c1wURQFt3eCSUuS4qOsazCCyX8TnFCEcFxV9MNPQ5wYiJCRGiN+aKWhgJqHzPIBj2VeQipCSIjHrQAIAzrZwCEOkoiOZTmgLtbizQ6m22uIj5RKLBYDVljakrWGEoJi2+AV0btYd9cxrAwAAAABJRU5ErkJggg=="
+    },
+    "press": {
+      "id": "press",
+      "name": "电动辊压机",
+      "unit": "件",
+      "icon": "machine",
+      "note": "单方块机器，上方进铁锭／铜锭、底部出板，侧面接电；按来料自动辊压，无模式。1铁锭→1铁板，1铜锭→1铜板，每批2秒／1000XH。工作台2铁竖排→2铁板的起步配方保留。",
+      "external": false,
+      "mass": null,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "PR-M01"
+      ],
+      "uses": [],
+      "primary_recipe": "PR-M01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "自动把铁锭和铜锭压成板材",
+        "benefit": "用单方块工位持续供给机器装配材料，保留手工起步配方。",
+        "operation": "上方进料、底部出板、侧面接电；1锭→1板，每批2秒／1000XH，无模式，红石暂停。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABtUlEQVR4nGNgGAWjgIpA1dL5PwiTooeFGpbC2K6uzjAmWOz28b2MhPQzUtFShnBvE4aVW8/A+bt372Ug5BBGbII9ma4kBSOxoGT6bgz7mBjoCLClDxZiFFELQKMLJX2woFs8Z0I5w+kF3TRxgD//OQYGpIQKcgQLugtBichfhR9FI4dNGtmW/jgyC4WPnlBZSDXw7ntEDCkLMpIsj2w5yQ4AGT598jw4PzM3CcUSbPLSBMxkItdyEADxYT7GJf9UO5VyB6xECzZqAiZqGEKJA5kYBhgwDRkHnDl2FpyqkQGIDxLHJy99dTZec1lIcS26JTDLQYBfRIzh9q3HDC7urgyqarJweWnUMo0yByBbCrIQhGEgIdgBzl6w9gADsYCFaJVQS7FZiA5gciCHHGDwYHD4vYM8Bxxg9YBaTNhS/A6B8LE5hAWfxaRaiAyQo4GoELgNqZ//w2pFUHCDDCHVETCLP755haiC8QBGbIKgtgGsrQeLd3wOQfYtzGJ8ALmtyIhLEayBgsshpFgKsxAGkBupjIRcixwayA4hxVKSW8WEHEGqL6nSL1BFixJyLaQYkNP9wgcA0m/R4OF6YmcAAAAASUVORK5CYII="
     }
   },
   "recipes": [
@@ -8190,7 +8617,7 @@
       "seconds": 10,
       "energy": 40000,
       "tools": [],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。潜行空手右键整备台打开材料加工页；原料放上排，夹具放附件格，按整件投料。",
+      "note": "沿用材料组成；本次补齐工时、夹具和工位。普通右键整备台；所有支持的原料放上排，机器自动按来料整备，无需切换模式；夹具放附件格，按整件投料。",
       "quality": "Q0颗粒，C0；不写入层相路线。",
       "inherited": false,
       "balance": false,
@@ -8373,7 +8800,7 @@
       "seconds": 10,
       "energy": 40000,
       "tools": [],
-      "note": "沿用材料组成；本次补齐工时、夹具和工位。潜行空手右键整备台打开材料加工页；原料放上排，夹具放附件格，按整件投料。",
+      "note": "沿用材料组成；本次补齐工时、夹具和工位。普通右键整备台；所有支持的原料放上排，机器自动按来料整备，无需切换模式；夹具放附件格，按整件投料。",
       "quality": "普通洁净辅材；无相晶P／I／O；与CB-02升级槽互斥。",
       "inherited": false,
       "balance": false,
@@ -8437,7 +8864,7 @@
       "tools": [
         "basic_jig"
       ],
-      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 沿用材料组成；本次补齐工时、夹具和工位。基础夹具扣1次；无PUB-08、PUB-09、钻石或跨星工程前置。潜行空手右键整备台打开材料加工页；原料放上排，夹具放附件格，按整件投料。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 沿用材料组成；本次补齐工时、夹具和工位。基础夹具扣1次；无PUB-08、PUB-09、钻石或跨星工程前置。普通右键整备台；所有支持的原料放上排，机器自动按来料整备，无需切换模式；夹具放附件格，按整件投料。",
       "quality": "陨相P≥90%、输入I≥21→成品I≥20、O≥40，C0；未激活。",
       "inherited": false,
       "balance": false,
@@ -8469,7 +8896,7 @@
       "seconds": 10,
       "energy": 40000,
       "tools": [],
-      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 沿用材料组成；本次补齐工时、夹具和工位。潜行空手右键整备台打开材料加工页；原料放上排，夹具放附件格，按整件投料。",
+      "note": "未来预留，尚未开放：待Minecraft官方新维度更新并适配林海／澄海星内容后再实装；当前不开放获取、交易、制造或魔法功能。 沿用材料组成；本次补齐工时、夹具和工位。普通右键整备台；所有支持的原料放上排，机器自动按来料整备，无需切换模式；夹具放附件格，按整件投料。",
       "quality": "普通非活性辅材；不充能、不自动洁净污染来料。",
       "inherited": false,
       "balance": false,
@@ -11353,7 +11780,7 @@
       "id": "VC-01",
       "name": "白色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "white_concrete_powder",
@@ -11374,7 +11801,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11384,7 +11811,7 @@
       "id": "VC-02",
       "name": "橙色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "orange_concrete_powder",
@@ -11405,7 +11832,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11415,7 +11842,7 @@
       "id": "VC-03",
       "name": "品红色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "magenta_concrete_powder",
@@ -11436,7 +11863,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11446,7 +11873,7 @@
       "id": "VC-04",
       "name": "淡蓝色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "light_blue_concrete_powder",
@@ -11467,7 +11894,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11477,7 +11904,7 @@
       "id": "VC-05",
       "name": "黄色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "yellow_concrete_powder",
@@ -11498,7 +11925,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11508,7 +11935,7 @@
       "id": "VC-06",
       "name": "黄绿色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "lime_concrete_powder",
@@ -11529,7 +11956,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11539,7 +11966,7 @@
       "id": "VC-07",
       "name": "粉红色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "pink_concrete_powder",
@@ -11560,7 +11987,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11570,7 +11997,7 @@
       "id": "VC-08",
       "name": "灰色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "gray_concrete_powder",
@@ -11591,7 +12018,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11601,7 +12028,7 @@
       "id": "VC-09",
       "name": "淡灰色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "light_gray_concrete_powder",
@@ -11622,7 +12049,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11632,7 +12059,7 @@
       "id": "VC-10",
       "name": "青色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "cyan_concrete_powder",
@@ -11653,7 +12080,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11663,7 +12090,7 @@
       "id": "VC-11",
       "name": "紫色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "purple_concrete_powder",
@@ -11684,7 +12111,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11694,7 +12121,7 @@
       "id": "VC-12",
       "name": "蓝色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "blue_concrete_powder",
@@ -11715,7 +12142,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11725,7 +12152,7 @@
       "id": "VC-13",
       "name": "棕色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "brown_concrete_powder",
@@ -11746,7 +12173,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11756,7 +12183,7 @@
       "id": "VC-14",
       "name": "绿色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "green_concrete_powder",
@@ -11777,7 +12204,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11787,7 +12214,7 @@
       "id": "VC-15",
       "name": "红色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "red_concrete_powder",
@@ -11808,7 +12235,7 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11818,7 +12245,7 @@
       "id": "VC-16",
       "name": "黑色混凝土水化",
       "station": "prep",
-      "unlock": "PUB-03；材料加工模式",
+      "unlock": "PUB-03；整备台自动按来料加工",
       "inputs": [
         {
           "item": "black_concrete_powder",
@@ -11839,7 +12266,627 @@
       "seconds": 2,
       "energy": 4000,
       "tools": [],
-      "note": "潜行空手右击整备台开启并保持材料加工模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "note": "整备台统一原料区直接投入同色粉末，无需切换模式；每批40tick。普通水从内部罐消耗，不返桶、不产温水。缺水或输出空间不足不得预留；断电或在制堵塞暂停，保存续作，不离线追赶。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "QM-M01",
+      "name": "电动采石机合成",
+      "station": "workbench",
+      "unlock": "PUB-05；加工材料装配",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 2
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        },
+        {
+          "item": "iron_pickaxe",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "quarry",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "九件整件部件装配；一个机器物品放置成2×2四格整体。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          },
+          {
+            "item": "iron_pickaxe",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "QM-M02",
+      "name": "辊式破碎机合成",
+      "station": "workbench",
+      "unlock": "PUB-05；加工材料装配",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 2
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        },
+        {
+          "item": "piston",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "crusher",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "使用铁板、钢基材和钢制固定件，不以一圈原锭替代加工件；放置须四格空地。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          },
+          {
+            "item": "piston",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "QM-R01",
+      "name": "电动采石",
+      "station": "quarry",
+      "unlock": "PUB-05",
+      "inputs": [],
+      "outputs": [
+        {
+          "item": "cobblestone",
+          "qty": 4
+        }
+      ],
+      "kind": "加工",
+      "seconds": 10,
+      "energy": 4000,
+      "tools": [],
+      "note": "四格石质地基与前方作业空间是环境条件，不是消耗物。持续可再生普通圆石，不刷矿、不依赖水岩浆刷石结构。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R01",
+      "name": "圆石破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "cobblestone",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "gravel",
+          "qty": 1
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R02",
+      "name": "沙砾破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "gravel",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "sand",
+          "qty": 1
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R03",
+      "name": "骨头破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "bone",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "bone_meal",
+          "qty": 6
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R04",
+      "name": "烈焰棒破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "blaze_rod",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "blaze_powder",
+          "qty": 3
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R05",
+      "name": "骨块破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "bone_block",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "bone_meal",
+          "qty": 9
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R06",
+      "name": "砂岩破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "sandstone",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "sand",
+          "qty": 4
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R07",
+      "name": "红砂岩破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "red_sandstone",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "red_sand",
+          "qty": 4
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R08",
+      "name": "萤石破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "glowstone",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "glowstone_dust",
+          "qty": 4
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R09",
+      "name": "石英块破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "quartz_block",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "quartz",
+          "qty": 4
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "CR-R10",
+      "name": "紫水晶块破碎",
+      "station": "crusher",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "amethyst_block",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "amethyst_shard",
+          "qty": 4
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 2000,
+      "tools": [],
+      "note": "原料识别、一次预留、断电/背压暂停、原子出料；不修改世界方块。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "PR-M01",
+      "name": "电动辊压机合成",
+      "station": "workbench",
+      "unlock": "PUB-05；加工件装配",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "piston",
+          "qty": 1
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        },
+        {
+          "item": "copper_plate",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "press",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "机架、活塞、铁板、钢基材、控制板、固定件和铜板九件装配。先手工做起步板材，再自动化，不锁死制造链。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "piston",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          },
+          {
+            "item": "copper_plate",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "PR-R01",
+      "name": "铁锭辊压",
+      "station": "press",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "iron",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "iron_plate",
+          "qty": 1
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 1000,
+      "tools": [],
+      "note": "仅自动化、不增加金属数量；一次预留，欠电／背压／红石暂停，存档续作。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "automatic": false
+    },
+    {
+      "id": "PR-R02",
+      "name": "铜锭辊压",
+      "station": "press",
+      "unlock": "PUB-05",
+      "inputs": [
+        {
+          "item": "copper",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "copper_plate",
+          "qty": 1
+        }
+      ],
+      "kind": "加工",
+      "seconds": 2,
+      "energy": 1000,
+      "tools": [],
+      "note": "仅自动化、不增加金属数量；一次预留，欠电／背压／红石暂停，存档续作。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -11949,6 +12996,9 @@
     "machine_frame",
     "g06",
     "g07",
-    "plant_cultivator"
+    "plant_cultivator",
+    "quarry",
+    "crusher",
+    "press"
   ]
 }

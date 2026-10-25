@@ -33,6 +33,57 @@ public final class ConcreteProductionGameTests {
     private static int output(IndustryBlockEntity be, Item item) {
         return be.stock.subList(9, 13).stream().filter(s -> s.is(item)).mapToInt(ItemStack::getCount).sum();
     }
+    private static final class MenuPlayer extends net.neoforged.neoforge.common.util.FakePlayer {
+        MenuPlayer(net.minecraft.server.level.ServerLevel level){super(level,new com.mojang.authlib.GameProfile(UUID.randomUUID(),"PreparationMenu"));setGameMode(net.minecraft.world.level.GameType.SURVIVAL);}
+        @Override public OptionalInt openMenu(net.minecraft.world.MenuProvider provider,java.util.function.Consumer<net.minecraft.network.RegistryFriendlyByteBuf> writer){
+            containerMenu=provider.createMenu(1,getInventory(),this);return OptionalInt.of(1);
+        }
+    }
+    private static void openBench(GameTestHelper h,MenuPlayer player){
+        var pos=h.absolutePos(PREP);player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,ItemStack.EMPTY);player.setShiftKeyDown(false);
+        player.gameMode.useItemOn(player,h.getLevel(),ItemStack.EMPTY,net.minecraft.world.InteractionHand.MAIN_HAND,new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(pos),Direction.UP,pos,false));
+    }
+    @GameTest(template="empty")
+    public static void oldTwoInventorySavesMergeWithoutLosingOverflowOrDuplicatingItems(GameTestHelper h){
+        h.setBlock(PREP,StarfallBlueprint.PREPARATION.get());var be=(PreparationBlockEntity)h.getBlockEntity(PREP);
+        be.stock.set(0,new ItemStack(Items.RED_CONCRETE_POWDER,8));be.stock.set(13,new ItemStack(Items.CHARCOAL,2));
+        var tag=be.saveWithFullMetadata(h.getLevel().registryAccess());var old=NonNullList.withSize(5,ItemStack.EMPTY);
+        old.set(0,new ItemStack(StarfallBlueprint.RAW.get()));old.set(1,new ItemStack(Items.COAL));old.set(2,new ItemStack(StarfallBlueprint.CRYSTAL.get(),5));old.set(3,new ItemStack(StarfallBlueprint.TAILINGS.get()));old.set(4,new ItemStack(StarfallBlueprint.CONNECTOR.get()));
+        net.minecraft.world.ContainerHelper.saveAllItems(tag,old,h.getLevel().registryAccess());tag.putBoolean("MaterialMode",false);
+        be.loadWithComponents(tag,h.getLevel().registryAccess());
+        h.assertTrue(be.stock.get(0).getCount()==8&&be.stock.get(1).is(StarfallBlueprint.RAW.get())&&output(be,StarfallBlueprint.CRYSTAL.get())==5&&output(be,StarfallBlueprint.TAILINGS.get())==1&&be.stock.get(19).is(StarfallBlueprint.CONNECTOR.get()),"Old ore inventory merges around existing material inventory rather than overwriting it");
+        var saved=be.saveWithFullMetadata(h.getLevel().registryAccess());var overflow=NonNullList.withSize(5,ItemStack.EMPTY);net.minecraft.world.ContainerHelper.loadAllItems(saved,overflow,h.getLevel().registryAccess());
+        h.assertTrue(overflow.get(1).is(Items.COAL)&&be.stock.get(13).is(Items.CHARCOAL)&&be.stock.get(13).getCount()==2,"Conflicting legacy fuel is retained in save data until the shared fuel slot has room");
+        be.loadWithComponents(saved,h.getLevel().registryAccess());be.stock.set(13,ItemStack.EMPTY);
+        be.createMenu(1,new net.minecraft.world.entity.player.Inventory(null),null);
+        h.assertTrue(be.stock.get(13).is(Items.COAL)&&be.stock.get(13).getCount()==1&&output(be,StarfallBlueprint.CRYSTAL.get())==5,"Deferred migration moves overflow exactly once after room becomes available");h.succeed();
+    }
+    @GameTest(template="empty")
+    public static void unifiedPreparationAcceptsPowderAndOreWithoutModes(GameTestHelper h){
+        h.setBlock(PREP,StarfallBlueprint.PREPARATION.get());var be=(PreparationBlockEntity)h.getBlockEntity(PREP);
+        var player=new MenuPlayer(h.getLevel());player.moveTo(net.minecraft.world.phys.Vec3.atCenterOf(h.absolutePos(PREP)).add(0,0,1));
+        be.materialMode=false;be.template="PC-R02";
+        openBench(h,player);h.assertTrue(player.containerMenu instanceof IndustryMenu,"Ordinary interaction always opens one unified preparation inventory");
+        player.getInventory().setItem(9,new ItemStack(Items.WHITE_CONCRETE_POWDER,8));
+        var material=(IndustryMenu)player.containerMenu;material.clicked(27,0,net.minecraft.world.inventory.ClickType.QUICK_MOVE,player);
+        h.assertTrue(player.getInventory().getItem(9).isEmpty()&&be.stock.get(0).is(Items.WHITE_CONCRETE_POWDER)&&be.stock.get(0).getCount()==8,"Actual material-menu Shift insertion accepts all eight powders");
+        var inlet=h.getLevel().getCapability(Capabilities.ItemHandler.BLOCK,h.absolutePos(PREP),Direction.UP);
+        h.assertTrue(inlet!=null&&ItemHandlerHelper.insertItemStacked(inlet,new ItemStack(Items.WHITE_CONCRETE_POWDER),true).isEmpty(),"The fixed top port accepts powder without a mode flag");
+        be.water=1000;be.setPower(4000);
+        for(int i=0;i<10;i++)PreparationBlockEntity.tick(h.getLevel(),be.getBlockPos(),be.getBlockState(),be);
+        String reserved=be.activeRecipe;openBench(h,player);
+        h.assertTrue(player.containerMenu instanceof IndustryMenu&&be.progressTicks==10&&be.activeRecipe.equals(reserved),"Normal right-click preserves the unified inventory and reserved batch");
+        for(int i=0;i<30;i++)PreparationBlockEntity.tick(h.getLevel(),be.getBlockPos(),be.getBlockState(),be);
+        h.assertTrue(output(be,Items.WHITE_CONCRETE)==8&&be.water==0&&be.getPower()==0&&be.idle(),"Actual machine tick completes same-color 8:8 hydration for one bucket and 4000 XH after reopening");
+        var raw=new ItemStack(StarfallBlueprint.RAW.get());raw.set(StarfallBlueprint.BATCH.get(),MaterialBatch.ore(12,40));
+        player.getInventory().setItem(9,raw);material=(IndustryMenu)player.containerMenu;material.clicked(27,0,net.minecraft.world.inventory.ClickType.QUICK_MOVE,player);
+        h.assertTrue(player.getInventory().getItem(9).isEmpty()&&be.stock.get(0).is(StarfallBlueprint.RAW.get())&&!material.canSelectRecipe(),"The exact same input slots accept ore and need no mode or recipe selection");
+        be.water=250;be.setPower(40000);
+        for(int i=0;i<200;i++)PreparationBlockEntity.tick(h.getLevel(),be.getBlockPos(),be.getBlockState(),be);
+        h.assertTrue(output(be,Items.WHITE_CONCRETE)==8&&output(be,StarfallBlueprint.CRYSTAL.get())==10&&output(be,StarfallBlueprint.TAILINGS.get())==1&&be.water==0&&be.getPower()==0,"The same bench automatically completes ore processing after hydration and shares four output slots");
+        var tag=be.saveWithFullMetadata(h.getLevel().registryAccess());var copy=new PreparationBlockEntity(be.getBlockPos(),be.getBlockState());copy.loadWithComponents(tag,h.getLevel().registryAccess());
+        h.assertTrue(output(copy,Items.WHITE_CONCRETE)==8&&output(copy,StarfallBlueprint.CRYSTAL.get())==10,"Unified inventory persists without a selected mode");h.succeed();
+    }
 
     @GameTest(template = "empty")
     public static void allSixteenColoursUseRealVanillaPowderRecipesAndWetPreparation(GameTestHelper h) {

@@ -37,6 +37,10 @@
     "starfall_blueprint:damper",
     "starfall_blueprint:rutile_ore",
     "starfall_blueprint:borate_ore",
-    "starfall_blueprint:moon_ore"
+    "starfall_blueprint:moon_ore",
+    "starfall_blueprint:blueprint_builder",
+    "starfall_blueprint:quarry",
+    "starfall_blueprint:crusher",
+    "starfall_blueprint:press"
   ]
 }

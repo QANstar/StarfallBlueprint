@@ -23,15 +23,15 @@ public final class SharedPreparationGameTests {
     private static final class Session implements AutoCloseable {
         final PreparationBlockEntity bench;
         final FakePlayer first, second;
-        final PreparationMenu a, b;
+        final IndustryMenu a, b;
 
         Session(GameTestHelper h) {
             h.setBlock(POS, StarfallBlueprint.PREPARATION.get());
             bench = (PreparationBlockEntity) h.getBlockEntity(POS);
             first = player(h);
             second = player(h);
-            a = (PreparationMenu) bench.createMenu(1, first.getInventory(), first);
-            b = (PreparationMenu) bench.createMenu(2, second.getInventory(), second);
+            a = (IndustryMenu) bench.createMenu(1, first.getInventory(), first);
+            b = (IndustryMenu) bench.createMenu(2, second.getInventory(), second);
             h.assertTrue(a.stillValid(first) && b.stillValid(second), "Both nearby survival players can use the same bench");
         }
 
@@ -98,12 +98,12 @@ public final class SharedPreparationGameTests {
             supply(s.bench, 1);
             ticks(s.bench, 200);
             // Both viewers see the output before either request is processed.
-            h.assertTrue(s.a.getSlot(2).getItem().getCount() == 10 && s.b.getSlot(2).getItem().getCount() == 10,
+            h.assertTrue(s.a.getSlot(9).getItem().getCount() == 10 && s.b.getSlot(9).getItem().getCount() == 10,
                     "Both menus initially view the same ten crystals");
-            s.a.clicked(2, 0, ClickType.QUICK_MOVE, s.first);
-            s.b.clicked(2, 0, ClickType.QUICK_MOVE, s.second);
-            s.b.clicked(3, 0, ClickType.QUICK_MOVE, s.second);
-            s.a.clicked(3, 0, ClickType.QUICK_MOVE, s.first);
+            s.a.clicked(9, 0, ClickType.QUICK_MOVE, s.first);
+            s.b.clicked(9, 0, ClickType.QUICK_MOVE, s.second);
+            s.b.clicked(10, 0, ClickType.QUICK_MOVE, s.second);
+            s.a.clicked(10, 0, ClickType.QUICK_MOVE, s.first);
             h.assertTrue(count(s.first.getInventory(), StarfallBlueprint.CRYSTAL.get()) == 10
                             && count(s.second.getInventory(), StarfallBlueprint.CRYSTAL.get()) == 0
                             && count(s.first.getInventory(), StarfallBlueprint.TAILINGS.get()) == 0
@@ -123,8 +123,8 @@ public final class SharedPreparationGameTests {
         try (Session s = new Session(h)) {
             supply(s.bench, 1);
             ticks(s.bench, 200);
-            s.a.clicked(2, 1, ClickType.PICKUP, s.first);
-            s.b.clicked(2, 0, ClickType.PICKUP, s.second);
+            s.a.clicked(9, 1, ClickType.PICKUP, s.first);
+            s.b.clicked(9, 0, ClickType.PICKUP, s.second);
             h.assertTrue(s.a.getCarried().getCount() == 5 && s.b.getCarried().getCount() == 5
                             && s.bench.getItem(2).isEmpty(),
                     "Right pickup and another viewer's left pickup split one stack into two halves");
@@ -152,16 +152,16 @@ public final class SharedPreparationGameTests {
             supply(s.bench, 2);
             s.first.getInventory().setItem(0, new ItemStack(StarfallBlueprint.CONNECTOR.get(), 2));
             s.second.getInventory().setItem(0, new ItemStack(StarfallBlueprint.CONNECTOR.get(), 2));
-            // Hotbar slot zero is menu index 32 (five machine slots + 27 main inventory slots).
-            s.a.clicked(32, 0, ClickType.QUICK_MOVE, s.first);
-            s.b.clicked(32, 0, ClickType.QUICK_MOVE, s.second);
+            // Hotbar slot zero is menu index 54 in the unified inventory; connector is slot 72.
+            s.a.clicked(54, 0, ClickType.QUICK_MOVE, s.first);
+            s.b.clicked(54, 0, ClickType.QUICK_MOVE, s.second);
             h.assertTrue(s.bench.getItem(4).getCount() == 1
                             && count(s.first.getInventory(), StarfallBlueprint.CONNECTOR.get()) == 1
                             && count(s.second.getInventory(), StarfallBlueprint.CONNECTOR.get()) == 2,
                     "Competing shift clicks fill the one-item connector slot once, without swallowing the second player's item");
             ticks(s.bench, 73);
-            s.b.clicked(4, 0, ClickType.QUICK_MOVE, s.second);
-            s.a.clicked(4, 0, ClickType.QUICK_MOVE, s.first);
+            s.b.clicked(72, 0, ClickType.QUICK_MOVE, s.second);
+            s.a.clicked(72, 0, ClickType.QUICK_MOVE, s.first);
             ticks(s.bench, 127);
             h.assertTrue(s.bench.energy == 284000 && s.bench.getItem(2).getCount() == 10,
                     "Another player removing the connector cannot reprice the in-flight 36kXH batch");
@@ -186,12 +186,12 @@ public final class SharedPreparationGameTests {
             ItemStack existing = new ItemStack(StarfallBlueprint.CRYSTAL.get(), 62);
             existing.set(StarfallBlueprint.BATCH.get(), MaterialBatch.crystal(38));
             s.first.getInventory().setItem(0, existing);
-            s.a.clicked(2, 0, ClickType.QUICK_MOVE, s.first);
+            s.a.clicked(9, 0, ClickType.QUICK_MOVE, s.first);
             h.assertTrue(count(s.first.getInventory(), StarfallBlueprint.CRYSTAL.get()) == 64
                             && s.bench.getItem(2).getCount() == 8,
                     "A partially full matching stack accepts exactly two crystals and leaves eight in the machine");
-            s.b.clicked(2, 0, ClickType.QUICK_MOVE, s.second);
-            s.a.clicked(2, 0, ClickType.QUICK_MOVE, s.first);
+            s.b.clicked(9, 0, ClickType.QUICK_MOVE, s.second);
+            s.a.clicked(9, 0, ClickType.QUICK_MOVE, s.first);
             h.assertTrue(count(s.second.getInventory(), StarfallBlueprint.CRYSTAL.get()) == 8
                             && count(s.first.getInventory(), StarfallBlueprint.CRYSTAL.get()) == 64
                             && s.bench.getItem(2).isEmpty(),
@@ -208,12 +208,12 @@ public final class SharedPreparationGameTests {
             supply(s.bench, 1);
             ticks(s.bench, 200);
             for (int i = 0; i < 36; i++) s.first.getInventory().setItem(i, new ItemStack(Items.STONE, 64));
-            s.a.clicked(2, 0, ClickType.QUICK_MOVE, s.first);
-            s.a.clicked(3, 0, ClickType.QUICK_MOVE, s.first);
+            s.a.clicked(9, 0, ClickType.QUICK_MOVE, s.first);
+            s.a.clicked(10, 0, ClickType.QUICK_MOVE, s.first);
             h.assertTrue(s.bench.getItem(2).getCount() == 10 && s.bench.getItem(3).getCount() == 1,
                     "A viewer without capacity cannot consume either output by shift clicking");
-            s.b.clicked(2, 0, ClickType.QUICK_MOVE, s.second);
-            s.b.clicked(3, 0, ClickType.QUICK_MOVE, s.second);
+            s.b.clicked(9, 0, ClickType.QUICK_MOVE, s.second);
+            s.b.clicked(10, 0, ClickType.QUICK_MOVE, s.second);
             h.assertTrue(count(s.second.getInventory(), StarfallBlueprint.CRYSTAL.get()) == 10
                             && count(s.second.getInventory(), StarfallBlueprint.TAILINGS.get()) == 1
                             && count(s.first.getInventory(), Items.STONE) == 36 * 64

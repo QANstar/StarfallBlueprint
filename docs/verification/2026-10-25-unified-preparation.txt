@@ -1,0 +1,32 @@
+2026-10-25: one preparation bench, one interface, no player-selectable modes
+
+Final offline Gradle build: BUILD SUCCESSFUL.
+Actual NeoForge server: All 148 required tests passed, exit code 0.
+[16:16:36] 148 GAME TESTS COMPLETE IN 13.10 s.
+Log: .tools/unified-preparation-gametest.log.
+Static checks: 446 JSON files and all PNG/model references; 131 catalogue
+recipes, 17 vanilla recipe mappings, alloy/substrate contracts match.
+
+Preparation always opens IndustryMenu with a shared 9-input/4-output inventory.
+Ore processing retains the original quality, water, fuel, duration and connector
+rules. Materials use the same water/power/fuel/output pool. Old template and
+material-mode flags do not block auto-selection. Normal interaction cannot
+switch the machine away from a running hydration job.
+
+Added real server interaction test: ordinary right-click, Shift-insert powder,
+fixed top capability, exactly 8 white powder + 1000 mB + 4000 XH -> 8 concrete,
+reopen during processing without altering reservation, then Shift-insert ore
+into the SAME machine and produce original crystal/tail outputs. No mode or
+recipe selection; explicitly ignores a stale legacy flag and template.
+
+Added old-save test: merge both prior inventories around occupied slots without
+overwriting materials; preserve conflicting coal/charcoal as saved migration
+overflow; move remaining fuel once space becomes available, without duplication.
+Existing multiplayer menu regressions now address unified slot positions and
+retain all conservation/component/partial-inventory checks. Real vanilla hopper
+regression continues to deliver two complete ore batches; coal stays in the
+top source hopper and ore stays in the side source hopper. Fuel scope remains
+coal/charcoal, and full shared outputs still pause without charging twice.
+
+Both offline handbooks, catalogue text and bundled blueprint descriptions updated.
+Independent client screenshot: docs/unified-preparation-interface.png.

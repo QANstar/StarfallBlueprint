@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 
-public final class IndustryBlock extends BaseEntityBlock {
+public class IndustryBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING=BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty ACTIVE=BlockStateProperties.LIT;
     public final String kind;
@@ -51,6 +51,8 @@ public final class IndustryBlock extends BaseEntityBlock {
                     if(l.getBlockEntity(target)instanceof IndustryBlockEntity work){found=true;report.append("进度 ").append(work.progressTicks).append('/').append(work.processTicks).append("，状态 ").append(work.status);}
                     if(found){be.setPower(be.getPower()-20);player.displayClientMessage(net.minecraft.network.chat.Component.literal(report.toString()),false);}else player.displayClientMessage(net.minecraft.network.chat.Component.literal("背面没有可读取的许可工位"),false);
                 }}
+            }else if(ConduitBlock.isConduit(kind)&&!be.hasItemFilter()){
+                player.displayClientMessage(net.minecraft.network.chat.Component.literal("自动连接相邻设备；箭头表示流向。红石信号关闭输送。"),true);
             }else player.openMenu(be);
         }return InteractionResult.sidedSuccess(l.isClientSide);
     }

@@ -1,36 +1,93 @@
 {
-  "variants": {
-    "facing=north,lit=false": {
-      "model": "starfall_blueprint:block/fluid_valve",
-      "y": 0
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve",
+        "y": 0
+      }
     },
-    "facing=north,lit=true": {
-      "model": "starfall_blueprint:block/fluid_valve_on",
-      "y": 0
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve",
+        "y": 90
+      }
     },
-    "facing=east,lit=false": {
-      "model": "starfall_blueprint:block/fluid_valve",
-      "y": 90
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve",
+        "y": 180
+      }
     },
-    "facing=east,lit=true": {
-      "model": "starfall_blueprint:block/fluid_valve_on",
-      "y": 90
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve",
+        "y": 270
+      }
     },
-    "facing=south,lit=false": {
-      "model": "starfall_blueprint:block/fluid_valve",
-      "y": 180
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve_arm"
+      }
     },
-    "facing=south,lit=true": {
-      "model": "starfall_blueprint:block/fluid_valve_on",
-      "y": 180
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve_arm",
+        "y": 90
+      }
     },
-    "facing=west,lit=false": {
-      "model": "starfall_blueprint:block/fluid_valve",
-      "y": 270
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve_arm",
+        "y": 180
+      }
     },
-    "facing=west,lit=true": {
-      "model": "starfall_blueprint:block/fluid_valve_on",
-      "y": 270
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve_arm",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve_arm",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "starfall_blueprint:block/fluid_valve_arm",
+        "x": 90
+      }
     }
-  }
+  ]
 }

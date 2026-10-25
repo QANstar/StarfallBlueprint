@@ -25,13 +25,13 @@ public final class IndustryNetworks {
         List<IndustryBlockEntity>nodes=new ArrayList<>();Set<BlockPos>visited=new HashSet<>();ArrayDeque<BlockPos>queue=new ArrayDeque<>();queue.add(be.getBlockPos());
         while(!queue.isEmpty()&&visited.size()<=4096){BlockPos p=queue.removeFirst();if(!visited.add(p)||!level.hasChunkAt(p))continue;
             if(!(level.getBlockEntity(p)instanceof IndustryBlockEntity n)||!family.contains(n.kind())||n.redstoneStopped())continue;nodes.add(n);
-            for(Direction d:Direction.values())if((n.faceMask&(1<<d.ordinal()))!=0){BlockPos next=p.relative(d);if(level.hasChunkAt(next)&&level.getBlockEntity(next)instanceof IndustryBlockEntity other&&family.contains(other.kind())&&(other.faceMask&(1<<d.getOpposite().ordinal()))!=0)queue.add(next);}
+            for(Direction d:Direction.values())if(n.connectionOpen(d)){BlockPos next=p.relative(d);if(level.hasChunkAt(next)&&level.getBlockEntity(next)instanceof IndustryBlockEntity other&&family.contains(other.kind())&&other.connectionOpen(d.getOpposite()))queue.add(next);}
         }
         for(var n:nodes)state.seen.add(n.getBlockPos());if(visited.size()>4096)return;
         nodes.sort(Comparator.comparingLong(n->n.getBlockPos().asLong()));
         if(family==POWER)power(nodes,level);else if(family==FLUID)fluids(nodes,level);else if(level.getGameTime()%20==0)items(nodes,level);
     }
-    private static List<End>ends(List<IndustryBlockEntity>nodes){Set<BlockPos>inside=new HashSet<>();nodes.forEach(n->inside.add(n.getBlockPos()));Set<End>ends=new LinkedHashSet<>();for(var n:nodes)for(Direction d:Direction.values())if((n.faceMask&(1<<d.ordinal()))!=0&&!inside.contains(n.getBlockPos().relative(d))&&n.getLevel().hasChunkAt(n.getBlockPos().relative(d)))ends.add(new End(n.getBlockPos().relative(d),d.getOpposite()));return new ArrayList<>(ends);}
+    private static List<End>ends(List<IndustryBlockEntity>nodes){Set<BlockPos>inside=new HashSet<>();nodes.forEach(n->inside.add(n.getBlockPos()));Set<End>ends=new LinkedHashSet<>();for(var n:nodes)for(Direction d:Direction.values())if(n.connectionOpen(d)&&!inside.contains(n.getBlockPos().relative(d))&&n.getLevel().hasChunkAt(n.getBlockPos().relative(d)))ends.add(new End(n.getBlockPos().relative(d),d.getOpposite()));return new ArrayList<>(ends);}
     private static void directPower(IndustryBlockEntity source){if(source.redstoneStopped())return;for(Direction d:Direction.values()){
         BlockPos p=source.getBlockPos().relative(d);if(!source.getLevel().hasChunkAt(p))continue;
         var target=source.getLevel().getCapability(Capabilities.EnergyStorage.BLOCK,p,d.getOpposite());if(target==null||!target.canReceive())continue;
@@ -110,7 +110,7 @@ public final class IndustryNetworks {
             }
             if(n.redstoneStopped()||!n.acceptsFilter(stack)||n.kind().equals("item_extractor"))continue;
             List<Direction>directions=n.kind().equals("item_router")?routerOutputs(n,stack):List.of(Direction.values());
-            for(Direction d:directions)if((n.faceMask&(1<<d.ordinal()))!=0){BlockPos next=pos.relative(d);if(level.hasChunkAt(next)&&level.getBlockEntity(next)instanceof IndustryBlockEntity other&&ITEM.contains(other.kind())&&(other.faceMask&(1<<d.getOpposite().ordinal()))==0)continue;queue.add(new Step(next,pos));}
+            for(Direction d:directions)if(n.connectionOpen(d)){BlockPos next=pos.relative(d);if(level.hasChunkAt(next)&&level.getBlockEntity(next)instanceof IndustryBlockEntity other&&ITEM.contains(other.kind())&&!other.connectionOpen(d.getOpposite()))continue;queue.add(new Step(next,pos));}
         }
         return new ArrayList<>(targets);
     }
@@ -125,7 +125,7 @@ public final class IndustryNetworks {
         while(!queue.isEmpty()){var step=queue.removeFirst();var node=inside.get(step.pos);if(node==null)continue;
             boolean directed=node.kind().equals("fluid_valve")||node.kind().equals("energy_junction");if(directed&&!step.from.equals(node.getBlockPos().relative(node.facing().getOpposite())))continue;if(!seen.add(step.pos))continue;
             List<Direction>directions=node.kind().equals("fluid_valve")?List.of(node.facing()):node.kind().equals("energy_junction")?List.of(node.facing(),node.facing().getCounterClockWise(),node.facing().getClockWise()):List.of(Direction.values());
-            for(Direction d:directions){if((node.faceMask&(1<<d.ordinal()))==0)continue;BlockPos next=step.pos.relative(d);if(!node.getLevel().hasChunkAt(next))continue;if(inside.containsKey(next)){if((inside.get(next).faceMask&(1<<d.getOpposite().ordinal()))!=0)queue.add(new Step(next,step.pos));}else ends.add(new End(next,d.getOpposite()));}
+            for(Direction d:directions){if(!node.connectionOpen(d))continue;BlockPos next=step.pos.relative(d);if(!node.getLevel().hasChunkAt(next))continue;if(inside.containsKey(next)){if(inside.get(next).connectionOpen(d.getOpposite()))queue.add(new Step(next,step.pos));}else ends.add(new End(next,d.getOpposite()));}
         }
         return new ArrayList<>(ends);
     }

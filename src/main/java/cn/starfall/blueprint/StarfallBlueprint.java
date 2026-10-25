@@ -38,17 +38,17 @@ public final class StarfallBlueprint {
             () -> DataComponentType.<MaterialBatch>builder().persistent(MaterialBatch.CODEC).networkSynchronized(MaterialBatch.STREAM_CODEC).build());
     public static final DeferredBlock<Block> ORE = BLOCKS.register("ore_meteor_phase", () -> new MeteorOreBlock(BlockBehaviour.Properties.of().strength(3.5f, 3).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> DEEP_ORE = BLOCKS.register("deepslate_ore_meteor_phase", () -> new MeteorOreBlock(BlockBehaviour.Properties.of().strength(4.5f, 3).requiresCorrectToolForDrops()));
-    public static final DeferredBlock<PreparationBlock> PREPARATION = BLOCKS.register("preparation_bench", () -> new PreparationBlock(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<PreparationBlock> PREPARATION = BLOCKS.register("preparation_bench", () -> new PreparationBlock(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredItem<BlockItem> BENCH_ITEM = ITEMS.registerSimpleBlockItem(PREPARATION);
-    public static final DeferredBlock<AlloyFurnaceBlock> ALLOY_FURNACE = BLOCKS.register("alloy_furnace", () -> new AlloyFurnaceBlock(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<AlloyFurnaceBlock> ALLOY_FURNACE = BLOCKS.register("alloy_furnace", () -> new AlloyFurnaceBlock(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredItem<BlockItem> ALLOY_ITEM = ITEMS.registerSimpleBlockItem(ALLOY_FURNACE);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyFurnaceBlockEntity>> ALLOY_ENTITY = ENTITIES.register("alloy_furnace", () -> BlockEntityType.Builder.of(AlloyFurnaceBlockEntity::new, ALLOY_FURNACE.get()).build(null));
     public static final DeferredHolder<MenuType<?>, MenuType<AlloyFurnaceMenu>> ALLOY_MENU = MENUS.register("alloy_furnace", () -> new MenuType<>(AlloyFurnaceMenu::new, net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS));
-    public static final DeferredBlock<CampWaterBlock> WATER_TANK = BLOCKS.register("water_tank", () -> new CampWaterBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops()));
-    public static final DeferredBlock<CampWaterBlock> RAIN_COLLECTOR = BLOCKS.register("rain_collector", () -> new CampWaterBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<CampWaterBlock> WATER_TANK = BLOCKS.register("water_tank", () -> new CampWaterBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops().noOcclusion()));
+    public static final DeferredBlock<CampWaterBlock> RAIN_COLLECTOR = BLOCKS.register("rain_collector", () -> new CampWaterBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredItem<BlockItem> TANK_ITEM = ITEMS.registerSimpleBlockItem(WATER_TANK);
     public static final DeferredItem<BlockItem> RAIN_ITEM = ITEMS.registerSimpleBlockItem(RAIN_COLLECTOR);
-    public static final DeferredBlock<SupplyTerminalBlock> SUPPLY_TERMINAL = BLOCKS.register("supply_terminal", () -> new SupplyTerminalBlock(BlockBehaviour.Properties.of().strength(2f)));
+    public static final DeferredBlock<SupplyTerminalBlock> SUPPLY_TERMINAL = BLOCKS.register("supply_terminal", () -> new SupplyTerminalBlock(BlockBehaviour.Properties.of().strength(2f).noOcclusion()));
     public static final DeferredItem<BlockItem> SUPPLY_TERMINAL_ITEM = ITEMS.registerSimpleBlockItem(SUPPLY_TERMINAL);
     public static final DeferredItem<Item> RAW = ITEMS.registerItem("raw_meteor_phase", p -> new MaterialItem(p, MaterialBatch.ore(12, 40)));
     public static final DeferredItem<Item> CRYSTAL = ITEMS.registerItem("stable_crystal", p -> new MaterialItem(p, MaterialBatch.crystal(38)));
@@ -89,22 +89,23 @@ public final class StarfallBlueprint {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("industry", () -> CreativeModeTab.builder()
             .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint"))
             .icon(() -> new ItemStack(CRYSTAL.get())).displayItems((parameters, output) -> {
-                output.accept(GUIDE.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get()); output.accept(SUPPLY_TERMINAL_ITEM.get());
+                output.accept(GUIDE.get()); output.accept(Blueprints.BUILDER_ITEM.get());output.accept(Blueprints.PLAN.get());output.accept(Blueprints.SURVEYOR.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get()); output.accept(SUPPLY_TERMINAL_ITEM.get());
                 for (int grade : new int[]{6,12,24}) {
                     ItemStack ore = new ItemStack(RAW.get()); ore.set(BATCH.get(), MaterialBatch.ore(grade, 40)); output.accept(ore);
                 }
                 output.accept(CRYSTAL.get()); output.accept(CONNECTOR.get()); output.accept(TOOL_BRACE.get()); output.accept(SHIELD_LINING.get()); output.accept(SCANNER.get()); output.accept(TAILINGS.get());
-                output.accept(ALLOY_ITEM.get());
+                output.accept(Blueprints.CREATIVE_CORE.get());output.accept(ALLOY_ITEM.get());
                 STRUCTURAL_ITEMS.forEach((name, item) -> { if (!name.endsWith("_portion")) output.accept(item.get()); });
                 CatalogueContent.ITEMS.forEach((key, item) -> { if (!CatalogueContent.RESERVED_ITEMS.contains(key)) output.accept(item.get()); });
                 CatalogueFluids.ENTRIES.values().forEach(fluid -> output.accept(fluid.bucket().get()));
             }).build());
 
     public StarfallBlueprint(IEventBus bus) {
-        CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();
+        CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();Blueprints.initialize();AggregateMachines.initialize();
         CatalogueFluids.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus); RECIPE_TYPES.register(bus);
         bus.addListener(this::capabilities);
+        bus.addListener(BlueprintNetworking::register);
         NeoForge.EVENT_BUS.addListener(this::bucketInteraction);
         NeoForge.EVENT_BUS.addListener(CatalogueEquipment::playerTick);
         NeoForge.EVENT_BUS.addListener(CatalogueEquipment::breakSpeed);
@@ -113,6 +114,10 @@ public final class StarfallBlueprint {
         NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST, ReinforcedRepairHooks::grindstone);
     }
     private void bucketInteraction(PlayerInteractEvent.RightClickBlock event) {
+        if(event.getItemStack().is(Blueprints.SURVEYOR.get())){
+            // Surveying a chest or machine must select the corner instead of opening its menu.
+            event.setUseBlock(TriState.FALSE);event.setUseItem(TriState.TRUE);
+        }
         // Vanilla buckets do not bypass sneak-use, so opt into the bench's documented draw-water action.
         if (event.getUseBlock() != TriState.FALSE && event.getEntity().isShiftKeyDown()
                 && (event.getItemStack().is(Items.BUCKET)||event.getItemStack().isEmpty())
@@ -121,13 +126,16 @@ public final class StarfallBlueprint {
         }
     }
     private void capabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK,AggregateMachines.PART_ENTITY.get(),(part,side)->{var owner=part.owner();return owner==null?null:owner.energyPort(side);});
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,AggregateMachines.PART_ENTITY.get(),(part,side)->{var owner=part.owner();return owner==null?null:new SidedInvWrapper(owner.workInventory(),side==null?net.minecraft.core.Direction.UP:side);});
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,Blueprints.ENTITY.get(),(be,side)->new SidedInvWrapper(be,side==null?net.minecraft.core.Direction.UP:side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CatalogueContent.ENTITY.get(), (be, side) -> new SidedInvWrapper(be, side == null ? net.minecraft.core.Direction.UP : side));
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CatalogueContent.ENTITY.get(), (be, side) -> be.fluidPort());
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CatalogueContent.ENTITY.get(), (be, side) -> be.energyPort(side));
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CatalogueContent.ENTITY.get(), (be, side) -> be.hasFluidPort()?be.fluidPort():null);
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CatalogueContent.ENTITY.get(), (be, side) -> be.hasEnergyPort()?be.energyPort(side):null);
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, PREPARATION_ENTITY.get(), (be, side) -> be.energyPort(side));
         event.registerItem(Capabilities.EnergyStorage.ITEM, (stack, context) -> CatalogueEquipment.energy(stack), CatalogueContent.item("s01"));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ALLOY_ENTITY.get(), (be, side) -> new SidedInvWrapper(be, side == null ? net.minecraft.core.Direction.UP : side));
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PREPARATION_ENTITY.get(), (be, side) -> new SidedInvWrapper(be.materialMode?be.workInventory():be, side == null ? net.minecraft.core.Direction.UP : side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PREPARATION_ENTITY.get(), (be, side) -> new SidedInvWrapper(be.workInventory(), side == null ? net.minecraft.core.Direction.UP : side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PREPARATION_ENTITY.get(), (be, side) -> be.fluidPort());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, WATER_ENTITY.get(), (be, side) -> be.tank);
     }

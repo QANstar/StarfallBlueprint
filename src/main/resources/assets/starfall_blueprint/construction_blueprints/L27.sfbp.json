@@ -1,0 +1,297 @@
+{
+  "format": "starfall_blueprint",
+  "version": 1,
+  "name": "L27 板材自动辊压线",
+  "description": "单方块板材自动化：顶部箱供铁锭或铜锭，风机露天供电，右下成品箱收铁板／铜板；无需样品或模式。每批1锭→1板，2秒／1000XH。",
+  "blocks": [
+    {
+      "pos": [
+        0,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        2,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        3,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -3
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -2
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        -1
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        5,
+        0,
+        0
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        -3
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "east"
+      }
+    },
+    {
+      "pos": [
+        5,
+        1,
+        -3
+      ],
+      "block": "minecraft:chest"
+    },
+    {
+      "pos": [
+        2,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:g02"
+    },
+    {
+      "pos": [
+        3,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:cable"
+    },
+    {
+      "pos": [
+        4,
+        2,
+        -3
+      ],
+      "block": "starfall_blueprint:press",
+      "properties": {
+        "facing": "south"
+      }
+    },
+    {
+      "pos": [
+        4,
+        3,
+        -3
+      ],
+      "block": "minecraft:hopper",
+      "properties": {
+        "facing": "down"
+      }
+    },
+    {
+      "pos": [
+        4,
+        4,
+        -3
+      ],
+      "block": "minecraft:chest"
+    }
+  ],
+  "materials": [
+    {
+      "item": "minecraft:chest",
+      "name": "原版箱子",
+      "count": 2
+    },
+    {
+      "item": "minecraft:cobblestone",
+      "name": "圆石",
+      "count": 24
+    },
+    {
+      "item": "minecraft:hopper",
+      "name": "原版漏斗",
+      "count": 2
+    },
+    {
+      "item": "starfall_blueprint:cable",
+      "name": "基础铜导线",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:g02",
+      "name": "鸣风机",
+      "count": 1
+    },
+    {
+      "item": "starfall_blueprint:press",
+      "name": "电动辊压机",
+      "count": 1
+    }
+  ]
+}

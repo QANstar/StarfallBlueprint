@@ -139,3 +139,5 @@ tag_data=json.loads(tag.read_text(encoding='utf-8'))
 if f'{MOD}:alloy_furnace' not in tag_data['values']: tag_data['values'].append(f'{MOD}:alloy_furnace')
 write(tag,tag_data)
 print('Generated whole-item L02 recipes, alloy mixing furnace and artwork.')
+from generate_material_textures import generate as generate_material_textures
+generate_material_textures()

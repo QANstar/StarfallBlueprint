@@ -252,7 +252,7 @@ public final class PlantCultivationGameTests {
         var be = machine(h);
         var menu = new IndustryMenu(1, player.getInventory(), be, be.processData);
         try {
-            Set<Integer> visible = Set.of(0, 1, 2, 9, 10, 11, 12, 18);
+            Set<Integer> visible = Set.of(0, 1, 2, 9, 10, 11, 12, 16, 17, 20, 21);
             for (int i = 0; i < 27; i++) h.assertTrue(menu.getSlot(i).isActive() == visible.contains(i), "Actual visible machine slot " + i);
             var specimen = sample(); var environment = new ItemStack(profile(specimen).environments().iterator().next());
             h.assertTrue(menu.getSlot(0).getMaxStackSize() == 1 && menu.getSlot(1).getMaxStackSize() == 1

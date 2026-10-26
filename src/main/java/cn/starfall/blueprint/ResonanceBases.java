@@ -67,7 +67,7 @@ public final class ResonanceBases {
         } catch (RuntimeException invalid) { return null; }
     }
     private static boolean upgraded(IndustryBlockEntity be) {
-        return be.stock.get(18).is(CatalogueContent.item("resonance_upgrade"));
+        return MachineUpgrades.count(be,"resonance_upgrade")>0;
     }
     private static boolean permitted(IndustryBlockEntity be, Route route) {
         return BASIC.contains(route.source()) || upgraded(be);

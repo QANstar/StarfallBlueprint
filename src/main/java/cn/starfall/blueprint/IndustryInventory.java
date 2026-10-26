@@ -24,6 +24,6 @@ public final class IndustryInventory implements WorldlyContainer {
     public void clearContent(){for(int i=0;i<getContainerSize();i++)setItem(i,ItemStack.EMPTY);setChanged();}
     public boolean canPlaceItem(int i,ItemStack s){return owner.workCanPlace(logical(i),s);}
     public int[]getSlotsForFace(Direction d){if(page==null)return owner.workSlots(d);return d==Direction.DOWN?new int[]{9,10,11,12}:new int[]{0,1,2,3,4,5,6,7,8};}
-    public boolean canPlaceItemThroughFace(int i,ItemStack s,Direction d){return !owner.redstoneStopped()&&canPlaceItem(i,s);}
+    public boolean canPlaceItemThroughFace(int i,ItemStack s,Direction d){return !MachineUpgrades.isSlot(owner.kind(),logical(i))&&!owner.redstoneStopped()&&canPlaceItem(i,s);}
     public boolean canTakeItemThroughFace(int i,ItemStack s,Direction d){return !owner.redstoneStopped()&&(owner.kind().equals("supply_crate")||(d==Direction.DOWN||AggregateMachines.large(owner.kind())&&d==owner.facing().getOpposite())&&i>=9&&i<=12);}
 }

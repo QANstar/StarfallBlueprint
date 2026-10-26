@@ -29,10 +29,11 @@ public final class IndustryProcessing {
             else if(be.kind().equals("autocrafter")){if(!startCraft(be))return;}
             else if(be.kind().equals("auto_furnace")){if(!startSmelting(be))return;}
             else if(!startProcess(be))return;
+            MachineUpgrades.reserve(be);
         }
         List<ItemStack> outputs=be.pending.stream().filter(s->!s.isEmpty()).toList();
         if(!be.outputFits(outputs)||!fluidsFit(be)){be.status=5;return;}
-        long target=be.processCost*(be.progressTicks+1)/be.processTicks;
+        long target=MachineUpgrades.paymentTarget(be.processCost,be.progressTicks+1,be.processTicks);
         long cost=target-be.processPaid;
         if(be.kind().equals("auto_furnace")) {
             long need=Math.max(0,cost-be.heatCredit),grant=Math.min(need,Math.min(1600,be.getPower()));
@@ -45,7 +46,9 @@ public final class IndustryProcessing {
             be.heatCredit-=cost;
         } else {
             if(be.getPower()<cost&&be.kind().equals("prep")&&PreparationBlockEntity.isFuel(be.stock.get(13))) {be.stock.get(13).shrink(1);be.setPower(be.getPower()+320000);}
-            if(be.getPower()<cost){be.status=4;return;}be.setPower(be.getPower()-cost);
+            // Large upgrade stacks may price one work step above the internal buffer.
+            // Persist partial payment so repeated energy deliveries can still complete it.
+            if(be.getPower()<cost){if(cost>be.capacity()){be.processPaid+=be.getPower();be.setPower(0);be.setChanged();}be.status=4;return;}be.setPower(be.getPower()-cost);
         }
         be.processPaid=target;be.progressTicks++;be.status=1;
         if(be.progressTicks>=be.processTicks){
@@ -170,10 +173,9 @@ public final class IndustryProcessing {
         reserve(be,"craft:"+be.template,outputs.get(),40,4000);return true;
     }
     private static boolean startSmelting(IndustryBlockEntity be){
-        int speed=be.stock.get(16).is(CatalogueContent.item("speed_2"))?2:be.stock.get(16).is(CatalogueContent.item("speed_1"))?1:0;
-        int bulk=be.stock.get(17).is(CatalogueContent.item("bulk_2"))?2:be.stock.get(17).is(CatalogueContent.item("bulk_1"))?1:0;
-        int lanes=new int[]{2,4,6}[bulk],duration=new int[]{400,320,267}[speed];
-        long costPer=new long[]{40000,44000,50000}[speed]*(bulk==2?110:bulk==1?105:100)/100;
+        long bulk=MachineUpgrades.bulk(be),lanes=2+2*bulk;
+        int duration=400;
+        long costPer=40000L*(100+5L*bulk)/100;
         List<ItemStack>out=new ArrayList<>();int[]used=new int[9];int count=0;float experience=0;
         for(int i=0;i<9&&count<lanes;i++){
             ItemStack s=be.stock.get(i);if(s.isEmpty())continue;

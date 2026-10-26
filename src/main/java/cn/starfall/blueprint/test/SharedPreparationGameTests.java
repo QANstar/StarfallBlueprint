@@ -152,23 +152,26 @@ public final class SharedPreparationGameTests {
             supply(s.bench, 2);
             s.first.getInventory().setItem(0, new ItemStack(StarfallBlueprint.CONNECTOR.get(), 2));
             s.second.getInventory().setItem(0, new ItemStack(StarfallBlueprint.CONNECTOR.get(), 2));
-            // Hotbar slot zero is menu index 54 in the unified inventory; connector is slot 72.
+            // Hotbar slot zero remains menu index 54; upgrades use the growing sidebar.
+            int bay=IndustryMenu.UPGRADE_MENU_START;
             s.a.clicked(54, 0, ClickType.QUICK_MOVE, s.first);
             s.b.clicked(54, 0, ClickType.QUICK_MOVE, s.second);
-            h.assertTrue(s.bench.getItem(4).getCount() == 1
-                            && count(s.first.getInventory(), StarfallBlueprint.CONNECTOR.get()) == 1
-                            && count(s.second.getInventory(), StarfallBlueprint.CONNECTOR.get()) == 2,
-                    "Competing shift clicks fill the one-item connector slot once, without swallowing the second player's item");
+            h.assertTrue(count(s.bench.upgrades, StarfallBlueprint.CONNECTOR.get()) == 4
+                            && count(s.first.getInventory(), StarfallBlueprint.CONNECTOR.get()) == 0
+                            && count(s.second.getInventory(), StarfallBlueprint.CONNECTOR.get()) == 0,
+                    "Both viewers install their actual stacks without losing or duplicating connectors");
             ticks(s.bench, 73);
-            s.b.clicked(72, 0, ClickType.QUICK_MOVE, s.second);
-            s.a.clicked(72, 0, ClickType.QUICK_MOVE, s.first);
+            s.b.clicked(bay, 0, ClickType.QUICK_MOVE, s.second);
+            s.a.clicked(bay, 0, ClickType.QUICK_MOVE, s.first);
+            h.assertTrue(count(s.bench.upgrades, StarfallBlueprint.CONNECTOR.get())==4,"Both viewers are locked out of in-flight upgrades");
             ticks(s.bench, 127);
-            h.assertTrue(s.bench.energy == 284000 && s.bench.getItem(2).getCount() == 10,
-                    "Another player removing the connector cannot reprice the in-flight 36kXH batch");
+            h.assertTrue(s.bench.energy == 292307 && s.bench.getItem(2).getCount() == 10,
+                    "Four modules reserve and settle ceil(40000*9/13) XH once");
+            s.b.clicked(bay,0,ClickType.QUICK_MOVE,s.second);
             ticks(s.bench, 200);
-            h.assertTrue(s.bench.energy == 244000 && s.bench.water == 500
+            h.assertTrue(s.bench.energy == 252307 && s.bench.water == 500
                             && s.bench.getItem(2).getCount() == 20 && s.bench.getItem(3).getCount() == 2
-                            && s.bench.getItem(4).isEmpty(),
+                            && s.bench.upgrades.isEmpty(),
                     "Only the next batch uses the ordinary 40kXH budget");
             h.assertTrue(count(s.first.getInventory(), StarfallBlueprint.CONNECTOR.get())
                             + count(s.second.getInventory(), StarfallBlueprint.CONNECTOR.get()) == 4,

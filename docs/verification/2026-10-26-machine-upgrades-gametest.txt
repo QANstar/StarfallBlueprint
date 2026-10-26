@@ -1,0 +1,48 @@
+Machine upgrade verification — 2026-10-26 16:31:33 +08:00
+
+Environment
+Java 21.0.12.1; NeoForge 21.1.262; Minecraft 1.21.1
+Working directory: D:\Code\Workspace\StarfallBlueprint
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+
+Command
+.\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+
+Result
+All 194 required tests passed :)
+194 GAME TESTS COMPLETE IN 15.52 s
+BUILD SUCCESSFUL in 41s
+7 actionable tasks: 4 executed, 3 up-to-date
+Exit code: 0
+
+Changes covered
+- 11 processors accept speed and energy-efficiency modules in a shared side bay.
+- General module stacks and mixed levels add effects across compatible slots.
+- Original furnace single-module budgets remain compatible; stacked bulk consumes every real recipe lane and preserves XP.
+- Ore preparation uses its own duration/payment snapshot and participates in the in-flight upgrade lock.
+- Manual, Shift-click, two-player insertion/removal, hidden-slot rejection and sided insertion restrictions are checked.
+- Output backpressure preserves inputs and energy.
+- Reload preserves module contents, pending products and exact reserved budgets.
+- Maximum speed stacks can pay a work step larger than the internal power buffer over successive deliveries.
+- Partial payment survives reload for phase extraction and ore preparation; exact final energy and water charges are checked.
+- Existing 186 tests adapted where slot coordinates or stack rules intentionally changed; eight additional tests passed.
+
+Static checks
+Bundled Python tools/verify_resources.py:
+PASS: 758 JSON files, all PNGs and local model/texture links.
+Bundled Python tools/verify_mc_catalogue.py:
+PASS: 223 discrete catalogue recipes; 17 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+Both repositories: git diff --check passed (RE_BFL reports LF/CRLF conversion warnings only).
+
+Catalogue generation
+RE_BFL build_atlas.py regenerated production-data.json and both offline HTML copies.
+tools/sync_catalogue.py synchronized game items, recipes and catalogue metadata.
+275 items / 223 recipes / 146 catalogue entries / 27 production lines / 23 public blueprints.
+Nine furnace examples explicitly describe single-module configurations; speed II is 267 ticks = 13.35 seconds.
+No texture/model generator was run.
+
+Limits
+NBT checks are save/load within one server process. These results do not claim a complete long-session balance test or cross-process restart test.
+Native-client fixture screenshots for preparation and autocrafting are recorded separately in the adjacent 2026-10-26-machine-upgrades directory. Fixtures render real menus without loading a player world; this does not replace interactive multiplayer UI testing.

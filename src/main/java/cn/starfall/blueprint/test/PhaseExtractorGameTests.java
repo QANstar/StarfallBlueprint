@@ -49,6 +49,19 @@ public final class PhaseExtractorGameTests {
         be.setPower(80000);
     }
 
+    @GameTest(template="empty")
+    public static void fullUpgradeStacksPayStepsLargerThanBufferAcrossReload(GameTestHelper h){
+        var be=machine(h,"phase_matrix_meteor");ready(be);
+        for(int i:new int[]{16,17,20,21})be.stock.set(i,CatalogueContent.stack("speed_2",64));
+        be.setPower(be.capacity());long supplied=be.getPower();process(be,1);
+        h.assertTrue(!be.idle()&&be.processCost==5_200_000&&be.processTicks==4&&be.processPaid>0&&be.progressTicks==0,"A 1.3 million XH step accepts partial power without exceeding the buffer");
+        var expected=be.pending.stream().filter(s->!s.isEmpty()).findFirst().orElseThrow().copy();
+        var saved=be.saveWithoutMetadata(h.getLevel().registryAccess());long paid=be.processPaid;be.loadWithComponents(saved,h.getLevel().registryAccess());
+        h.assertTrue(be.processPaid==paid,"Partial payment survives reload");
+        int guard=0;while(!be.idle()&&guard++<100){long grant=Math.min(be.capacity()-be.getPower(),5_200_000-supplied);if(grant>0){be.setPower(be.getPower()+grant);supplied+=grant;}process(be,1);}
+        h.assertTrue(be.idle()&&supplied==5_200_000&&be.getPower()==0&&be.tanks[0].getFluidAmount()==500,"Maximum stacks finish once with exact energy and one real water charge");assertProduct(h,be,expected);h.succeed();
+    }
+
     private static void process(IndustryBlockEntity be, int ticks) {
         for (int i = 0; i < ticks; i++) IndustryProcessing.tick(be);
     }

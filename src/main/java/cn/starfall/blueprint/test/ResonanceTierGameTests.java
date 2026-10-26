@@ -92,31 +92,32 @@ public final class ResonanceTierGameTests {
         var upgrade = CatalogueContent.stack("resonance_upgrade", 1);
         upgrade.set(DataComponents.CUSTOM_NAME, Component.literal("retained resonance component"));
         var expected = upgrade.copy();
+        int bay = IndustryMenu.UPGRADE_MENU_START;
         try {
             player.getInventory().setItem(9, upgrade);
-            h.assertTrue(menu.getSlot(18).isActive() && menu.getSlot(18).getMaxStackSize() == 1, "Visible single upgrade slot");
+            h.assertTrue(menu.getSlot(bay).isActive() && menu.getSlot(bay).getMaxStackSize(expected) == 1, "Visible dynamic upgrade slot retains the dedicated module stack limit");
             menu.clicked(27, 0, ClickType.QUICK_MOVE, player);
-            h.assertTrue(ItemStack.matches(expected, be.stock.get(18)), "Real shift insertion preserves components");
-            h.assertTrue(!menu.getSlot(18).mayPlace(new ItemStack(Items.DIAMOND)), "Upgrade slot rejects ordinary items");
+            h.assertTrue(ItemStack.matches(expected, be.upgrades.getItem(0)) && be.stock.get(18).isEmpty(), "Shift insertion uses the first free bay and preserves components");
+            h.assertTrue(!menu.getSlot(bay).mayPlace(new ItemStack(Items.DIAMOND)), "Upgrade slot rejects ordinary items");
             for (var direction : Direction.values()) h.assertTrue(Arrays.stream(new IndustryInventory(be).getSlotsForFace(direction)).noneMatch(i -> i == 18), "Automation never exposes upgrade slot");
             tick(be, 73);
             var locked = be.pending.get(0).copy();
-            h.assertTrue(!menu.getSlot(18).mayPickup(player) && !menu.getSlot(18).mayPlace(expected), "Running menu locks removal and insertion");
-            menu.clicked(18, 0, ClickType.QUICK_MOVE, player);
-            h.assertTrue(ItemStack.matches(expected, be.stock.get(18)), "Running shift extraction cannot take upgrade");
+            h.assertTrue(!menu.getSlot(bay).mayPickup(player) && !menu.getSlot(bay).mayPlace(expected), "Running menu locks removal and insertion");
+            menu.clicked(bay, 0, ClickType.QUICK_MOVE, player);
+            h.assertTrue(ItemStack.matches(expected, be.upgrades.getItem(0)), "Running shift extraction cannot take upgrade");
             reload(h, be);
-            h.assertTrue(ItemStack.matches(expected, be.stock.get(18)), "NBT preserves upgrade components");
-            be.stock.set(18, ItemStack.EMPTY); // Simulate legacy/corrupt external removal; normal UI is locked.
+            h.assertTrue(ItemStack.matches(expected, be.upgrades.getItem(0)), "NBT preserves upgrade components");
+            be.upgrades.setItem(0, ItemStack.EMPTY); // Simulate corrupt external removal; normal UI is locked.
             floor(be, key("stone"));
             tick(be, 20);
             h.assertTrue(be.status == 13 && be.progressTicks == 73 && be.getPower() == 6540 && ItemStack.matches(locked, be.pending.get(0)), "Advanced pending still requires upgrade after foundation swap");
             reload(h, be);
-            be.stock.set(18, expected.copy());
+            be.upgrades.setItem(0, expected.copy());
             tick(be, 127);
             h.assertTrue(be.idle() && be.stock.get(9).is(Items.DIAMOND) && outputs(be) == 1 && be.getPower() == 4000, "Reinstall resumes original advanced batch once");
-            h.assertTrue(ItemStack.matches(expected, be.stock.get(18)), "Settlement retains exact upgrade components");
-            menu.clicked(18, 0, ClickType.QUICK_MOVE, player);
-            h.assertTrue(be.stock.get(18).isEmpty(), "Idle shift extraction is permitted");
+            h.assertTrue(ItemStack.matches(expected, be.upgrades.getItem(0)), "Settlement retains exact upgrade components");
+            menu.clicked(bay, 0, ClickType.QUICK_MOVE, player);
+            h.assertTrue(be.upgrades.isEmpty(), "Idle shift extraction is permitted");
             tick(be, 200);
             h.assertTrue(outputs(be) == 5 && be.getPower() == 0, "Next batch follows stone foundation without upgrade");
         } finally { menu.removed(player); player.getInventory().clearContent(); }

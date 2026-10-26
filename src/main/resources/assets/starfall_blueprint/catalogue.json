@@ -2085,10 +2085,26 @@
       "name": "基础省能接头",
       "unit": "件",
       "icon": "module",
-      "note": "整备台40k→36kXH／批；同机只装1件。",
+      "note": "11种加工机通用节能升级，每格64件并跨槽叠加；n件使耗能乘9／(9+n)，1件仍90%。",
       "external": false,
       "mass": null,
       "implementation": "已实装",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "工位改装件",
@@ -2100,11 +2116,21 @@
       "primary_recipe": "CB-01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "降低整备台每批能源消耗",
-        "benefit": "相同来料与产出下，标准批40k降到36kXH。",
-        "operation": "装入整备台唯一省能接口，不适配熔炉。",
+        "summary": "降低11种加工机的每批能源消耗",
+        "benefit": "接头数量n使总耗能乘9／(9+n)，1件仍为90%。",
+        "operation": "左侧任一升级格安装，每格64件，同栈和跨槽数量叠加；在制批次禁止取放。",
         "targets": [
-          "prep"
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABUElEQVR4nGNgGAWjgAbATVPtPwgTo5aRWhbik991/RYjVR3ghsfCNZNC4OyQvDUEHcFITQtxAZhDsDmCkRQLibGMkCPQHcKIz2JKLCTWESzoinYemcrgbpNNFcuRLQQBTwVuML39wVe4GAu6pgkxZWBHgAA5DkG2FGYhzFJki3FGgacCN4ZCfI4gxpcwMDlOjSF30S38UQADfe2BYLqocj0Dr5Ejw+dz+4myEEbDLEM2BxtgYSACgKKlYEkXOErwWUgOYCFVg/uULgiNJv4Xic28aiLtHAACaftuMuACs5zUGUgBTAwDDJhGHcAw0qOAhRxNpKZ0shxQhKPkIiWPo5sDK4YJOsATqRIhF6BbhquOYEHmQCoISJuAVEcQshBGo7eKWNANQiiA1IzUtpDoNLALGhrojoBZTK6F6ICRkAJYMw1XHJJqIV06G6OAgQQAAO03rl/aeX/vAAAAAElFTkSuQmCC"
@@ -2748,6 +2774,34 @@
       "external": false,
       "mass": null,
       "implementation": "已实装",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21,
+          19
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -2774,6 +2828,33 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -2800,6 +2881,33 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -3148,6 +3256,33 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -3475,6 +3610,33 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -3628,10 +3790,39 @@
       "name": "并列自动熔炉",
       "unit": "件",
       "icon": "machine",
-      "note": "2路并列，每路20秒完成1次普通熔炉配方；无模块满载6件／分钟、200XH/t。燃料／电力二选一，燃料每煤320kXH、供热上限500XH/t，电力输入上限1600XH/t。每路40kXH；不翻倍掉落、不接受高炉专属或精制机配方。2个专用模块槽分别安装提速与扩批模块。",
+      "note": "2路并列，每路20秒完成1次普通熔炉配方；无模块满载6件／分钟、200XH/t。燃料／电力二选一，燃料每煤320kXH、供热上限500XH/t，电力输入上限1600XH/t。每路40kXH；不翻倍掉落、不接受高炉专属或精制机配方。主界面左侧统一升级面板默认一个空槽，放入模块后追加一个空位，不设固定槽数上限；固定大小每页最多6格，可混装适配的通用与熔炉专属模块。",
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint",
+          "bulk_1",
+          "bulk_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -3644,24 +3835,39 @@
       "purpose": {
         "summary": "自动进出料并并列执行普通烧制",
         "benefit": "先减少看炉操作，再通过模块提高吞吐。",
-        "operation": "接燃料或电力，布置输入／输出端口，提速和扩批槽各装一件。",
+        "operation": "接燃料或电力，布置输入／输出端口；左侧4格可混装通用提速、省能接头和熔炉扩批模块。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAlUlEQVR4nGNgoBAwgggZE+v/5Gh+cuYoIwuMM3daF0mak7PKwDQL3IB5y8hxBAPcABDQ4jAlStO1H6exGwACC08vANPxpgkYYujiIMDEQAQAaULXiNeAeByKiTIgHodmZG/gNWAhDoVEu4BUwEKsF3CJsyBzkOOXLBfUuvLC2c27P2PV8DPGmoF9yVE4n+LMRI4+FAAAnDsocxgQh84AAAAASUVORK5CYII="
     },
     "speed_1": {
       "id": "speed_1",
-      "name": "熔炉提速模块Ⅰ",
+      "name": "通用提速模块Ⅰ",
       "unit": "件",
       "icon": "module",
-      "note": "周期÷1.25（20→16秒），每路耗能×1.10；只能装入提速槽。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
+      "note": "通用提速Ⅰ：每件增加0.25提速倍率，耗能系数增加0.10；每格64件，同栈及跨槽叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
       "external": false,
       "mass": null,
-      "furnace_module": true,
+      "upgrade_module": true,
       "implementation": "设计配方",
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
       "catalogue": true,
-      "category": "机器与设施",
-      "subcategory": "熔炉升级模块",
+      "category": "材料",
+      "subcategory": "普通材料",
       "recipes": [
         "SV-SP01"
       ],
@@ -3671,10 +3877,20 @@
       "primary_recipe": "SV-SP01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "缩短自动熔炉每批等待时间",
-        "benefit": "满供能时周期20→16秒，单路耗能40→44kXH。",
-        "operation": "停机清空在制批后装提速槽，不与Ⅱ级叠加。",
+        "summary": "缩短11种加工机的每批工时",
+        "benefit": "每件增加0.25提速倍率，耗能系数增加0.10。",
+        "operation": "左侧任一升级格，每格64件，同栈、跨槽和Ⅱ级共同叠加；有在制批次不可取放。",
         "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
           "auto_furnace",
           "speed_2"
         ]
@@ -3683,17 +3899,32 @@
     },
     "speed_2": {
       "id": "speed_2",
-      "name": "熔炉提速模块Ⅱ",
+      "name": "通用提速模块Ⅱ",
       "unit": "件",
       "icon": "module",
-      "note": "周期÷1.50（20→13⅓秒），每路耗能×1.25；消耗Ⅰ级模块升级，不与Ⅰ级叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
+      "note": "通用提速Ⅱ：每件增加0.50提速倍率，耗能系数增加0.25；每格64件，可与Ⅰ级叠加；制造消耗Ⅰ级模块。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
       "external": false,
       "mass": null,
-      "furnace_module": true,
+      "upgrade_module": true,
       "implementation": "设计配方",
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
       "catalogue": true,
-      "category": "机器与设施",
-      "subcategory": "熔炉升级模块",
+      "category": "材料",
+      "subcategory": "普通材料",
       "recipes": [
         "SV-SP02"
       ],
@@ -3701,10 +3932,20 @@
       "primary_recipe": "SV-SP02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "进一步提高自动熔炉的烧制速度",
-        "benefit": "满供能时周期20→13⅓秒，单路耗能50kXH。",
-        "operation": "用Ⅰ级模块升级；装提速槽并检查总供能是否足够。",
+        "summary": "进一步缩短11种加工机的每批工时",
+        "benefit": "每件增加0.50提速倍率，耗能系数增加0.25。",
+        "operation": "左侧任一升级格，每格64件，可与Ⅰ级叠加；制造消耗Ⅰ级模块，有在制批次不可取放。",
         "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
           "auto_furnace"
         ]
       },
@@ -3715,11 +3956,17 @@
       "name": "熔炉扩批模块Ⅰ",
       "unit": "件",
       "icon": "module",
-      "note": "并列路数2→4；每路耗能×1.05；只能装入扩批槽。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
+      "note": "熔炉专属扩批Ⅰ：每件增加2路，每路耗能系数增加0.05；每格64件并跨槽叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
       "external": false,
       "mass": null,
+      "upgrade_module": true,
       "furnace_module": true,
       "implementation": "设计配方",
+      "upgrade_targets": [
+        "auto_furnace"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "熔炉升级模块",
@@ -3732,9 +3979,9 @@
       "primary_recipe": "SV-BK01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "让自动熔炉每批同时加工4路",
-        "benefit": "满载吞吐翻倍，基础周期下需420XH/t。",
-        "operation": "停机后装扩批槽，每路独立实耗原配方，单路耗能×1.05。",
+        "summary": "提高并列自动熔炉的实际加工路数",
+        "benefit": "每件增加2路，每路耗能系数增加0.05。",
+        "operation": "仅熔炉适配，左侧任一升级格每格64件并跨槽叠加；每路实耗一套来料，受出料空间限制。",
         "targets": [
           "auto_furnace",
           "bulk_2"
@@ -3747,11 +3994,17 @@
       "name": "熔炉扩批模块Ⅱ",
       "unit": "件",
       "icon": "module",
-      "note": "并列路数2→6；每路耗能×1.10；消耗Ⅰ级模块升级，不与Ⅰ级叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
+      "note": "熔炉专属扩批Ⅱ：每件增加4路，每路耗能系数增加0.10；每格64件并跨槽叠加；制造消耗Ⅰ级模块。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
       "external": false,
       "mass": null,
+      "upgrade_module": true,
       "furnace_module": true,
       "implementation": "设计配方",
+      "upgrade_targets": [
+        "auto_furnace"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "熔炉升级模块",
@@ -3762,9 +4015,9 @@
       "primary_recipe": "SV-BK02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "让自动熔炉每批同时加工6路",
-        "benefit": "减少大量常规烧制的排队时间。",
-        "operation": "用Ⅰ级升级，装扩批槽；每路耗能×1.10，不是产物倍率。",
+        "summary": "进一步提高并列自动熔炉的实际加工路数",
+        "benefit": "每件增加4路，每路耗能系数增加0.10。",
+        "operation": "仅熔炉适配，左侧任一升级格每格64件并跨槽叠加；制造消耗Ⅰ级模块，不直接翻倍产物。",
         "targets": [
           "auto_furnace"
         ]
@@ -4218,6 +4471,33 @@
         "locked_batch": true,
         "profile_registry": "runtime",
         "supported_scope": "explicit vanilla samples"
+      },
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -5155,7 +5435,7 @@
       "name": "地脉共振仪",
       "unit": "件",
       "icon": "machine",
-      "note": "2×2四格下方放4个同种基底，前方两格留空；初始仅石头、铜铁普通及深层5种基底。槽18空闲时装卸广谱升级组件，保留不消耗，解锁其余29种原版基底；不支持模组矿。200刻／4000XH；基底保留，不挖世界。",
+      "note": "2×2四格下方放4个同种基底，前方两格留空；初始仅石头、铜铁普通及深层5种基底。左侧任一升级格空闲时装卸广谱升级组件，保留不消耗，解锁其余29种原版基底；不支持模组矿。200刻／4000XH；基底保留，不挖世界。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5163,6 +5443,35 @@
       "resonance_upgrade_slot": 18,
       "resonance_upgrade": "resonance_upgrade",
       "resonance_upgrade_idle_only": true,
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21,
+          18
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint",
+          "resonance_upgrade"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -5175,7 +5484,7 @@
       "purpose": {
         "summary": "用共振基底持续生产对应原版石材或矿物",
         "benefit": "基础仅石头与铜铁5种，装广谱组件后共34种原版基底；排除模组矿。",
-        "operation": "2×2下方4个同种基底，前方两格留空；200刻／4000XH，基底保留。槽18仅空闲可取放升级组件，保留不消耗；紫水晶和萤石每批4，其他矿物1。",
+        "operation": "2×2下方4个同种基底，前方两格留空；200刻／4000XH，基底保留。左侧任一升级格仅空闲可取放升级组件，保留不消耗；紫水晶和萤石每批4，其他矿物1。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABqUlEQVR4nGNgGAWjYLgAGX2L/8u27fhPqj5GUhR75JT+3zGlmxHd4q72Bgy1UV4ejDRxAAMUxHk5E1RPjCMYyXUAMlDk4ATTtk5WJDuEkRiL0eN20ba9WNXhC5WyygaGJxdPMBLtABkccQsCh/cdg7Pv//hOkmPQQ4MRXQExKRnZAeQ4BDk0WEixGB8ApQNYGsAVRTAADdn/oNBgQXaVsoc7Q7q9JQOlAOZrXA6ZefA4w90dO8FsFmyS1HAEskNg5mIDLLhcCALIDtH7vQnBtsVhI5KaS6x+eC2GASZ8koQ0E9JLjH4WYgwCganYyxiKARPDAAMWYhVmHxOFs7X+Ys+x15hJKtkHaQi8OnqMQcwaf4Qj+9TF3xTOlkJSs2fjadJD4NXRY3AaxqYFQDabBcbg5eVlICc0yLEUGbDAGJ8/fwYXxegKYXxyHEJMKDKiV8G4QgMG8DmEkIUwvbB6AFQjYs03IIdgCw1sjiDVUpjFRDVIGBgYsEYLMRbisxQZMBIykJxoQQ5iQuYzElKA7BDk0MBlKbEWk+wABrRoocRSigHIITDHUAoA2VvFiL30kucAAAAASUVORK5CYII="
@@ -5188,6 +5497,33 @@
       "note": "2×2占地，按来料自动破碎，不切模式。圆石→沙砾，沙砾→沙子；骨头1→骨粉6、烈焰棒1→烈焰粉3。顶部/侧面进料，底部/后侧出料；每批2秒/2000XH。骨块等可逆压缩块仅等量还原，避免合成循环增殖。",
       "external": false,
       "mass": null,
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -5324,7 +5660,7 @@
       "name": "深板岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深板岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个深板岩圆石，基底保留。",
+      "note": "8个深板岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个深板岩圆石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5346,7 +5682,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5380,7 +5716,7 @@
       "name": "花岗岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个花岗岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个花岗岩，基底保留。",
+      "note": "8个花岗岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个花岗岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5402,7 +5738,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5436,7 +5772,7 @@
       "name": "闪长岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个闪长岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个闪长岩，基底保留。",
+      "note": "8个闪长岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个闪长岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5458,7 +5794,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5492,7 +5828,7 @@
       "name": "安山岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个安山岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个安山岩，基底保留。",
+      "note": "8个安山岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个安山岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5514,7 +5850,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5548,7 +5884,7 @@
       "name": "凝灰岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个凝灰岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个凝灰岩，基底保留。",
+      "note": "8个凝灰岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个凝灰岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5570,7 +5906,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5604,7 +5940,7 @@
       "name": "方解石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个方解石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个方解石，基底保留。",
+      "note": "8个方解石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个方解石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5626,7 +5962,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5660,7 +5996,7 @@
       "name": "黑石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个黑石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个黑石，基底保留。",
+      "note": "8个黑石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个黑石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5682,7 +6018,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5716,7 +6052,7 @@
       "name": "玄武岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个玄武岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个玄武岩，基底保留。",
+      "note": "8个玄武岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个玄武岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5738,7 +6074,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5772,7 +6108,7 @@
       "name": "末地石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个末地石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个末地石，基底保留。",
+      "note": "8个末地石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个末地石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5794,7 +6130,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5828,7 +6164,7 @@
       "name": "下界岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个下界岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个下界岩，基底保留。",
+      "note": "8个下界岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个下界岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5850,7 +6186,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5884,7 +6220,7 @@
       "name": "黑曜石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个黑曜石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个黑曜石，基底保留。",
+      "note": "8个黑曜石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个黑曜石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5906,7 +6242,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5959,7 +6295,7 @@
       "name": "煤矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个煤矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个煤炭，基底保留。",
+      "note": "8个煤矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个煤炭，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5981,7 +6317,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6013,7 +6349,7 @@
       "name": "深层煤矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层煤矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个煤炭，基底保留。",
+      "note": "8个深层煤矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个煤炭，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6035,7 +6371,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6346,7 +6682,7 @@
       "name": "金矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个粗金，基底保留。",
+      "note": "8个金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个粗金，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6368,7 +6704,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6400,7 +6736,7 @@
       "name": "深层金矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个粗金，基底保留。",
+      "note": "8个深层金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个粗金，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6422,7 +6758,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6475,7 +6811,7 @@
       "name": "红石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个红石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个红石粉，基底保留。",
+      "note": "8个红石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个红石粉，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6497,7 +6833,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6529,7 +6865,7 @@
       "name": "深层红石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层红石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个红石粉，基底保留。",
+      "note": "8个深层红石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个红石粉，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6551,7 +6887,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6604,7 +6940,7 @@
       "name": "青金石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个青金石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个青金石，基底保留。",
+      "note": "8个青金石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个青金石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6626,7 +6962,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6658,7 +6994,7 @@
       "name": "深层青金石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层青金石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个青金石，基底保留。",
+      "note": "8个深层青金石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个青金石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6680,7 +7016,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6733,7 +7069,7 @@
       "name": "钻石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个钻石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个钻石，基底保留。",
+      "note": "8个钻石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个钻石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6755,7 +7091,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6787,7 +7123,7 @@
       "name": "深层钻石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层钻石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个钻石，基底保留。",
+      "note": "8个深层钻石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个钻石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6809,7 +7145,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6862,7 +7198,7 @@
       "name": "绿宝石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个绿宝石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个绿宝石，基底保留。",
+      "note": "8个绿宝石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个绿宝石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6884,7 +7220,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6916,7 +7252,7 @@
       "name": "深层绿宝石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层绿宝石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个绿宝石，基底保留。",
+      "note": "8个深层绿宝石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个绿宝石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6938,7 +7274,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6991,7 +7327,7 @@
       "name": "下界金矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个下界金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个金粒，基底保留。",
+      "note": "8个下界金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个金粒，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7013,7 +7349,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7065,7 +7401,7 @@
       "name": "下界石英矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个下界石英矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个下界石英，基底保留。",
+      "note": "8个下界石英矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个下界石英，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7087,7 +7423,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7121,7 +7457,7 @@
       "name": "远古残骸共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个远古残骸环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个远古残骸，基底保留。",
+      "note": "8个远古残骸环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个远古残骸，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7143,7 +7479,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7195,7 +7531,7 @@
       "name": "紫水晶簇共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个紫水晶簇环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个紫水晶碎片，基底保留。",
+      "note": "8个紫水晶簇环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个紫水晶碎片，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7217,7 +7553,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7249,7 +7585,7 @@
       "name": "镶金黑石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个镶金黑石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产1个金粒，基底保留。",
+      "note": "8个镶金黑石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个金粒，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7271,7 +7607,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7323,7 +7659,7 @@
       "name": "萤石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个萤石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需槽18保留广谱共振升级组件。每200刻／4000XH产4个萤石粉，基底保留。",
+      "note": "8个萤石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个萤石粉，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7345,7 +7681,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需槽18保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7375,13 +7711,19 @@
       "name": "广谱共振升级组件",
       "unit": "件",
       "icon": "module",
-      "note": "地脉共振仪槽18仅空闲时取放，保留不消耗；将基础石头铜铁扩展至全部34种原版共振基底。模组矿排除。",
+      "note": "地脉共振仪左侧任一升级格仅空闲时取放，每格最多1件，保留不消耗；将基础石头铜铁扩展至全部34种原版共振基底。模组矿排除。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
       "implementation": "本轮新增或调整，待集中游戏验证",
       "retained": true,
       "resonance_tier": 1,
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "quarry"
+      ],
+      "upgrade_stack_limit": 1,
+      "upgrade_effect_stacks": false,
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "工位改装件",
@@ -7394,7 +7736,7 @@
       "purpose": {
         "summary": "解锁地脉共振仪的29种进阶原版基底",
         "benefit": "由基础石头铜铁扩展至全部34种原版资源，模组矿仍排除。",
-        "operation": "槽18仅idle无在制批次取放；保留不消耗。钻石2、精制2、导相2、控制板1、金锭1、烈焰粉1固定九宫格合成。",
+        "operation": "左侧任一升级格每格最多1件，仅idle无在制批次取放；保留不消耗。钻石2、精制2、导相2、控制板1、金锭1、烈焰粉1固定九宫格合成。",
         "targets": [
           "quarry"
         ]
@@ -7429,6 +7771,33 @@
       "legacy_migration": {
         "reserved_drill": "settle_once_without_mining",
         "single_cell": "requires_break_and_replace_eight_cells"
+      },
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -7577,6 +7946,33 @@
       "note": "单方块机器，上方进铁锭／铜锭、底部出板，侧面接电；按来料自动辊压，无模式。1铁锭→1铁板，1铜锭→1铜板，每批2秒／1000XH。工作台2铁竖排→2铁板的起步配方保留。",
       "external": false,
       "mass": null,
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -10662,7 +11058,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "整备台40k→36kXH／批；同机只装1件。",
+      "note": "11种加工机通用节能升级，每格64件并跨槽叠加；n件使耗能乘9／(9+n)，1件仍90%。",
       "quality": "通用Q0；P≥90%、I≥20、C0；不检查O。",
       "inherited": true,
       "balance": false,
@@ -12558,7 +12954,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "2路并列，每路20秒完成1次普通熔炉配方；无模块满载6件／分钟、200XH/t。燃料／电力二选一，燃料每煤320kXH、供热上限500XH/t，电力输入上限1600XH/t。每路40kXH；不翻倍掉落、不接受高炉专属或精制机配方。2个专用模块槽分别安装提速与扩批模块。",
+      "note": "2路并列，每路20秒完成1次普通熔炉配方；无模块满载6件／分钟、200XH/t。燃料／电力二选一，燃料每煤320kXH、供热上限500XH/t，电力输入上限1600XH/t。每路40kXH；不翻倍掉落、不接受高炉专属或精制机配方。主界面左侧统一升级面板默认一个空槽，放入模块后追加一个空位，不设固定槽数上限；固定大小每页最多6格，可混装适配的通用与熔炉专属模块。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -12610,7 +13006,7 @@
     },
     {
       "id": "SV-SP01",
-      "name": "熔炉提速模块Ⅰ合成",
+      "name": "通用提速模块Ⅰ合成",
       "station": "workbench",
       "unlock": "PUB-03、PUB-05",
       "inputs": [
@@ -12649,7 +13045,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "周期÷1.25（20→16秒），每路耗能×1.10；只能装入提速槽。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。",
+      "note": "通用提速Ⅰ：每件增加0.25提速倍率，耗能系数增加0.10；每格64件，同栈及跨槽叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -12692,7 +13088,7 @@
     },
     {
       "id": "SV-SP02",
-      "name": "熔炉提速模块Ⅱ合成",
+      "name": "通用提速模块Ⅱ合成",
       "station": "workbench",
       "unlock": "陨相阶段；已有Ⅰ级模块、普通钢与金锭",
       "inputs": [
@@ -12739,7 +13135,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "周期÷1.50（20→13⅓秒），每路耗能×1.25；消耗Ⅰ级模块升级，不与Ⅰ级叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 Ⅱ级实耗通用晶料、钛硼与金锭；不要求首领掉落。",
+      "note": "通用提速Ⅱ：每件增加0.50提速倍率，耗能系数增加0.25；每格64件，可与Ⅰ级叠加；制造消耗Ⅰ级模块。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 Ⅱ级实耗通用晶料、钛硼与金锭；不要求首领掉落。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -12830,7 +13226,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "并列路数2→4；每路耗能×1.05；只能装入扩批槽。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。",
+      "note": "熔炉专属扩批Ⅰ：每件增加2路，每路耗能系数增加0.05；每格64件并跨槽叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 实际消耗1份Q0陨相晶料，属于首次陨相后的产能或供能升级。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -12922,7 +13318,7 @@
       "seconds": 0,
       "energy": 0,
       "tools": [],
-      "note": "并列路数2→6；每路耗能×1.10；消耗Ⅰ级模块升级，不与Ⅰ级叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 Ⅱ级实耗通用晶料、耐温玻璃与金锭；中期扩产不强制下界。",
+      "note": "熔炉专属扩批Ⅱ：每件增加4路，每路耗能系数增加0.10；每格64件并跨槽叠加；制造消耗Ⅰ级模块。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。 Ⅱ级实耗通用晶料、耐温玻璃与金锭；中期扩产不强制下界。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15165,7 +15561,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深板岩共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深板岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15277,7 +15673,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种花岗岩共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种花岗岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15389,7 +15785,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种闪长岩共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种闪长岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15501,7 +15897,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种安山岩共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种安山岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15613,7 +16009,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种凝灰岩共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种凝灰岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15725,7 +16121,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种方解石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种方解石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15837,7 +16233,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种黑石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种黑石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15949,7 +16345,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种玄武岩共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种玄武岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16061,7 +16457,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种末地石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种末地石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16173,7 +16569,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种下界岩共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种下界岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16285,7 +16681,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种黑曜石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种黑曜石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16397,7 +16793,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种煤矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种煤矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16509,7 +16905,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层煤矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层煤矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17069,7 +17465,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种金矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17181,7 +17577,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层金矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17293,7 +17689,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种红石矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种红石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17405,7 +17801,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层红石矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层红石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17517,7 +17913,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种青金石矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种青金石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17629,7 +18025,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层青金石矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层青金石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17741,7 +18137,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种钻石矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种钻石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17853,7 +18249,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层钻石矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层钻石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17965,7 +18361,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种绿宝石矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种绿宝石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18077,7 +18473,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层绿宝石矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层绿宝石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18189,7 +18585,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种下界金矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种下界金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18301,7 +18697,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种下界石英矿石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种下界石英矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18413,7 +18809,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种远古残骸共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种远古残骸共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18525,7 +18921,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种紫水晶簇共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种紫水晶簇共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18637,7 +19033,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种镶金黑石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种镶金黑石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18749,7 +19145,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种萤石共振基底，前方两格留空；需槽18保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种萤石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,

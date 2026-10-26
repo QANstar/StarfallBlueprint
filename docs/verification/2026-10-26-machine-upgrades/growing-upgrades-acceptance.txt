@@ -1,0 +1,21 @@
+动态升级槽定向验收 — 2026-10-26
+
+当前行为：11类机器升级侧栏固定60×144，每页最多6格；默认仅一个空位，只显示全部已占用格和唯一追加空位；填入后追加，移除后重用空洞，不设固定总槽数。Shift跨所有页先合并后追加；所有页面参与升级效果；沿用旧槽位存档并单独保存新增模块。
+
+构建：JDK 21.0.12.1，NeoForge 21.1.262；gradlew --offline --init-script .tools/mirror.init.gradle build --console=plain 成功。仅有既有EventBusSubscriber弃用警告。
+定向运行：.tools/run_growing_upgrades_targeted.ps1 在独立目录复制编译产物，仅保留MachineUpgradeGameTests游戏测试类后以MOD_CLASSES启动，不修改正式注册逻辑，不执行全量游戏回归。
+日志：2026-10-26 17:15:32，8 GAME TESTS COMPLETE IN 802.8 ms；All 8 required tests passed :)。
+完整本地日志：.tools/upgrade-targeted-ae8ac5f6cbbe4c22aa7035974b6bbf8c/targeted.log。
+
+8项覆盖：
+1. 同栈与跨槽混合提速、省能及批次预算读档不变。
+2. 熔炉扩批真实配方、输入耗用及经验。
+3. 整备原矿加工升级锁定、耗能及读档续作。
+4. 单步耗能超过内部缓存时的分次付款及读档续作。
+5. Shift整栈装入、自动化隔离及隐藏槽点击拒绝。
+6. 新增组合回归：默认唯一空位；6格后分页；真实菜单追加；300个自定义名称满栈逐项NBT比对（超256槽）；19200个模块跨51页计数；移除两栈后只保留一个可重用空位，页数与当前页收缩；再次读档；真实开工后后页取放及Shift锁定。
+7. 11类机器通用模块适配及专属模块限制。
+8. 满输出仓不消耗升级后的配方输入和电量。
+
+两仓库git diff --check通过。图册动态面板metadata已同步，11个面板均为initial_slots=1、page_size=6、slot_limit=null。
+本轮未新增原生客户端截图；同目录较早截图与194项验收属于固定槽位版本历史，不作为当前分页外观的截图证据。

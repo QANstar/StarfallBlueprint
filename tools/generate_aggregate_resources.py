@@ -81,7 +81,7 @@ def main():
                 whole=[]
                 for p in parts:whole.append({**p,'from':[p['from'][0]-8,p['from'][1],p['from'][2]-8],'to':[p['to'][0]-8,p['to'][1],p['to'][2]-8]})
                 write(Path(f'models/block/{kind}.json'),{'parent':'minecraft:block/block','textures':tex,'elements':whole,'display':{'gui':{'rotation':[25,225,0],'translation':[0,0,0],'scale':[.45,.45,.45]},'ground':{'scale':[.25,.25,.25]},'thirdperson_righthand':{'scale':[.3,.3,.3]}}})
-        write(Path(f'blockstates/{kind}.json'),{'variants':{f'facing={face},lit={str(active).lower()},part={part}':{'model':f'{MOD}:block/{kind}_{part}{"_on"if active else""}','y':rot}for face,rot in [('north',0),('east',90),('south',180),('west',270)]for active in (False,True)for part in range(4)}})
+        write(Path(f'blockstates/{kind}.json'),{'variants':{f'facing={face},lit={str(active).lower()},part={part}':{'model':f'{MOD}:block/{kind}_{part%4}{"_on"if active else""}','y':rot}for face,rot in [('north',0),('east',90),('south',180),('west',270)]for active in (False,True)for part in range(8)}})
         write(Path(f'models/item/{kind}.json'),{'parent':f'{MOD}:block/{kind}'})
         icon=Image.new('RGBA',(32,32));d=ImageDraw.Draw(icon)
         d.polygon([(2,12),(19,5),(30,12),(30,25),(13,31),(2,24)],fill=paint,outline='#1c2f38');d.polygon([(2,12),(19,5),(30,12),(13,19)],fill='#a6b6b8');d.line((3,22,13,28,29,23),fill='#293c45',width=3)
@@ -90,8 +90,8 @@ def main():
             for x in (9,17):d.line((x,12,x+6,16),fill='#384752',width=4);d.point((x+1,11),fill='#d4d9c8')
         d.rectangle((16,21,21,24),fill='#83c6b4');(ART/'textures/item').mkdir(parents=True,exist_ok=True);icon.save(ART/'textures/item'/f'{kind}.png')
         for lang in ('zh_cn','en_us'):
-            path=ART/'lang'/f'{lang}.json';names=json.loads(path.read_text(encoding='utf-8'));names[f'block.{MOD}.{kind}']=({'quarry':'电动采石机','crusher':'辊式破碎机'}if lang=='zh_cn'else{'quarry':'Electric Quarry','crusher':'Roller Crusher'})[kind]
-            for index,zh,en in [(9,'大型机器结构不完整','Incomplete machine footprint'),(10,'需要四格石质地基','Needs four stone foundation blocks'),(11,'采石机前方需要留空','Clear the two front work spaces')]:names[f'gui.{MOD}.industry.state.{index}']=zh if lang=='zh_cn'else en
+            path=ART/'lang'/f'{lang}.json';names=json.loads(path.read_text(encoding='utf-8'));names[f'block.{MOD}.{kind}']=({'quarry':'地脉共振仪','crusher':'辊式破碎机'}if lang=='zh_cn'else{'quarry':'Geological Resonator','crusher':'Roller Crusher'})[kind]
+            for index,zh,en in [(9,'大型机器结构不完整','Incomplete machine footprint'),(10,'需要四块同种共振基底','Needs four identical resonance bases'),(11,'共振仪前方需要留空','Clear the two front work spaces')]:names[f'gui.{MOD}.industry.state.{index}']=zh if lang=='zh_cn'else en
             path.write_text(json.dumps(names,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     path=ROOT/'src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json';tag=json.loads(path.read_text(encoding='utf-8'));tag['values']=list(dict.fromkeys(tag['values']+[f'{MOD}:quarry',f'{MOD}:crusher']));path.write_text(json.dumps(tag,indent=2)+'\n',encoding='utf-8')
     data=ROOT/'src/main/resources/data'/MOD
@@ -100,6 +100,10 @@ def main():
         assert (data/'recipe'/f'{recipe}.json').exists(),recipe
         path=data/'advancement/recipes'/f'{recipe}.json';path.parent.mkdir(parents=True,exist_ok=True)
         path.write_text(json.dumps({'criteria':{'materials':{'trigger':'minecraft:inventory_changed','conditions':{'items':[{'items':MOD+':iron_plate'}]}}},'rewards':{'recipes':[MOD+':'+recipe]}},indent=2)+'\n',encoding='utf-8')
+    from generate_resonance_resources import main as generate_resonance_resources
+    generate_resonance_resources()
+    from generate_phase_array_resources import main as generate_phase_array_resources
+    generate_phase_array_resources()
     print('Generated two distinct 2x2 machines, 16 split models, item models and localizations.')
 
 if __name__=='__main__':main()

@@ -67,9 +67,9 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     public boolean idle(){return activeRecipe.isEmpty();}
     public boolean connectionOpen(Direction side){return !ConduitBlock.isConduit(kind())||ConduitBlock.hasPort(kind(),facing(),side);}
     public boolean hasItemFilter(){return Set.of("item_extractor","item_router","supply_crate").contains(kind());}
-    public boolean hasFluidPort(){return Set.of("prep","refiner","bio_processor","g05","plant_cultivator","pump","dew").contains(kind());}
+    public boolean hasFluidPort(){return Set.of("phase_extractor","prep","refiner","bio_processor","g05","plant_cultivator","pump","dew").contains(kind());}
     public boolean hasEnergyPort(){return !ConduitBlock.isConduit(kind())&&!Set.of("damper","supply_crate").contains(kind());}
-    public boolean redstoneStopped(){if(stopped)return true;if(level==null)return false;if(AggregateMachines.large(kind()))for(int p=0;p<4;p++){var pos=worldPosition.offset(LargeMachineBlock.offset(facing(),p));if(level.hasChunkAt(pos)&&level.hasNeighborSignal(pos))return true;}return level.hasNeighborSignal(worldPosition);}
+    public boolean redstoneStopped(){if(stopped)return true;if(level==null)return false;if(AggregateMachines.large(kind()))for(int p=0;p<LargeMachineBlock.parts(kind());p++){var pos=worldPosition.offset(LargeMachineBlock.offset(facing(),p));if(level.hasChunkAt(pos)&&level.hasNeighborSignal(pos))return true;}return level.hasNeighborSignal(worldPosition);}
     public static void tick(Level level,BlockPos pos,BlockState state,IndustryBlockEntity be){
         if(be.redstoneStopped()){be.status=8;}else{IndustryEnergy.tick(be);IndustryProcessing.tick(be);}
         IndustryNetworks.tick(be);
@@ -98,7 +98,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     };}
     public IFluidHandler fluidPort(){return new IFluidHandler(){
         public int getTanks(){return 3;}public FluidStack getFluidInTank(int i){return tanks[i].getFluid();}public int getTankCapacity(int i){return 4000;}
-        public boolean isFluidValid(int i,FluidStack s){return i==0&&Set.of("plant_cultivator","prep","refiner","bio_processor","g05").contains(kind())&&s.is(CatalogueFluids.fluid(kind().equals("g05")?"bio":"water"));}
+        public boolean isFluidValid(int i,FluidStack s){return i==0&&Set.of("phase_extractor","plant_cultivator","prep","refiner","bio_processor","g05").contains(kind())&&s.is(CatalogueFluids.fluid(kind().equals("g05")?"bio":"water"));}
         public int fill(FluidStack s,FluidAction a){return !redstoneStopped()&&isFluidValid(0,s)?tanks[0].fill(s,a):0;}
         public FluidStack drain(FluidStack s,FluidAction a){for(int i:outlets())if(FluidStack.isSameFluidSameComponents(tanks[i].getFluid(),s))return tanks[i].drain(s.getAmount(),a);return FluidStack.EMPTY;}
         public FluidStack drain(int n,FluidAction a){for(int i:outlets())if(!tanks[i].isEmpty())return tanks[i].drain(n,a);return FluidStack.EMPTY;}
@@ -157,6 +157,8 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     }
     public boolean workCanPlace(int i,ItemStack s){
         if(kind().equals("press"))return i>=0&&i<9&&(s.is(Items.IRON_INGOT)||s.is(Items.COPPER_INGOT));
+        if(kind().equals("quarry"))return i==18&&idle()&&s.is(CatalogueContent.item("resonance_upgrade"));
+        if(kind().equals("phase_extractor"))return false;
         if(AggregateMachines.large(kind()))return kind().equals("crusher")&&i>=0&&i<9&&IndustryProcessing.available(this).stream().flatMap(r->java.util.stream.StreamSupport.stream(r.getAsJsonArray("inputs").spliterator(),false)).anyMatch(in->CatalogueContent.matches(CatalogueContent.key(in),s));
         if(kind().equals("autocrafter")&&i==CRAFTING_SAMPLE)return true;
         if(ConduitBlock.isConduit(kind())||kind().equals("damper"))return false;
@@ -173,7 +175,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         return i>=0&&i<9&&!nested(s);
     }
     public int[]getSlotsForFace(Direction d){return workSlots(d);}
-    public int[]workSlots(Direction d){if(kind().equals("press"))return d==Direction.DOWN?new int[]{9,10,11,12}:d==Direction.UP?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(AggregateMachines.large(kind()))return d==Direction.DOWN||d==facing().getOpposite()?new int[]{9,10,11,12}:kind().equals("crusher")?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(ConduitBlock.isConduit(kind())||Set.of("damper","terminal").contains(kind()))return new int[]{};if(kind().equals("supply_crate"))return java.util.stream.IntStream.range(0,27).toArray();if(d==Direction.DOWN)return new int[]{9,10,11,12};if(kind().equals("plant_cultivator"))return d==Direction.UP?new int[]{0,1,2}:new int[]{};if(kind().equals("autocrafter"))return craftingInputSlots();if(d==Direction.UP)return generator()?new int[]{13}:new int[]{0,1,2,3,4,5,6,7,8};return new int[]{13};}
+    public int[]workSlots(Direction d){if(kind().equals("phase_extractor"))return d==Direction.DOWN?new int[]{9,10,11,12}:new int[]{};if(kind().equals("press"))return d==Direction.DOWN?new int[]{9,10,11,12}:d==Direction.UP?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(AggregateMachines.large(kind()))return d==Direction.DOWN||d==facing().getOpposite()?new int[]{9,10,11,12}:kind().equals("crusher")?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(ConduitBlock.isConduit(kind())||Set.of("damper","terminal").contains(kind()))return new int[]{};if(kind().equals("supply_crate"))return java.util.stream.IntStream.range(0,27).toArray();if(d==Direction.DOWN)return new int[]{9,10,11,12};if(kind().equals("plant_cultivator"))return d==Direction.UP?new int[]{0,1,2}:new int[]{};if(kind().equals("autocrafter"))return craftingInputSlots();if(d==Direction.UP)return generator()?new int[]{13}:new int[]{0,1,2,3,4,5,6,7,8};return new int[]{13};}
     public boolean canPlaceItemThroughFace(int i,ItemStack s,Direction d){return !redstoneStopped()&&canPlaceItem(i,s);}
     public boolean canTakeItemThroughFace(int i,ItemStack s,Direction d){return !redstoneStopped()&&(kind().equals("supply_crate")||(d==Direction.DOWN||AggregateMachines.large(kind())&&d==facing().getOpposite())&&i>=9&&i<=12);}
     public void awardExperience(Player player){if(player.level()instanceof net.minecraft.server.level.ServerLevel server&&experience>0){int amount=(int)experience;if(server.random.nextFloat()<experience-amount)amount++;experience=0;setChanged();if(amount>0)net.minecraft.world.entity.ExperienceOrb.award(server,player.position(),amount);}}

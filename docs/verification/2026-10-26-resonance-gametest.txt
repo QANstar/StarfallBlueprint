@@ -1,0 +1,53 @@
+Date: 2026-10-26 (Asia/Shanghai)
+Feature: Geological Resonator / 地脉共振仪 (existing quarry ID), 35 non-consumed resonance bases
+Environment: Minecraft 1.21.1, NeoForge 21.1.262, Java 21.0.12.1, Windows
+
+Canonical scope:
+- 35 bases: 12 stone families, 16 overworld ore variants, 3 nether ore/ancient debris sources, 4 enabled mod ores.
+- 35 shaped base recipes RS-B01..35: exact raw_meteor_phase center + eight identical source blocks -> one base.
+- 35 environmental quarry recipes QM-R01..35: four identical bases, no consumable inputs; 200 ticks, 4000 XH; stone x4 or mineral x1.
+- 216 canonical recipes, 141 catalogue entries. The 144 prior non-QM recipes are unchanged.
+- Four enabled mod ore block items are obtainable with a correct Silk Touch pickaxe; ordinary/Fortune harvest keeps the existing ore rules. Reserved moon remains unavailable.
+
+Static validation:
+python tools/verify_resources.py
+PASS: 694 JSON files, all PNGs and local model/texture links.
+python tools/verify_mc_catalogue.py
+PASS: 216 discrete catalogue recipes; 17 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+
+Final real build and server command:
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+Log: .tools/resonance-final-validation.log
+[12:44:18] AFK L26 verified: 16 concrete, retained lily, no supplied energy, water, fuel, sand, gravel or dye
+[12:44:19] ========= 169 GAME TESTS COMPLETE IN 14.60 s ======================
+[12:44:19] All 169 required tests passed :)
+BUILD SUCCESSFUL in 36s
+Exit code: 0
+
+Coverage:
+- Previous 162 tests retained, seven new ResonanceGameTests.
+- Every one of 35 bases runs two complete 200-tick batches. First batch reloads at tick 73, then executes 126+1 ticks; exact 4000 XH and full pending stack components survive.
+- Every base uses real CraftingMenu selection and consumption: exact center, all eight ring positions, wrong/missing center, mixed rings, no repeated Quick Move output. Blackstone's ordinary furnace recipe remains valid when the center is removed, but cannot produce a base.
+- All 87 active catalogue workbench recipes load and execute.
+- Four foundation positions each reject missing/ordinary/mixed bases; both front positions reject obstruction. No power consumption while paused; bases are retained.
+- Complete base replacement preserves the already reserved batch; the next batch uses the new mineral.
+- Insufficient power, full outputs, repeated NBT reload and restoration settle once without duplication.
+- Meteor/auxiliary outputs compare complete components and Origin with actual unenchanted iron-pick Block.getDrops at the controller's below position.
+- Four enabled mod ore source rings are obtained with actual Silk Touch drops; the center uses actual ordinary mined raw material. Inferior tools and reserved moon remain blocked.
+- Updated L26 includes eight stone resonance bases, exact blueprint materials, and actually produces 16 white concrete from an initially empty power/water buffer.
+
+First run:
+Build reached the real server; four tests failed because fixtures retained old assumptions (52 rather than 87 crafting recipes; only ordinary stone categorized as x4; choosing deepslate as the supposed mineral replacement; assuming a blackstone ring without center has no vanilla recipe). Corrected fixtures, then ran the final full build/server command above. No production changes were made between the first and final server runs.
+
+Final artifact SHA256:
+build/libs/starfall_blueprint-0.1.0.jar
+D577A363508D743630290AB267D3F98F13C9202D61878DCE2159C82786A05F1F
+src/main/resources/assets/starfall_blueprint/catalogue.json
+52C59492E252F64A6E619937A0A02AFDF7916F537C1C8E653C018CA2E961EF96
+.tools/resonance-final-validation.log
+69251F6AE298DDB013DB528233B19D27A3DF7C77A23F8AB6FC667E2F7B30A1AD
+
+Not performed this stage: client rendering, pressure/FPS benchmarks, third-party ore adapters, extra two-JVM probe, ore density calibration or actual survival playtime/balance measurement. No commit or push performed.

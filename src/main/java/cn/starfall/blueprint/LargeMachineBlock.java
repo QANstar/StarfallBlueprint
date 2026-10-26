@@ -19,14 +19,15 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 
-/** A real 2x2 footprint with exactly one inventory and one item drop. */
+/** Real 2x2 footprints (two layers for the phase array), one inventory and one item drop. */
 public final class LargeMachineBlock extends IndustryBlock {
-    public static final IntegerProperty PART=IntegerProperty.create("part",0,3);
+    public static final IntegerProperty PART=IntegerProperty.create("part",0,7);
     private static final ThreadLocal<Boolean> DISMANTLING=ThreadLocal.withInitial(()->false);
     public LargeMachineBlock(String kind,Properties p){super(kind,p);registerDefaultState(defaultBlockState().setValue(PART,0));}
     @Override protected MapCodec<? extends BaseEntityBlock> codec(){return simpleCodec(p->new LargeMachineBlock(kind,p));}
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block,BlockState> b){super.createBlockStateDefinition(b);b.add(PART);}
-    public static BlockPos offset(Direction facing,int part){return BlockPos.ZERO.relative(facing.getClockWise(),part&1).relative(facing.getOpposite(),part>>1);}
+    public static int parts(String kind){return kind.equals("phase_extractor")?8:4;}
+    public static BlockPos offset(Direction facing,int part){return BlockPos.ZERO.relative(facing.getClockWise(),part&1).relative(facing.getOpposite(),(part>>1)&1).above(part>>2);}
     public static BlockPos anchor(BlockPos pos,BlockState state){return pos.subtract(offset(state.getValue(FACING),state.getValue(PART)));}
     public static IndustryBlockEntity controller(Level level,BlockPos pos){
         if(!level.hasChunkAt(pos))return null;var state=level.getBlockState(pos);if(!(state.getBlock()instanceof LargeMachineBlock))return null;
@@ -35,7 +36,7 @@ public final class LargeMachineBlock extends IndustryBlock {
     }
     @Override public BlockState getStateForPlacement(BlockPlaceContext context){
         var state=super.getStateForPlacement(context);var level=context.getLevel();var root=context.getClickedPos();
-        for(int part=0;part<4;part++){
+        for(int part=0;part<parts(kind);part++){
             BlockPos pos=root.offset(offset(state.getValue(FACING),part));
             if(!level.hasChunkAt(pos)||level.isOutsideBuildHeight(pos)||!level.getWorldBorder().isWithinBounds(pos)||!level.getBlockState(pos).canBeReplaced(context))return null;
             if(context.getPlayer()!=null&&(!level.mayInteract(context.getPlayer(),pos)||!context.getPlayer().mayUseItemAt(pos,context.getClickedFace(),context.getItemInHand())))return null;
@@ -43,7 +44,7 @@ public final class LargeMachineBlock extends IndustryBlock {
     }
     @Override public void setPlacedBy(Level level,BlockPos root,BlockState state,LivingEntity entity,ItemStack stack){
         super.setPlacedBy(level,root,state,entity,stack);
-        if(!level.isClientSide)for(int part=1;part<4;part++)level.setBlock(root.offset(offset(state.getValue(FACING),part)),state.setValue(PART,part),3);
+        if(!level.isClientSide)for(int part=1;part<parts(kind);part++)level.setBlock(root.offset(offset(state.getValue(FACING),part)),state.setValue(PART,part),3);
     }
     @Override public BlockEntity newBlockEntity(BlockPos pos,BlockState state){return state.getValue(PART)==0?new IndustryBlockEntity(pos,state):new LargeMachinePartEntity(pos,state);}
     @Override public <T extends BlockEntity>BlockEntityTicker<T> getTicker(Level level,BlockState state,BlockEntityType<T> type){return state.getValue(PART)==0?super.getTicker(level,state,type):null;}
@@ -59,7 +60,7 @@ public final class LargeMachineBlock extends IndustryBlock {
         if(!state.is(next.getBlock())&&level.getBlockEntity(pos) instanceof LargeMachinePartEntity part&&level.getBlockEntity(anchor(pos,state)) instanceof IndustryBlockEntity owner)part.rememberOwner(owner);
         if(!state.is(next.getBlock())&&!level.isClientSide&&!DISMANTLING.get()){
             DISMANTLING.set(true);
-            try{BlockPos root=anchor(pos,state);for(int part=0;part<4;part++){
+            try{BlockPos root=anchor(pos,state);for(int part=0;part<parts(kind);part++){
                 BlockPos other=root.offset(offset(state.getValue(FACING),part));if(other.equals(pos)||!level.hasChunkAt(other))continue;
                 var s=level.getBlockState(other);if(s.is(this)&&s.getValue(PART)==part&&s.getValue(FACING)==state.getValue(FACING))level.removeBlock(other,false);
             }}finally{DISMANTLING.set(false);}
@@ -68,10 +69,11 @@ public final class LargeMachineBlock extends IndustryBlock {
     public static void validatePlan(List<ConstructionPlan.Cell> cells){
         Map<BlockPos,BlockState> states=new HashMap<>();cells.forEach(c->states.put(c.pos(),c.state()));
         for(var cell:cells)if(cell.state().getBlock()instanceof LargeMachineBlock){
-            var state=cell.state();BlockPos root=anchor(cell.pos(),state);
-            for(int part=0;part<4;part++){
+            var state=cell.state();var block=(LargeMachineBlock)state.getBlock();BlockPos root=anchor(cell.pos(),state);
+            if(state.getValue(PART)>=parts(block.kind))throw new IllegalArgumentException("大型机器含无效的外壳编号");
+            for(int part=0;part<parts(block.kind);part++){
                 var found=states.get(root.offset(offset(state.getValue(FACING),part)));
-                if(found==null||found.getBlock()!=state.getBlock()||found.getValue(PART)!=part||found.getValue(FACING)!=state.getValue(FACING))throw new IllegalArgumentException("大型机器需要完整的2×2四格结构，请扩大测绘范围");
+                if(found==null||found.getBlock()!=state.getBlock()||found.getValue(PART)!=part||found.getValue(FACING)!=state.getValue(FACING))throw new IllegalArgumentException(parts(block.kind)==8?"相核凝矿阵需要完整的2×2×2八格结构，请扩大测绘范围":"大型机器需要完整的2×2四格结构，请扩大测绘范围");
             }
         }
     }

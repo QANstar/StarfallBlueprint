@@ -1,0 +1,9 @@
+{
+  "type": "starfall_blueprint:catalogue_crafting",
+  "recipe": "RS-B32",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:false"
+    }
+  ]
+}

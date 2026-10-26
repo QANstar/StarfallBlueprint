@@ -80,7 +80,7 @@ public final class OreHarvestGameTests {
     }
 
     @GameTest(template = "empty")
-    public static void oreRequiresCorrectToolAndSilkCannotCreatePlaceableOre(GameTestHelper h) {
+    public static void oreRequiresCorrectToolAndSilkObtainsOneResonanceSourceBlock(GameTestHelper h) {
         BlockPos pos = h.absolutePos(new BlockPos(1, 1, 1));
         ItemStack silk = pick(h, 0);
         silk.enchant(h.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
@@ -93,8 +93,18 @@ public final class OreHarvestGameTests {
             h.assertTrue(Block.getDrops(state, h.getLevel(), pos, null, null, ItemStack.EMPTY).isEmpty()
                             && Block.getDrops(state, h.getLevel(), pos, null, null, wood).isEmpty(),
                     "Fortune cannot bypass the iron-tier mining requirement");
-            h.assertTrue(ItemStack.matches(harvest(h, state, pos, silk), harvest(h, state, pos, pick(h, 0))),
-                    "Silk Touch still yields ordinary raw material rather than a placeable reroll source");
+            var silkDrops = Block.getDrops(state, h.getLevel(), pos, null, null, silk);
+            h.assertTrue(silkDrops.size() == 1 && silkDrops.getFirst().is(block.asItem())
+                            && silkDrops.getFirst().getCount() == 1 && silkDrops.getFirst().getItem() instanceof BlockItem,
+                    "Correct iron Silk Touch yields one placeable source block for resonance crafting");
+            var stoneSilk = new ItemStack(Items.STONE_PICKAXE);
+            stoneSilk.enchant(h.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                    .getHolderOrThrow(Enchantments.SILK_TOUCH), 1);
+            h.assertTrue(Block.getDrops(state, h.getLevel(), pos, null, null, stoneSilk).isEmpty(),
+                    "Silk Touch cannot bypass the original iron-tier requirement");
+            var ordinary = harvest(h, state, pos, pick(h, 0));
+            h.assertTrue(ordinary.getCount() == 1 && ordinary.has(StarfallBlueprint.BATCH.get())
+                            && !ordinary.is(block.asItem()), "Unenchanted mining retains its original component-bearing raw drop");
         }
         h.succeed();
     }

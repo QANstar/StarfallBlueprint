@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-/** Ore blocks have no survival block item: replacing/remining cannot reroll a batch. */
+/** Silk Touch supplies source blocks for resonance bases; normal harvest retains batch metadata. */
 public final class MeteorOreBlock extends Block {
     public MeteorOreBlock(Properties p) { super(p); }
     @Override public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
@@ -19,6 +19,9 @@ public final class MeteorOreBlock extends Block {
         if (origin == null) return List.of();
         var tool = params.getOptionalParameter(LootContextParams.TOOL);
         if (tool == null || !tool.isCorrectToolForDrops(state)) return List.of();
+        var silk = params.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                .getHolderOrThrow(Enchantments.SILK_TOUCH);
+        if (tool.getEnchantmentLevel(silk) > 0) return List.of(new ItemStack(asItem()));
         BlockPos pos = BlockPos.containing(origin);
         RandomSource random = RandomSource.create(params.getLevel().getSeed() ^ pos.asLong());
         int roll = random.nextInt(100);

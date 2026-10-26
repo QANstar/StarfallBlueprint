@@ -1,0 +1,60 @@
+StarfallBlueprint - tiered vanilla resonance and finite mod ore extraction
+Date: 2026-10-26 (Asia/Shanghai)
+Environment: Windows, Java 21.0.12.1, Minecraft 1.21.1, NeoForge 21.1.262
+
+Frozen scope:
+- 34 active vanilla resonance foundations: 5 basic (stone, iron/copper normal/deepslate), 29 requiring retained resonance_upgrade in slot18.
+- 12 stone / 22 mineral sources; stable 01..31 IDs, new 36 amethyst, 37 gilded blackstone, 38 glowstone.
+- 4 old mod ore foundations stay registered for save compatibility; their crafting and production are retired. Legacy mod pending batches freeze.
+- Independent phase_extractor mines only four open mod ores from real positions below it (1..64), consuming finite world sources.
+- Each extraction: 400 ticks, 80000 XH, 500 mB water, one fixed diamond drill durability. No Fortune/Silk Touch drills.
+- Real permission/BreakEvent checks; no OP fake player, chunk generation, experience drops or sample-based reproduction.
+
+One concentrated resource synchronization/static check:
+ tools/sync_catalogue.py
+ tools/generate_catalogue_resources.py
+ tools/generate_resonance_resources.py
+ tools/verify_resources.py
+ tools/verify_mc_catalogue.py
+Results:
+ PASS: 721 JSON files, all PNGs and local model/texture links.
+ PASS: 220 discrete catalogue recipes; 17 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+Canonical: 271 items / 220 recipes / 142 catalogue entries / 27 lines / 23 public blueprints.
+Both handbook HTML entries are identical; canonical items/recipes/catalogue copied into runtime.
+
+One concentrated full build and real dedicated-server test run:
+ JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+ GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+ JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+ .\gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+Source log: .tools/resonance-tiers-validation.log
+Exit code: 0
+Exact final log lines:
+ [13:18:22] [Server thread/INFO] [minecraft/GameTestServer]: ========= 180 GAME TESTS COMPLETE IN 15.29 s ======================
+ [13:18:22] [Server thread/INFO] [minecraft/GameTestServer]: All 180 required tests passed :)
+ BUILD SUCCESSFUL in 40s
+No production or test edits were required after this run. Subsequent changes only record documentation and verification results.
+
+11 new real GameTests, in addition to the adjusted prior 169:
+ ResonanceTierGameTests.independentCompleteVanillaCatalogueAndFiveBasicTwentyNineAdvanced
+ ResonanceTierGameTests.realMenuShiftMoveComponentsAndInFlightUpgradeLockSurviveNbt
+ ResonanceTierGameTests.retiredFoundationsMissingRecipesAndModPendingAlwaysFreeze
+ ResonanceTierGameTests.amethystGildedBlackstoneGlowstoneHaveFixedVanillaOutputs
+ PhaseExtractorGameTests.fourRealOresKeepPositionQualityOriginAndConsumeOneSource
+ PhaseExtractorGameTests.scanIgnoresVanillaMoonStoneAndBlockEntitiesAndStopsAt64
+ PhaseExtractorGameTests.invalidWaterPowerOutputAndDrillsNeverConsumeResources
+ PhaseExtractorGameTests.canceledBreakEventUsesOrdinaryFakePlayerAndConsumesNothing
+ PhaseExtractorGameTests.nbt73PowerAndOutputPausesResumeWithoutMiningAgain
+ PhaseExtractorGameTests.realMenuLocksDrillAgainstPickupShiftSwapAndThrowWhileRunning
+ PhaseExtractorGameTests.registeredWaterAndBottomOutputCapabilitiesPreserveSimulationAndComponents
+Existing seven resonance tests now exercise 34 active bases and their real nine-slot crafting/production; real mod Silk Touch collection remains supported.
+All 88 active catalogue workbench recipes executed; L26 still produces 16 concrete from its base stone-foundation setup.
+
+Build artifact: build/libs/starfall_blueprint-0.1.0.jar
+SHA256: 734b273332fae3ea59cc7441516b48b56160ed650eb6058582a1dbdbe129b5ee
+Frozen canonical SHA256: 8e7f333682305dc3b2feaae0a1e9b8a645e77d73b5bd93bb5dc2755236450883
+Frozen handbook HTML SHA256: 7eea02236328cc16d8bf647cef7de1587479aa0db312538ef98704081c3851f2
+
+Limitations: no client render/interaction validation, stress test, two-JVM restart run, full playthrough timing, or third-party protection/mod compatibility certification. Save coverage uses real NBT round trips. Sources are actual permitted world blocks; the machine does not infer whether a player placed an ore. Pending status in canonical item metadata describes pre-verification design data and was intentionally left frozen; current acceptance is recorded here and in both progress documents.
+Mojang public-key lookup failed on this offline host (api.minecraftservices.com); it was non-fatal and the server completed all 180 required tests successfully.
+No Git commit or push performed for this development round.

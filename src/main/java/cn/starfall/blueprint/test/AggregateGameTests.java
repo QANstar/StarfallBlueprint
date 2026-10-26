@@ -26,19 +26,22 @@ public final class AggregateGameTests {
         var pos=h.absolutePos(new BlockPos(200+index*8,50,200));var level=h.getLevel();
         for(int x=-1;x<=1;x++)for(int z=-1;z<=1;z++)level.getChunk((pos.getX()>>4)+x,(pos.getZ()>>4)+z);
         var state=CatalogueContent.BLOCKS.get(kind).get().defaultBlockState();
-        for(int part=0;part<4;part++){var target=pos.offset(LargeMachineBlock.offset(Direction.NORTH,part));level.setBlock(target.below(),Blocks.STONE.defaultBlockState(),3);level.setBlock(target,state.setValue(LargeMachineBlock.PART,part),3);}
+        for(int part=0;part<4;part++){var target=pos.offset(LargeMachineBlock.offset(Direction.NORTH,part));var foundation=kind.equals("quarry")?((BlockItem)CatalogueContent.ITEMS.get("resonance_base_stone").get()).getBlock():Blocks.STONE;level.setBlock(target.below(),foundation.defaultBlockState(),3);level.setBlock(target,state.setValue(LargeMachineBlock.PART,part),3);}
         return (IndustryBlockEntity)level.getBlockEntity(pos);
     }
     private static int output(IndustryBlockEntity be,Item item){return be.stock.subList(9,13).stream().filter(s->s.is(item)).mapToInt(ItemStack::getCount).sum();}
     private static void process(IndustryBlockEntity be,int n){for(int i=0;i<n;i++)IndustryProcessing.tick(be);}
     private static ConstructionPlan plan(String file){try(var in=AggregateGameTests.class.getResourceAsStream("/assets/starfall_blueprint/construction_blueprints/"+file)){return ConstructionPlan.parse(new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8));}catch(Exception e){throw new AssertionError(e);}}
     @GameTest(template="empty")
-    public static void quarryNeedsStoneAndSpaceAndNeverMinesTheWorld(GameTestHelper h){
+    public static void quarryRejectsOrdinaryStoneAndNeedsResonanceBasesAndSpace(GameTestHelper h){
         var be=machine(h,"quarry",0);var level=h.getLevel();be.setPower(8000);var floor=be.getBlockPos().below();
-        level.setBlock(floor,Blocks.DIRT.defaultBlockState(),3);process(be,200);h.assertTrue(be.idle()&&be.getPower()==8000&&be.status==10,"No resource generation without four stone foundation blocks");
-        level.setBlock(floor,Blocks.STONE.defaultBlockState(),3);level.setBlock(be.getBlockPos().north(),Blocks.STONE.defaultBlockState(),3);process(be,200);
+        var base=((BlockItem)CatalogueContent.ITEMS.get("resonance_base_stone").get()).getBlock();
+        for(int part=0;part<4;part++)level.setBlock(floor.offset(LargeMachineBlock.offset(Direction.NORTH,part)),Blocks.STONE.defaultBlockState(),3);
+        process(be,200);h.assertTrue(be.idle()&&be.getPower()==8000&&be.status==10,"Ordinary stone is not a resonance foundation");
+        for(int part=0;part<4;part++)level.setBlock(floor.offset(LargeMachineBlock.offset(Direction.NORTH,part)),base.defaultBlockState(),3);
+        level.setBlock(be.getBlockPos().north(),Blocks.STONE.defaultBlockState(),3);process(be,200);
         h.assertTrue(be.idle()&&be.getPower()==8000&&be.status==11,"Front work area must remain empty");level.removeBlock(be.getBlockPos().north(),false);
-        process(be,200);h.assertTrue(output(be,Items.COBBLESTONE)==4&&be.getPower()==4000&&level.getBlockState(floor).is(Blocks.STONE),"Exactly four renewable cobble for 4000 XH without altering stone or producing ores");
+        process(be,200);h.assertTrue(output(be,Items.COBBLESTONE)==4&&be.getPower()==4000&&level.getBlockState(floor).is(base),"Exactly four renewable cobble for 4000 XH without consuming the resonance base");
         process(be,200);h.assertTrue(output(be,Items.COBBLESTONE)==8&&be.getPower()==0,"Repeat batch uses exact additional energy");process(be,200);h.assertTrue(output(be,Items.COBBLESTONE)==8,"Unpowered quarry cannot generate");h.succeed();
     }
     @GameTest(template="empty")

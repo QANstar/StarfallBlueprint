@@ -39,6 +39,8 @@ public final class StarfallBlueprint {
     public static final DeferredBlock<Block> ORE = BLOCKS.register("ore_meteor_phase", () -> new MeteorOreBlock(BlockBehaviour.Properties.of().strength(3.5f, 3).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> DEEP_ORE = BLOCKS.register("deepslate_ore_meteor_phase", () -> new MeteorOreBlock(BlockBehaviour.Properties.of().strength(4.5f, 3).requiresCorrectToolForDrops()));
     public static final DeferredBlock<PreparationBlock> PREPARATION = BLOCKS.register("preparation_bench", () -> new PreparationBlock(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops().noOcclusion()));
+    public static final DeferredItem<BlockItem> ORE_ITEM = ITEMS.registerSimpleBlockItem(ORE);
+    public static final DeferredItem<BlockItem> DEEP_ORE_ITEM = ITEMS.registerSimpleBlockItem(DEEP_ORE);
     public static final DeferredItem<BlockItem> BENCH_ITEM = ITEMS.registerSimpleBlockItem(PREPARATION);
     public static final DeferredBlock<AlloyFurnaceBlock> ALLOY_FURNACE = BLOCKS.register("alloy_furnace", () -> new AlloyFurnaceBlock(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredItem<BlockItem> ALLOY_ITEM = ITEMS.registerSimpleBlockItem(ALLOY_FURNACE);
@@ -93,10 +95,11 @@ public final class StarfallBlueprint {
                 for (int grade : new int[]{6,12,24}) {
                     ItemStack ore = new ItemStack(RAW.get()); ore.set(BATCH.get(), MaterialBatch.ore(grade, 40)); output.accept(ore);
                 }
+                output.accept(ORE_ITEM.get()); output.accept(DEEP_ORE_ITEM.get());
                 output.accept(CRYSTAL.get()); output.accept(CONNECTOR.get()); output.accept(TOOL_BRACE.get()); output.accept(SHIELD_LINING.get()); output.accept(SCANNER.get()); output.accept(TAILINGS.get());
                 output.accept(Blueprints.CREATIVE_CORE.get());output.accept(ALLOY_ITEM.get());
                 STRUCTURAL_ITEMS.forEach((name, item) -> { if (!name.endsWith("_portion")) output.accept(item.get()); });
-                CatalogueContent.ITEMS.forEach((key, item) -> { if (!CatalogueContent.RESERVED_ITEMS.contains(key)) output.accept(item.get()); });
+                CatalogueContent.ITEMS.forEach((key, item) -> { if (!CatalogueContent.RESERVED_ITEMS.contains(key)&&!CatalogueContent.RETIRED_BASES.contains(key)) output.accept(item.get()); });
                 CatalogueFluids.ENTRIES.values().forEach(fluid -> output.accept(fluid.bucket().get()));
             }).build());
 
@@ -126,6 +129,7 @@ public final class StarfallBlueprint {
         }
     }
     private void capabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK,AggregateMachines.PART_ENTITY.get(),(part,side)->{var owner=part.owner();return owner!=null&&owner.hasFluidPort()?owner.fluidPort():null;});
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK,AggregateMachines.PART_ENTITY.get(),(part,side)->{var owner=part.owner();return owner==null?null:owner.energyPort(side);});
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,AggregateMachines.PART_ENTITY.get(),(part,side)->{var owner=part.owner();return owner==null?null:new SidedInvWrapper(owner.workInventory(),side==null?net.minecraft.core.Direction.UP:side);});
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,Blueprints.ENTITY.get(),(be,side)->new SidedInvWrapper(be,side==null?net.minecraft.core.Direction.UP:side));

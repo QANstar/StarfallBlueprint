@@ -16,6 +16,22 @@
       "model": "starfall_blueprint:block/crusher_3",
       "y": 0
     },
+    "facing=north,lit=false,part=4": {
+      "model": "starfall_blueprint:block/crusher_0",
+      "y": 0
+    },
+    "facing=north,lit=false,part=5": {
+      "model": "starfall_blueprint:block/crusher_1",
+      "y": 0
+    },
+    "facing=north,lit=false,part=6": {
+      "model": "starfall_blueprint:block/crusher_2",
+      "y": 0
+    },
+    "facing=north,lit=false,part=7": {
+      "model": "starfall_blueprint:block/crusher_3",
+      "y": 0
+    },
     "facing=north,lit=true,part=0": {
       "model": "starfall_blueprint:block/crusher_0_on",
       "y": 0
@@ -29,6 +45,22 @@
       "y": 0
     },
     "facing=north,lit=true,part=3": {
+      "model": "starfall_blueprint:block/crusher_3_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=4": {
+      "model": "starfall_blueprint:block/crusher_0_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=5": {
+      "model": "starfall_blueprint:block/crusher_1_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=6": {
+      "model": "starfall_blueprint:block/crusher_2_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=7": {
       "model": "starfall_blueprint:block/crusher_3_on",
       "y": 0
     },
@@ -48,6 +80,22 @@
       "model": "starfall_blueprint:block/crusher_3",
       "y": 90
     },
+    "facing=east,lit=false,part=4": {
+      "model": "starfall_blueprint:block/crusher_0",
+      "y": 90
+    },
+    "facing=east,lit=false,part=5": {
+      "model": "starfall_blueprint:block/crusher_1",
+      "y": 90
+    },
+    "facing=east,lit=false,part=6": {
+      "model": "starfall_blueprint:block/crusher_2",
+      "y": 90
+    },
+    "facing=east,lit=false,part=7": {
+      "model": "starfall_blueprint:block/crusher_3",
+      "y": 90
+    },
     "facing=east,lit=true,part=0": {
       "model": "starfall_blueprint:block/crusher_0_on",
       "y": 90
@@ -61,6 +109,22 @@
       "y": 90
     },
     "facing=east,lit=true,part=3": {
+      "model": "starfall_blueprint:block/crusher_3_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=4": {
+      "model": "starfall_blueprint:block/crusher_0_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=5": {
+      "model": "starfall_blueprint:block/crusher_1_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=6": {
+      "model": "starfall_blueprint:block/crusher_2_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=7": {
       "model": "starfall_blueprint:block/crusher_3_on",
       "y": 90
     },
@@ -80,6 +144,22 @@
       "model": "starfall_blueprint:block/crusher_3",
       "y": 180
     },
+    "facing=south,lit=false,part=4": {
+      "model": "starfall_blueprint:block/crusher_0",
+      "y": 180
+    },
+    "facing=south,lit=false,part=5": {
+      "model": "starfall_blueprint:block/crusher_1",
+      "y": 180
+    },
+    "facing=south,lit=false,part=6": {
+      "model": "starfall_blueprint:block/crusher_2",
+      "y": 180
+    },
+    "facing=south,lit=false,part=7": {
+      "model": "starfall_blueprint:block/crusher_3",
+      "y": 180
+    },
     "facing=south,lit=true,part=0": {
       "model": "starfall_blueprint:block/crusher_0_on",
       "y": 180
@@ -93,6 +173,22 @@
       "y": 180
     },
     "facing=south,lit=true,part=3": {
+      "model": "starfall_blueprint:block/crusher_3_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=4": {
+      "model": "starfall_blueprint:block/crusher_0_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=5": {
+      "model": "starfall_blueprint:block/crusher_1_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=6": {
+      "model": "starfall_blueprint:block/crusher_2_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=7": {
       "model": "starfall_blueprint:block/crusher_3_on",
       "y": 180
     },
@@ -112,6 +208,22 @@
       "model": "starfall_blueprint:block/crusher_3",
       "y": 270
     },
+    "facing=west,lit=false,part=4": {
+      "model": "starfall_blueprint:block/crusher_0",
+      "y": 270
+    },
+    "facing=west,lit=false,part=5": {
+      "model": "starfall_blueprint:block/crusher_1",
+      "y": 270
+    },
+    "facing=west,lit=false,part=6": {
+      "model": "starfall_blueprint:block/crusher_2",
+      "y": 270
+    },
+    "facing=west,lit=false,part=7": {
+      "model": "starfall_blueprint:block/crusher_3",
+      "y": 270
+    },
     "facing=west,lit=true,part=0": {
       "model": "starfall_blueprint:block/crusher_0_on",
       "y": 270
@@ -125,6 +237,22 @@
       "y": 270
     },
     "facing=west,lit=true,part=3": {
+      "model": "starfall_blueprint:block/crusher_3_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=4": {
+      "model": "starfall_blueprint:block/crusher_0_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=5": {
+      "model": "starfall_blueprint:block/crusher_1_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=6": {
+      "model": "starfall_blueprint:block/crusher_2_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=7": {
       "model": "starfall_blueprint:block/crusher_3_on",
       "y": 270
     }

@@ -18,6 +18,18 @@ for r in data['recipes']:
         if any(entry['item'] in reserved for side in ('inputs','outputs') for entry in r[side]):
             definition['neoforge:conditions']=[{'type':'neoforge:false'}]
         (recipes/f"catalogue_{r['id'].lower()}.json").write_text(json.dumps(definition,indent=2)+'\n',encoding='utf-8',newline='\n')
+# Explicitly retire generated recipes in source and incremental build output; old base blocks stay registered.
+for number in range(32,36):
+    key=f'catalogue_rs-b{number:02d}'
+    disabled={'type':'starfall_blueprint:catalogue_crafting','recipe':f'RS-B{number:02d}',
+              'neoforge:conditions':[{'type':'neoforge:false'}]}
+    for base in (ROOT/'src/main/resources/data/starfall_blueprint',ROOT/'build/resources/main/data/starfall_blueprint'):
+        (base/'recipe').mkdir(parents=True,exist_ok=True)
+        (base/'recipe'/f'{key}.json').write_text(json.dumps(disabled,indent=2)+'\n',encoding='utf-8')
+        advancement=base/'advancement/recipes'/f'{key}.json'
+        advancement.parent.mkdir(parents=True,exist_ok=True)
+        advancement.write_text(json.dumps({'neoforge:conditions':[{'type':'neoforge:false'}],
+            'criteria':{'disabled':{'trigger':'minecraft:impossible'}}},indent=2)+'\n',encoding='utf-8')
 print(f"Exported {len(data['catalogue'])} catalogue entries and canonical recipes.")
 glass=next(r for r in data['recipes'] if r['id']=='PM-10')
 (recipes/'boroglass.json').write_text(json.dumps({'type':'starfall_blueprint:alloy_mixing','base':{'item':'minecraft:glass'},'base_count':3,'additive':{'item':'starfall_blueprint:boron'},'additive_count':1,'result':{'id':'starfall_blueprint:boroglass','count':3},'duration':300},indent=2)+'\n',encoding='utf-8',newline='\n')

@@ -21,8 +21,11 @@ public final class CatalogueContent {
     public static final Map<String,DeferredItem<Item>> ITEMS=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<IndustryBlock>> BLOCKS=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<Block>> ORES=new LinkedHashMap<>();
-    public static final Set<String> MACHINE_KEYS=Set.of("press","quarry","crusher","plant_cultivator","refiner","recycler","g01","g02","g03","g04","g06","g07","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
+    public static final Map<String,DeferredBlock<Block>> RESONANCE_BASES=new LinkedHashMap<>();
+    public static final Map<String,DeferredBlock<Block>> PHASE_MATRICES=new LinkedHashMap<>();
+    public static final Set<String> MACHINE_KEYS=Set.of("phase_extractor","press","quarry","crusher","plant_cultivator","refiner","recycler","g01","g02","g03","g04","g06","g07","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
     // Chenghai/Linhai content awaits a future official Minecraft dimension; keep registry IDs for saves only.
+    public static final Set<String> RETIRED_BASES=Set.of("resonance_base_ore_meteor_phase","resonance_base_deepslate_ore_meteor_phase","resonance_base_rutile_ore","resonance_base_borate_ore");
     public static final Set<String> RESERVED_ITEMS=Set.of("moon","lunar","moon_tail","liner","lined_box","anima","anima_basic","staff_blank");
     public static final Set<String> FLUID_KEYS=Set.of("warm","wastewater","bio","returnwater");
     public static final Set<String> TOOLS=Set.of("basic_jig","head","direction_jig","pressure_module","laminate_jig","clean_module","facet_jig");
@@ -44,6 +47,9 @@ public final class CatalogueContent {
                 if (RESERVED_ITEMS.contains(key)) return List.of();
                 var tool = params.getOptionalParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.TOOL);
                 if (tool == null || !tool.isCorrectToolForDrops(state)) return List.of();
+                var silk = params.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                        .getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.SILK_TOUCH);
+                if (tool.getEnchantmentLevel(silk) > 0) return List.of(new ItemStack(asItem()));
                 var fortune = params.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
                         .getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.FORTUNE);
                 int level = Math.clamp(tool.getEnchantmentLevel(fortune), 0, 3);
@@ -62,6 +68,8 @@ public final class CatalogueContent {
                 return List.of(out);
             }
         }));
+        for(String key:List.of("rutile","borate"))
+            ITEMS.put(key+"_ore",StarfallBlueprint.ITEMS.registerItem(key+"_ore",p->new BlockItem(ORES.get(key).get(),p)));
         for(var e:DEFINITIONS.entrySet()) {
             String key=e.getKey();if(isExisting(key)||key.equals("power")||FLUID_KEYS.contains(key)||e.getValue().get("vanilla")!=null&&e.getValue().get("vanilla").getAsBoolean()||Set.of("water","water_source","trade_lunar").contains(key))continue;
             if(MACHINE_KEYS.contains(key)) {
@@ -70,10 +78,24 @@ public final class CatalogueContent {
                         :new IndustryBlock(key,BlockBehaviour.Properties.of().strength(3f).requiresCorrectToolForDrops().noOcclusion()));
                 BLOCKS.put(key,block);
                 ITEMS.put(key,StarfallBlueprint.ITEMS.registerItem(key,p->new BlockItem(block.get(),p)));
+            } else if(e.getValue().has("phase_matrix_output")) {
+                var block=StarfallBlueprint.BLOCKS.register(key,()->new Block(BlockBehaviour.Properties.of().strength(5f).requiresCorrectToolForDrops()));
+                PHASE_MATRICES.put(key,block);
+                ITEMS.put(key,StarfallBlueprint.ITEMS.registerItem(key,p->new BlockItem(block.get(),p)));
+            } else if(e.getValue().has("resonance_source")) {
+                var block=StarfallBlueprint.BLOCKS.register(key,()->new Block(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops()));
+                RESONANCE_BASES.put(key,block);
+                ITEMS.put(key,StarfallBlueprint.ITEMS.registerItem(key,p->new BlockItem(block.get(),p)));
             } else if(key.equals("boroglass")) {
                 var block=StarfallBlueprint.BLOCKS.register(key,()->new TransparentBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).strength(1.5f)));
                 ITEMS.put(key,StarfallBlueprint.ITEMS.registerItem(key,p->new BlockItem(block.get(),p)));
             } else ITEMS.put(key,StarfallBlueprint.ITEMS.registerItem(key,p->CatalogueEquipment.create(key,p)));
+        }
+        // Keep old placed foundations readable, without recipes or creative acquisition.
+        for(String key:RETIRED_BASES)if(!RESONANCE_BASES.containsKey(key)){
+            var block=StarfallBlueprint.BLOCKS.register(key,()->new Block(BlockBehaviour.Properties.of().strength(3.5f).requiresCorrectToolForDrops()));
+            RESONANCE_BASES.put(key,block);
+            ITEMS.put(key,StarfallBlueprint.ITEMS.registerItem(key,p->new BlockItem(block.get(),p)));
         }
         ENTITY=StarfallBlueprint.ENTITIES.register("industry",()->BlockEntityType.Builder.of(IndustryBlockEntity::new,BLOCKS.values().stream().map(DeferredBlock::get).toArray(Block[]::new)).build(null));
         MENU=StarfallBlueprint.MENUS.register("industry",()->new MenuType<>(IndustryMenu::new,net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS));
@@ -87,7 +109,7 @@ public final class CatalogueContent {
             case "stone"->net.minecraft.world.item.Items.COBBLESTONE;case "plank"->net.minecraft.world.item.Items.OAK_PLANKS;case "log"->net.minecraft.world.item.Items.OAK_LOG;
             case "wool"->net.minecraft.world.item.Items.WHITE_WOOL;case "clay"->net.minecraft.world.item.Items.CLAY_BALL;case "slime"->net.minecraft.world.item.Items.SLIME_BALL;
             case "iron_pickaxe"->net.minecraft.world.item.Items.IRON_PICKAXE;case "workbench"->net.minecraft.world.item.Items.CRAFTING_TABLE;
-            default->BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(switch(key){case "coal"->"coal";default->key;}));};
+            default->BuiltInRegistries.ITEM.get(ResourceLocation.parse(key));};
     }
     private static Item existing(String key) {
         return switch(key){case "ore"->StarfallBlueprint.RAW.get();case "common"->StarfallBlueprint.CRYSTAL.get();case "tail"->StarfallBlueprint.TAILINGS.get();

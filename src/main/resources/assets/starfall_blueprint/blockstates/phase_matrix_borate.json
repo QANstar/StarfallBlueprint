@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "starfall_blueprint:block/phase_matrix_borate"
+    }
+  }
+}

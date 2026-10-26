@@ -1,0 +1,57 @@
+2026-10-26 相核凝矿阵集中服务端验收
+
+本次结果：一次完整 build + runGameTestServer 成功，186/186 required tests；退出码0。
+机器由有限实采改为2×2×2八格凝矿阵；保留phase_extractor注册ID以读取已有存档。
+
+环境与实际命令
+Windows / Java 21.0.12.1 / Minecraft 1.21.1 / NeoForge；使用既有离线Gradle缓存。
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.12.1
+GRADLE_USER_HOME=D:\Code\Workspace\.gradle
+JAVA_TOOL_OPTIONS=-Djdk.net.hosts.file=D:\Code\Workspace\StarfallBlueprint\.tools\build-hosts
+gradlew.bat --offline --init-script .tools/mirror.init.gradle build runGameTestServer -x downloadAssets --console=plain
+完整日志：.tools/phase-array-validation.log
+实际运行job：pwsh-bb645174bb054190，退出码0。
+
+日志原文
+[13:41:47] [Server thread/INFO] [cn.st.bl.te.AggregateGameTests/]: AFK L26 verified: 16 concrete, retained lily, no supplied energy, water, fuel, sand, gravel or dye
+[13:41:47] [Server thread/INFO] [minecraft/GameTestServer]: ========= 186 GAME TESTS COMPLETE IN 27.90 s ======================
+[13:41:47] [Server thread/INFO] [minecraft/GameTestServer]: All 186 required tests passed :)
+BUILD SUCCESSFUL in 54s
+7 actionable tasks: 4 executed, 3 up-to-date
+
+静态生成与验证
+sync_catalogue.py、generate_resources.py、generate_catalogue_resources.py均成功。
+PASS: 758 JSON files, all PNGs and local model/texture links.
+PASS: 223 discrete catalogue recipes; 17 vanilla recipes match mod inputs/outputs; alloy and substrate contracts match.
+Canonical：275 items / 223 recipes / 146 catalogue / 27 lines / 23 public blueprints。
+92条已加载CatalogueCraftingRecipe工作台配方真实匹配、装配并核对余物。
+34种原版共振基底及5/29分档、27产线和L26不变。
+新模型为32×32×32，两层线圈、反应核心与立柱：idle/active各8个非空分体、全部局部坐标0..16，64 facing/part/lit variants。
+
+本轮回归覆盖
+原180项中7项PhaseExtractor替换为凝矿场景，另增6项PhaseArrayStructure，共186项。
+- 三种专用基底各真实运行400刻，原矿1；水500mB、电80000XH；陨相固定MaterialBatch.ore(12,58)，Origin为实际维度。
+- 四块基底永久保留，双批再生与换基底仅影响下一批；周围世界不破坏、无矿源扫描。
+- 混放、缺基底、普通/原版/退役模组基底、无水/无电/输出不足时原子拒绝；第4输出位参与模拟。
+- 73刻NBT恢复、断电、满仓、真实红石停机恢复；预留与结算各一次。
+- 无工具需求；旧工具槽只取回、活动时锁定、取空隐藏。
+- 任意上下层共享能源/流体/物品能力，流体代理已注册；上下层无独立生产tick。
+- 八格放置空间及权限检查；上层阻塞不放置，拆上层只掉一个保留NBT的机器。
+- 上层红石暂停、八格active同步；未加载或不完整结构不能运行。
+- 八格蓝图四旋转、仅扣一台、缺层拒绝、四格旧机非法part拒绝；保护取消及修复回滚保留原控制器库存。
+- 旧单格drill批次可按原pending最多结算一次，不重新破坏矿块或磨损工具；之后必须拆移重放，不自动扩壳覆盖世界。
+
+冻结与构建SHA256
+RE_BFL/04_游戏设定/产线图册/production-data.json
+829345bd1b93ffb30036925861ebab111046f3751b039180e82e899ad22d4887
+StarfallBlueprint/src/main/resources/assets/starfall_blueprint/catalogue.json（同步导出结构不同，哈希不应与完整canonical相同）
+f16b42c3108db9e07580bc495f5bff3e3708ae559edfbc4a1114fb0a27c168d9
+RE_BFL两份离线HTML相同
+6241e31bb460677adedf6175f4dffd1b50af968ebfe2f558d07393ae3066b3c6
+build/libs/starfall_blueprint-0.1.0.jar
+95d63572a46e766c063cac2cbac416f65f71c59a2eabec8d7474133693801f0f
+
+范围
+本次未运行客户端、压力测试、额外两JVM重启或完整游玩平衡计时；NBT保存/加载属于同进程GameTest。
+日志包含既有外网公钥获取UnknownHostException；服务端继续完整运行且退出码0，该日志不影响此结果。
+186项仅为本轮结果；169和180项旧方案证据保留为历史。

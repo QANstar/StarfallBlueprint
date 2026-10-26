@@ -100,8 +100,9 @@ public final class EarlyMaterialsGameTests {
                 && Block.getDrops(state, h.getLevel(), pos, null, null, ItemStack.EMPTY).isEmpty(),
                 "Fortune and bare hands cannot bypass tool tier: " + ore);
             var silkDrops = Block.getDrops(state, h.getLevel(), pos, null, null, silk);
-            h.assertTrue(silkDrops.size() == 1 && ItemStack.matches(drops.getFirst(), silkDrops.getFirst()),
-                "Silk Touch retains raw-ore identity and origin: " + ore);
+            h.assertTrue(silkDrops.size() == 1 && silkDrops.getFirst().is(state.getBlock().asItem())
+                && silkDrops.getFirst().getCount() == 1 && silkDrops.getFirst().getItem() instanceof BlockItem,
+                "Correct iron Silk Touch yields one placeable source block for resonance crafting: " + ore);
             boolean increased = false;
             for (int i = 0; i < 32; i++) {
                 var sample = pos.offset(i % 8, 0, i / 8);

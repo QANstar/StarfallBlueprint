@@ -41,7 +41,7 @@ public final class CatalogueGameTests {
             var out=recipe.assemble(input,h.getLevel().registryAccess());var expectedOutput=d.getAsJsonArray("outputs").get(0);h.assertTrue(CatalogueContent.matches(CatalogueContent.key(expectedOutput),out)&&out.getCount()==CatalogueContent.qty(expectedOutput),"Wrong result: "+recipe.id);
             var remaining=recipe.getRemainingItems(input);h.assertTrue(remaining.stream().allMatch(ItemStack::isEmpty),"Catalogue assembly must not duplicate containers: "+recipe.id);h.assertTrue(verified.add(recipe.id),"Duplicate catalogue recipe: "+recipe.id);
         }
-        h.assertTrue(expected.size()==52&&verified.equals(expected),"All 52 active workbench recipes must load and execute: expected="+expected+" verified="+verified);h.succeed();
+        h.assertTrue(expected.size()==92&&verified.equals(expected),"All 92 active workbench recipes must load and execute: expected="+expected+" verified="+verified);h.succeed();
     }
     @GameTest(template="empty")
     public static void everyIndustrialProcessSurvivesReloadAndConservesInputs(GameTestHelper h){

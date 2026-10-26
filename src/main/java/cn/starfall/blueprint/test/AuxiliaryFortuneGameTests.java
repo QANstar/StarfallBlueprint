@@ -52,7 +52,13 @@ public final class AuxiliaryFortuneGameTests {
             var pos = h.absolutePos(new BlockPos(1, 1, 1));
             h.assertTrue(Block.getDrops(state, h.getLevel(), pos, null, null, wrongTool).isEmpty(), "Stone Fortune cannot bypass iron-tier requirement");
             var silkDrops = Block.getDrops(state, h.getLevel(), pos, null, null, silk);
-            h.assertTrue(silkDrops.size() == 1 && CatalogueContent.matches(key, silkDrops.getFirst()) && silkDrops.getFirst().getCount() == 1, "Silk Touch still gives raw ore rather than a placeable reroll block");
+            h.assertTrue(silkDrops.size() == 1 && silkDrops.getFirst().is(state.getBlock().asItem())
+                    && silkDrops.getFirst().getCount() == 1 && silkDrops.getFirst().getItem() instanceof BlockItem,
+                    "Correct iron Silk Touch yields one placeable auxiliary source block for resonance crafting");
+            var stoneSilk = new ItemStack(Items.STONE_PICKAXE);
+            stoneSilk.enchant(registry.getHolderOrThrow(Enchantments.SILK_TOUCH), 1);
+            h.assertTrue(Block.getDrops(state, h.getLevel(), pos, null, null, stoneSilk).isEmpty(),
+                    "Silk Touch cannot bypass the auxiliary ore's iron-tier mining requirement");
         }
         for (var tool : tools) h.assertTrue(tool.getCount() == 1 && tool.getDamageValue() == 0, "Loot queries do not consume or damage tools");
         h.succeed();

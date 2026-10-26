@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "starfall_blueprint:block/resonance_base_gilded_blackstone"
+  }
+}

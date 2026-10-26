@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "starfall_blueprint:block/phase_matrix_borate"
+  }
+}

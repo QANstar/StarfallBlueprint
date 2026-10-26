@@ -11,8 +11,11 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 /** Reserve inputs once, pause under backpressure, and settle all material/fluid outputs once. */
 public final class IndustryProcessing {
     public static void tick(IndustryBlockEntity be){
-        if(!Set.of("press","quarry","crusher","plant_cultivator","refiner","recycler","bio_processor","autocrafter","auto_furnace","prep").contains(be.kind()))return;
-        if(AggregateMachines.large(be.kind())&&!AggregateMachines.ready(be))return;
+        if(!Set.of("phase_extractor","press","quarry","crusher","plant_cultivator","refiner","recycler","bio_processor","autocrafter","auto_furnace","prep").contains(be.kind()))return;
+        if(!ResonanceBases.canRun(be))return;
+        // The former single-block drill already consumed its source; settle that reserved batch once.
+        boolean legacyDrill=be.kind().equals("phase_extractor")&&!be.idle()&&be.activeRecipe.startsWith("drill:");
+        if(AggregateMachines.large(be.kind())&&!legacyDrill&&!AggregateMachines.ready(be))return;
         if(be.kind().equals("plant_cultivator"))fillCultivationBucket(be);
         // Preserve legacy in-flight batches without completing or consuming more resources.
         var active = CatalogueContent.RECIPES.get(be.activeRecipe);
@@ -21,7 +24,8 @@ public final class IndustryProcessing {
             be.status=8; return;
         }
         if(be.idle()) {
-            if(be.kind().equals("plant_cultivator")){if(!PlantCultivation.start(be))return;}
+            if(be.kind().equals("phase_extractor")){if(!PhaseExtractor.start(be))return;}
+            else if(be.kind().equals("plant_cultivator")){if(!PlantCultivation.start(be))return;}
             else if(be.kind().equals("autocrafter")){if(!startCraft(be))return;}
             else if(be.kind().equals("auto_furnace")){if(!startSmelting(be))return;}
             else if(!startProcess(be))return;
@@ -62,7 +66,8 @@ public final class IndustryProcessing {
         be.stock.get(2).shrink(1);be.tanks[0].fill(water,FluidAction.EXECUTE);be.planOutputs(empty,true);be.setChanged();
     }
     private static boolean fluidsFit(IndustryBlockEntity be){return (be.pendingFluid1.isEmpty()||be.tanks[1].fill(be.pendingFluid1,FluidAction.SIMULATE)==be.pendingFluid1.getAmount())&&(be.pendingFluid2.isEmpty()||be.tanks[2].fill(be.pendingFluid2,FluidAction.SIMULATE)==be.pendingFluid2.getAmount());}
-    public static List<JsonObject> available(IndustryBlockEntity be){return CatalogueContent.RECIPES.values().stream().filter(CatalogueContent::isRecipeEnabled).filter(r->r.get("station").getAsString().equals(be.kind())&&!r.get("id").getAsString().equals("PC-R01")).toList();}
+    public static List<JsonObject> available(IndustryBlockEntity be){return CatalogueContent.RECIPES.values().stream().filter(CatalogueContent::isRecipeEnabled).filter(r->r.get("station").getAsString().equals(be.kind())&&!r.get("id").getAsString().equals("PC-R01"))
+            .filter(r->!be.kind().equals("quarry")||ResonanceBases.matches(be,r)).toList();}
     private static boolean startProcess(IndustryBlockEntity be){
         be.status=2;
         for(JsonObject r:available(be)) {
@@ -107,8 +112,11 @@ public final class IndustryProcessing {
                 if(key.equals("warm")||key.equals("returnwater")){f1=new FluidStack(CatalogueFluids.fluid(key),n);continue;}
                 if(key.equals("wastewater")){f2=new FluidStack(CatalogueFluids.fluid(key),n);continue;}
                 if(key.equals("bio")){f1=new FluidStack(CatalogueFluids.fluid(key),n);continue;}
-                ItemStack out=CatalogueContent.stack(key,n);inheritQuality(id,key,qualitySource,out);outs.add(out);
+                ItemStack out=be.kind().equals("quarry")?ResonanceBases.output(be,r):CatalogueContent.stack(key,n);
+                if(out.isEmpty()){invalid=true;break;}
+                inheritQuality(id,key,qualitySource,out);outs.add(out);
             }
+            if(invalid)continue;
             // A process may have two clean liquid outputs (bio + return water).
             if(id.equals("BIO-R01")){f1=new FluidStack(CatalogueFluids.fluid("bio"),1000);f2=new FluidStack(CatalogueFluids.fluid("returnwater"),1000);}
             if(outs.size()>4||!be.outputFits(outs)||(!f1.isEmpty()&&be.tanks[1].fill(f1,FluidAction.SIMULATE)!=f1.getAmount())||(!f2.isEmpty()&&(reuse>0?be.tanks[2].getFluidAmount()-reuse+f2.getAmount()>be.tanks[2].getCapacity():be.tanks[2].fill(f2,FluidAction.SIMULATE)!=f2.getAmount()))){be.status=5;continue;}

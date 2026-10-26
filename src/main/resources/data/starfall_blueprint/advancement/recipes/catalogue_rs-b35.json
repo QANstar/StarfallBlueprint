@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:false"
+    }
+  ],
+  "criteria": {
+    "disabled": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

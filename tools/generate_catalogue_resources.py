@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parents[1]; RES=ROOT/'src/main/resources'; MOD='starfall_blueprint'; ART=RES/'assets'/MOD; DATA=RES/'data'/MOD
 catalogue=json.loads((ART/'catalogue.json').read_text(encoding='utf-8'))
-machines={'plant_cultivator','refiner','recycler','g01','g02','g03','g04','g06','g07','pump','dew','cable','pipe','s02','bio_processor','g05','autocrafter','auto_furnace','supply_crate','energy_junction','item_duct','item_extractor','item_router','fluid_valve','terminal','busjoint','damper'}
+machines={'phase_extractor','plant_cultivator','refiner','recycler','g01','g02','g03','g04','g06','g07','pump','dew','cable','pipe','s02','bio_processor','g05','autocrafter','auto_furnace','supply_crate','energy_junction','item_duct','item_extractor','item_router','fluid_valve','terminal','busjoint','damper'}
 existing={'ore','common','tail','joint','brace','shield','finder','prep','tank','rain_collector','alloy_furnace','iron_plate','copper_plate','fix','steel_pre','steel','ceramic','insulation','binder','substrate','board','breaker','sheath','steel_fix','box','machine_frame'}
 fluids={'warm':'#bca88a','wastewater':'#837a61','bio':'#a6bf59','returnwater':'#699997'}
 # Keep these registry assets as placeholders; official dimension content is not released yet.

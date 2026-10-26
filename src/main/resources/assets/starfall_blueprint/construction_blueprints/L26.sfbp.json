@@ -2,7 +2,7 @@
   "format": "starfall_blueprint",
   "version": 1,
   "name": "L26 挂机混凝土建材线",
-  "description": "完整挂机白色建材线：首次在培养机放泥土与铃兰，两者保留；两台自动合成台已分别预设铃兰制白染料与白色粉末。无需刷石结构、煤、沙子或沙砾补给。 两台采石机各接一条支路：左支圆石→沙砾，右支圆石→沙砾→沙子；底部箱收混凝土。四格石头地基已包含，采石机正前方两格不要放方块。 风机须露天，凝露供水；首次需等待电、水缓冲充足。12风机低海拔合计960XH/t；铃兰和双采石支路理论匹配48混凝土/分钟，实际受物流/区块加载影响。",
+  "description": "完整挂机白色建材线：首次在培养机放泥土与铃兰，两者保留；两台自动合成台已分别预设铃兰制白染料与白色粉末。无需刷石结构、煤、沙子或沙砾补给。 两台地脉共振仪各接一条支路：左支圆石→沙砾，右支圆石→沙砾→沙子；底部箱收混凝土。两组四格共8个石头共振基底已包含（64石头＋8陨相原矿），普通石头无效；地脉共振仪正前方两格不要放方块。 风机须露天，凝露供水；首次需等待电、水缓冲充足。12风机低海拔合计960XH/t；铃兰和双采石支路理论匹配48混凝土/分钟，实际受物流/区块加载影响。",
   "blocks": [
     {
       "pos": [
@@ -1228,7 +1228,7 @@
         9,
         -3
       ],
-      "block": "minecraft:stone"
+      "block": "starfall_blueprint:resonance_base_stone"
     },
     {
       "pos": [
@@ -1236,7 +1236,7 @@
         9,
         -2
       ],
-      "block": "minecraft:stone"
+      "block": "starfall_blueprint:resonance_base_stone"
     },
     {
       "pos": [
@@ -1252,7 +1252,7 @@
         9,
         -3
       ],
-      "block": "minecraft:stone"
+      "block": "starfall_blueprint:resonance_base_stone"
     },
     {
       "pos": [
@@ -1260,7 +1260,7 @@
         9,
         -2
       ],
-      "block": "minecraft:stone"
+      "block": "starfall_blueprint:resonance_base_stone"
     },
     {
       "pos": [
@@ -1268,7 +1268,7 @@
         9,
         -3
       ],
-      "block": "minecraft:stone"
+      "block": "starfall_blueprint:resonance_base_stone"
     },
     {
       "pos": [
@@ -1276,7 +1276,7 @@
         9,
         -2
       ],
-      "block": "minecraft:stone"
+      "block": "starfall_blueprint:resonance_base_stone"
     },
     {
       "pos": [
@@ -1292,7 +1292,7 @@
         9,
         -3
       ],
-      "block": "minecraft:stone"
+      "block": "starfall_blueprint:resonance_base_stone"
     },
     {
       "pos": [
@@ -1300,7 +1300,7 @@
         9,
         -2
       ],
-      "block": "minecraft:stone"
+      "block": "starfall_blueprint:resonance_base_stone"
     },
     {
       "pos": [
@@ -1505,11 +1505,6 @@
       "count": 9
     },
     {
-      "item": "minecraft:stone",
-      "name": "石头",
-      "count": 8
-    },
-    {
       "item": "starfall_blueprint:autocrafter",
       "name": "自动合成台",
       "count": 2
@@ -1561,8 +1556,13 @@
     },
     {
       "item": "starfall_blueprint:quarry",
-      "name": "电动采石机",
+      "name": "地脉共振仪",
       "count": 2
+    },
+    {
+      "item": "starfall_blueprint:resonance_base_stone",
+      "name": "石头共振基底",
+      "count": 8
     }
   ]
 }

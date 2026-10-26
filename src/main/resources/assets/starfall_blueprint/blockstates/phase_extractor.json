@@ -1,0 +1,260 @@
+{
+  "variants": {
+    "facing=north,lit=false,part=0": {
+      "model": "starfall_blueprint:block/phase_extractor_0",
+      "y": 0
+    },
+    "facing=north,lit=false,part=1": {
+      "model": "starfall_blueprint:block/phase_extractor_1",
+      "y": 0
+    },
+    "facing=north,lit=false,part=2": {
+      "model": "starfall_blueprint:block/phase_extractor_2",
+      "y": 0
+    },
+    "facing=north,lit=false,part=3": {
+      "model": "starfall_blueprint:block/phase_extractor_3",
+      "y": 0
+    },
+    "facing=north,lit=false,part=4": {
+      "model": "starfall_blueprint:block/phase_extractor_4",
+      "y": 0
+    },
+    "facing=north,lit=false,part=5": {
+      "model": "starfall_blueprint:block/phase_extractor_5",
+      "y": 0
+    },
+    "facing=north,lit=false,part=6": {
+      "model": "starfall_blueprint:block/phase_extractor_6",
+      "y": 0
+    },
+    "facing=north,lit=false,part=7": {
+      "model": "starfall_blueprint:block/phase_extractor_7",
+      "y": 0
+    },
+    "facing=north,lit=true,part=0": {
+      "model": "starfall_blueprint:block/phase_extractor_0_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=1": {
+      "model": "starfall_blueprint:block/phase_extractor_1_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=2": {
+      "model": "starfall_blueprint:block/phase_extractor_2_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=3": {
+      "model": "starfall_blueprint:block/phase_extractor_3_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=4": {
+      "model": "starfall_blueprint:block/phase_extractor_4_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=5": {
+      "model": "starfall_blueprint:block/phase_extractor_5_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=6": {
+      "model": "starfall_blueprint:block/phase_extractor_6_on",
+      "y": 0
+    },
+    "facing=north,lit=true,part=7": {
+      "model": "starfall_blueprint:block/phase_extractor_7_on",
+      "y": 0
+    },
+    "facing=east,lit=false,part=0": {
+      "model": "starfall_blueprint:block/phase_extractor_0",
+      "y": 90
+    },
+    "facing=east,lit=false,part=1": {
+      "model": "starfall_blueprint:block/phase_extractor_1",
+      "y": 90
+    },
+    "facing=east,lit=false,part=2": {
+      "model": "starfall_blueprint:block/phase_extractor_2",
+      "y": 90
+    },
+    "facing=east,lit=false,part=3": {
+      "model": "starfall_blueprint:block/phase_extractor_3",
+      "y": 90
+    },
+    "facing=east,lit=false,part=4": {
+      "model": "starfall_blueprint:block/phase_extractor_4",
+      "y": 90
+    },
+    "facing=east,lit=false,part=5": {
+      "model": "starfall_blueprint:block/phase_extractor_5",
+      "y": 90
+    },
+    "facing=east,lit=false,part=6": {
+      "model": "starfall_blueprint:block/phase_extractor_6",
+      "y": 90
+    },
+    "facing=east,lit=false,part=7": {
+      "model": "starfall_blueprint:block/phase_extractor_7",
+      "y": 90
+    },
+    "facing=east,lit=true,part=0": {
+      "model": "starfall_blueprint:block/phase_extractor_0_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=1": {
+      "model": "starfall_blueprint:block/phase_extractor_1_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=2": {
+      "model": "starfall_blueprint:block/phase_extractor_2_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=3": {
+      "model": "starfall_blueprint:block/phase_extractor_3_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=4": {
+      "model": "starfall_blueprint:block/phase_extractor_4_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=5": {
+      "model": "starfall_blueprint:block/phase_extractor_5_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=6": {
+      "model": "starfall_blueprint:block/phase_extractor_6_on",
+      "y": 90
+    },
+    "facing=east,lit=true,part=7": {
+      "model": "starfall_blueprint:block/phase_extractor_7_on",
+      "y": 90
+    },
+    "facing=south,lit=false,part=0": {
+      "model": "starfall_blueprint:block/phase_extractor_0",
+      "y": 180
+    },
+    "facing=south,lit=false,part=1": {
+      "model": "starfall_blueprint:block/phase_extractor_1",
+      "y": 180
+    },
+    "facing=south,lit=false,part=2": {
+      "model": "starfall_blueprint:block/phase_extractor_2",
+      "y": 180
+    },
+    "facing=south,lit=false,part=3": {
+      "model": "starfall_blueprint:block/phase_extractor_3",
+      "y": 180
+    },
+    "facing=south,lit=false,part=4": {
+      "model": "starfall_blueprint:block/phase_extractor_4",
+      "y": 180
+    },
+    "facing=south,lit=false,part=5": {
+      "model": "starfall_blueprint:block/phase_extractor_5",
+      "y": 180
+    },
+    "facing=south,lit=false,part=6": {
+      "model": "starfall_blueprint:block/phase_extractor_6",
+      "y": 180
+    },
+    "facing=south,lit=false,part=7": {
+      "model": "starfall_blueprint:block/phase_extractor_7",
+      "y": 180
+    },
+    "facing=south,lit=true,part=0": {
+      "model": "starfall_blueprint:block/phase_extractor_0_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=1": {
+      "model": "starfall_blueprint:block/phase_extractor_1_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=2": {
+      "model": "starfall_blueprint:block/phase_extractor_2_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=3": {
+      "model": "starfall_blueprint:block/phase_extractor_3_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=4": {
+      "model": "starfall_blueprint:block/phase_extractor_4_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=5": {
+      "model": "starfall_blueprint:block/phase_extractor_5_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=6": {
+      "model": "starfall_blueprint:block/phase_extractor_6_on",
+      "y": 180
+    },
+    "facing=south,lit=true,part=7": {
+      "model": "starfall_blueprint:block/phase_extractor_7_on",
+      "y": 180
+    },
+    "facing=west,lit=false,part=0": {
+      "model": "starfall_blueprint:block/phase_extractor_0",
+      "y": 270
+    },
+    "facing=west,lit=false,part=1": {
+      "model": "starfall_blueprint:block/phase_extractor_1",
+      "y": 270
+    },
+    "facing=west,lit=false,part=2": {
+      "model": "starfall_blueprint:block/phase_extractor_2",
+      "y": 270
+    },
+    "facing=west,lit=false,part=3": {
+      "model": "starfall_blueprint:block/phase_extractor_3",
+      "y": 270
+    },
+    "facing=west,lit=false,part=4": {
+      "model": "starfall_blueprint:block/phase_extractor_4",
+      "y": 270
+    },
+    "facing=west,lit=false,part=5": {
+      "model": "starfall_blueprint:block/phase_extractor_5",
+      "y": 270
+    },
+    "facing=west,lit=false,part=6": {
+      "model": "starfall_blueprint:block/phase_extractor_6",
+      "y": 270
+    },
+    "facing=west,lit=false,part=7": {
+      "model": "starfall_blueprint:block/phase_extractor_7",
+      "y": 270
+    },
+    "facing=west,lit=true,part=0": {
+      "model": "starfall_blueprint:block/phase_extractor_0_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=1": {
+      "model": "starfall_blueprint:block/phase_extractor_1_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=2": {
+      "model": "starfall_blueprint:block/phase_extractor_2_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=3": {
+      "model": "starfall_blueprint:block/phase_extractor_3_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=4": {
+      "model": "starfall_blueprint:block/phase_extractor_4_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=5": {
+      "model": "starfall_blueprint:block/phase_extractor_5_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=6": {
+      "model": "starfall_blueprint:block/phase_extractor_6_on",
+      "y": 270
+    },
+    "facing=west,lit=true,part=7": {
+      "model": "starfall_blueprint:block/phase_extractor_7_on",
+      "y": 270
+    }
+  }
+}

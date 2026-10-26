@@ -112,7 +112,8 @@ public final class IndustryScreen extends AbstractContainerScreen<IndustryMenu>{
             text(g,"白名单：持物点击；空手清除",8,133,0xff43554d);return;}
         if(crafting){boolean sample=!menu.container.getItem(IndustryBlockEntity.CRAFTING_SAMPLE).isEmpty();text(g,font.plainSubstrByWidth(menu.templateLabel(minecraft.level),sample?94:136),sample?50:8,24,0xff304b43);text(g,"样品",128,36,0xff43554d);}
         else if(kind.equals("prep")){text(g,"按来料自动整备",8,24,0xff304b43);text(g,"接头",128,36,0xff43554d);}
-        else if(kind.equals("quarry")){text(g,"石质地基 · 前方两格留空",8,24,0xff304b43);text(g,"10秒 / 4圆石 / 4000XH",8,45,0xff546961);}
+        else if(kind.equals("quarry")){text(g,"四块同种基底 · 前方留空",8,24,0xff304b43);text(g,"基础：石头 / 铜 / 铁",8,45,0xff546961);}
+        else if(kind.equals("phase_extractor")){text(g,"四块同种凝矿基座 · 持续再生",8,24,0xff304b43);text(g,"20秒 / 500mB / 80000XH",8,45,0xff546961);}
         else if(kind.equals("crusher"))text(g,"按来料破碎 · 2秒 / 2000XH",8,24,0xff304b43);
         else if(kind.equals("press"))text(g,"自动辊压板材 · 2秒 / 1000XH",8,24,0xff304b43);
         else if(menu.canSelectRecipe())text(g,font.plainSubstrByWidth(menu.templateLabel(minecraft.level),116),30,24,0xff304b43);
@@ -122,10 +123,10 @@ public final class IndustryScreen extends AbstractContainerScreen<IndustryMenu>{
         if(menu.visible(13))text(g,"燃料",80,72,0xff43554d);if(menu.visible(14))text(g,"附件",104,72,0xff43554d);
         int progress=Math.min(100,menu.data.get(2)*100/Math.max(1,menu.data.get(3)));
         g.fill(x+8,y+106,x+168,y+111,0xffb9c4ba);g.fill(x+8,y+106,x+8+160*progress/100,y+111,0xff48977b);
-        if(menu.visible(18))text(g,"电池",8,109,0xff43554d);
+        if(menu.visible(18))text(g,kind.equals("quarry")?"升级组件":"电池",8,109,0xff43554d);
         if(crafting)text(g,"库存 "+(menu.craftingPage()+1)+" / 6",65,120,0xff43554d);
         text(g,menu.energy()+" XH",32,crafting?135:122,0xff8c662e);
-        if(plant||Set.of("prep","refiner","bio_processor","pump","dew","g05").contains(kind))
+        if(plant||Set.of("phase_extractor","prep","refiner","bio_processor","pump","dew","g05").contains(kind))
             text(g,plant?"培养水 "+menu.data.get(9)+" mB":"液体 "+menu.data.get(9)+" / "+menu.data.get(10)+" / "+menu.data.get(11)+" mB",32,135,0xff386f85);
         g.drawString(font,Component.translatable("gui.starfall_blueprint.industry.state."+menu.data.get(4)),x+32,y+148,0xff43554d,false);
     }

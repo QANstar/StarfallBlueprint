@@ -44,6 +44,8 @@ public final class CatalogueEquipment {
             public boolean isValidRepairItem(ItemStack s,ItemStack ingredient){return CatalogueContent.TOOLS.contains(key)?ingredient.is(key.equals("head")||key.equals("facet_jig")?Items.DIAMOND:Items.IRON_INGOT):super.isValidRepairItem(s,ingredient);}
             public void appendHoverText(ItemStack s,TooltipContext c,List<Component>lines,TooltipFlag f){
                 if(key.equals("s01"))lines.add(Component.literal(getData(s).getInt("Energy")+" / 200000 XH"));
+                for(String line:MachineUpgrades.description(key))lines.add(Component.literal(line));
+                if(!MachineUpgrades.description(key).isEmpty())lines.add(Component.literal("装入适配机器左侧升级栏；加工中锁定，开工固定效果"));
                 if(s.has(CatalogueContent.QUALITY.get())){var q=MaterialQuality.of(s);lines.add(Component.literal("P"+q.purity()+"% I"+q.integrity()+" O"+q.orientation()+" C"+q.contamination()+" · "+q.route()+(q.continuous()?" · 连续":"")));}
             }
             public InteractionResult useOn(net.minecraft.world.item.context.UseOnContext c){

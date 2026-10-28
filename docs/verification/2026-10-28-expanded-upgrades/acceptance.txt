@@ -1,0 +1,19 @@
+2026-10-28 扩展机器升级定向验收
+
+范围：StarfallBlueprint 与 RE_BFL；15种新升级物品、16条新增工作台配方、旧升级四字命名、原创图标及说明同步。
+
+通过：
+- Gradle --offline build，Java 21.0.12.1 / NeoForge 21.1.262 / Minecraft 1.21.1。
+- tools/verify_resources.py：805份JSON、全部PNG、本地模型和贴图链接。
+- tools/verify_mc_catalogue.py：239条整件图册配方；17条既有原版配方与模组材料/产物一致。
+- MachineUpgradeGameTests + MiningUpgradeGameTests：12项定向GameTest全部通过。运行日志：All 12 required tests passed :)，游戏测试用时1.469秒。
+- speedSavingAndEfficiencyKeepDistinctTradeoffsAcrossReload：16条新增工作台配方在实际RecipeManager加载并逐条匹配、合成；两条高效核心Ⅱ路线均包含。五组真实批次覆盖超频、节能、高效核心、接头与混装，预约后存读档精确结算。
+- expandedPortsPersistAndRefuseUnsafeCapacityRemoval：真实储能960000、液槽12000mB、接收4096XH/t；方向共享接收预算；扩容存量恢复；菜单和Shift拒绝溢出拆卸，达到剩余容量后无损拆卸；能源、泵、集露设备适配。
+- fortuneSmeltingLocksRealDropsBudgetAndSeedAcrossBlockedReload：时运取最高级，真实铜矿时运掉落后按熔炉配方转换，每个转换输入加100基础能耗；输出堵塞和读档不重抽、重复收费或推进；清空输出后一次结算。
+- silkHarvestAndConflictingOrForgedSavedMiningFreezeSafely：真实精准掉落，冲突配置、篡改待产物及退役路由冻结且不扣能。
+- 同批包含8项既有升级定向回归，涵盖300栈/51页、存档与跨页计效、工作装卸锁定和堵塞不消耗输入。
+- 两仓库 git diff --check 无空白错误。
+
+未运行历史全量游戏测试。本轮未做新的客户端截图验收，升级侧栏保留既有固定面板和分页布局，新增提示已编译。
+
+日志环境信息：隔离测试运行目录初次启动自动创建server.properties；离线Yggdrasil公钥请求失败不影响GameTest服务器，进程最终exit 0。

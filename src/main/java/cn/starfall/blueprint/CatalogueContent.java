@@ -23,7 +23,7 @@ public final class CatalogueContent {
     public static final Map<String,DeferredBlock<Block>> ORES=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<Block>> RESONANCE_BASES=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<Block>> PHASE_MATRICES=new LinkedHashMap<>();
-    public static final Set<String> MACHINE_KEYS=Set.of("phase_extractor","press","quarry","crusher","plant_cultivator","refiner","recycler","g01","g02","g03","g04","g06","g07","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
+    public static final Set<String> MACHINE_KEYS=Set.of("phase_extractor","press","quarry","crusher","plant_cultivator","refiner","recycler","g01","g02","g03","g04","g06","g07","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","auto_brewer","auto_smith","auto_stonecutter","auto_blast_furnace","auto_smoker","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
     // Chenghai/Linhai content awaits a future official Minecraft dimension; keep registry IDs for saves only.
     public static final Set<String> RETIRED_BASES=Set.of("resonance_base_ore_meteor_phase","resonance_base_deepslate_ore_meteor_phase","resonance_base_rutile_ore","resonance_base_borate_ore");
     public static final Set<String> RESERVED_ITEMS=Set.of("moon","lunar","moon_tail","liner","lined_box","anima","anima_basic","staff_blank");

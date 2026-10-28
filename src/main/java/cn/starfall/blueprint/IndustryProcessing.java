@@ -11,7 +11,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 /** Reserve inputs once, pause under backpressure, and settle all material/fluid outputs once. */
 public final class IndustryProcessing {
     public static void tick(IndustryBlockEntity be){
-        if(!Set.of("phase_extractor","press","quarry","crusher","plant_cultivator","refiner","recycler","bio_processor","autocrafter","auto_furnace","prep").contains(be.kind()))return;
+        if(!Set.of("phase_extractor","press","quarry","crusher","plant_cultivator","refiner","recycler","bio_processor","autocrafter","auto_furnace","prep").contains(be.kind())&&!SpecialProcessing.supports(be.kind()))return;
         if(!ResonanceBases.canRun(be))return;
         // The former single-block drill already consumed its source; settle that reserved batch once.
         boolean legacyDrill=be.kind().equals("phase_extractor")&&!be.idle()&&be.activeRecipe.startsWith("drill:");
@@ -28,8 +28,10 @@ public final class IndustryProcessing {
             else if(be.kind().equals("plant_cultivator")){if(!PlantCultivation.start(be))return;}
             else if(be.kind().equals("autocrafter")){if(!startCraft(be))return;}
             else if(be.kind().equals("auto_furnace")){if(!startSmelting(be))return;}
+            else if(SpecialProcessing.supports(be.kind())){if(!SpecialProcessing.start(be))return;}
             else if(!startProcess(be))return;
             MachineUpgrades.reserve(be);
+            MiningUpgrades.lock(be);
         }
         List<ItemStack> outputs=be.pending.stream().filter(s->!s.isEmpty()).toList();
         if(!be.outputFits(outputs)||!fluidsFit(be)){be.status=5;return;}
@@ -56,7 +58,7 @@ public final class IndustryProcessing {
             if(!be.pendingFluid1.isEmpty())be.tanks[1].fill(be.pendingFluid1,FluidAction.EXECUTE);
             if(!be.pendingFluid2.isEmpty())be.tanks[2].fill(be.pendingFluid2,FluidAction.EXECUTE);
             be.pending=NonNullList.withSize(4,ItemStack.EMPTY);be.pendingFluid1=FluidStack.EMPTY;be.pendingFluid2=FluidStack.EMPTY;
-            be.activeRecipe="";be.progressTicks=0;be.processPaid=0;be.status=0;
+            be.activeRecipe="";be.progressTicks=0;be.processPaid=0;be.status=0;MiningUpgrades.clear(be);
             be.experience+=be.pendingExperience;be.pendingExperience=0;
         }
         be.setChanged();
@@ -110,7 +112,14 @@ public final class IndustryProcessing {
                 if(index<0){toolsReady=false;break;}wear.add(index);}
             if(!toolsReady){be.status=6;continue;}
             List<ItemStack>outs=new ArrayList<>();FluidStack f1=FluidStack.EMPTY,f2=FluidStack.EMPTY;
+            MiningUpgrades.Plan mining=null;
+            if(be.kind().equals("quarry")) {
+                var plan=ResonanceBases.miningPlan(be,r);
+                if(plan.isEmpty()){be.status=14;continue;}
+                mining=plan.get();outs.addAll(mining.outputs());
+            }
             for(var o:r.getAsJsonArray("outputs")) {
+                if(mining!=null)break;
                 String key=CatalogueContent.key(o);int n=CatalogueContent.qty(o);
                 if(key.equals("warm")||key.equals("returnwater")){f1=new FluidStack(CatalogueFluids.fluid(key),n);continue;}
                 if(key.equals("wastewater")){f2=new FluidStack(CatalogueFluids.fluid(key),n);continue;}
@@ -123,13 +132,15 @@ public final class IndustryProcessing {
             // A process may have two clean liquid outputs (bio + return water).
             if(id.equals("BIO-R01")){f1=new FluidStack(CatalogueFluids.fluid("bio"),1000);f2=new FluidStack(CatalogueFluids.fluid("returnwater"),1000);}
             if(outs.size()>4||!be.outputFits(outs)||(!f1.isEmpty()&&be.tanks[1].fill(f1,FluidAction.SIMULATE)!=f1.getAmount())||(!f2.isEmpty()&&(reuse>0?be.tanks[2].getFluidAmount()-reuse+f2.getAmount()>be.tanks[2].getCapacity():be.tanks[2].fill(f2,FluidAction.SIMULATE)!=f2.getAmount()))){be.status=5;continue;}
-            long cost=r.get("energy").getAsLong();
+            long cost=r.get("energy").getAsLong()+(mining==null?0:mining.extraCost());
             if(be.getPower()==0&&!(be.kind().equals("prep")&&PreparationBlockEntity.isFuel(be.stock.get(13)))){be.status=4;continue;}
             for(int i=0;i<9;i++)be.stock.get(i).shrink(used[i]);
             if(fluidNeed>0)be.tanks[0].drain(fluidNeed,FluidAction.EXECUTE);
             if(reuse>0)be.tanks[2].drain(reuse,FluidAction.EXECUTE);
             for(int index:wear){ItemStack tool=be.stock.get(index);if(tool.isDamageableItem()){tool.setDamageValue(tool.getDamageValue()+1);if(tool.getDamageValue()>=tool.getMaxDamage())tool.shrink(1);}}
-            reserve(be,id,outs,(int)Math.ceil(r.get("seconds").getAsDouble()*20),cost);be.pendingFluid1=f1;be.pendingFluid2=f2;return true;
+            reserve(be,id,outs,(int)Math.ceil(r.get("seconds").getAsDouble()*20),cost);
+            if(mining!=null)MiningUpgrades.reserve(be,mining);
+            be.pendingFluid1=f1;be.pendingFluid2=f2;return true;
         }
         return false;
     }

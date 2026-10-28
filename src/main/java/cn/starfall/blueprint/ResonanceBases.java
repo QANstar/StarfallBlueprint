@@ -83,9 +83,15 @@ public final class ResonanceBases {
         var item = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("minecraft", route.output()));
         return item == Items.AIR ? ItemStack.EMPTY : new ItemStack(item, route.count());
     }
+    public static Optional<MiningUpgrades.Plan> miningPlan(IndustryBlockEntity be, JsonObject recipe) {
+        if (!matches(be, recipe)) return Optional.empty();
+        Route route = recipeRoute(recipe);
+        return MiningUpgrades.plan(be, route.source(), route.output(), route.count());
+    }
     /** Must run before aggregate validation, including for retired recipes absent from the catalogue. */
     public static boolean canRun(IndustryBlockEntity be) {
         if (!be.kind().equals("quarry")) return true;
+        if (MiningUpgrades.conflicts(be)) { be.status = 14; return false; }
         if (be.pending.stream().anyMatch(s -> !s.isEmpty() && !BuiltInRegistries.ITEM.getKey(s.getItem()).getNamespace().equals("minecraft"))) {
             be.status = 14; return false;
         }
@@ -98,14 +104,19 @@ public final class ResonanceBases {
         } else {
             route = recipeRoute(CatalogueContent.RECIPES.get(be.activeRecipe));
             if (route == null) { be.status = 14; return false; }
-            int stacks = 0;
-            for (var stack : be.pending) if (!stack.isEmpty()) {
-                if (!vanilla(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(), route.output()) || stack.getCount() != route.count()) {
-                    be.status = 14; return false;
+            if (MiningUpgrades.hasSnapshot(be)) {
+                if (!MiningUpgrades.validSnapshot(be, route.source(), route.output(), route.count())) { be.status = 14; return false; }
+            } else {
+                // Old batches have no seed: retain the original exact output/count gate.
+                int stacks = 0;
+                for (var stack : be.pending) if (!stack.isEmpty()) {
+                    if (!vanilla(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(), route.output()) || stack.getCount() != route.count()) {
+                        be.status = 14; return false;
+                    }
+                    stacks++;
                 }
-                stacks++;
+                if (stacks != 1 || !be.pendingFluid1.isEmpty() || !be.pendingFluid2.isEmpty()) { be.status = 14; return false; }
             }
-            if (stacks != 1 || !be.pendingFluid1.isEmpty() || !be.pendingFluid2.isEmpty()) { be.status = 14; return false; }
         }
         if (!permitted(be, route)) { be.status = 13; return false; }
         return true;

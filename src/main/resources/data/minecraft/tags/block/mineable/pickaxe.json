@@ -79,6 +79,11 @@
     "starfall_blueprint:resonance_base_glowstone",
     "starfall_blueprint:phase_matrix_meteor",
     "starfall_blueprint:phase_matrix_rutile",
-    "starfall_blueprint:phase_matrix_borate"
+    "starfall_blueprint:phase_matrix_borate",
+    "starfall_blueprint:auto_stonecutter",
+    "starfall_blueprint:auto_blast_furnace",
+    "starfall_blueprint:auto_brewer",
+    "starfall_blueprint:auto_smith",
+    "starfall_blueprint:auto_smoker"
   ]
 }

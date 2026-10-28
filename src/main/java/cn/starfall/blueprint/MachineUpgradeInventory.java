@@ -28,7 +28,7 @@ public final class MachineUpgradeInventory implements Container {
     public boolean isEmpty(){for(int i=0;i<getContainerSize();i++)if(!getItem(i).isEmpty())return false;return true;}
     public boolean extraIsEmpty(){return extra.stream().allMatch(ItemStack::isEmpty);}
     public void clearContent(){for(int index:legacy())owner.stock.set(index,ItemStack.EMPTY);extra.clear();setChanged();}
-    public void setChanged(){owner.setChanged();}
+    public void setChanged(){owner.refreshUpgradeCapacity();owner.setChanged();}
     public boolean stillValid(Player player){return owner.stillValid(player);}
     public boolean canPlaceItem(int index,ItemStack stack){return MachineUpgrades.accepts(owner,stack);}
     /** Occupied entries followed by exactly one free entry; empty holes are reused. */

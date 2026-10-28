@@ -102,6 +102,54 @@ public final class MachineUpgradeGameTests {
         }h.succeed();
     }
     @GameTest(template="empty")
+    public static void speedSavingAndEfficiencyKeepDistinctTradeoffsAcrossReload(GameTestHelper h){
+        int recipes=0;
+        for(var holder:h.getLevel().getRecipeManager().getAllRecipesFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING))if(holder.value() instanceof CatalogueCraftingRecipe recipe&&java.util.List.of("SV-ES","SV-EF","SV-CP","SV-IN","SV-FC","SV-FT","SV-SI","SV-AS").stream().anyMatch(recipe.id::startsWith)){
+            var definition=CatalogueContent.recipe(recipe.id);var grid=new java.util.ArrayList<ItemStack>(java.util.Collections.nCopies(9,ItemStack.EMPTY));var cells=definition.getAsJsonObject("craft").getAsJsonArray("cells");
+            for(int i=0;i<9;i++)if(!cells.get(i).isJsonNull()){
+                var stack=CatalogueContent.stack(CatalogueContent.key(cells.get(i)),1);if(stack.is(StarfallBlueprint.CRYSTAL.get()))stack.set(StarfallBlueprint.BATCH.get(),MaterialBatch.crystal(100));grid.set(i,stack);
+            }
+            var input=net.minecraft.world.item.crafting.CraftingInput.of(3,3,grid);
+            h.assertTrue(recipe.matches(input,h.getLevel())&&ItemStack.isSameItem(recipe.assemble(input,h.getLevel().registryAccess()),recipe.getResultItem(h.getLevel().registryAccess())),"New upgrade recipe loads and crafts its documented result: "+recipe.id);recipes++;
+        }
+        h.assertTrue(recipes==16,"All sixteen new upgrade recipes, including both efficiency II routes, are loaded");
+        String[][] configurations={{"speed_1"},{"energy_saving_1"},{"efficiency_1"},{"speed_1","energy_saving_1"},{"speed_2","energy_saving_2","efficiency_1","efficiency_1","connector"}};
+        int[][] expected={{32,4400},{44,3273},{32,3273},{36,3600},{24,2500}};
+        for(int scenario=0;scenario<configurations.length;scenario++){
+            var be=machine(h,"autocrafter");be.template="minecraft:iron_block";be.stock.set(0,new ItemStack(Items.IRON_INGOT,9));
+            for(int i=0;i<configurations[scenario].length;i++){String key=configurations[scenario][i];be.upgrades.setItem(i,key.equals("connector")?new ItemStack(StarfallBlueprint.CONNECTOR.get()):CatalogueContent.stack(key,1));}
+            be.setPower(20000);ticks(be,1);
+            h.assertTrue(be.processTicks==expected[scenario][0]&&be.processCost==expected[scenario][1]&&be.stock.get(0).isEmpty(),"Reserved real craft has expected speed penalty, energy premium or positive-only core effects: "+scenario);
+            var saved=be.saveWithoutMetadata(h.getLevel().registryAccess());be.loadWithComponents(saved,h.getLevel().registryAccess());ticks(be,expected[scenario][0]-1);
+            h.assertTrue(be.idle()&&output(be,Items.IRON_BLOCK)==1&&be.getPower()==20000-expected[scenario][1],"Reload finishes once and charges the frozen combined budget: "+scenario);
+        }
+        h.succeed();
+    }
+    @GameTest(template="empty")
+    public static void expandedPortsPersistAndRefuseUnsafeCapacityRemoval(GameTestHelper h){
+        var be=machine(h,"refiner");String[] keys={"capacity_1","capacity_2","intake_1","intake_2","fluid_capacity_1","fluid_capacity_2"};
+        for(int i=0;i<keys.length;i++)be.upgrades.setItem(i,CatalogueContent.stack(keys[i],i%2==0?2:1));
+        h.assertTrue(be.capacity()==960000&&be.energyPort(Direction.UP).getMaxEnergyStored()==960000&&be.fluidPort().getTankCapacity(0)==12000,"Mixed expansion tiers change real energy and fluid port capacities");
+        var energy=be.energyPort(Direction.UP);h.assertTrue(energy.receiveEnergy(10000,true)==4096&&be.getPower()==0&&energy.receiveEnergy(10000,false)==4096&&be.energyPort(Direction.NORTH).receiveEnergy(1,false)==0,"Expanded receive limit is shared across sides and simulation leaves its budget untouched");
+        be.setPower(800000);h.assertTrue(be.fluidPort().fill(new FluidStack(CatalogueFluids.fluid("water"),10000),FluidAction.EXECUTE)==10000,"Expanded tank actually accepts more than the base capacity");
+        var saved=be.saveWithoutMetadata(h.getLevel().registryAccess());be.loadWithComponents(saved,h.getLevel().registryAccess());
+        h.assertTrue(be.getPower()==800000&&be.capacity()==960000&&be.tanks[0].getCapacity()==12000&&be.tanks[0].getFluidAmount()==10000&&MachineUpgrades.count(be,"fluid_capacity_2")==1,"Reload restores upgrades before clamping stored energy and fluids, including the extra upgrade entries");
+        var p=FakePlayerFactory.get(h.getLevel(),new GameProfile(UUID.randomUUID(),"CapacityUpgrade"));p.getInventory().clearContent();var menu=(IndustryMenu)be.createMenu(4,p.getInventory(),p);int bay=IndustryMenu.UPGRADE_MENU_START;
+        try{
+            h.assertTrue(!menu.getSlot(bay).mayPickup(p)&&!menu.getSlot(bay+4).mayPickup(p),"Real menu refuses shrinking below stored energy or fluid");
+            menu.quickMoveStack(p,bay);menu.quickMoveStack(p,bay+4);
+            h.assertTrue(MachineUpgrades.count(be,"capacity_1")==2&&MachineUpgrades.count(be,"fluid_capacity_1")==2&&be.getPower()==800000&&be.tanks[0].getFluidAmount()==10000,"Shift removal cannot bypass the content-preserving capacity lock");
+            be.setPower(640000);be.tanks[0].drain(2000,FluidAction.EXECUTE);
+            h.assertTrue(menu.getSlot(bay).mayPickup(p)&&menu.getSlot(bay+4).mayPickup(p),"Removal becomes legal exactly at the remaining capacity");
+            menu.quickMoveStack(p,bay+4);menu.quickMoveStack(p,bay);
+            h.assertTrue(be.capacity()==640000&&be.getPower()==640000&&be.tanks[0].getCapacity()==8000&&be.tanks[0].getFluidAmount()==8000&&MachineUpgrades.count(be,"capacity_1")==0&&MachineUpgrades.count(be,"fluid_capacity_1")==0,"Legal removal refreshes both capacities without losing stored contents");
+        }finally{menu.removed(p);p.getInventory().clearContent();}
+        for(String kind:List.of("s02","g01","g05","pump","dew")){
+            var utility=machine(h,kind);h.assertTrue(MachineUpgrades.accepts(utility,CatalogueContent.stack("capacity_1",1))&&MachineUpgrades.accepts(utility,CatalogueContent.stack("intake_1",1))==!utility.generator()&&MachineUpgrades.accepts(utility,CatalogueContent.stack("fluid_capacity_1",1))==utility.hasFluidPort()&&!MachineUpgrades.accepts(utility,CatalogueContent.stack("efficiency_1",1)),"Utility upgrades respect generator intake and real fluid-port boundaries: "+kind);
+        }
+        h.succeed();
+    }
+    @GameTest(template="empty")
     public static void blockedOutputsNeverConsumeUpgradedCraftInputs(GameTestHelper h){
         var be=machine(h,"autocrafter");be.template="minecraft:iron_block";be.stock.set(0,new ItemStack(Items.IRON_INGOT,9));be.stock.set(16,CatalogueContent.stack("speed_2",64));be.setPower(320000);for(int i=9;i<13;i++)be.stock.set(i,new ItemStack(Items.COBBLESTONE,64));ticks(be,2);
         h.assertTrue(be.idle()&&be.getPower()==320000&&be.stock.get(0).getCount()==9&&be.stock.get(16).getCount()==64,"Full outputs preserve all real inputs, power and upgrades");h.succeed();

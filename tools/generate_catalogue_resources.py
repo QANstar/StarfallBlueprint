@@ -5,7 +5,8 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parents[1]; RES=ROOT/'src/main/resources'; MOD='starfall_blueprint'; ART=RES/'assets'/MOD; DATA=RES/'data'/MOD
 catalogue=json.loads((ART/'catalogue.json').read_text(encoding='utf-8'))
-machines={'phase_extractor','plant_cultivator','refiner','recycler','g01','g02','g03','g04','g06','g07','pump','dew','cable','pipe','s02','bio_processor','g05','autocrafter','auto_furnace','supply_crate','energy_junction','item_duct','item_extractor','item_router','fluid_valve','terminal','busjoint','damper'}
+special_machines={'auto_brewer','auto_smith','auto_stonecutter','auto_blast_furnace','auto_smoker'}
+machines=special_machines | {'phase_extractor','plant_cultivator','refiner','recycler','g01','g02','g03','g04','g06','g07','pump','dew','cable','pipe','s02','bio_processor','g05','autocrafter','auto_furnace','supply_crate','energy_junction','item_duct','item_extractor','item_router','fluid_valve','terminal','busjoint','damper'}
 existing={'ore','common','tail','joint','brace','shield','finder','prep','tank','rain_collector','alloy_furnace','iron_plate','copper_plate','fix','steel_pre','steel','ceramic','insulation','binder','substrate','board','breaker','sheath','steel_fix','box','machine_frame'}
 fluids={'warm':'#bca88a','wastewater':'#837a61','bio':'#a6bf59','returnwater':'#699997'}
 # Keep these registry assets as placeholders; official dimension content is not released yet.
@@ -50,7 +51,11 @@ def sprite(key):
 
 for key in catalogue['catalogue']:
  if key in existing:continue
- im=sprite(key);save(im,ART/'textures/item'/f'{key}.png')
+ im=sprite(key)
+ original=ROOT.parent/'RE_BFL/04_游戏设定/产线图册/item-art'/f'{key}.png'
+ if (key.startswith(('speed_','energy_saving_','efficiency_','capacity_','intake_','fluid_capacity_','fortune_')) or key in {'silk_touch','auto_smelt'} or key in special_machines) and original.is_file():
+  im=Image.open(original).convert('RGBA')
+ save(im,ART/'textures/item'/f'{key}.png')
  if key in machines:
   save(im,ART/'textures/block'/f'{key}_front.png')
   lit=im.copy();d=ImageDraw.Draw(lit);d.rectangle((10,12,13,13),fill='#81e5c2');save(lit,ART/'textures/block'/f'{key}_front_on.png')
@@ -82,6 +87,7 @@ for lang in ['zh_cn','en_us']:
   if key in fluids:
    text[f'fluid_type.{MOD}.{key}']=name;text[f'item.{MOD}.{key}_bucket']=name+('桶'if lang=='zh_cn'else' Bucket')
  for i,label in enumerate(['就绪','加工中','缺少原料/模板','缺少工艺水','等待供能','出料已满','缺少可用夹具','来料品质不合格','红石停机']):text[f'gui.{MOD}.industry.state.{i}']=label if lang=='zh_cn' else ['Ready','Processing','Needs inputs/template','Needs water','Needs energy','Output full','Needs tool','Invalid quality','Stopped'][i]
+ if lang=='zh_cn':text['item.starfall_blueprint.efficient_connector']='省能接头'
  write(path,text)
 tag=RES/'data/minecraft/tags/block/mineable/pickaxe.json';content=json.loads(tag.read_text(encoding='utf-8'));content['values']=list(dict.fromkeys(content['values']+[f'{MOD}:{k}'for k in machines]));write(tag,content)
 write(RES/'data/minecraft/tags/block/dampens_vibrations.json',{'replace':False,'values':[f'{MOD}:damper']})

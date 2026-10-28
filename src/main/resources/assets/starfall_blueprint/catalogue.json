@@ -55,7 +55,8 @@
         "MC-M01",
         "MC-C01",
         "EN-G07",
-        "PR-R01"
+        "PR-R01",
+        "SV-FC01"
       ],
       "primary_recipe": "V-IRON",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -113,7 +114,11 @@
         "MC-C01",
         "EN-G06",
         "EN-G07",
-        "PR-R02"
+        "PR-R02",
+        "SV-ES01",
+        "SV-CP01",
+        "SV-CP02",
+        "SV-IN01"
       ],
       "primary_recipe": "V-COPPER",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -148,7 +153,9 @@
         "SV-SP01",
         "LG-I02",
         "LG-I03",
-        "LG-F01"
+        "LG-F01",
+        "SV-CP01",
+        "SV-IN01"
       ],
       "primary_recipe": "",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -199,7 +206,11 @@
         "DX-C01",
         "DX-B01",
         "DX-B02",
-        "DX-B03"
+        "DX-B03",
+        "SV-FT01",
+        "SV-FT02",
+        "SV-FT03",
+        "SV-SI01"
       ],
       "primary_recipe": "",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -850,7 +861,10 @@
         "SV-BK02",
         "EN-G06",
         "EN-G07",
-        "AG-M01"
+        "AG-M01",
+        "SV-ES02",
+        "SV-CP02",
+        "SV-FT01"
       ],
       "primary_recipe": "PC-R01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -879,7 +893,10 @@
           "bulk_2",
           "g06",
           "g07",
-          "plant_cultivator"
+          "plant_cultivator",
+          "energy_saving_2",
+          "capacity_2",
+          "fortune_1"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABdUlEQVR4nO1UPU4CURAeJ5zBtSPhCBZEKzobCxrPgScgZuMJ8ALewIQCCwoTK8GCG0BiJ9T2a4Zkkucy83bm8cg2fslmA/P3fd+btwD/yIiiP6i8Ndg2Ccw5eLWcQqsO3L2+Qe/h3uUCtqk+G4EQu/nC5QLmUj/7/vrzv5UEwglALliBTQkxFRR7nD6ptRYXsJljnMTtRffAfo8LmLrdTeqtLuAxd1tT73EBT6ne4gKm3u0m9WFtDKgFJIVMwqM+hOQCWhPrSizqGZtyAtpxolakWUwujIcj8EJbZqwnxiz2fOEY5zdX4nGqBHKD7I8tM0rqYxvOTTygflkd2JSTpD2QXEApybPhMfx8LKPnT+iEP7af72fj4ch0zzmXjyM8a45rXz/KpfgBAetWk7KwGQ+U8p9Xa4BLvV/HSyBkrw1l7OMlVBA4WheAUlHqgmnYuyAIEAnkBg2r74cJRX9QXc9eKnrzk0oi7OUqKo4YKvXL1SsrfgH+B+vPU7a+JwAAAABJRU5ErkJggg=="
@@ -909,7 +926,9 @@
         "PM-08",
         "QM-U01",
         "DX-M01",
-        "DX-C01"
+        "DX-C01",
+        "SV-FT02",
+        "SV-SI01"
       ],
       "primary_recipe": "PC-R03",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -928,7 +947,9 @@
           "directed",
           "resonance_upgrade",
           "phase_extractor",
-          "phase_matrix_frame"
+          "phase_matrix_frame",
+          "fortune_2",
+          "silk_touch"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABYklEQVR4nGNgGAUjHTCSoljczP4/NvGXpw6SZA4yYCHFcqX6fOySjQxYHUaM4xiJtbx54ySG+efuMiQaKROjBawWBO41TsTrCCZSfA6yHGYwtQATMYqI9TU2AHI8rrRD0AGwoCcHIDsanyOYaGE5KYCJ1BRPbjrAFQpM2Cw/d3IjRfFOiiOYsCkM2baPwVtCHowpAcR4ggWXBMgRILDGywlMb33xkGQHYIsqcNQ2MvyHlQ0shAzB5hBYOkD3ITYLX+06wSDmZgHnoxdMLMT6Bt0h8xnu4rWUWMBCtEo0hyBbTqyF2IplJgYyASgkQBYTshw5+LEBJgY6AVyVEhPDAAMmeliCr0pmoqXFhOKf5g4gpkHCgi4AVgxtYuFsglERsGAThLuYDIfAgh3k8y/HTxJsE7Lgk0R2CCFHIFuMopcaJeFLHNGCXsaTYjFJDsAWLSEUWkwxEDez/4+vsTkKGIgEAOzstwP2f0peAAAAAElFTkSuQmCC"
@@ -969,7 +990,8 @@
         "SV-SP02",
         "SV-BK01",
         "LG-I02",
-        "EN-G06"
+        "EN-G06",
+        "SV-IN01"
       ],
       "primary_recipe": "AUX-R01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -997,7 +1019,8 @@
           "speed_2",
           "bulk_1",
           "item_extractor",
-          "g06"
+          "g06",
+          "intake_1"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB6UlEQVR4nGNgGAWjgErAQVvnPzn6mKhleWuAPFmOYKKW5SBAjiOYGKgMSHUEE7EKQYaiGwzir5sSxaDpYg0XA7FJcQQjMYqOVnv/hxkelLOMwVNViGH77Xdgi/ABkHohxypGskOgM8AO7muQYbMn7gBbbqPNC7b8yNXPcLXIbBj/+p6jBEOCEZugp4vd/+/PET6EWQ6yGB8AqQNZCnMATH31hocMB65ewWoXI6GUTSqApQeYQ2AAlyOYsBni4mMA1oALoAc3MgBZjM1ykJnYABM2waNnH6E4AjmVgwC2qMDlKJjlIDOxARZs8Z+T5Avn7//DwMCA5iNsAOYoWDqA5RiQ5Yb6+sQ7ABkUlRUwvHrxkmHJouUMe7ZcYCAKwKIO6vN/DMx4lbMQY2ZMXCRxlmPRt2jRKvId8OrFSwYxCXEwTa4j4uLC8DqCiYFOAJSuQOmL6BDQ1tfCKr6yupOgZeGt5UQ7jIWBTJCa74EhBiotSQUs5DqAHMsIpgFPtDKAHoCJkAJYTqAEgHLC2YtXqBMF4SQkMHQADd3/2/ccYiTogKsXr6HkBHJDARSC+AALMgfqMng6gDmCkCHEAGN9HdIaJAyIIAM7AuQYSsCUeZvBNHLw43QANXMFLouJcgADUmiQC3BZPGgAAOsg19hAeMQ5AAAAAElFTkSuQmCC"
@@ -1467,7 +1490,12 @@
         "AG-M01",
         "QM-M01",
         "QM-M02",
-        "PR-M01"
+        "PR-M01",
+        "SP-M01",
+        "SP-M02",
+        "SP-M03",
+        "SP-M04",
+        "SP-M05"
       ],
       "primary_recipe": "ST-01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1481,7 +1509,12 @@
           "plant_cultivator",
           "quarry",
           "crusher",
-          "press"
+          "press",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABEUlEQVR4nGNgGAWjYBRQGWia2P0H4QGz+MKDp2BMrCMYqWExiF6+ZjmGXGRIJJi+fuYQI9UdoInDYlV5KYbbD59hOASXIxgptfjImatg2sZEmyxHMFLTYmQAcgQIIDsEW5QwUttibA7BFxqMtLIYn4NAwMTUHuwIRlpZjK4P2WIQwAgBTRO7/2dOH0QJLpAh1LQ4u6IGzM4JccNMA5pQn6M7glYWY3WAjoUdw5UTh8COAAFiHIJsMcxSYizG6QAYgDkEnyNgUYQev8RYTNABxDiCEotxpgEdHI4AAZhDqGExhgNIcQi6xVM7WvBWOPgAIy4JbA4BOYJaFhN0AC6H2DvYUcXiodPSGQWjYBQw0BgAABdz1m/rtfZwAAAAAElFTkSuQmCC"
@@ -1506,7 +1539,12 @@
       "uses": [
         "ST-09",
         "PM-02",
-        "PR-M01"
+        "PR-M01",
+        "SP-M01",
+        "SP-M02",
+        "SP-M03",
+        "SP-M04",
+        "SP-M05"
       ],
       "primary_recipe": "ST-02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1518,7 +1556,12 @@
           "substrate",
           "conductor",
           "warm",
-          "press"
+          "press",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABE0lEQVR4nGNgGAWjYBRQGbhpqv0HYWLVM1LTYhC9ZlIImB+St4Zh1/VbjDR3gBuaxcgA5AgQwOcQRmpbzGvkyPD53H4Mh+ByBCOlFj8/cwlMS5rokeUIRmpajAxAjgABZIdgixJGaluMzSH4QoORVhbjcxAIuNtkgx3BSCuL0fUhWwwCGCHgpqn2f+eRqSjBBTKEmhZPjlMDs9Urt2CmATeoz9EdQSuLsTrAU4GbYfuDr2BHgAAxDkG2GGYpMRbjdAAMwByCzxGwKEKPX2IsJugAYhxBicU404AnDkeAAMwh1LAYwwGkOATd4txFt4iq+bABRlwS2BwCcgS1LCboAFwO8bKTporFNG/pjIJRMAqGDAAACbzRYmcUBm8AAAAASUVORK5CYII="
@@ -1583,7 +1626,14 @@
         "EN-G06",
         "QM-M01",
         "QM-M02",
-        "PR-M01"
+        "PR-M01",
+        "SP-M01",
+        "SP-M02",
+        "SP-M03",
+        "SP-M04",
+        "SP-M05",
+        "SV-FC02",
+        "SV-AS01"
       ],
       "primary_recipe": "ST-05",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1603,7 +1653,14 @@
           "g06",
           "quarry",
           "crusher",
-          "press"
+          "press",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "fluid_capacity_2",
+          "auto_smelt"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABf0lEQVR4nO2WMUrEUBCG30DOYO+WClYWiyIYPcFiZbWdIKyVtZVXEKw9gUdQEMXCStBSey+hTHCWyb+TybzsxkLywxKSnZfvfzM/SVIaNOi/abSx882/aD2tEszHy6vr6vxidlodP96fqDcDI7VTAaPYiGeC+oBaJliWEcoFR6FRIxSBLgtm7W9vVce98W7NROGBl4Va4LX1zfT1+Tb/v0Dww/Njun957QVsqcALvIBNsHKNCNQCn53PajloNMA6Oj6p2hTtBu5WwAIVcDmZLqwlfWI9wTwTVpsRytLgu9ub9hCWk+m80BoJgnVYNdTacagD5e9CMSHJFSMMtqC4W0vYAfIM4CK9WwxTG/jgcFxb547AG0nObgXaOYRlQyc8cBs0HEIpxhtY8CZoJIRFpPURqNR7UJ2lkAGcvxUmD4pAfA+wFjKgi7pkQEPlMayh+E1AeAMJomWkaRy5UNeAZ8QaidTkQLWorUDGogH61doFmmUAu7EK6J998w9KAf0AkBYArGV4R9UAAAAASUVORK5CYII="
@@ -1679,7 +1736,11 @@
         "FX-06",
         "PM-05",
         "PM-12",
-        "LG-E01"
+        "LG-E01",
+        "SV-ES01",
+        "SV-EF01",
+        "SV-CP01",
+        "SV-IN02"
       ],
       "primary_recipe": "ST-07",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1697,7 +1758,11 @@
           "clean_module",
           "coating",
           "liner",
-          "energy_junction"
+          "energy_junction",
+          "energy_saving_1",
+          "efficiency_1",
+          "capacity_1",
+          "intake_2"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABWElEQVR4nGNgGAWjYDgAJV2t/+TqZaGGxQGRTgwbGBjA7HuXrzGSYgYjpRajgw3L9zGQ4hBGallMrkMYSbGcGItJdQgjMRZjE0d3TFZ8BJietnAFSQ5hJMbilu4CDPma0glkOwTZEYz4LMdmMTaHYIsaXA4h2gEtaJZPnbkKzs5ODyPKEdgcgu4AJkKWgyxGthwbAKmHxTE6wBUVOB2ADJAtfn7nGRzD4p8agIlQ0MMsRwfojsAXCkQ7AJvvsVkOA9QICSaKTRh1wFCKgpOnbxDvgGxoYSOpIoXTQGJKShCIz2kAW25uqoHfAfcuX2PElrKxOQLdcmylIchSmMWg3IReCoIA3hYRKBRg2RHZEehFMa6gBlkMsnTDnWekVcdKZNYFyBaDADYfE+UAfKUiOkC2HNliYptljPgk8VXL2NoDpLYHCToA3SHYALhFTIbFg6JPMApAIQAAL2jWFxR7NeEAAAAASUVORK5CYII="
@@ -1754,7 +1819,12 @@
         "ST-09"
       ],
       "uses": [
-        "PM-06"
+        "PM-06",
+        "SV-ES02",
+        "SV-EF02",
+        "SV-EF02-UP",
+        "SV-CP02",
+        "SV-FC02"
       ],
       "primary_recipe": "ST-09",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1765,7 +1835,11 @@
         "targets": [
           "sensor",
           "warm",
-          "wastewater"
+          "wastewater",
+          "energy_saving_2",
+          "efficiency_2",
+          "capacity_2",
+          "fluid_capacity_2"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABnElEQVR4nO2WLU8DQRCGd5J1hD+AwtAEi0aAKamvJBgkoQKBQ+EJuQaJQdc3YECgsSRXg+ofIOiS2XbI3GR2d7a0CHJv0mxuv553Pi4951q1+m/q7nZm+LPuh1WCcRxV/fDcH4zC+PRew9oMdFmkBJZCIykTsA6oZgKlGYFSsBVqNQIWaAn4/mYcxtOLXmN+c+8wjEf7Zw0TPgUuhVrAve0NN/74+ln3Evz4euc+356LwBIaA2sCaQBHNIGyGpHQGJhHnizB7fFl2GzNhow2Bh6edNz5Q90467UL8QBegBemTKTSzKNFcExemySn3ASKjFjAKWi2B4aLw5Qu6lwysix4trMVxsHVS7oHSNwIZYODLWkmKAom03wPVNcHzk2mjTnePPw9tkKLS1ChCeUwmciBY1BzCWBxgXahhOei/VUJQBhxrl4KSpLwsF5SAmuKaV0Cef9QCUAa4JukEbwwVwIO1d4W+U3g+cN8cZ4FPIzNwo3EShCDymg1QWyByqFlhIyVRFpsQJaFA3L/cCUCyyaejVVA/+ybv5Uz6BuaCzCH0L1XzwAAAABJRU5ErkJggg=="
@@ -1794,7 +1868,8 @@
         "SV-M02",
         "LG-I01",
         "LG-I03",
-        "MC-C01"
+        "MC-C01",
+        "SV-FC01"
       ],
       "primary_recipe": "ST-03",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1812,7 +1887,8 @@
           "supply_crate",
           "item_duct",
           "item_router",
-          "machine_frame"
+          "machine_frame",
+          "fluid_capacity_1"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA4ElEQVR4nGNgGAWDGWia2P0HYVrawYjLYhC9fM1yMD8yJBIud/3MIax6qAY0Tez+f/3/H+xzEL7w4Ckc0zo0wACbpchi1HYEIzZBkCWw4EcHoOigZjQw4nIAjI2eDmieBpDBlDW74FHAQAIgRQ8jIYOQ+YR8T07uYSQUAjB2TogbQcvPnD7IYGJqD+YjpyFqpxuq5h5GBioCcnIPI7UdMORyDyMtHEBK7mGkhQNIyT2jYMAbJYz4LAbRo42SCzRulDDiiwJ6NEoY8TlgyBWr5ABGQgpIbZRQ3QFTRovV4Q4APTbwQlPaSzgAAAAASUVORK5CYII="
@@ -1838,7 +1914,12 @@
         "QM-M02",
         "DX-M01",
         "DX-C01",
-        "PR-M01"
+        "PR-M01",
+        "SP-M01",
+        "SP-M02",
+        "SP-M03",
+        "SP-M04",
+        "SP-M05"
       ],
       "primary_recipe": "ST-13",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1852,7 +1933,12 @@
           "crusher",
           "phase_extractor",
           "phase_matrix_frame",
-          "press"
+          "press",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA5UlEQVR4nGNgGAWDGShpWf0HYVrawYjLYhDdPGU6mF+bkwmXu3ftGFY9VANKWlb/n376D/Y5CC/ddxGOaR0aYIDNUmQxajuCEZsgyBJY8KMDUHRQMxoYcTkAxkZPBzRPA8gguXomPAoYSACk6GEkZBAyn5Dvyck9jIRCAMae25pO0PLDJ44y2FpYg/nIaYja6YaquYeRgYqAnNzDSG0HDLncw0gLB5CSe1ho4QDHwHgGYnPPKBjwRgkjPotB9GijZCmNGyWM+KKAHo0SRnwOGHLFKjmAkZACUhslpAIWQgpGi9VhDwCJXODmLOx16gAAAABJRU5ErkJggg=="
@@ -1891,7 +1977,28 @@
         "QM-U01",
         "DX-M01",
         "DX-C01",
-        "PR-M01"
+        "PR-M01",
+        "SP-M01",
+        "SP-M02",
+        "SP-M03",
+        "SP-M04",
+        "SP-M05",
+        "SV-ES01",
+        "SV-ES02",
+        "SV-EF01",
+        "SV-EF02",
+        "SV-EF02-UP",
+        "SV-CP01",
+        "SV-CP02",
+        "SV-IN01",
+        "SV-IN02",
+        "SV-FC01",
+        "SV-FC02",
+        "SV-FT01",
+        "SV-FT02",
+        "SV-FT03",
+        "SV-SI01",
+        "SV-AS01"
       ],
       "primary_recipe": "ST-10",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1918,7 +2025,27 @@
           "resonance_upgrade",
           "phase_extractor",
           "phase_matrix_frame",
-          "press"
+          "press",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2",
+          "fortune_1",
+          "fortune_2",
+          "fortune_3",
+          "silk_touch",
+          "auto_smelt"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABgUlEQVR4nGNgGAWjgAZA3Mz+PwgTo5aRWhbik3956iAjVR0gjsfC5o2T4Oxa/zyCjmCkpoW4AMwh2BzBSIqFxFhGyBHoDmHEZzElFhLrCBZ0RedObmQwMveniuXIFoIAj6U5mP5y/CRcjAVdk11BG9gRIECOQ5AthVkIsxTZYpwOgDmC2NDA50tkC5Xq88H0vcaJKOoZ0dMAsqtB4NCEKjC99cVDMC1w7jIDMaCfgQtMbxI8Dhfze28JdwDONIArNEAOAYXG5PpUhpqmmQz4QEtdOtxikKX4AAsDkYDteCvDlQlmDPvfI8Tc/bxR1OzctBXOJmQx0Q44EQ7Jmb8sq6EhoM9ACkCPApIdYLESkkwOEechDItpGgX4wMiIgp1IiW5kRUFLXTpxrqCGAyzQogBWwpEK0Itgoh1ALkC3EFtNCAIoDoCWz+AwR68TKLUQRqO3iljQDUJSgFExUcNCoqPgJTQ00B0Bs5hcC9EBIyEFsGYarjgk1UK6dDZGAQMJAAA2nNq6Q6VvmwAAAABJRU5ErkJggg=="
@@ -1941,7 +2068,8 @@
       "uses": [
         "EN-S02",
         "EN-G05",
-        "LG-E01"
+        "LG-E01",
+        "SV-IN01"
       ],
       "primary_recipe": "ST-11",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1952,7 +2080,8 @@
         "targets": [
           "s02",
           "g05",
-          "energy_junction"
+          "energy_junction",
+          "intake_1"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABVUlEQVR4nGNgGAWjgAYg2MHyPwgTo5aRWhbik1974DgjVR0QjMfCeQsb4Oyk+AaCjmCkpoW4AMwh2BzBSIqFxFhGyBHoDmHEZzElFhLrCBZ0RWu2L2MI8YyiiuXIFoKAt606mN56+CZcjAVd0/y2RrAjQIAchyBbCrMQZimyxTgdAHMEvtDgE1ODs2+WF6DIteqJgWn1zglwMZAZrfURYHZ14woU9UwMeAAsNJAthPnQ2C0NjHEBZHmY5dgACz4HwBwBAolV9WCfIAcrNQATqRqwxSNdHdCKJzjp4gBqAxZKDYg6/21gHRCYq4NVfP3kK0MjCphGvANYyA2Bs7tm4ZWv8UXloxfBFDng5olNBNWgW4itJsRwALSOBrcJSC1yCVkIo9FbRSzoBiEp+I/PEeRaSHQUrIWGBrojYBaTayE6YCSkANZMwxWHpFpIl87GKGAgAQAAkR+dA0CgIOUAAAAASUVORK5CYII="
@@ -1977,7 +2106,8 @@
         "EN-G04",
         "EN-P02",
         "EN-G06",
-        "EN-G07"
+        "EN-G07",
+        "SV-AS01"
       ],
       "primary_recipe": "ST-12",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1990,7 +2120,8 @@
           "g04",
           "dew",
           "g06",
-          "g07"
+          "g07",
+          "auto_smelt"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABXElEQVR4nO2XsQ4BQRCGby/eRa1DIhGtRHMNlRBPQeEUPIUQFc01Eq1IJOjUnobMxcpYc2N2XYHc39zGnf3+mb2d2fO8TJn+QUG1dHX9by4N8HjYhEs8jnZHZTOHSgH8pMFo5dkYUWmBXY0oG7gEbGtEScDU76aZfLERXy+ntZURJQHPFuHL/W47dDaCTeQ4OAU2TYERbALAh+3Z6/SHrBHWAAWPpsvHOOi1np4zTWDwu4z4VPQYDmAMpwTP6zU25ZwBEAZv9hc0DtnlsZHPRU/BzZdQkgWxASp6Cp5kwkX+xzNkBn5pCQ7bs9xAcC829Uo+cULpVpxPRjG8XCvwBqLdUVFvNmXChFPVEKAaDLvJ7AMgthBBFvR2xCZwKU6SBgMU4FbtOCAKUlIvwNHrNdappiIWGeCqoikMx2DpsUxxN7m2TJ0HbM+DIL4Z6YnaIXvsdgF/xTdBJsjADSV21S5IoNWQAAAAAElFTkSuQmCC"
@@ -2082,7 +2213,7 @@
     },
     "joint": {
       "id": "joint",
-      "name": "基础省能接头",
+      "name": "省能接头",
       "unit": "件",
       "icon": "module",
       "note": "11种加工机通用节能升级，每格64件并跨槽叠加；n件使耗能乘9／(9+n)，1件仍90%。",
@@ -2101,22 +2232,29 @@
         "recycler",
         "bio_processor",
         "autocrafter",
-        "auto_furnace"
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker"
       ],
       "upgrade_stack_limit": 64,
       "upgrade_effect_stacks": true,
       "catalogue": true,
       "category": "机器与设施",
-      "subcategory": "工位改装件",
+      "subcategory": "通用升级",
       "recipes": [
         "CB-01",
         "AUTO-CB01"
       ],
-      "uses": [],
+      "uses": [
+        "SV-ES01"
+      ],
       "primary_recipe": "CB-01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "降低11种加工机的每批能源消耗",
+        "summary": "降低16种加工机的每批能源消耗",
         "benefit": "接头数量n使总耗能乘9／(9+n)，1件仍为90%。",
         "operation": "左侧任一升级格安装，每格64件，同栈和跨槽数量叠加；在制批次禁止取放。",
         "targets": [
@@ -2130,7 +2268,13 @@
           "recycler",
           "bio_processor",
           "autocrafter",
-          "auto_furnace"
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "energy_saving_1"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABUElEQVR4nGNgGAWjgAbATVPtPwgTo5aRWhbik991/RYjVR3ghsfCNZNC4OyQvDUEHcFITQtxAZhDsDmCkRQLibGMkCPQHcKIz2JKLCTWESzoinYemcrgbpNNFcuRLQQBTwVuML39wVe4GAu6pgkxZWBHgAA5DkG2FGYhzFJki3FGgacCN4ZCfI4gxpcwMDlOjSF30S38UQADfe2BYLqocj0Dr5Ejw+dz+4myEEbDLEM2BxtgYSACgKKlYEkXOErwWUgOYCFVg/uULgiNJv4Xic28aiLtHAACaftuMuACs5zUGUgBTAwDDJhGHcAw0qOAhRxNpKZ0shxQhKPkIiWPo5sDK4YJOsATqRIhF6BbhquOYEHmQCoISJuAVEcQshBGo7eKWNANQiiA1IzUtpDoNLALGhrojoBZTK6F6ICRkAJYMw1XHJJqIV06G6OAgQQAAO03rl/aeX/vAAAAAElFTkSuQmCC"
@@ -2239,7 +2383,11 @@
         "DX-C01",
         "DX-B01",
         "DX-B02",
-        "DX-B03"
+        "DX-B03",
+        "SV-EF01",
+        "SV-IN02",
+        "SV-FT03",
+        "SV-AS01"
       ],
       "primary_recipe": "PM-02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -2257,7 +2405,11 @@
           "phase_matrix_frame",
           "phase_matrix_meteor",
           "phase_matrix_rutile",
-          "phase_matrix_borate"
+          "phase_matrix_borate",
+          "efficiency_1",
+          "intake_2",
+          "fortune_3",
+          "auto_smelt"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABa0lEQVR4nGNgGAWjYBRQGbhpqv0HYWLVM1LTYhC9ZlIImB+St4Zh1/VbjDR3gBuaxcgA5AgQwOcQRlpYjM0huBzBSEuLiXEEIyUWB+17D6bXOQkS7QgQQHYIIyUWIwN8jgCpR5ZHDg1GUi3m+/KG4ROPCIqByA7CJQ6T4zVyBLPdbbLBjmAkxccgy2FggZ8qhi+RLULnI1sMAhgh4Kap9n/nkakMn8/th2vkNXMG064da+A+S9h0G8VibA7ZXREC17e7JAhu8eQ4NTBbvXILZhpwg/oc2REwB3w+tRc9oFAcgu4ImD6GP/9wWozVAZ4K3AzbH3wFOwJsMVJoYAMwR8AcAAtmfD4m6AAYgDkElyOQQ2BtQxpK/BJjMQyw4JIAOQZkIK50wbDpNkUW40wDnkihAALoUYIev+RajOEAUhyCbnHuoltE1XzYACMuCWwOATmCWhYTdAAuh3jZSVPFYpq3dEbBKBgFQwYAAAQ74FnB91aQAAAAAElFTkSuQmCC"
@@ -2423,7 +2575,11 @@
         "PM-08"
       ],
       "uses": [
-        "CM-03"
+        "CM-03",
+        "SV-EF02",
+        "SV-EF02-UP",
+        "SV-FT03",
+        "SV-SI01"
       ],
       "primary_recipe": "PM-08",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -2432,7 +2588,10 @@
         "benefit": "用于把基础充电效率从90%升级到95%。",
         "operation": "按CM-03配套封装；不提高标称容量或产生电量。",
         "targets": [
-          "guide"
+          "guide",
+          "efficiency_2",
+          "fortune_3",
+          "silk_touch"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABJUlEQVR4nGNgGAWjYBRQGYib2f8H4QGzeNbzi2BMrCMYqWExiG7eOAlDrtY/D0y/PHWQkeoOEMdjMTaH4HIEIy0s9paQB9NbXzwk6AhGWlrc2bEUTJdXRMMdAQLIDmGkhcXIYP65u2D61a4TKA6BOYKR1hYnGinDxUAhcmhCFZhtZO4PdgQjtYMam8XIekAWgwBGCIib2f8/d3IjVt+QG9ToFivV54PZx72DMNOAONTn2BxBaVBjsxirA3gszRm+HD8JdgQ2CwkFNcyhxFiM0wEwAHMIuiOwBTV6/BJjMUEH4HMEelCTYzHONMCDwxEgAHMIJT7G6QBSHIJu8b3GiXgrHHyAEZcENoeAHEEtiwk6AJdDxNwsqGLx0GnpjIJRMAoYaAwA1TntgBiBnswAAAAASUVORK5CYII="
@@ -2510,7 +2669,12 @@
         "DX-M01",
         "DX-B01",
         "DX-B02",
-        "DX-B03"
+        "DX-B03",
+        "SV-CP01",
+        "SV-FC01",
+        "SV-FC02",
+        "SV-FT01",
+        "SV-SI01"
       ],
       "primary_recipe": "PM-10",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -2543,7 +2707,12 @@
           "phase_extractor",
           "phase_matrix_meteor",
           "phase_matrix_rutile",
-          "phase_matrix_borate"
+          "phase_matrix_borate",
+          "capacity_1",
+          "fluid_capacity_1",
+          "fluid_capacity_2",
+          "fortune_1",
+          "silk_touch"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnElEQVR4nGNgGNRA1dHjPwjjU8OCT7NWbwZDlbAiQ0wCA9yQ2/t3MOI1QBVq45IFnWB+29v7KGyGYohhMIMYcdkKVszAwPBn0xkGFj8TMBsmfq14BtwAJnya0QE2cSZiFKEDkEUwrzIxUAiY8Eki+5+gAbf372AEBQ5VXYALYI0FBiRJfBqRNYMASjqAAeTkCwpxdFtJAsTkB4oAAPkfU5+QCjlIAAAAAElFTkSuQmCC"
@@ -2760,7 +2929,8 @@
       ],
       "uses": [
         "SV-M01",
-        "MC-M01"
+        "MC-M01",
+        "SV-AS01"
       ],
       "primary_recipe": "V-FURNACE",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -2796,11 +2966,22 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -2849,11 +3030,22 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -2902,11 +3094,20 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -2955,6 +3156,33 @@
       "mass": null,
       "implementation": "本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
       "implementation_status": "server_verified",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -2981,6 +3209,33 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -3007,6 +3262,33 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -3033,6 +3315,33 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -3060,6 +3369,37 @@
       "mass": null,
       "logistics": "液体取用",
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "物流",
       "subcategory": "液体取用",
@@ -3087,6 +3427,37 @@
       "mass": null,
       "logistics": "液体取用",
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "物流",
       "subcategory": "液体取用",
@@ -3180,7 +3551,8 @@
       ],
       "uses": [
         "LG-F01",
-        "AG-M01"
+        "AG-M01",
+        "SV-FC01"
       ],
       "primary_recipe": "EN-FL01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -3190,7 +3562,8 @@
         "operation": "接许可输出和输入面，同网一种流体，共享2000mB／秒。",
         "targets": [
           "fluid_valve",
-          "plant_cultivator"
+          "plant_cultivator",
+          "fluid_capacity_1"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAsklEQVR4nGNgoBAwgggZE+v/5Gh+cuYoIwuMM3daF0mak7PKwDQL3IB5y8hxBAPcABAQ/c2BoeBvkA8D87otKGKvWX9gNwAEtt04ywAD7lX1cEN2tjWC2V4axgzIgImBQsCESwJmOy4+bV3gjsM2bOJM2BTCAowYcRZ0AVgo/8ViAHoMYBjwGil+GTavwTSBFVMIxYBaV144u3n3ZyxuYGD4GWPNwL7kKJxPcWYiRx8KAABFFC64WUUAHQAAAABJRU5ErkJggg=="
@@ -3230,6 +3603,35 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -3277,11 +3679,22 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -3309,6 +3722,35 @@
       "external": false,
       "mass": null,
       "implementation": "设计配方",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -3631,11 +4073,20 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -3816,12 +4267,21 @@
           "speed_1",
           "speed_2",
           "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
           "bulk_1",
           "bulk_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -3834,15 +4294,15 @@
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "自动进出料并并列执行普通烧制",
-        "benefit": "先减少看炉操作，再通过模块提高吞吐。",
-        "operation": "接燃料或电力，布置输入／输出端口；左侧4格可混装通用提速、省能接头和熔炉扩批模块。",
+        "benefit": "先减少看炉操作，再通过升级提高吞吐。",
+        "operation": "接燃料或电力，布置输入／输出端口；左侧升级栏每页6格、占用后追加空位，可混装适配通用升级和并行冶炼。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAlUlEQVR4nGNgoBAwgggZE+v/5Gh+cuYoIwuMM3daF0mak7PKwDQL3IB5y8hxBAPcABDQ4jAlStO1H6exGwACC08vANPxpgkYYujiIMDEQAQAaULXiNeAeByKiTIgHodmZG/gNWAhDoVEu4BUwEKsF3CJsyBzkOOXLBfUuvLC2c27P2PV8DPGmoF9yVE4n+LMRI4+FAAAnDsocxgQh84AAAAASUVORK5CYII="
     },
     "speed_1": {
       "id": "speed_1",
-      "name": "通用提速模块Ⅰ",
+      "name": "超频驱动Ⅰ",
       "unit": "件",
       "icon": "module",
       "note": "通用提速Ⅰ：每件增加0.25提速倍率，耗能系数增加0.10；每格64件，同栈及跨槽叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
@@ -3861,23 +4321,30 @@
         "recycler",
         "bio_processor",
         "autocrafter",
-        "auto_furnace"
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker"
       ],
       "upgrade_stack_limit": 64,
       "upgrade_effect_stacks": true,
       "catalogue": true,
-      "category": "材料",
-      "subcategory": "普通材料",
+      "category": "机器与设施",
+      "subcategory": "通用升级",
       "recipes": [
         "SV-SP01"
       ],
       "uses": [
-        "SV-SP02"
+        "SV-SP02",
+        "SV-EF01",
+        "SV-EF02-UP"
       ],
       "primary_recipe": "SV-SP01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "缩短11种加工机的每批工时",
+        "summary": "缩短16种加工机的每批工时",
         "benefit": "每件增加0.25提速倍率，耗能系数增加0.10。",
         "operation": "左侧任一升级格，每格64件，同栈、跨槽和Ⅱ级共同叠加；有在制批次不可取放。",
         "targets": [
@@ -3892,14 +4359,21 @@
           "bio_processor",
           "autocrafter",
           "auto_furnace",
-          "speed_2"
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "speed_2",
+          "efficiency_1",
+          "efficiency_2"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAoElEQVR4nGNgGNRA1dHjPwjjU8OCT/N0r3YG3jAmhpgEBrght/fvYERWx4hNI4hesqATzP+86h/YEBg7c1slikGMuGwFKQaB/q9rGQq5g8FsmDjIEJgBTPg0owNs4kzEKEIHIItgXmVioBAw4ZNE9j9BA27v38EIC2GquQAXwBoLDEiS+DQiawYBlJQIk8hkQKQ8Bi9IGKBrJBoQkx8oAgAWZVPpgVkbewAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA9ElEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKb49UZmqlqvm38UqzoJPk1nrD6IMP1XNgVctSB4XYCLKBgKWUwKYBtJyih1ADcA0kL4HARZqWY7LQYQSMhM1LKckFzGR6gBqWk6yA4j1PbGWk+QAWlgOAkQnQmwGozuKVMtBgGrZkBzLKXIANSynigMosZxsB8CCn1LLyXYAtSwHARZysx7N6wJVHC0YagMWQgrQm2bUdhgTwwADRno2y7H1DZgIKYhS2w/G1BDD1jEhCO7uzfoPwtQSG3RpgGGgAQByLmwQX7GHvQAAAABJRU5ErkJggg=="
     },
     "speed_2": {
       "id": "speed_2",
-      "name": "通用提速模块Ⅱ",
+      "name": "超频驱动Ⅱ",
       "unit": "件",
       "icon": "module",
       "note": "通用提速Ⅱ：每件增加0.50提速倍率，耗能系数增加0.25；每格64件，可与Ⅰ级叠加；制造消耗Ⅰ级模块。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
@@ -3918,21 +4392,28 @@
         "recycler",
         "bio_processor",
         "autocrafter",
-        "auto_furnace"
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker"
       ],
       "upgrade_stack_limit": 64,
       "upgrade_effect_stacks": true,
       "catalogue": true,
-      "category": "材料",
-      "subcategory": "普通材料",
+      "category": "机器与设施",
+      "subcategory": "通用升级",
       "recipes": [
         "SV-SP02"
       ],
-      "uses": [],
+      "uses": [
+        "SV-EF02"
+      ],
       "primary_recipe": "SV-SP02",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "进一步缩短11种加工机的每批工时",
+        "summary": "进一步缩短16种加工机的每批工时",
         "benefit": "每件增加0.50提速倍率，耗能系数增加0.25。",
         "operation": "左侧任一升级格，每格64件，可与Ⅰ级叠加；制造消耗Ⅰ级模块，有在制批次不可取放。",
         "targets": [
@@ -3946,14 +4427,20 @@
           "recycler",
           "bio_processor",
           "autocrafter",
-          "auto_furnace"
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "efficiency_2"
         ]
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAoElEQVR4nGNgGNRA1dHjPwjjU8OCT7Oblg9DXJktQ0wCA9yQ2/t3MOI1QBVq45IFnWD+oq7DKGwGBohhMINYcNkKVczwQPQFnA0SZ+hiYNh1bQtcDxM+zegAmzgTMYrQAcgimFeZGCgETPgkQf5XeC1BnAG39+9gRA4cqrgAFwBZBItGJmyS+DQiawYBlHSAJAFPeQpaPhi2kgSIyQ8UAQB8I1FilmMZpAAAAABJRU5ErkJggg=="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA9UlEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKb49UZmqlqvm38UqzoJPk1nrD6IMP1XNgVctSB4XYCLKBgKWUwKYBtJyih1ADcA0kL4HARZqWY7LQYQSMhM1LKckFzGR6gBqWk6yA4j1PbGWk+QAWlgOAkQnQmwGozuKVMtBgGrZkBzLKXIANSynigMosZxsB8CCn1LLyXYAtSwHARZysx7N6wJVHC0YagMWQgrQm2Ywh+ESH3LtAUZ6Nsux9Q2YCCmIUtsPxtQQw9YxIQju7s36D8LUEht0aYBhoAEAQrRvENhrZtIAAAAASUVORK5CYII="
     },
     "bulk_1": {
       "id": "bulk_1",
-      "name": "熔炉扩批模块Ⅰ",
+      "name": "并行冶炼Ⅰ",
       "unit": "件",
       "icon": "module",
       "note": "熔炉专属扩批Ⅰ：每件增加2路，每路耗能系数增加0.05；每格64件并跨槽叠加。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
@@ -3969,7 +4456,7 @@
       "upgrade_effect_stacks": true,
       "catalogue": true,
       "category": "机器与设施",
-      "subcategory": "熔炉升级模块",
+      "subcategory": "熔炉升级",
       "recipes": [
         "SV-BK01"
       ],
@@ -3991,7 +4478,7 @@
     },
     "bulk_2": {
       "id": "bulk_2",
-      "name": "熔炉扩批模块Ⅱ",
+      "name": "并行冶炼Ⅱ",
       "unit": "件",
       "icon": "module",
       "note": "熔炉专属扩批Ⅱ：每件增加4路，每路耗能系数增加0.10；每格64件并跨槽叠加；制造消耗Ⅰ级模块。 不改变单次配方产量、来料品质或燃料热值；停机并清空在制批后可完整拆回。",
@@ -4007,7 +4494,7 @@
       "upgrade_effect_stacks": true,
       "catalogue": true,
       "category": "机器与设施",
-      "subcategory": "熔炉升级模块",
+      "subcategory": "熔炉升级",
       "recipes": [
         "SV-BK02"
       ],
@@ -4274,7 +4761,12 @@
         "QM-M01",
         "QM-M02",
         "DX-M01",
-        "PR-M01"
+        "PR-M01",
+        "SP-M01",
+        "SP-M02",
+        "SP-M03",
+        "SP-M04",
+        "SP-M05"
       ],
       "primary_recipe": "MC-C01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -4296,7 +4788,12 @@
           "quarry",
           "crusher",
           "phase_extractor",
-          "press"
+          "press",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB4klEQVR4nO1XLU8DQRC9vZzhH6CRJKDJEURVBab9BRUkIKsIgqSEJhUEVQkJgl9ADQKFaLigIUFWY9DIkjk6l3fLzu3s3dUxSXN77cy8Nx+7O42if2lZtrbTJT59krQJynJ0fsPvy8VHZqpsTRuAJJ3+wKn7/HCfPyUipi6oBCgJEXGRMFpADShHG5INUwWqBbRtNESYhMEf3h4vCwK90yenExsUo6EAUJ908X2Yfhbr3cMLU9oFdvTz15dodHXrjNLX2WgzPjsu1l/zcYR45EfchgROxiNFJyP5HBBAyQ+Tml13/9galxNMG0fA2WASqE/ZsgFtkTJpkAAD27VDIgd7+7VB7f4QCaCx1ETTbFMdpeS/sgfAuGQYGmXju2CxIkHrYdp1Onf1hVZijRID0NnwvtErzgj63rclWyFgpzf0HmiNQIho6k+yNgIsvr6I1wVMZeJSVZGI2wSlhrybnJSa0tcvcZP6uYSiJXv0wSToIONP5TnQWd3pfGOFEMAzQRNI7KthncMlZLBJkHmnP5DGsEoSmvGN3qfZ7xr7JEElaZTCMUsCDhnfsLQJKkG9nRdQ3jzfs2gnJYfhM6OrnxLfBRRy7NYZ3xLpB182JNDQXWM0SlxrnJiagNaW0D+eGvkBwTg1Hx0L4bQAAAAASUVORK5CYII="
@@ -4323,7 +4820,12 @@
         "CM-02",
         "SV-SP02",
         "SV-BK02",
-        "QM-U01"
+        "QM-U01",
+        "SV-ES02",
+        "SV-CP02",
+        "SV-IN02",
+        "SV-FT01",
+        "SV-FT02"
       ],
       "primary_recipe": ""
     },
@@ -4348,7 +4850,9 @@
         "QM-U01",
         "DX-B01",
         "DX-B02",
-        "DX-B03"
+        "DX-B03",
+        "SV-FT03",
+        "SV-AS01"
       ],
       "primary_recipe": "CR-R04"
     },
@@ -4381,6 +4885,33 @@
       "mass": null,
       "implementation_status": "server_verified",
       "implementation": "本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -4408,6 +4939,33 @@
       "mass": null,
       "implementation_status": "server_verified",
       "implementation": "本轮能源扩展已通过2026-10-23集中服务端验证114/114项（含7项EnergyExpansion），3.179秒，完整构建25秒；378份JSON、130条配方、17条原版映射静态核对通过。客户端、压力测试及全部第三方模组兼容未验收。",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "capacity_1",
+          "capacity_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "供能与储能",
@@ -4493,11 +5051,22 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -5466,11 +6035,25 @@
           "speed_1",
           "speed_2",
           "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fortune_1",
+          "fortune_2",
+          "fortune_3",
+          "silk_touch",
+          "auto_smelt",
           "resonance_upgrade"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -5518,11 +6101,20 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -5660,7 +6252,7 @@
       "name": "深板岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深板岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个深板岩圆石，基底保留。",
+      "note": "8个深板岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个深板岩圆石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5682,7 +6274,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5716,7 +6308,7 @@
       "name": "花岗岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个花岗岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个花岗岩，基底保留。",
+      "note": "8个花岗岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个花岗岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5738,7 +6330,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5772,7 +6364,7 @@
       "name": "闪长岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个闪长岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个闪长岩，基底保留。",
+      "note": "8个闪长岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个闪长岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5794,7 +6386,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5828,7 +6420,7 @@
       "name": "安山岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个安山岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个安山岩，基底保留。",
+      "note": "8个安山岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个安山岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5850,7 +6442,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5884,7 +6476,7 @@
       "name": "凝灰岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个凝灰岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个凝灰岩，基底保留。",
+      "note": "8个凝灰岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个凝灰岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5906,7 +6498,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5940,7 +6532,7 @@
       "name": "方解石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个方解石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个方解石，基底保留。",
+      "note": "8个方解石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个方解石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -5962,7 +6554,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -5996,7 +6588,7 @@
       "name": "黑石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个黑石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个黑石，基底保留。",
+      "note": "8个黑石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个黑石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6018,7 +6610,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6052,7 +6644,7 @@
       "name": "玄武岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个玄武岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个玄武岩，基底保留。",
+      "note": "8个玄武岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个玄武岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6074,7 +6666,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6108,7 +6700,7 @@
       "name": "末地石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个末地石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个末地石，基底保留。",
+      "note": "8个末地石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个末地石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6130,7 +6722,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6164,7 +6756,7 @@
       "name": "下界岩共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个下界岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个下界岩，基底保留。",
+      "note": "8个下界岩环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个下界岩，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6186,7 +6778,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6220,7 +6812,7 @@
       "name": "黑曜石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个黑曜石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个黑曜石，基底保留。",
+      "note": "8个黑曜石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个黑曜石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6242,7 +6834,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6295,7 +6887,7 @@
       "name": "煤矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个煤矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个煤炭，基底保留。",
+      "note": "8个煤矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个煤炭，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6317,7 +6909,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6349,7 +6941,7 @@
       "name": "深层煤矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层煤矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个煤炭，基底保留。",
+      "note": "8个深层煤矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个煤炭，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6371,7 +6963,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6682,7 +7274,7 @@
       "name": "金矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个粗金，基底保留。",
+      "note": "8个金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个粗金，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6704,7 +7296,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6736,7 +7328,7 @@
       "name": "深层金矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个粗金，基底保留。",
+      "note": "8个深层金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个粗金，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6758,7 +7350,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6811,7 +7403,7 @@
       "name": "红石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个红石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个红石粉，基底保留。",
+      "note": "8个红石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个红石粉，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6833,7 +7425,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6865,7 +7457,7 @@
       "name": "深层红石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层红石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个红石粉，基底保留。",
+      "note": "8个深层红石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个红石粉，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6887,7 +7479,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6940,7 +7532,7 @@
       "name": "青金石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个青金石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个青金石，基底保留。",
+      "note": "8个青金石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个青金石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -6962,7 +7554,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -6994,7 +7586,7 @@
       "name": "深层青金石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层青金石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个青金石，基底保留。",
+      "note": "8个深层青金石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个青金石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7016,7 +7608,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7069,7 +7661,7 @@
       "name": "钻石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个钻石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个钻石，基底保留。",
+      "note": "8个钻石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个钻石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7091,7 +7683,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7123,7 +7715,7 @@
       "name": "深层钻石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层钻石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个钻石，基底保留。",
+      "note": "8个深层钻石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个钻石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7145,7 +7737,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7198,7 +7790,7 @@
       "name": "绿宝石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个绿宝石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个绿宝石，基底保留。",
+      "note": "8个绿宝石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个绿宝石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7220,7 +7812,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7252,7 +7844,7 @@
       "name": "深层绿宝石矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个深层绿宝石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个绿宝石，基底保留。",
+      "note": "8个深层绿宝石矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个绿宝石，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7274,7 +7866,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7327,7 +7919,7 @@
       "name": "下界金矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个下界金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个金粒，基底保留。",
+      "note": "8个下界金矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个金粒，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7349,7 +7941,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7401,7 +7993,7 @@
       "name": "下界石英矿石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个下界石英矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个下界石英，基底保留。",
+      "note": "8个下界石英矿石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个下界石英，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7423,7 +8015,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7457,7 +8049,7 @@
       "name": "远古残骸共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个远古残骸环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个远古残骸，基底保留。",
+      "note": "8个远古残骸环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个远古残骸，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7479,7 +8071,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7531,7 +8123,7 @@
       "name": "紫水晶簇共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个紫水晶簇环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个紫水晶碎片，基底保留。",
+      "note": "8个紫水晶簇环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个紫水晶碎片，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7553,7 +8145,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7585,7 +8177,7 @@
       "name": "镶金黑石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个镶金黑石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产1个金粒，基底保留。",
+      "note": "8个镶金黑石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产1个金粒，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7607,7 +8199,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批1个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7659,7 +8251,7 @@
       "name": "萤石共振基底",
       "unit": "件",
       "icon": "block",
-      "note": "8个萤石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振升级组件。每200刻／4000XH产4个萤石粉，基底保留。",
+      "note": "8个萤石环绕1个陨相原矿合成1个。四格下方放4个同种基底；需左侧任一升级格保留广谱共振。每200刻／4000XH产4个萤石粉，基底保留。",
       "external": false,
       "mass": null,
       "implementation_status": "pending_verification",
@@ -7681,7 +8273,7 @@
       "purpose": {
         "summary": "使地脉共振仪生产对应来源的石材或矿物",
         "benefit": "四个同种基底即可持续生产，每批4个产物；基底保留。",
-        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振升级组件，空闲时装卸。",
+        "operation": "8个同种原版来源方块环绕中央1个陨相原矿定形合成1个；四格正下方放4个同种基底，前方两格留空。需左侧任一升级格保留广谱共振，空闲时装卸。",
         "targets": [
           "quarry"
         ]
@@ -7708,7 +8300,7 @@
     },
     "resonance_upgrade": {
       "id": "resonance_upgrade",
-      "name": "广谱共振升级组件",
+      "name": "广谱共振",
       "unit": "件",
       "icon": "module",
       "note": "地脉共振仪左侧任一升级格仅空闲时取放，每格最多1件，保留不消耗；将基础石头铜铁扩展至全部34种原版共振基底。模组矿排除。",
@@ -7726,7 +8318,7 @@
       "upgrade_effect_stacks": false,
       "catalogue": true,
       "category": "机器与设施",
-      "subcategory": "工位改装件",
+      "subcategory": "采矿升级",
       "recipes": [
         "QM-U01"
       ],
@@ -7793,11 +8385,22 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2",
+          "fluid_capacity_1",
+          "fluid_capacity_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -7967,11 +8570,20 @@
         "accepts": [
           "speed_1",
           "speed_2",
-          "joint"
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
         ],
         "idle_only": true,
         "automation": false,
-        "budget_frozen_on_start": true
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -7989,6 +8601,1377 @@
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABtUlEQVR4nGNgGAWjgIpA1dL5PwiTooeFGpbC2K6uzjAmWOz28b2MhPQzUtFShnBvE4aVW8/A+bt372Ug5BBGbII9ma4kBSOxoGT6bgz7mBjoCLClDxZiFFELQKMLJX2woFs8Z0I5w+kF3TRxgD//OQYGpIQKcgQLugtBichfhR9FI4dNGtmW/jgyC4WPnlBZSDXw7ntEDCkLMpIsj2w5yQ4AGT598jw4PzM3CcUSbPLSBMxkItdyEADxYT7GJf9UO5VyB6xECzZqAiZqGEKJA5kYBhgwDRkHnDl2FpyqkQGIDxLHJy99dTZec1lIcS26JTDLQYBfRIzh9q3HDC7urgyqarJweWnUMo0yByBbCrIQhGEgIdgBzl6w9gADsYCFaJVQS7FZiA5gciCHHGDwYHD4vYM8Bxxg9YBaTNhS/A6B8LE5hAWfxaRaiAyQo4GoELgNqZ//w2pFUHCDDCHVETCLP755haiC8QBGbIKgtgGsrQeLd3wOQfYtzGJ8ALmtyIhLEayBgsshpFgKsxAGkBupjIRcixwayA4hxVKSW8WEHEGqL6nSL1BFixJyLaQYkNP9wgcA0m/R4OF6YmcAAAAASUVORK5CYII="
+    },
+    "brewing_stand": {
+      "id": "brewing_stand",
+      "name": "酿造台",
+      "unit": "件",
+      "icon": "machine",
+      "note": "Minecraft原版工作站；按原版配方取得，作为电动适配机器的装配原料。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "registry_id": "minecraft:brewing_stand",
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "SP-M01"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "auto_brewer": {
+      "id": "auto_brewer",
+      "name": "回流酿造釜",
+      "unit": "件",
+      "icon": "machine",
+      "note": "单方块纯电驱，每批400刻／8000XH；瓶位0..2各限1瓶，材料位3、烈焰粉位4；每批最多处理3瓶，消耗材料1和烈焰粉1，不套用原版一份烈焰粉20次的燃料缓存。顶部输入材料和烈焰粉，水平面输入瓶子。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "external": false,
+      "mass": null,
+      "processing": {
+        "recipe_type": "BREWING",
+        "ticks": 400,
+        "energy": 8000,
+        "electric_only": true,
+        "output_slots": [
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "implementation": "特殊工序扩展；实际运行验收见程序仓库最新记录",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "SP-M01"
+      ],
+      "uses": [],
+      "primary_recipe": "SP-M01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "自动执行回流酿造釜工序",
+        "benefit": "真实BREWING适配，每批400刻／8000XH；原料仍需上游提供。",
+        "operation": "瓶位0..2各限1瓶，材料位3、烈焰粉位4；每批最多处理3瓶，消耗材料1和烈焰粉1，不套用原版一份烈焰粉20次的燃料缓存。顶部输入材料和烈焰粉，水平面输入瓶子。底部成品9..12，左侧统一通用升级栏；纯电驱，不消耗燃料。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABB0lEQVR4nGNgGOmAEcaQVDf8T0+Ln988D7abBZtk37QpNLG0KCuHcAjoGpox0BJcPn+KcAgU2tbSxPL+w80YYiy4FKdOC6aq5bOz1mIVZ6HE0GNTLOFsq5zjZJnBxDDAgGnUAQwDDFiIUbSqazkOmUl41YSVRQ6TEAjD4RPkbEiMb4deCOzctRXOdnfzxpD7DGXz3mohWh9NQsCKzFKQag6gBDDhkkAORnQ+uXIkp4FHG37A2XIBHFSRGzpRQC/Agk8SX/CRK0dUm7CQhk0yotqE/VjabiMvDfTFsWOIFS36SZLh2uWIYvhq51biHHAZGkcMcbYMOOWIdQCDN0G9jAPdNWMY8QAAUlViBuHD4EgAAAAASUVORK5CYII="
+    },
+    "smithing_table": {
+      "id": "smithing_table",
+      "name": "锻造台",
+      "unit": "件",
+      "icon": "machine",
+      "note": "Minecraft原版工作站；按原版配方取得，作为电动适配机器的装配原料。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "registry_id": "minecraft:smithing_table",
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "SP-M02"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "auto_smith": {
+      "id": "auto_smith",
+      "name": "铭纹锻造台",
+      "unit": "件",
+      "icon": "machine",
+      "note": "单方块纯电驱，每批80刻／4000XH；模板位0、装备位1、材料位2，按真实SMITHING配方匹配和扣料，不是固定下界合金公式。顶部输入模板，背面输入材料，前／左／右输入装备。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "external": false,
+      "mass": null,
+      "processing": {
+        "recipe_type": "SMITHING",
+        "ticks": 80,
+        "energy": 4000,
+        "electric_only": true,
+        "output_slots": [
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "implementation": "特殊工序扩展；实际运行验收见程序仓库最新记录",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "SP-M02"
+      ],
+      "uses": [],
+      "primary_recipe": "SP-M02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "自动执行铭纹锻造台工序",
+        "benefit": "真实SMITHING适配，每批80刻／4000XH；原料仍需上游提供。",
+        "operation": "模板位0、装备位1、材料位2，按真实SMITHING配方匹配和扣料，不是固定下界合金公式。顶部输入模板，背面输入材料，前／左／右输入装备。底部成品9..12，左侧统一通用升级栏；纯电驱，不消耗燃料。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABDUlEQVR4nGNgGOmAEcaQVDf8T0+Ln988D7abBZtk37QpNLG0KCuHcAjoGpox0BJcPn+KcAgkJObRxPIF8ydhiLHgUlxWlERVy7v65mEVZ2KgEZiZokiUOhZSDF2zbg1OuZCgEJIsJssBuMDbbaVwi9Pn3GeguwPIsZgsB4RAg5magIXc1EsKwJejmBgGGDDR2gJC5QkTwwADFnJ8QEy6ILYkZWGgMiC1CGdiGGDANOIdwEJKCBCT+GBqqJoIu8goDYl1CAsxhlG7cUKUA7qoUAeQ7YAFWNpuwzYbsuCS6ItjxxArWvSTJMO1y73h7KudW4lzwGVou50hzpYBpxyxDmDwJqiXcaC7ZgwjHgAAL+lL+KSGP78AAAAASUVORK5CYII="
+    },
+    "stonecutter": {
+      "id": "stonecutter",
+      "name": "切石机",
+      "unit": "件",
+      "icon": "machine",
+      "note": "Minecraft原版工作站；按原版配方取得，作为电动适配机器的装配原料。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "registry_id": "minecraft:stonecutter",
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "SP-M03"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "auto_stonecutter": {
+      "id": "auto_stonecutter",
+      "name": "精裁切石机",
+      "unit": "件",
+      "icon": "machine",
+      "note": "单方块纯电驱，每批20刻／1000XH；原料位0，成品样品位19保留不消耗；无样品按来料选默认配方，有样品只选匹配成品，无匹配则等待，不回退为其他产物。所有非底面输入原料。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "external": false,
+      "mass": null,
+      "processing": {
+        "recipe_type": "STONECUTTING",
+        "ticks": 20,
+        "energy": 1000,
+        "electric_only": true,
+        "output_slots": [
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "implementation": "特殊工序扩展；实际运行验收见程序仓库最新记录",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "SP-M03"
+      ],
+      "uses": [],
+      "primary_recipe": "SP-M03",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "自动执行精裁切石机工序",
+        "benefit": "真实STONECUTTING适配，每批20刻／1000XH；原料仍需上游提供。",
+        "operation": "原料位0，成品样品位19保留不消耗；无样品按来料选默认配方，有样品只选匹配成品，无匹配则等待，不回退为其他产物。所有非底面输入原料。底部成品9..12，左侧统一通用升级栏；纯电驱，不消耗燃料。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMElEQVR4nGNgGOmAEcaQVDf8T0+Ln988D7abBZtk37QpNLG0KCuHcAjoGpox0BJcPn+KcAio50bSxPKbk5djiLHgUrw+rZyqlgfO6sQqzkQrg4kFTAwDDJio4XtKQoGJVMuorZ6FWoaSGwosxCoE5Qp0S85PWYLCN8yJQVFP0zRwHs1yXGI0ccB5JIsae2vAmFxHsBBSgC9ukS0GseuLWzD0EYoKFgYaA0KJk4mQAfh8gOxjZDYpZrAwkAFAqR0W1+gWI+cEQpaDANm5AN0iciwHAbwh0NpYC2E8/4JV3iQ4AFUATZ0JTD8DA8OZYVkZDQsHsODLv2cGygE3sbTdRl4U9MWxY4gVLfpJkuHa5d5w9tXOrcQ54DK03c4QZ8uAU45YBzB4E9TLONBdM4YRDwB0g2rd3kfSZwAAAABJRU5ErkJggg=="
+    },
+    "blast_furnace": {
+      "id": "blast_furnace",
+      "name": "高炉",
+      "unit": "件",
+      "icon": "machine",
+      "note": "Minecraft原版工作站；按原版配方取得，作为电动适配机器的装配原料。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "registry_id": "minecraft:blast_furnace",
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "SP-M04"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "auto_blast_furnace": {
+      "id": "auto_blast_furnace",
+      "name": "炽流高炉",
+      "unit": "件",
+      "icon": "machine",
+      "note": "单方块纯电驱，每批40刻／2000XH；原料位0..8，真实BLASTING配方；纯电驱，不消耗燃料，所有非底面输入原料，不把仅SMELTING的物品视为高炉配方。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "external": false,
+      "mass": null,
+      "processing": {
+        "recipe_type": "BLASTING",
+        "ticks": 40,
+        "energy": 2000,
+        "electric_only": true,
+        "output_slots": [
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "implementation": "特殊工序扩展；实际运行验收见程序仓库最新记录",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "SP-M04"
+      ],
+      "uses": [],
+      "primary_recipe": "SP-M04",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "自动执行炽流高炉工序",
+        "benefit": "真实BLASTING适配，每批40刻／2000XH；原料仍需上游提供。",
+        "operation": "原料位0..8，真实BLASTING配方；纯电驱，不消耗燃料，所有非底面输入原料，不把仅SMELTING的物品视为高炉配方。底部成品9..12，左侧统一通用升级栏；纯电驱，不消耗燃料。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABJUlEQVR4nGNgGOmAEcaQVDf8T0+Ln988D7abBZtk37QpNLG0KCuHcAjoGpox0BJcPn+KcAisdHxJE8vD94tjiLHgUqw76TlVLb+cJ4lVnIlhgAELIQWdHS0UW1JeUYNTjolhsIdAOR7XUwMwMQwwYCGkYDQNlI/4NAACfV2tDISA65MpDLtlMCuborJqyhIhDMwuz2bAB1xzNTHUpHZOZaBJNlyVq4mVjy5O03JgFRmWUdUBMEfgCg1iAQtJqpEsEPC0xZD7sP3w4CiKV5EQCizEKoSl6N0wgctYFMnoI6mn0AGXkVswT6ZQvSWE1wHhWNpuI6867otjxxArWvSTJMO1y73h7KudW4lzwGVou50hDjObweWIdQCDN0G9jAPdNWMY8QAACrpSutfCf7EAAAAASUVORK5CYII="
+    },
+    "smoker": {
+      "id": "smoker",
+      "name": "烟熏炉",
+      "unit": "件",
+      "icon": "machine",
+      "note": "Minecraft原版工作站；按原版配方取得，作为电动适配机器的装配原料。",
+      "external": true,
+      "mass": null,
+      "vanilla": true,
+      "registry_id": "minecraft:smoker",
+      "catalogue": false,
+      "category": "材料",
+      "subcategory": "普通材料",
+      "recipes": [],
+      "uses": [
+        "SP-M05"
+      ],
+      "primary_recipe": "",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
+    },
+    "auto_smoker": {
+      "id": "auto_smoker",
+      "name": "烟岚熏制炉",
+      "unit": "件",
+      "icon": "machine",
+      "note": "单方块纯电驱，每批40刻／2000XH；原料位0..8，真实SMOKING配方；纯电驱，不消耗燃料，所有非底面输入原料，不把仅SMELTING的物品视为烟熏配方。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "external": false,
+      "mass": null,
+      "processing": {
+        "recipe_type": "SMOKING",
+        "ticks": 40,
+        "energy": 2000,
+        "electric_only": true,
+        "output_slots": [
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "implementation": "特殊工序扩展；实际运行验收见程序仓库最新记录",
+      "upgrade_panel": {
+        "side": "left",
+        "always_visible": true,
+        "legacy_slots": [
+          16,
+          17,
+          20,
+          21
+        ],
+        "initial_slots": 1,
+        "page_size": 6,
+        "fixed_width": 60,
+        "fixed_height": 144,
+        "dynamic_slots": true,
+        "slot_limit": null,
+        "visible_slots": "occupied_plus_one_empty",
+        "reuse_empty_slots": true,
+        "shift_insert": "merge_all_pages_then_append",
+        "accepts": [
+          "speed_1",
+          "speed_2",
+          "joint",
+          "energy_saving_1",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2",
+          "capacity_1",
+          "capacity_2",
+          "intake_1",
+          "intake_2"
+        ],
+        "idle_only": true,
+        "automation": false,
+        "budget_frozen_on_start": true,
+        "removal_requires_contents_fit": true
+      },
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "SP-M05"
+      ],
+      "uses": [],
+      "primary_recipe": "SP-M05",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "自动执行烟岚熏制炉工序",
+        "benefit": "真实SMOKING适配，每批40刻／2000XH；原料仍需上游提供。",
+        "operation": "原料位0..8，真实SMOKING配方；纯电驱，不消耗燃料，所有非底面输入原料，不把仅SMELTING的物品视为烟熏配方。底部成品9..12，左侧统一通用升级栏；纯电驱，不消耗燃料。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABHklEQVR4nGNgGOmAEcaQVDf8T0+Ln988D7abBZtk37QpNLG0KCuHcAjoGpox0BJcPn+KcAg0eLLRxPKG7b8wxFhwKQ7rgrgUBubO7AXTyenFOC3Ap2ZVGfaQZWIgEuCzmBQ1ZDsA3ZeUqiEYBbS0lCQHzEUyGFcQE6OG7ChIRjIQly+JUUO2A5AtwOc7YtQMylzAQkgBrvxLCkAvU0hyAAisWH+agVwQEWhK3XKA2oCFGEWp0TZkW/D520/KHTB76RGyLCfG4UwMwz0KCAEWWkbB8MkFEQR8QRMHrKJCCUiMWSzEtt1oBZgYBhiw4JLoi2PHECtahL9UQwfa5d5w9tXOrcQ54DK03c4QZ8uAU45YBzB4E9TLONBdM4YRDwBYFWAWpEJY3QAAAABJRU5ErkJggg=="
+    },
+    "energy_saving_1": {
+      "id": "energy_saving_1",
+      "name": "节能回路Ⅰ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件省能权重增加2、减速权重增加10%；无提速时工时延长10%，省能统一按9／(9＋总权重)计算。 装入加工机左侧升级栏，每格64件，所有页合计；节能减速与超频提速分开计算。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-ES01"
+      ],
+      "uses": [
+        "SV-ES02",
+        "SV-EF01",
+        "SV-EF02-UP"
+      ],
+      "primary_recipe": "SV-ES01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "减少每批加工所需能量",
+        "benefit": "每件省能权重增加2、减速权重增加10%；无提速时工时延长10%，省能统一按9／(9＋总权重)计算。",
+        "operation": "装入加工机左侧升级栏，每格64件，所有页合计；节能减速与超频提速分开计算。",
+        "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "energy_saving_2",
+          "efficiency_1",
+          "efficiency_2"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABBUlEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKY5ZE01Vy5eELMUqzoJP09asAwQNPrBzEph2cM/DqcZ7mgNOOSaGAQZM5GoE+QrZZ/h8SXUHeOOwjBxHMFHLcnIdwUSJ5bgSKSmOYKKW5eh8Yh3BRKwD8FlGSJzqDqAmYKHUAHwF0PDKhlsJJDJicwhFUbA16wBRpR8piZGJFAcQYzipOYGJVAdQOxuykOMAci0j2QHeZNZwVHHAEhwtGLo5AFfTjNoOY2IYYMBIz2Y5tr4BEyEFUWr7wZgaYtg6JgTB3b1Z/0GYWmKDLg0wDDQAAGPWdmoQhcEXAAAAAElFTkSuQmCC"
+    },
+    "energy_saving_2": {
+      "id": "energy_saving_2",
+      "name": "节能回路Ⅱ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件省能权重增加4、减速权重增加20%；无提速时工时延长20%，省能统一按9／(9＋总权重)计算。 装入加工机左侧升级栏，每格64件，所有页合计；节能减速与超频提速分开计算。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-ES02"
+      ],
+      "uses": [
+        "SV-EF02"
+      ],
+      "primary_recipe": "SV-ES02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "减少每批加工所需能量",
+        "benefit": "每件省能权重增加4、减速权重增加20%；无提速时工时延长20%，省能统一按9／(9＋总权重)计算。",
+        "operation": "装入加工机左侧升级栏，每格64件，所有页合计；节能减速与超频提速分开计算。",
+        "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "efficiency_2"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABBklEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKY5ZE01Vy5eELMUqzoJP09asAwQNPrBzEph2cM/DqcZ7mgNOOSaGAQZM5GoE+QrZZ/h8SXUHeOOwjBxHMFHLcnIdwUSJ5bgSKSmOYKKW5eh8Yh3BRKwD8FlGSJzqDqAmYKHUAHwF0PDKhlsJJDJicwhFUbA16wBRpR8piZGJFAcQYzipOYGJVAdQOxuykOMAci0j2QHeZNZwVHHAEhwtGLo5AFfTDOYwXOJDrihmpGezHFvfgImQgii1/WBMDTFsHROC4O7erP8gTC2xQZcGGAYaAAAxnHlqSHFs6gAAAABJRU5ErkJggg=="
+    },
+    "efficiency_1": {
+      "id": "efficiency_1",
+      "name": "高效核心Ⅰ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件提速＋25%、省能权重＋2，不继承超频增耗或节能减速。 同档超频驱动与节能回路加控制、导相或隔离材料合成；Ⅱ级另有Ⅰ级核心升级路线。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-EF01"
+      ],
+      "uses": [
+        "SV-EF02-UP"
+      ],
+      "primary_recipe": "SV-EF01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "同时提高加工速度与节省能量",
+        "benefit": "每件提速＋25%、省能权重＋2，不继承超频增耗或节能减速。",
+        "operation": "同档超频驱动与节能回路加控制、导相或隔离材料合成；Ⅱ级另有Ⅰ级核心升级路线。",
+        "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "efficiency_2"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABSElEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKS6uuEBVy3s7DLCKs+DTNG+eN0GDD+ycBKYd3PPA9LlZOgxGaVdQ1CQlbcWpn4lhgAELuRoRvroL5+dYlJNsDhNllmMHoGigWQgk4bAc3feojihn6KVGCCShWU5MIgWBKSc6ccoxUcNyvoezcOpDzxFkO4AcnxMDmKhhyCf5NLBPQRg5uAn5HgTIzoYwACuA0BMjxCHe9M2GSVBxfImObAfMQ4t3dEegF0TEphMWYh0AMxTZYmwhAfI9KYmUiRQHwByBDYB8T6rlZDkAlyPIsRwEyM4F1CoLWCipdGjqgF4cLRi6OQBX04zaDmNiGGDASM9mOba+ARMhBVFq+8GYGmLYOiYEwd29Wf9BmFpigy4NMAw0AAAFPZDZMX1J7gAAAABJRU5ErkJggg=="
+    },
+    "efficiency_2": {
+      "id": "efficiency_2",
+      "name": "高效核心Ⅱ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件提速＋50%、省能权重＋4，不继承超频增耗或节能减速。 同档超频驱动与节能回路加控制、导相或隔离材料合成；Ⅱ级另有Ⅰ级核心升级路线。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-EF02",
+        "SV-EF02-UP"
+      ],
+      "uses": [],
+      "primary_recipe": "SV-EF02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "同时提高加工速度与节省能量",
+        "benefit": "每件提速＋50%、省能权重＋4，不继承超频增耗或节能减速。",
+        "operation": "同档超频驱动与节能回路加控制、导相或隔离材料合成；Ⅱ级另有Ⅰ级核心升级路线。",
+        "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABS0lEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKS6uuEBVy3s7DLCKs+DTNG+eN0GDD+ycBKYd3PPA9LlZOgxGaVdQ1CQlbcWpn4lhgAELuRoRvroL5+dYlJNsDhNllmMHoGigWQgk4bAc3feojihn6KVGCCShWU5MIgWBKSc6ccoxUcNyvoezcOpDzxFkO4AcnxMDmKhhyCf5NLBPQRg5uAn5HgTIzoYwACuA0BMjxCHe9M2GSVBxfImObAfMQ4t3dEegF0TEphMWYh0AMxTZYmwhAfI9KYmUiRQHwByBDYB8T6rlZDkAlyPIsRwEyM4F1CoLWCipdGjqgF4cLRi6OQBX0wzmMFzipAImhgEGjPRslmPrGzARUhClth+MqSGGrWNCENzdm/UfhKklNujSAMNAAwDYdJPZh6JAaQAAAABJRU5ErkJggg=="
+    },
+    "capacity_1": {
+      "id": "capacity_1",
+      "name": "储能矩阵Ⅰ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件增加基础储能容量的50%；容量增加不附送电量。 适配加工机、发电机、公共备用电源、取水泵和凝露机；取下后若现存电量超新容量则拒绝取下。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker",
+        "s02",
+        "g01",
+        "g02",
+        "g03",
+        "g04",
+        "g05",
+        "g06",
+        "g07",
+        "pump",
+        "dew"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-CP01"
+      ],
+      "uses": [
+        "SV-CP02"
+      ],
+      "primary_recipe": "SV-CP01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "增加设备内部电量缓存",
+        "benefit": "每件增加基础储能容量的50%；容量增加不附送电量。",
+        "operation": "适配加工机、发电机、公共备用电源、取水泵和凝露机；取下后若现存电量超新容量则拒绝取下。",
+        "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "s02",
+          "g01",
+          "g02",
+          "g03",
+          "g04",
+          "g05",
+          "g06",
+          "g07",
+          "pump",
+          "dew",
+          "capacity_2"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA5UlEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKT4xX4+qllskXsIqzoJPk2f5W6pYvr1TGKccCzUNJcfBTAwDDJgG2gEslMYhpdHCxDDAgGnYOcCz/C1JuYGJYYABCymKsfkMlvDQ5UB8YhIvE8NQCoHteHyEHhLEZl0WBioDYi0eNFHANNAOYCFGEbWqZZIdsJ3E+KSqAyxwtGDo5gBcTTNqO4yJYYABIz2b5dj6BkyEFESp7Qdjaohh65gQBHf3Zv0HYWqJDbo0wDDQAAC2xGAY72uBYQAAAABJRU5ErkJggg=="
+    },
+    "capacity_2": {
+      "id": "capacity_2",
+      "name": "储能矩阵Ⅱ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件增加基础储能容量的100%；容量增加不附送电量。 适配加工机、发电机、公共备用电源、取水泵和凝露机；取下后若现存电量超新容量则拒绝取下。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker",
+        "s02",
+        "g01",
+        "g02",
+        "g03",
+        "g04",
+        "g05",
+        "g06",
+        "g07",
+        "pump",
+        "dew"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-CP02"
+      ],
+      "uses": [],
+      "primary_recipe": "SV-CP02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "增加设备内部电量缓存",
+        "benefit": "每件增加基础储能容量的100%；容量增加不附送电量。",
+        "operation": "适配加工机、发电机、公共备用电源、取水泵和凝露机；取下后若现存电量超新容量则拒绝取下。",
+        "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "s02",
+          "g01",
+          "g02",
+          "g03",
+          "g04",
+          "g05",
+          "g06",
+          "g07",
+          "pump",
+          "dew"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA5klEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKT4xX4+qllskXsIqzoJPk2f5W6pYvr1TGKccCzUNJcfBTAwDDJgG2gEslMYhpdHCxDDAgGnYOcCz/C1JuYGJYYABCymKsfkMlvDQ5UB8YhIvE8NQCoHteHyEHhLEZl0WBioDYi0eNFHANNAOYCFGEbWqZZIdsJ3E+KSqAyxwtGDo5gBcTTOYw3CJD7lEyEjPZjm2vgETIQVRavvBmBpi2DomBMHdvVn/QZhaYoMuDTAMNAAAh6pjGMmIeBkAAAAASUVORK5CYII="
+    },
+    "intake_1": {
+      "id": "intake_1",
+      "name": "能流增幅Ⅰ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件增加基础接收速率的25%；电源和线路共享预算仍有效。 适配加工机、公共备用电源、取水泵和凝露机；发电机不接受，不增加发电功率。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker",
+        "s02",
+        "pump",
+        "dew"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-IN01"
+      ],
+      "uses": [
+        "SV-IN02"
+      ],
+      "primary_recipe": "SV-IN01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "提高设备自身电力接收上限",
+        "benefit": "每件增加基础接收速率的25%；电源和线路共享预算仍有效。",
+        "operation": "适配加工机、公共备用电源、取水泵和凝露机；发电机不接受，不增加发电功率。",
+        "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "s02",
+          "pump",
+          "dew",
+          "intake_2"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABCklEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKbZbtY6qlh8KC8IqzoJP0+WcXKIM150yGa9akDwuwESUDQQspwQwDaTlFDuAGoAFn2T35uUYYqW+kVTzPUEH4ALYLMflIEIJmQWfJMy3yKFBis+JyUVMDDQCxGZhpoG0nCYOIMVyEGChxAL09ECq5QQdgC0bUtNyEKBKFJBrOQgQnQ1pYTkIkBUCsOCn1HKyHUAty0EAbxTgK/VoXhccwtGCoTZgIaQAvWlGbYcxMQwwYKRnsxxb34CJkIIotf1gTA0xbB0TguDu3qz/IEwtsUGXBhgGGgAAxORycP+3bdYAAAAASUVORK5CYII="
+    },
+    "intake_2": {
+      "id": "intake_2",
+      "name": "能流增幅Ⅱ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件增加基础接收速率的50%；电源和线路共享预算仍有效。 适配加工机、公共备用电源、取水泵和凝露机；发电机不接受，不增加发电功率。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "prep",
+        "press",
+        "crusher",
+        "quarry",
+        "phase_extractor",
+        "plant_cultivator",
+        "refiner",
+        "recycler",
+        "bio_processor",
+        "autocrafter",
+        "auto_furnace",
+        "auto_brewer",
+        "auto_smith",
+        "auto_stonecutter",
+        "auto_blast_furnace",
+        "auto_smoker",
+        "s02",
+        "pump",
+        "dew"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-IN02"
+      ],
+      "uses": [],
+      "primary_recipe": "SV-IN02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "提高设备自身电力接收上限",
+        "benefit": "每件增加基础接收速率的50%；电源和线路共享预算仍有效。",
+        "operation": "适配加工机、公共备用电源、取水泵和凝露机；发电机不接受，不增加发电功率。",
+        "targets": [
+          "prep",
+          "press",
+          "crusher",
+          "quarry",
+          "phase_extractor",
+          "plant_cultivator",
+          "refiner",
+          "recycler",
+          "bio_processor",
+          "autocrafter",
+          "auto_furnace",
+          "auto_brewer",
+          "auto_smith",
+          "auto_stonecutter",
+          "auto_blast_furnace",
+          "auto_smoker",
+          "s02",
+          "pump",
+          "dew"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABC0lEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKbZbtY6qlh8KC8IqzoJP0+WcXKIM150yGa9akDwuwESUDQQspwQwDaTlFDuAGoAFn2T35uUYYqW+kVTzPUEH4ALYLMflIEIJmQWfJMy3yKFBis+JyUVMDDQCxGZhpoG0nCYOIMVyEGChxAL09ECq5QQdgC0bUtNyEKBKFJBrOQgQnQ1pYTkIkBUCsOCn1HKyHUAty0EAbxTgK/VoXhccwtGCoTZgIaQAvWkGcxgu8SHXHmCkZ7McW9+AiZCCKLX9YEwNMWwdE4Lg7t6s/yBMLbFBlwYYBhoAAJXadXBiQk2wAAAAAElFTkSuQmCC"
+    },
+    "fluid_capacity_1": {
+      "id": "fluid_capacity_1",
+      "name": "流体容仓Ⅰ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件增加基础液槽容量的50%；不增加输液速率或凭空产生液体。 仅有液体端口的适配设备接受；当前液量超过拆除后容量时须先消耗或排出。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "phase_extractor",
+        "prep",
+        "refiner",
+        "bio_processor",
+        "g05",
+        "plant_cultivator",
+        "pump",
+        "dew"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-FC01"
+      ],
+      "uses": [
+        "SV-FC02"
+      ],
+      "primary_recipe": "SV-FC01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "扩大设备已有的工艺液槽",
+        "benefit": "每件增加基础液槽容量的50%；不增加输液速率或凭空产生液体。",
+        "operation": "仅有液体端口的适配设备接受；当前液量超过拆除后容量时须先消耗或排出。",
+        "targets": [
+          "phase_extractor",
+          "prep",
+          "refiner",
+          "bio_processor",
+          "g05",
+          "plant_cultivator",
+          "pump",
+          "dew",
+          "fluid_capacity_2"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA1ElEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKbat3k1Vyw+3umIVZ8Gn6crsBKpYrpO6AKccC7GGzFu8hGSLk2JjCKphYhhgwEILX5ESWkwMQy0E5pGRFqjqgKQRHwU6ePI0OYCJqqaNOmAoRgELqRqK7EjWMkxCIImIAojqDtChcp4nyQGHcbRg6OYAXE0zajuMiWGAASM9m+XY+gZMhBREqe0HY2qIYeuYEAR392b9B2FqiQ26NMAw0AAAHb5S/4r/Uu0AAAAASUVORK5CYII="
+    },
+    "fluid_capacity_2": {
+      "id": "fluid_capacity_2",
+      "name": "流体容仓Ⅱ",
+      "unit": "件",
+      "icon": "module",
+      "note": "每件增加基础液槽容量的100%；不增加输液速率或凭空产生液体。 仅有液体端口的适配设备接受；当前液量超过拆除后容量时须先消耗或排出。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "phase_extractor",
+        "prep",
+        "refiner",
+        "bio_processor",
+        "g05",
+        "plant_cultivator",
+        "pump",
+        "dew"
+      ],
+      "upgrade_stack_limit": 64,
+      "upgrade_effect_stacks": true,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "通用升级",
+      "recipes": [
+        "SV-FC02"
+      ],
+      "uses": [],
+      "primary_recipe": "SV-FC02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "扩大设备已有的工艺液槽",
+        "benefit": "每件增加基础液槽容量的100%；不增加输液速率或凭空产生液体。",
+        "operation": "仅有液体端口的适配设备接受；当前液量超过拆除后容量时须先消耗或排出。",
+        "targets": [
+          "phase_extractor",
+          "prep",
+          "refiner",
+          "bio_processor",
+          "g05",
+          "plant_cultivator",
+          "pump",
+          "dew"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA1UlEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKbat3k1Vyw+3umIVZ8Gn6crsBKpYrpO6AKccC7GGzFu8hGSLk2JjCKphYhhgwEILX5ESWkwMQy0E5pGRFqjqgKQRHwU6ePI0OYCJqqaNOmAoRgELqRqK7EjWMkxCIImIAojqDtChcp4nyQGHcbRg6OYAXE0zmMNwiQ+5RMhIz2Y5tr4BEyEFUWr7wZgaYtg6JgTB3b1Z/0GYWmKDLg0wDDQAAOx1Vf/Fxn3KAAAAAElFTkSuQmCC"
+    },
+    "fortune_1": {
+      "id": "fortune_1",
+      "name": "富矿采集Ⅰ",
+      "unit": "件",
+      "icon": "module",
+      "note": "使用时运1级规则，所有已装时运只取最高等级，不叠加等级。 仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "quarry"
+      ],
+      "upgrade_stack_limit": 1,
+      "upgrade_effect_stacks": false,
+      "upgrade_conflicts": [
+        "silk_touch"
+      ],
+      "upgrade_aggregation": "highest_level",
+      "fortune_level": 1,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "采矿升级",
+      "recipes": [
+        "SV-FT01"
+      ],
+      "uses": [
+        "SV-FT02"
+      ],
+      "primary_recipe": "SV-FT01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "提高地脉共振仪适用矿物的采集掉落",
+        "benefit": "使用时运1级规则，所有已装时运只取最高等级，不叠加等级。",
+        "operation": "仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+        "targets": [
+          "quarry",
+          "fortune_2"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABSElEQVR4nO2XMQ/BQBTHry/9GGaTL9FJbAYMwmTCJDEyMUoMiMkkMWCwiUH6Jaw234O8JpLLuevde44a/JJGcn3t/3ev1V6F+JMxgW5wtNzdPxE2bFdf8uBb4aZzB7qCxWT8EYFuf/DSidBUXD/1vIZvilPteJh20LG5tZ54Hy9FJWqn1pTWNeM+sCZYwhvzWfLLBd4NR1a3mC0B3HAMRaJyQcSHC1sCuOEYiuEyHAnghKs8u8CRAE64bvYyFAmghpuQu0CRABcB/J+3cpGggPW254OzgCqhzla9LK7hJAFVwgQlnCwgI3fhOXtqOEuAcz+kEXIOQonkDi+/N3uEfQnkTnDDEVYHZAmX1zFboJTyHpcfOC51ZIGNYQXjm9BWoC7NfIuByJjgm8ty3bcB2Arq+TjZfIzpPkysXM+dO26+xn7uHhBZ8wADjbvs7yJIIwAAAABJRU5ErkJggg=="
+    },
+    "fortune_2": {
+      "id": "fortune_2",
+      "name": "富矿采集Ⅱ",
+      "unit": "件",
+      "icon": "module",
+      "note": "使用时运2级规则，所有已装时运只取最高等级，不叠加等级。 仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "quarry"
+      ],
+      "upgrade_stack_limit": 1,
+      "upgrade_effect_stacks": false,
+      "upgrade_conflicts": [
+        "silk_touch"
+      ],
+      "upgrade_aggregation": "highest_level",
+      "fortune_level": 2,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "采矿升级",
+      "recipes": [
+        "SV-FT02"
+      ],
+      "uses": [
+        "SV-FT03"
+      ],
+      "primary_recipe": "SV-FT02",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "提高地脉共振仪适用矿物的采集掉落",
+        "benefit": "使用时运2级规则，所有已装时运只取最高等级，不叠加等级。",
+        "operation": "仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+        "targets": [
+          "quarry",
+          "fortune_3"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABS0lEQVR4nO2XMQ/BQBTHry/9GGaTL9FJbAYMwmTCJDEyMUoMSCeTxIDBJgbpl7DafA/ymjS5nLvevafU4Jc0kutr/797rfYqxJ+c8XSDk3D/+ETYuFt/yYNvhZvO7ekKVrPpRwT6w9FLJ3xTcfM8yDR8W55rx/20g07tnfXEhygUtaCbWlPZNIz7wJpgCW8tF/EvF3g3HFnfI7YEcMMxFAmqJREdr2wJ4IZjKIbLcCSAE66SdIEjAZxw3exlKBJADTchd4EiAS4C+D/vFAJBAettzwdnAVVCna16WVzDSQKqhAlKOFlARu5CMntqOEuAcz+k4XMOQon4Dq++N3uEfQnkTnDDEVYHZAmX1zFboJLyHpcfOC51ZIGtYQWTNb6tQF2aJWKmcSogcsb75rJc920AtoJmMYq3LMZ0HyZWbpfeA7esxn7uHhB58wTTVL7s2QWOyAAAAABJRU5ErkJggg=="
+    },
+    "fortune_3": {
+      "id": "fortune_3",
+      "name": "富矿采集Ⅲ",
+      "unit": "件",
+      "icon": "module",
+      "note": "使用时运3级规则，所有已装时运只取最高等级，不叠加等级。 仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "quarry"
+      ],
+      "upgrade_stack_limit": 1,
+      "upgrade_effect_stacks": false,
+      "upgrade_conflicts": [
+        "silk_touch"
+      ],
+      "upgrade_aggregation": "highest_level",
+      "fortune_level": 3,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "采矿升级",
+      "recipes": [
+        "SV-FT03"
+      ],
+      "uses": [],
+      "primary_recipe": "SV-FT03",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "提高地脉共振仪适用矿物的采集掉落",
+        "benefit": "使用时运3级规则，所有已装时运只取最高等级，不叠加等级。",
+        "operation": "仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+        "targets": [
+          "quarry"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABTElEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKY7aWUhVy5e592MVZ8GnaXvsKoIGr9k/nSHEMROvGs/FYTjlmAjaQMDymCmTwTS5gIlSy0Fg7pP9ZDuCiVzLQZaCgGOADsP+DVfIdgQTuZaDLAVZjgzIcQQTOZajA1gokOMIJnIsx+Z7ZECKI5hItRwXQA4FUhzBRIwDQPk8WcaRgRQAUk+ofCDaAeiOQPcterQQazlJDkB3BC5AiuUkOwAZIIcCzPekWk6WA8hJD/gACzmaQI4Ap/AAynwPAmRHAXJIkGs5CJAVAsiOIKY6JtsBnnjqceQChxh1JDtgGY4WDLUBCyEF6E0zmMNIFadJi4gagJGezXJsfQMmQgqi1PaDMTXEsHVMCIK7e7P+gzC1xAZdGmAYaAAAWyrB7KHF6GgAAAAASUVORK5CYII="
+    },
+    "silk_touch": {
+      "id": "silk_touch",
+      "name": "精准采集",
+      "unit": "件",
+      "icon": "module",
+      "note": "按目标的精准采集规则产出；保留基底，不挖世界。 仅地脉共振仪接受，每格1件；与富矿采集、炽热熔炼互斥，重复安装不叠加。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "quarry"
+      ],
+      "upgrade_stack_limit": 1,
+      "upgrade_effect_stacks": false,
+      "upgrade_conflicts": [
+        "fortune_1",
+        "fortune_2",
+        "fortune_3",
+        "auto_smelt"
+      ],
+      "upgrade_aggregation": "presence",
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "采矿升级",
+      "recipes": [
+        "SV-SI01"
+      ],
+      "uses": [],
+      "primary_recipe": "SV-SI01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "使地脉共振仪保留适用目标的方块掉落",
+        "benefit": "按目标的精准采集规则产出；保留基底，不挖世界。",
+        "operation": "仅地脉共振仪接受，每格1件；与富矿采集、炽热熔炼互斥，重复安装不叠加。",
+        "targets": [
+          "quarry"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABCklEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKT6//QRVLTf0tMAqzoJPk1N8MFUs37dwLU45JlINa0ucRJYc1RxAbcDEMNIdwEJq4jlx4CnORIVPbmiGAHJ2RPYZruwJygXIcsSEBhNBFUiWwgwHGUxqUFPsAGSA7hBKHMNCrkb0oAZhUCKkiQP2IfmQUEofXrnACUtqR0/p+ORAoYGeg+gaAk5E1KYs5BhMTq1HlgP2kZG99jmspY4DDHG0YKgNWAgpQG+aUdthTAwDDBjp2SzH1jdgIqQgSm0/GFNDDFvHhCC4uzfrPwhTS2zQpQGGgQYA0jmHifGaFS8AAAAASUVORK5CYII="
+    },
+    "auto_smelt": {
+      "id": "auto_smelt",
+      "name": "炽热熔炼",
+      "unit": "件",
+      "icon": "module",
+      "note": "先按时运或普通掉落结算，再应用实际熔炉配方；无配方的产物保持原样。 仅地脉共振仪接受，每格1件；每实际熔炼件先加100XH基础预算，再受通用耗能修正，与精准采集互斥。",
+      "external": false,
+      "mass": null,
+      "implementation": "NeoForge服务端已实现；2026-10-28定向升级验收通过",
+      "implementation_status": "server_verified",
+      "upgrade_module": true,
+      "upgrade_targets": [
+        "quarry"
+      ],
+      "upgrade_stack_limit": 1,
+      "upgrade_effect_stacks": false,
+      "upgrade_conflicts": [
+        "silk_touch"
+      ],
+      "upgrade_aggregation": "presence",
+      "extra_base_energy_per_smelted_item": 100,
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "采矿升级",
+      "recipes": [
+        "SV-AS01"
+      ],
+      "uses": [],
+      "primary_recipe": "SV-AS01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "直接熔炼地脉共振仪采得的适用产物",
+        "benefit": "先按时运或普通掉落结算，再应用实际熔炉配方；无配方的产物保持原样。",
+        "operation": "仅地脉共振仪接受，每格1件；每实际熔炼件先加100XH基础预算，再受通用耗能修正，与精准采集互斥。",
+        "targets": [
+          "quarry"
+        ]
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABFUlEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKX6UpEhVy+Xm3ccqzoJPk/6WXwQNvujDRlAdSA0uwMRABYDPAkKAiVoWk+sIJkotphQwUdNychzGRLIOApaR6ggmalhKiSOYKLWcNUKHaMsocgA+y7E5gthQYKJlqidGHxMxBmEr6dB9TW5UMDHQEBBTlDORYxgu35ITCiwk62BgYPi94gqGhTAxmkaB/pZfKCEBsxTdcnR1VHMANguwWU61KLhIRvYjVQ8LqS0YagMWQgrQm2bUdhgTwwADRno2y7H1DZgIKYhS2w/G1BDD1jEhCO7uzfoPwtQSG3RpgGGgAQAaunxY6UPUOAAAAABJRU5ErkJggg=="
     }
   },
   "recipes": [
@@ -11035,7 +13018,7 @@
     },
     {
       "id": "CB-01",
-      "name": "基础省能接头",
+      "name": "省能接头",
       "station": "workbench",
       "unlock": "PUB-03",
       "inputs": [
@@ -13006,7 +14989,7 @@
     },
     {
       "id": "SV-SP01",
-      "name": "通用提速模块Ⅰ合成",
+      "name": "超频驱动Ⅰ合成",
       "station": "workbench",
       "unlock": "PUB-03、PUB-05",
       "inputs": [
@@ -13088,7 +15071,7 @@
     },
     {
       "id": "SV-SP02",
-      "name": "通用提速模块Ⅱ合成",
+      "name": "超频驱动Ⅱ合成",
       "station": "workbench",
       "unlock": "陨相阶段；已有Ⅰ级模块、普通钢与金锭",
       "inputs": [
@@ -13187,7 +15170,7 @@
     },
     {
       "id": "SV-BK01",
-      "name": "熔炉扩批模块Ⅰ合成",
+      "name": "并行冶炼Ⅰ合成",
       "station": "workbench",
       "unlock": "PUB-03、PUB-05",
       "inputs": [
@@ -13275,7 +15258,7 @@
     },
     {
       "id": "SV-BK02",
-      "name": "熔炉扩批模块Ⅱ合成",
+      "name": "并行冶炼Ⅱ合成",
       "station": "workbench",
       "unlock": "陨相阶段；已有Ⅰ级模块、普通钢与金锭",
       "inputs": [
@@ -15561,7 +17544,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深板岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深板岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15673,7 +17656,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种花岗岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种花岗岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15785,7 +17768,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种闪长岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种闪长岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -15897,7 +17880,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种安山岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种安山岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16009,7 +17992,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种凝灰岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种凝灰岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16121,7 +18104,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种方解石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种方解石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16233,7 +18216,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种黑石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种黑石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16345,7 +18328,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种玄武岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种玄武岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16457,7 +18440,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种末地石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种末地石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16569,7 +18552,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种下界岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种下界岩共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16681,7 +18664,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种黑曜石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种黑曜石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16793,7 +18776,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种煤矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种煤矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -16905,7 +18888,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层煤矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层煤矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17465,7 +19448,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17577,7 +19560,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17689,7 +19672,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种红石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种红石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17801,7 +19784,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层红石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层红石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -17913,7 +19896,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种青金石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种青金石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18025,7 +20008,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层青金石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层青金石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18137,7 +20120,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种钻石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种钻石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18249,7 +20232,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层钻石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层钻石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18361,7 +20344,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种绿宝石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种绿宝石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18473,7 +20456,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种深层绿宝石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种深层绿宝石矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18585,7 +20568,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种下界金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种下界金矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18697,7 +20680,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种下界石英矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种下界石英矿石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18809,7 +20792,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种远古残骸共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种远古残骸共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -18921,7 +20904,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种紫水晶簇共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种紫水晶簇共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -19033,7 +21016,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种镶金黑石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种镶金黑石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -19145,7 +21128,7 @@
       "seconds": 10,
       "energy": 4000,
       "tools": [],
-      "note": "四格下方4个同种萤石共振基底，前方两格留空；需左侧任一升级格保留广谱共振升级组件。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
+      "note": "四格下方4个同种萤石共振基底，前方两格留空；需左侧任一升级格保留广谱共振。基底和组件保留，不进消耗输入，不接受普通地基或模组矿。",
       "quality": "",
       "inherited": false,
       "balance": false,
@@ -19158,7 +21141,7 @@
     },
     {
       "id": "QM-U01",
-      "name": "广谱共振升级组件合成",
+      "name": "广谱共振合成",
       "station": "workbench",
       "unlock": "PUB-08；精制与导相材料",
       "inputs": [
@@ -20309,6 +22292,1841 @@
       "inherited": false,
       "balance": false,
       "automatic": false
+    },
+    {
+      "id": "SP-M01",
+      "name": "回流酿造釜合成",
+      "station": "workbench",
+      "unlock": "PUB-05；已有对应原版工作站与钢制机电部件",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "brewing_stand",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "copper_plate",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "auto_brewer",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "SPS／FWB／ICJ：钢基材2、铁板2、机架1、原版工作站1、铜板1、控制板1、钢制固定件1，共9件。单方块纯电驱，每批400刻／8000XH；瓶位0..2各限1瓶，材料位3、烈焰粉位4；每批最多处理3瓶，消耗材料1和烈焰粉1，不套用原版一份烈焰粉20次的燃料缓存。顶部输入材料和烈焰粉，水平面输入瓶子。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "layout": [
+        "SPS",
+        "FWB",
+        "ICJ"
+      ],
+      "layout_key": {
+        "S": "steel",
+        "P": "iron_plate",
+        "F": "machine_frame",
+        "W": "brewing_stand",
+        "B": "board",
+        "I": "iron_plate",
+        "C": "copper_plate",
+        "J": "steel_fix"
+      },
+      "craft": {
+        "mode": "定形九宫格",
+        "cells": [
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "brewing_stand",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "copper_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "按图排列；每个非空格每次消耗1件。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SP-M02",
+      "name": "铭纹锻造台合成",
+      "station": "workbench",
+      "unlock": "PUB-05；已有对应原版工作站与钢制机电部件",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "smithing_table",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "copper_plate",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "auto_smith",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "SPS／FWB／ICJ：钢基材2、铁板2、机架1、原版工作站1、铜板1、控制板1、钢制固定件1，共9件。单方块纯电驱，每批80刻／4000XH；模板位0、装备位1、材料位2，按真实SMITHING配方匹配和扣料，不是固定下界合金公式。顶部输入模板，背面输入材料，前／左／右输入装备。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "layout": [
+        "SPS",
+        "FWB",
+        "ICJ"
+      ],
+      "layout_key": {
+        "S": "steel",
+        "P": "iron_plate",
+        "F": "machine_frame",
+        "W": "smithing_table",
+        "B": "board",
+        "I": "iron_plate",
+        "C": "copper_plate",
+        "J": "steel_fix"
+      },
+      "craft": {
+        "mode": "定形九宫格",
+        "cells": [
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "smithing_table",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "copper_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "按图排列；每个非空格每次消耗1件。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SP-M03",
+      "name": "精裁切石机合成",
+      "station": "workbench",
+      "unlock": "PUB-05；已有对应原版工作站与钢制机电部件",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "stonecutter",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "copper_plate",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "auto_stonecutter",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "SPS／FWB／ICJ：钢基材2、铁板2、机架1、原版工作站1、铜板1、控制板1、钢制固定件1，共9件。单方块纯电驱，每批20刻／1000XH；原料位0，成品样品位19保留不消耗；无样品按来料选默认配方，有样品只选匹配成品，无匹配则等待，不回退为其他产物。所有非底面输入原料。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "layout": [
+        "SPS",
+        "FWB",
+        "ICJ"
+      ],
+      "layout_key": {
+        "S": "steel",
+        "P": "iron_plate",
+        "F": "machine_frame",
+        "W": "stonecutter",
+        "B": "board",
+        "I": "iron_plate",
+        "C": "copper_plate",
+        "J": "steel_fix"
+      },
+      "craft": {
+        "mode": "定形九宫格",
+        "cells": [
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "stonecutter",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "copper_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "按图排列；每个非空格每次消耗1件。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SP-M04",
+      "name": "炽流高炉合成",
+      "station": "workbench",
+      "unlock": "PUB-05；已有对应原版工作站与钢制机电部件",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "blast_furnace",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "copper_plate",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "auto_blast_furnace",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "SPS／FWB／ICJ：钢基材2、铁板2、机架1、原版工作站1、铜板1、控制板1、钢制固定件1，共9件。单方块纯电驱，每批40刻／2000XH；原料位0..8，真实BLASTING配方；纯电驱，不消耗燃料，所有非底面输入原料，不把仅SMELTING的物品视为高炉配方。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "layout": [
+        "SPS",
+        "FWB",
+        "ICJ"
+      ],
+      "layout_key": {
+        "S": "steel",
+        "P": "iron_plate",
+        "F": "machine_frame",
+        "W": "blast_furnace",
+        "B": "board",
+        "I": "iron_plate",
+        "C": "copper_plate",
+        "J": "steel_fix"
+      },
+      "craft": {
+        "mode": "定形九宫格",
+        "cells": [
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "blast_furnace",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "copper_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "按图排列；每个非空格每次消耗1件。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SP-M05",
+      "name": "烟岚熏制炉合成",
+      "station": "workbench",
+      "unlock": "PUB-05；已有对应原版工作站与钢制机电部件",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "smoker",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "copper_plate",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "auto_smoker",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "SPS／FWB／ICJ：钢基材2、铁板2、机架1、原版工作站1、铜板1、控制板1、钢制固定件1，共9件。单方块纯电驱，每批40刻／2000XH；原料位0..8，真实SMOKING配方；纯电驱，不消耗燃料，所有非底面输入原料，不把仅SMELTING的物品视为烟熏配方。底部9..12输出；左侧通用升级栏，适配提速、省能、高效、储能和接收升级，不支持并行冶炼模块。初始材料由外部提供，不保证资源来源闭环。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "layout": [
+        "SPS",
+        "FWB",
+        "ICJ"
+      ],
+      "layout_key": {
+        "S": "steel",
+        "P": "iron_plate",
+        "F": "machine_frame",
+        "W": "smoker",
+        "B": "board",
+        "I": "iron_plate",
+        "C": "copper_plate",
+        "J": "steel_fix"
+      },
+      "craft": {
+        "mode": "定形九宫格",
+        "cells": [
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "smoker",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "copper_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "按图排列；每个非空格每次消耗1件。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-ES01",
+      "name": "节能回路Ⅰ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；首批陨相与普通机电材料",
+      "inputs": [
+        {
+          "item": "joint",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "copper",
+          "qty": 2
+        },
+        {
+          "item": "insulation",
+          "qty": 2
+        }
+      ],
+      "outputs": [
+        {
+          "item": "energy_saving_1",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件省能权重增加2、减速权重增加10%；无提速时工时延长10%，省能统一按9／(9＋总权重)计算。 装入加工机左侧升级栏，每格64件，所有页合计；节能减速与超频提速分开计算。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相机电升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "joint",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "insulation",
+            "qty": 1
+          },
+          {
+            "item": "insulation",
+            "qty": 1
+          },
+          null,
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-ES02",
+      "name": "节能回路Ⅱ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；首批陨相与普通机电材料",
+      "inputs": [
+        {
+          "item": "energy_saving_1",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
+        },
+        {
+          "item": "substrate",
+          "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 2
+        }
+      ],
+      "outputs": [
+        {
+          "item": "energy_saving_2",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件省能权重增加4、减速权重增加20%；无提速时工时延长20%，省能统一按9／(9＋总权重)计算。 装入加工机左侧升级栏，每格64件，所有页合计；节能减速与超频提速分开计算。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相机电升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "energy_saving_1",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "gold_ingot",
+            "qty": 1
+          },
+          {
+            "item": "substrate",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          },
+          null,
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-EF01",
+      "name": "高效核心Ⅰ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；已有精制与导相材料",
+      "inputs": [
+        {
+          "item": "speed_1",
+          "qty": 1
+        },
+        {
+          "item": "energy_saving_1",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "conductor",
+          "qty": 2
+        },
+        {
+          "item": "insulation",
+          "qty": 2
+        }
+      ],
+      "outputs": [
+        {
+          "item": "efficiency_1",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件提速＋25%、省能权重＋2，不继承超频增耗或节能减速。 同档超频驱动与节能回路加控制、导相或隔离材料合成；Ⅱ级另有Ⅰ级核心升级路线。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P3：精制导相升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "speed_1",
+            "qty": 1
+          },
+          {
+            "item": "energy_saving_1",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "conductor",
+            "qty": 1
+          },
+          {
+            "item": "conductor",
+            "qty": 1
+          },
+          {
+            "item": "insulation",
+            "qty": 1
+          },
+          {
+            "item": "insulation",
+            "qty": 1
+          },
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-EF02",
+      "name": "高效核心Ⅱ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；已有精制与导相材料",
+      "inputs": [
+        {
+          "item": "speed_2",
+          "qty": 1
+        },
+        {
+          "item": "energy_saving_2",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 2
+        },
+        {
+          "item": "directed",
+          "qty": 1
+        },
+        {
+          "item": "substrate",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "efficiency_2",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件提速＋50%、省能权重＋4，不继承超频增耗或节能减速。 同档超频驱动与节能回路加控制、导相或隔离材料合成；Ⅱ级另有Ⅰ级核心升级路线。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P3：精制导相升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "speed_2",
+            "qty": 1
+          },
+          {
+            "item": "energy_saving_2",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "directed",
+            "qty": 1
+          },
+          {
+            "item": "substrate",
+            "qty": 1
+          },
+          null,
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-EF02-UP",
+      "name": "高效核心Ⅱ合成（Ⅰ级核心升级）",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；已有精制与导相材料",
+      "inputs": [
+        {
+          "item": "efficiency_1",
+          "qty": 1
+        },
+        {
+          "item": "speed_1",
+          "qty": 1
+        },
+        {
+          "item": "energy_saving_1",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "directed",
+          "qty": 1
+        },
+        {
+          "item": "substrate",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "efficiency_2",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件提速＋50%、省能权重＋4，不继承超频增耗或节能减速。 同档超频驱动与节能回路加控制、导相或隔离材料合成；Ⅱ级另有Ⅰ级核心升级路线。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P3：精制导相升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "efficiency_1",
+            "qty": 1
+          },
+          {
+            "item": "speed_1",
+            "qty": 1
+          },
+          {
+            "item": "energy_saving_1",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "directed",
+            "qty": 1
+          },
+          {
+            "item": "substrate",
+            "qty": 1
+          },
+          null,
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-CP01",
+      "name": "储能矩阵Ⅰ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；首批陨相与普通机电材料",
+      "inputs": [
+        {
+          "item": "copper",
+          "qty": 2
+        },
+        {
+          "item": "redstone",
+          "qty": 2
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
+        },
+        {
+          "item": "insulation",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "capacity_1",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件增加基础储能容量的50%；容量增加不附送电量。 适配加工机、发电机、公共备用电源、取水泵和凝露机；取下后若现存电量超新容量则拒绝取下。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相机电升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "redstone",
+            "qty": 1
+          },
+          {
+            "item": "redstone",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "insulation",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-CP02",
+      "name": "储能矩阵Ⅱ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；首批陨相与普通机电材料",
+      "inputs": [
+        {
+          "item": "capacity_1",
+          "qty": 1
+        },
+        {
+          "item": "copper",
+          "qty": 2
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
+        },
+        {
+          "item": "substrate",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "capacity_2",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件增加基础储能容量的100%；容量增加不附送电量。 适配加工机、发电机、公共备用电源、取水泵和凝露机；取下后若现存电量超新容量则拒绝取下。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相机电升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "capacity_1",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "gold_ingot",
+            "qty": 1
+          },
+          {
+            "item": "substrate",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          },
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-IN01",
+      "name": "能流增幅Ⅰ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；首批陨相与普通机电材料",
+      "inputs": [
+        {
+          "item": "copper",
+          "qty": 2
+        },
+        {
+          "item": "redstone",
+          "qty": 1
+        },
+        {
+          "item": "breaker",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "titan",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "intake_1",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件增加基础接收速率的25%；电源和线路共享预算仍有效。 适配加工机、公共备用电源、取水泵和凝露机；发电机不接受，不增加发电功率。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相机电升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "copper",
+            "qty": 1
+          },
+          {
+            "item": "redstone",
+            "qty": 1
+          },
+          {
+            "item": "breaker",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "titan",
+            "qty": 1
+          },
+          null,
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-IN02",
+      "name": "能流增幅Ⅱ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；已有精制与导相材料",
+      "inputs": [
+        {
+          "item": "intake_1",
+          "qty": 1
+        },
+        {
+          "item": "conductor",
+          "qty": 2
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "insulation",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "intake_2",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件增加基础接收速率的50%；电源和线路共享预算仍有效。 适配加工机、公共备用电源、取水泵和凝露机；发电机不接受，不增加发电功率。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P3：精制导相升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "intake_1",
+            "qty": 1
+          },
+          {
+            "item": "conductor",
+            "qty": 1
+          },
+          {
+            "item": "conductor",
+            "qty": 1
+          },
+          {
+            "item": "gold_ingot",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "insulation",
+            "qty": 1
+          },
+          null,
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-FC01",
+      "name": "流体容仓Ⅰ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；首批陨相与普通机电材料",
+      "inputs": [
+        {
+          "item": "iron",
+          "qty": 2
+        },
+        {
+          "item": "boroglass",
+          "qty": 2
+        },
+        {
+          "item": "pipe",
+          "qty": 1
+        },
+        {
+          "item": "fix",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "fluid_capacity_1",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件增加基础液槽容量的50%；不增加输液速率或凭空产生液体。 仅有液体端口的适配设备接受；当前液量超过拆除后容量时须先消耗或排出。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相机电升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "iron",
+            "qty": 1
+          },
+          {
+            "item": "iron",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "pipe",
+            "qty": 1
+          },
+          {
+            "item": "fix",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-FC02",
+      "name": "流体容仓Ⅱ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；首批陨相与普通机电材料",
+      "inputs": [
+        {
+          "item": "fluid_capacity_1",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "boroglass",
+          "qty": 2
+        },
+        {
+          "item": "substrate",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "fluid_capacity_2",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "每件增加基础液槽容量的100%；不增加输液速率或凭空产生液体。 仅有液体端口的适配设备接受；当前液量超过拆除后容量时须先消耗或排出。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相机电升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "fluid_capacity_1",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "substrate",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-FT01",
+      "name": "富矿采集Ⅰ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；首批陨相与普通机电材料",
+      "inputs": [
+        {
+          "item": "diamond",
+          "qty": 1
+        },
+        {
+          "item": "common",
+          "qty": 2
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "fortune_1",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "使用时运1级规则，所有已装时运只取最高等级，不叠加等级。 仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P2：陨相机电升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "diamond",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          },
+          {
+            "item": "common",
+            "qty": 1
+          },
+          {
+            "item": "gold_ingot",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          null,
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-FT02",
+      "name": "富矿采集Ⅱ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；已有精制与导相材料",
+      "inputs": [
+        {
+          "item": "fortune_1",
+          "qty": 1
+        },
+        {
+          "item": "diamond",
+          "qty": 2
+        },
+        {
+          "item": "refined",
+          "qty": 2
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "gold_ingot",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "fortune_2",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "使用时运2级规则，所有已装时运只取最高等级，不叠加等级。 仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P3：精制导相升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "fortune_1",
+            "qty": 1
+          },
+          {
+            "item": "diamond",
+            "qty": 1
+          },
+          {
+            "item": "diamond",
+            "qty": 1
+          },
+          {
+            "item": "refined",
+            "qty": 1
+          },
+          {
+            "item": "refined",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "gold_ingot",
+            "qty": 1
+          },
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-FT03",
+      "name": "富矿采集Ⅲ合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；已有精制与导相材料",
+      "inputs": [
+        {
+          "item": "fortune_2",
+          "qty": 1
+        },
+        {
+          "item": "diamond",
+          "qty": 2
+        },
+        {
+          "item": "directed",
+          "qty": 2
+        },
+        {
+          "item": "conductor",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "blaze_powder",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "fortune_3",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "使用时运3级规则，所有已装时运只取最高等级，不叠加等级。 仅地脉共振仪接受，每格1件；与精准采集互斥，可与炽热熔炼组合，先采集后熔炼。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P3：精制导相升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "fortune_2",
+            "qty": 1
+          },
+          {
+            "item": "diamond",
+            "qty": 1
+          },
+          {
+            "item": "diamond",
+            "qty": 1
+          },
+          {
+            "item": "directed",
+            "qty": 1
+          },
+          {
+            "item": "directed",
+            "qty": 1
+          },
+          {
+            "item": "conductor",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "blaze_powder",
+            "qty": 1
+          },
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-SI01",
+      "name": "精准采集合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；已有精制与导相材料",
+      "inputs": [
+        {
+          "item": "diamond",
+          "qty": 2
+        },
+        {
+          "item": "refined",
+          "qty": 2
+        },
+        {
+          "item": "directed",
+          "qty": 1
+        },
+        {
+          "item": "boroglass",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "silk_touch",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "按目标的精准采集规则产出；保留基底，不挖世界。 仅地脉共振仪接受，每格1件；与富矿采集、炽热熔炼互斥，重复安装不叠加。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P3：精制导相升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "diamond",
+            "qty": 1
+          },
+          {
+            "item": "diamond",
+            "qty": 1
+          },
+          {
+            "item": "refined",
+            "qty": 1
+          },
+          {
+            "item": "refined",
+            "qty": 1
+          },
+          {
+            "item": "directed",
+            "qty": 1
+          },
+          {
+            "item": "boroglass",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
+    },
+    {
+      "id": "SV-AS01",
+      "name": "炽热熔炼合成",
+      "station": "workbench",
+      "unlock": "PUB-03、PUB-05；已有精制与导相材料",
+      "inputs": [
+        {
+          "item": "furnace",
+          "qty": 1
+        },
+        {
+          "item": "sheath",
+          "qty": 2
+        },
+        {
+          "item": "conductor",
+          "qty": 1
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "blaze_powder",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "auto_smelt",
+          "qty": 1
+        }
+      ],
+      "kind": "部件",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "先按时运或普通掉落结算，再应用实际熔炉配方；无配方的产物保持原样。 仅地脉共振仪接受，每格1件；每实际熔炼件先加100XH基础预算，再受通用耗能修正，与精准采集互斥。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "progression_stage": "P3：精制导相升级",
+      "craft": {
+        "mode": "无序九宫格",
+        "cells": [
+          {
+            "item": "furnace",
+            "qty": 1
+          },
+          {
+            "item": "sheath",
+            "qty": 1
+          },
+          {
+            "item": "sheath",
+            "qty": 1
+          },
+          {
+            "item": "conductor",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "blaze_powder",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          null,
+          null
+        ],
+        "tools": [],
+        "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
+      },
+      "automatic": true
     }
   ],
   "catalogue": [
@@ -20457,6 +24275,26 @@
     "phase_matrix_meteor",
     "phase_matrix_rutile",
     "phase_matrix_borate",
-    "press"
+    "press",
+    "auto_brewer",
+    "auto_smith",
+    "auto_stonecutter",
+    "auto_blast_furnace",
+    "auto_smoker",
+    "energy_saving_1",
+    "energy_saving_2",
+    "efficiency_1",
+    "efficiency_2",
+    "capacity_1",
+    "capacity_2",
+    "intake_1",
+    "intake_2",
+    "fluid_capacity_1",
+    "fluid_capacity_2",
+    "fortune_1",
+    "fortune_2",
+    "fortune_3",
+    "silk_touch",
+    "auto_smelt"
   ]
 }

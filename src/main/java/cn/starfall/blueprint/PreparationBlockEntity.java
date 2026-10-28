@@ -35,12 +35,12 @@ public final class PreparationBlockEntity extends IndustryBlockEntity implements
         tanks[0]=new net.neoforged.neoforge.fluids.capability.templates.FluidTank(4000){
             public FluidStack getFluid(){return water==0?FluidStack.EMPTY:new FluidStack(Fluids.WATER,water);}
             public int getFluidAmount(){return water;}public boolean isEmpty(){return water==0;}
-            public int fill(FluidStack s,IFluidHandler.FluidAction a){if(!s.is(Fluids.WATER))return 0;int n=Math.min(s.getAmount(),4000-water);if(a.execute()&&n>0){water+=n;setChanged();}return n;}
+            public int fill(FluidStack s,IFluidHandler.FluidAction a){if(!s.is(Fluids.WATER))return 0;int n=Math.max(0,Math.min(s.getAmount(),getCapacity()-water));if(a.execute()&&n>0){water+=n;setChanged();}return n;}
             public FluidStack drain(int n,IFluidHandler.FluidAction a){int amount=Math.min(n,water);if(amount<=0)return FluidStack.EMPTY;if(a.execute()){water-=amount;setChanged();}return new FluidStack(Fluids.WATER,amount);}
         };
     }
     @Override public long getPower(){return energy;}
-    @Override public void setPower(long value){energy=Math.clamp(value,0L,320199L);setChanged();}
+    @Override public void setPower(long value){energy=Math.clamp(value,0L,(long)capacity()+199);setChanged();}
 
     public static void tick(Level level, BlockPos pos, BlockState blockState, PreparationBlockEntity be) {
         be.migrateLegacyItems();
@@ -112,11 +112,11 @@ public final class PreparationBlockEntity extends IndustryBlockEntity implements
     public IFluidHandler waterPort() { return new IFluidHandler() {
         public int getTanks() { return 1; }
         public FluidStack getFluidInTank(int tank) { return water == 0 ? FluidStack.EMPTY : new FluidStack(Fluids.WATER, water); }
-        public int getTankCapacity(int tank) { return 4000; }
+        public int getTankCapacity(int tank) { return fluidCapacity(); }
         public boolean isFluidValid(int tank, FluidStack stack) { return stack.is(Fluids.WATER); }
         public int fill(FluidStack stack, FluidAction action) {
             if (!stack.is(Fluids.WATER)) return 0;
-            int amount = Math.min(stack.getAmount(), 4000 - water);
+            int amount = Math.max(0,Math.min(stack.getAmount(), fluidCapacity() - water));
             if (action.execute() && amount > 0) { water += amount; setChanged(); }
             return amount;
         }
@@ -135,8 +135,8 @@ public final class PreparationBlockEntity extends IndustryBlockEntity implements
     @Override protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider); items = NonNullList.withSize(5, ItemStack.EMPTY); ContainerHelper.loadAllItems(tag, items, provider);
         materialMode=true;migrateLegacyItems();
-        water = Math.clamp(tag.getInt("Water"), 0, 4000); energy = Math.clamp(tag.getLong("EnergyXH"), 0L, 320_199L);
-        batchDuration=tag.contains("OreDuration")?Math.clamp(tag.getInt("OreDuration"),1,200):200;
+        water = Math.clamp(tag.getInt("Water"), 0, fluidCapacity()); energy = Math.clamp(tag.getLong("EnergyXH"), 0L, (long)capacity()+199);
+        batchDuration=tag.contains("OreDuration")?Math.clamp(tag.getInt("OreDuration"),1,Integer.MAX_VALUE):200;
         progress = Math.clamp(tag.getInt("Progress"), 0, batchDuration-1); batchPower = tag.getInt("BatchPower") == 180 ? 180 : 200;
         oreCost=tag.contains("OreCost")?Math.max(0L,tag.getLong("OreCost")):(long)batchPower*200;
         orePaid=tag.contains("OrePaid")?Math.clamp(tag.getLong("OrePaid"),0L,oreCost):(long)progress*batchPower;

@@ -22,6 +22,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     public static final int CRAFTING_SAMPLE=19;
     /** Sample is an owned item, outside all 54 consumable input slots. Empty keeps the last preset. */
     public void selectCraftingSample(){
+        if(kind().equals("auto_stonecutter")){SpecialProcessing.selectSample(this);return;}
         if(!kind().equals("autocrafter")||level==null||level.isClientSide)return;
         var sample=stock.get(CRAFTING_SAMPLE);if(sample.isEmpty())return;
         var key=net.minecraft.resources.ResourceLocation.tryParse(template);
@@ -44,10 +45,11 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     public float experience,pendingExperience;
     public boolean stopped,efficientCharge;
     public String activeRecipe="",template="",fluidFilter="";
+    public CompoundTag miningSnapshot=new CompoundTag();
     private long inputTick=-1,outputTick=-1,peakCountedTick=-1;
     private int inputThisTick,outputThisTick;
     public static final List<String> KINDS=java.util.stream.Stream.concat(CatalogueContent.MACHINE_KEYS.stream(),java.util.stream.Stream.of("prep")).sorted().toList();
-    private int templateNumber(){if(kind().equals("autocrafter")&&level!=null){var list=AutomaticCrafting.recipes(level).stream().map(r->r.id().toString()).toList();return list.indexOf(template);}return new ArrayList<>(CatalogueContent.RECIPES.keySet()).indexOf(template);}
+    private int templateNumber(){if(SpecialProcessing.supports(kind())&&level!=null)return SpecialProcessing.choices(level,kind()).stream().map(r->r.id().toString()).toList().indexOf(template);if(kind().equals("autocrafter")&&level!=null){var list=AutomaticCrafting.recipes(level).stream().map(r->r.id().toString()).toList();return list.indexOf(template);}return new ArrayList<>(CatalogueContent.RECIPES.keySet()).indexOf(template);}
     public final ContainerData processData=new ContainerData(){
         public int get(int i){return switch(i){case 0->(int)(getPower()&65535);case 1->(int)(getPower()>>>16);case 2->progressTicks;case 3->processTicks;case 4->status;case 5->retain;case 6->stopped?1:0;case 7->filterMode;case 8->KINDS.indexOf(kind());case 9,10,11->tanks[i-9].getFluidAmount();case 12->templateNumber();case 13->faceMask;case 14->List.of("","water","warm","wastewater","bio","returnwater").indexOf(fluidFilter);default->0;};}
         public void set(int i,int v){} public int getCount(){return 15;}
@@ -63,7 +65,9 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     public Direction facing(){return getBlockState().hasProperty(IndustryBlock.FACING)?getBlockState().getValue(IndustryBlock.FACING):Direction.NORTH;}
     public long getPower(){return powerStored;}
     public void setPower(long value){powerStored=Math.clamp(value,0L,capacity());setChanged();}
-    public int capacity(){return kind().equals("s02")?2_000_000:kind().equals("g05")?1_000_000:320_000;}
+    public int capacity(){return MachineUpgrades.capacity(this);}
+    public int fluidCapacity(){return MachineUpgrades.fluidCapacity(this);}
+    public void refreshUpgradeCapacity(){if(upgrades!=null)for(var tank:tanks)if(tank!=null)tank.setCapacity(fluidCapacity());}
     public boolean generator(){return Set.of("g01","g02","g03","g04","g05","g06","g07").contains(kind());}
     public boolean idle(){return activeRecipe.isEmpty();}
     public boolean connectionOpen(Direction side){return !ConduitBlock.isConduit(kind())||ConduitBlock.hasPort(kind(),facing(),side);}
@@ -77,7 +81,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         boolean lit=be.status==1;if(state.hasProperty(IndustryBlock.ACTIVE)&&state.getValue(IndustryBlock.ACTIVE)!=lit){if(AggregateMachines.large(be.kind()))AggregateMachines.syncActive(be,lit);else level.setBlock(pos,state.setValue(IndustryBlock.ACTIVE,lit),3);}
     }
     public IEnergyStorage energyPort(Direction side){return new IEnergyStorage(){
-        private int receiveLimit(){return kind().equals("s02")&&peakCooldown==0&&peakTicks<100?2000:kind().equals("s02")?1000:2048;}
+        private int receiveLimit(){return MachineUpgrades.receiveLimit(IndustryBlockEntity.this,kind().equals("s02")&&peakCooldown==0&&peakTicks<100?2000:kind().equals("s02")?1000:2048);}
         private int extractLimit(){return switch(kind()){case "g01"->500;case "g02","g07"->160;case "g03","g04"->100;case "g05"->2000;case "g06"->200;case "s02"->peakCooldown==0&&peakTicks<100?2000:1000;default->0;};}
         public int receiveEnergy(int max,boolean simulate){
             if(!canReceive()||max<=0)return 0;
@@ -98,7 +102,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         public boolean canReceive(){return !redstoneStopped()&&!generator()&&!Set.of("cable","pipe","item_duct","item_extractor","item_router","fluid_valve","energy_junction","supply_crate").contains(kind());}
     };}
     public IFluidHandler fluidPort(){return new IFluidHandler(){
-        public int getTanks(){return 3;}public FluidStack getFluidInTank(int i){return tanks[i].getFluid();}public int getTankCapacity(int i){return 4000;}
+        public int getTanks(){return 3;}public FluidStack getFluidInTank(int i){return tanks[i].getFluid();}public int getTankCapacity(int i){return fluidCapacity();}
         public boolean isFluidValid(int i,FluidStack s){return i==0&&Set.of("phase_extractor","plant_cultivator","prep","refiner","bio_processor","g05").contains(kind())&&s.is(CatalogueFluids.fluid(kind().equals("g05")?"bio":"water"));}
         public int fill(FluidStack s,FluidAction a){return !redstoneStopped()&&isFluidValid(0,s)?tanks[0].fill(s,a):0;}
         public FluidStack drain(FluidStack s,FluidAction a){for(int i:outlets())if(FluidStack.isSameFluidSameComponents(tanks[i].getFluid(),s))return tanks[i].drain(s.getAmount(),a);return FluidStack.EMPTY;}
@@ -125,6 +129,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         tag.putInt("FaceMask",faceMask);tag.putInt("Retain",retain);tag.putInt("FilterMode",filterMode);tag.putInt("Cursor",rotationCursor);tag.putInt("PeakTicks",peakTicks);tag.putInt("PeakCooldown",peakCooldown);tag.putBoolean("EfficientCharge",efficientCharge);tag.putString("FluidFilter",fluidFilter);
         tag.put("FilterItems",filters.createTag(provider));
         tag.put("ExtraMachineUpgrades",upgrades.save(provider));
+        MiningUpgrades.save(this,tag);
         tag.putFloat("Experience",experience);tag.putFloat("PendingExperience",pendingExperience);
         for(int i=0;i<3;i++)tag.put("Fluid"+i,tanks[i].writeToNBT(provider,new CompoundTag()));
         tag.put("PendingFluid1",pendingFluid1.saveOptional(provider));tag.put("PendingFluid2",pendingFluid2.saveOptional(provider));
@@ -133,9 +138,9 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         super.loadAdditional(tag,provider);stock=NonNullList.withSize(27,ItemStack.EMPTY);pending=NonNullList.withSize(4,ItemStack.EMPTY);
         ContainerHelper.loadAllItems(tag.getCompound("IndustryInventory"),stock,provider);ContainerHelper.loadAllItems(tag.getCompound("IndustryPending"),pending,provider);
         extraCraftingInputs=NonNullList.withSize(45,ItemStack.EMPTY);ContainerHelper.loadAllItems(tag.getCompound("ExtraCraftingInputs"),extraCraftingInputs,provider);
-        upgrades.load(tag.getList("ExtraMachineUpgrades",10),provider);
+        upgrades.load(tag.getList("ExtraMachineUpgrades",10),provider);refreshUpgradeCapacity();
         powerStored=Math.clamp(tag.getLong("Power"),0L,capacity());processCost=Math.max(0L,tag.getLong("Cost"));processPaid=Math.clamp(tag.getLong("Paid"),0L,processCost);heatCredit=Math.clamp(tag.getLong("HeatCredit"),0L,Math.max(10_000_000L,processCost));fuelHeat=Math.clamp(tag.getInt("FuelHeat"),0,kind().equals("g01")?Integer.MAX_VALUE:320000);chargeRemainder=Math.clamp(tag.getInt("ChargeRemainder"),0,99);
-        processTicks=Math.clamp(tag.getInt("Duration"),1,12000);progressTicks=Math.clamp(tag.getInt("WorkProgress"),0,processTicks-1);activeRecipe=tag.getString("ActiveRecipe");template=tag.getString("Template");stopped=tag.getBoolean("Stopped");faceMask=tag.contains("FaceMask")?tag.getInt("FaceMask")&63:63;
+        processTicks=Math.clamp(tag.getInt("Duration"),1,Integer.MAX_VALUE);progressTicks=Math.clamp(tag.getInt("WorkProgress"),0,processTicks-1);activeRecipe=tag.getString("ActiveRecipe");template=tag.getString("Template");stopped=tag.getBoolean("Stopped");faceMask=tag.contains("FaceMask")?tag.getInt("FaceMask")&63:63;
         retain=Math.clamp(tag.getInt("Retain"),0,64);filterMode=Math.clamp(tag.getInt("FilterMode"),0,5);rotationCursor=Math.max(0,tag.getInt("Cursor"));peakTicks=Math.clamp(tag.getInt("PeakTicks"),0,100);peakCooldown=Math.clamp(tag.getInt("PeakCooldown"),0,200);efficientCharge=tag.getBoolean("EfficientCharge");fluidFilter=tag.getString("FluidFilter");
         experience=Math.max(0,tag.getFloat("Experience"));pendingExperience=Math.max(0,tag.getFloat("PendingExperience"));
         filters.clearContent();filters.fromTag(tag.getList("FilterItems",10),provider);for(int i=0;i<3;i++)tanks[i].readFromNBT(provider,tag.getCompound("Fluid"+i));
@@ -143,6 +148,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         stopped=false;faceMask=63;retain=0;filterMode=0;fluidFilter="";
         pendingFluid1=FluidStack.parseOptional(provider,tag.getCompound("PendingFluid1"));pendingFluid2=FluidStack.parseOptional(provider,tag.getCompound("PendingFluid2"));
         if(activeRecipe.isEmpty()){progressTicks=0;processPaid=0;pending=NonNullList.withSize(4,ItemStack.EMPTY);pendingFluid1=FluidStack.EMPTY;pendingFluid2=FluidStack.EMPTY;}
+        MiningUpgrades.load(this,tag);
     }
     public Component getDisplayName(){return Component.translatable("block.starfall_blueprint."+kind());}
     public AbstractContainerMenu createMenu(int id,Inventory inv,Player p){return new IndustryMenu(id,inv,this,processData);}
@@ -160,6 +166,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     }
     public boolean workCanPlace(int i,ItemStack s){
         if(MachineUpgrades.isSlot(kind(),i))return MachineUpgrades.accepts(this,s);
+        if(SpecialProcessing.supports(kind()))return i==18?s.is(CatalogueContent.item("s01")):kind().equals("auto_stonecutter")&&i==CRAFTING_SAMPLE||SpecialProcessing.accepts(this,i,s);
         if(kind().equals("press"))return i>=0&&i<9&&(s.is(Items.IRON_INGOT)||s.is(Items.COPPER_INGOT));
         if(kind().equals("quarry"))return i==18&&idle()&&s.is(CatalogueContent.item("resonance_upgrade"));
         if(kind().equals("phase_extractor"))return false;
@@ -179,7 +186,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         return i>=0&&i<9&&!nested(s);
     }
     public int[]getSlotsForFace(Direction d){return workSlots(d);}
-    public int[]workSlots(Direction d){if(kind().equals("phase_extractor"))return d==Direction.DOWN?new int[]{9,10,11,12}:new int[]{};if(kind().equals("press"))return d==Direction.DOWN?new int[]{9,10,11,12}:d==Direction.UP?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(AggregateMachines.large(kind()))return d==Direction.DOWN||d==facing().getOpposite()?new int[]{9,10,11,12}:kind().equals("crusher")?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(ConduitBlock.isConduit(kind())||Set.of("damper","terminal").contains(kind()))return new int[]{};if(kind().equals("supply_crate"))return java.util.stream.IntStream.range(0,27).toArray();if(d==Direction.DOWN)return new int[]{9,10,11,12};if(kind().equals("plant_cultivator"))return d==Direction.UP?new int[]{0,1,2}:new int[]{};if(kind().equals("autocrafter"))return craftingInputSlots();if(d==Direction.UP)return generator()?new int[]{13}:new int[]{0,1,2,3,4,5,6,7,8};return new int[]{13};}
+    public int[]workSlots(Direction d){if(SpecialProcessing.supports(kind())){if(d==Direction.DOWN)return new int[]{9,10,11,12};return switch(kind()){case "auto_brewer"->d==Direction.UP?new int[]{3,4}:new int[]{0,1,2};case "auto_smith"->d==Direction.UP?new int[]{0}:d==facing().getOpposite()?new int[]{2}:new int[]{1};case "auto_stonecutter"->new int[]{0};default->new int[]{0,1,2,3,4,5,6,7,8};};}if(kind().equals("phase_extractor"))return d==Direction.DOWN?new int[]{9,10,11,12}:new int[]{};if(kind().equals("press"))return d==Direction.DOWN?new int[]{9,10,11,12}:d==Direction.UP?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(AggregateMachines.large(kind()))return d==Direction.DOWN||d==facing().getOpposite()?new int[]{9,10,11,12}:kind().equals("crusher")?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(ConduitBlock.isConduit(kind())||Set.of("damper","terminal").contains(kind()))return new int[]{};if(kind().equals("supply_crate"))return java.util.stream.IntStream.range(0,27).toArray();if(d==Direction.DOWN)return new int[]{9,10,11,12};if(kind().equals("plant_cultivator"))return d==Direction.UP?new int[]{0,1,2}:new int[]{};if(kind().equals("autocrafter"))return craftingInputSlots();if(d==Direction.UP)return generator()?new int[]{13}:new int[]{0,1,2,3,4,5,6,7,8};return new int[]{13};}
     public boolean canPlaceItemThroughFace(int i,ItemStack s,Direction d){return !MachineUpgrades.isSlot(kind(),i)&&!redstoneStopped()&&canPlaceItem(i,s);}
     public boolean canTakeItemThroughFace(int i,ItemStack s,Direction d){return !redstoneStopped()&&(kind().equals("supply_crate")||(d==Direction.DOWN||AggregateMachines.large(kind())&&d==facing().getOpposite())&&i>=9&&i<=12);}
     public void awardExperience(Player player){if(player.level()instanceof net.minecraft.server.level.ServerLevel server&&experience>0){int amount=(int)experience;if(server.random.nextFloat()<experience-amount)amount++;experience=0;setChanged();if(amount>0)net.minecraft.world.entity.ExperienceOrb.award(server,player.position(),amount);}}

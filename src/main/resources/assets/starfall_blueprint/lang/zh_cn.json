@@ -277,5 +277,8 @@
   "block.starfall_blueprint.auto_smith": "铭纹锻造台",
   "block.starfall_blueprint.auto_stonecutter": "精裁切石机",
   "block.starfall_blueprint.auto_blast_furnace": "炽流高炉",
-  "block.starfall_blueprint.auto_smoker": "烟岚熏制炉"
+  "block.starfall_blueprint.auto_smoker": "烟岚熏制炉",
+  "item.starfall_blueprint.best_frame": "轻型助力骨架",
+  "item.starfall_blueprint.best_cutter": "工程钻切器",
+  "block.starfall_blueprint.best_workbench": "贝斯特工务装配台"
 }

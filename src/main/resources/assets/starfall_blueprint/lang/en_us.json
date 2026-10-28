@@ -277,5 +277,8 @@
   "block.starfall_blueprint.auto_smith": "Auto Smith",
   "block.starfall_blueprint.auto_stonecutter": "Auto Stonecutter",
   "block.starfall_blueprint.auto_blast_furnace": "Auto Blast Furnace",
-  "block.starfall_blueprint.auto_smoker": "Auto Smoker"
+  "block.starfall_blueprint.auto_smoker": "Auto Smoker",
+  "item.starfall_blueprint.best_frame": "Lightweight Assist Frame",
+  "item.starfall_blueprint.best_cutter": "Engineering Drill-Cutter",
+  "block.starfall_blueprint.best_workbench": "Best Engineering Workbench"
 }

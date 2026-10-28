@@ -101,7 +101,7 @@ public final class CatalogueContent {
         MENU=StarfallBlueprint.MENUS.register("industry",()->new MenuType<>(IndustryMenu::new,net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS));
     }
     public static void initialize(){CatalogueFluids.initialize();}
-    private static boolean isExisting(String key){return Set.of("ore","common","tail","joint","brace","shield","finder","prep","tank","rain_collector","alloy_furnace","fix","steel_pre","steel","substrate","board","breaker","sheath","steel_fix","box").contains(key)||StarfallBlueprint.STRUCTURAL_ITEMS.containsKey(key);}
+    private static boolean isExisting(String key){return key.equals("best_workbench")||Set.of("ore","common","tail","joint","brace","shield","finder","prep","tank","rain_collector","alloy_furnace","fix","steel_pre","steel","substrate","board","breaker","sheath","steel_fix","box").contains(key)||StarfallBlueprint.STRUCTURAL_ITEMS.containsKey(key);}
     public static Item item(String key) {
         Item old=existing(key);if(old!=null)return old;
         if(ITEMS.containsKey(key))return ITEMS.get(key).get();
@@ -112,7 +112,7 @@ public final class CatalogueContent {
             default->BuiltInRegistries.ITEM.get(ResourceLocation.parse(key));};
     }
     private static Item existing(String key) {
-        return switch(key){case "ore"->StarfallBlueprint.RAW.get();case "common"->StarfallBlueprint.CRYSTAL.get();case "tail"->StarfallBlueprint.TAILINGS.get();
+        return switch(key){case "best_workbench"->BestEngineering.WORKBENCH_ITEM.get();case "ore"->StarfallBlueprint.RAW.get();case "common"->StarfallBlueprint.CRYSTAL.get();case "tail"->StarfallBlueprint.TAILINGS.get();
             case "joint"->StarfallBlueprint.CONNECTOR.get();case "brace"->StarfallBlueprint.TOOL_BRACE.get();case "shield"->StarfallBlueprint.SHIELD_LINING.get();case "finder"->StarfallBlueprint.SCANNER.get();
             case "prep"->StarfallBlueprint.BENCH_ITEM.get();case "tank"->StarfallBlueprint.TANK_ITEM.get();case "rain_collector"->StarfallBlueprint.RAIN_ITEM.get();case "alloy_furnace"->StarfallBlueprint.ALLOY_ITEM.get();
             default->{String name=switch(key){case "fix"->"iron_fasteners";case "steel_pre"->"mixed_steel_billet";case "steel"->"ordinary_steel";case "substrate"->"isolation_substrate";case "board"->"control_board";case "breaker"->"circuit_breaker";case "sheath"->"ceramic_sheath";case "steel_fix"->"steel_fasteners";case "box"->"sealed_box";default->key;};

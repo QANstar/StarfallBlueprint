@@ -252,8 +252,13 @@ public final class PlantCultivationGameTests {
         var be = machine(h);
         var menu = new IndustryMenu(1, player.getInventory(), be, be.processData);
         try {
-            Set<Integer> visible = Set.of(0, 1, 2, 9, 10, 11, 12, 16, 17, 20, 21);
+            Set<Integer> visible = Set.of(0, 1, 2, 9, 10, 11, 12);
             for (int i = 0; i < 27; i++) h.assertTrue(menu.getSlot(i).isActive() == visible.contains(i), "Actual visible machine slot " + i);
+            h.assertTrue(menu.getSlot(IndustryMenu.BATTERY_MENU_SLOT).isActive(), "The battery uses its dedicated visible menu slot");
+            for (int i = 0; i < IndustryMenu.UPGRADE_PAGE_SIZE; i++) {
+                h.assertTrue(menu.getSlot(IndustryMenu.UPGRADE_MENU_START + i).isActive() == (i == 0),
+                    "An empty upgrade bay displays exactly one insertion slot: " + i);
+            }
             var specimen = sample(); var environment = new ItemStack(profile(specimen).environments().iterator().next());
             h.assertTrue(menu.getSlot(0).getMaxStackSize() == 1 && menu.getSlot(1).getMaxStackSize() == 1
                 && menu.getSlot(0).mayPlace(environment) && menu.getSlot(1).mayPlace(specimen)

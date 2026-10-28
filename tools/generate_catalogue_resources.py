@@ -144,3 +144,5 @@ generate_industrial_models()
 import generate_blueprint_resources
 from generate_aggregate_resources import main as generate_aggregate_resources
 generate_aggregate_resources()
+from generate_best_resources import main as generate_best_resources
+generate_best_resources()

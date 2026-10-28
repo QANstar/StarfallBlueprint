@@ -84,6 +84,7 @@
     "starfall_blueprint:auto_blast_furnace",
     "starfall_blueprint:auto_brewer",
     "starfall_blueprint:auto_smith",
-    "starfall_blueprint:auto_smoker"
+    "starfall_blueprint:auto_smoker",
+    "starfall_blueprint:best_workbench"
   ]
 }

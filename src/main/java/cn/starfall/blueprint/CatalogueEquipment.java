@@ -22,6 +22,8 @@ public final class CatalogueEquipment {
     public static final DeferredHolder<MenuType<?>,MenuType<MiningBagMenu>> BAG_MENU=StarfallBlueprint.MENUS.register("mining_bag",()->new MenuType<>(MiningBagMenu::new,net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS));
     public static void initialize(){}
     public static Item create(String key,Item.Properties p){
+        if(key.equals("best_frame"))return new BestEquipment.Frame(p);
+        if(key.equals("best_cutter"))return new BestEquipment.Cutter(p);
         if(key.equals("s01"))p.stacksTo(1);
         if(key.equals("lined_box")||key.equals("coated_box"))return new SealedSampleItem(p);
         if(key.equals("sample_pick"))return new SamplePick(p);

@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "starfall_blueprint:block/best_workbench",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "starfall_blueprint:block/best_workbench",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "starfall_blueprint:block/best_workbench",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "starfall_blueprint:block/best_workbench",
+      "y": 270
+    }
+  }
+}

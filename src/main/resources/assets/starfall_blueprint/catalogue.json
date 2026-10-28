@@ -272,7 +272,8 @@
         "EN-G03",
         "V-STICK",
         "SV-M02",
-        "SV-M03"
+        "SV-M03",
+        "BEST-M01"
       ],
       "primary_recipe": "",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。"
@@ -1495,7 +1496,8 @@
         "SP-M02",
         "SP-M03",
         "SP-M04",
-        "SP-M05"
+        "SP-M05",
+        "BEST-M01"
       ],
       "primary_recipe": "ST-01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1514,7 +1516,8 @@
           "auto_smith",
           "auto_stonecutter",
           "auto_blast_furnace",
-          "auto_smoker"
+          "auto_smoker",
+          "best_workbench"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABEUlEQVR4nGNgGAWjYBRQGWia2P0H4QGz+MKDp2BMrCMYqWExiF6+ZjmGXGRIJJi+fuYQI9UdoInDYlV5KYbbD59hOASXIxgptfjImatg2sZEmyxHMFLTYmQAcgQIIDsEW5QwUttibA7BFxqMtLIYn4NAwMTUHuwIRlpZjK4P2WIQwAgBTRO7/2dOH0QJLpAh1LQ4u6IGzM4JccNMA5pQn6M7glYWY3WAjoUdw5UTh8COAAFiHIJsMcxSYizG6QAYgDkEnyNgUYQev8RYTNABxDiCEotxpgEdHI4AAZhDqGExhgNIcQi6xVM7WvBWOPgAIy4JbA4BOYJaFhN0AC6H2DvYUcXiodPSGQWjYBQw0BgAABdz1m/rtfZwAAAAAElFTkSuQmCC"
@@ -1633,7 +1636,8 @@
         "SP-M04",
         "SP-M05",
         "SV-FC02",
-        "SV-AS01"
+        "SV-AS01",
+        "BEST-M01"
       ],
       "primary_recipe": "ST-05",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1660,7 +1664,8 @@
           "auto_blast_furnace",
           "auto_smoker",
           "fluid_capacity_2",
-          "auto_smelt"
+          "auto_smelt",
+          "best_workbench"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABf0lEQVR4nO2WMUrEUBCG30DOYO+WClYWiyIYPcFiZbWdIKyVtZVXEKw9gUdQEMXCStBSey+hTHCWyb+TybzsxkLywxKSnZfvfzM/SVIaNOi/abSx882/aD2tEszHy6vr6vxidlodP96fqDcDI7VTAaPYiGeC+oBaJliWEcoFR6FRIxSBLgtm7W9vVce98W7NROGBl4Va4LX1zfT1+Tb/v0Dww/Njun957QVsqcALvIBNsHKNCNQCn53PajloNMA6Oj6p2hTtBu5WwAIVcDmZLqwlfWI9wTwTVpsRytLgu9ub9hCWk+m80BoJgnVYNdTacagD5e9CMSHJFSMMtqC4W0vYAfIM4CK9WwxTG/jgcFxb547AG0nObgXaOYRlQyc8cBs0HEIpxhtY8CZoJIRFpPURqNR7UJ2lkAGcvxUmD4pAfA+wFjKgi7pkQEPlMayh+E1AeAMJomWkaRy5UNeAZ8QaidTkQLWorUDGogH61doFmmUAu7EK6J998w9KAf0AkBYArGV4R9UAAAAASUVORK5CYII="
@@ -1919,7 +1924,8 @@
         "SP-M02",
         "SP-M03",
         "SP-M04",
-        "SP-M05"
+        "SP-M05",
+        "BEST-M01"
       ],
       "primary_recipe": "ST-13",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -1938,7 +1944,8 @@
           "auto_smith",
           "auto_stonecutter",
           "auto_blast_furnace",
-          "auto_smoker"
+          "auto_smoker",
+          "best_workbench"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA5UlEQVR4nGNgGAWDGShpWf0HYVrawYjLYhDdPGU6mF+bkwmXu3ftGFY9VANKWlb/n376D/Y5CC/ddxGOaR0aYIDNUmQxajuCEZsgyBJY8KMDUHRQMxoYcTkAxkZPBzRPA8gguXomPAoYSACk6GEkZBAyn5Dvyck9jIRCAMae25pO0PLDJ44y2FpYg/nIaYja6YaquYeRgYqAnNzDSG0HDLncw0gLB5CSe1ho4QDHwHgGYnPPKBjwRgkjPotB9GijZCmNGyWM+KKAHo0SRnwOGHLFKjmAkZACUhslpAIWQgpGi9VhDwCJXODmLOx16gAAAABJRU5ErkJggg=="
@@ -1998,7 +2005,8 @@
         "SV-FT02",
         "SV-FT03",
         "SV-SI01",
-        "SV-AS01"
+        "SV-AS01",
+        "BEST-M01"
       ],
       "primary_recipe": "ST-10",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -2045,7 +2053,8 @@
           "fortune_2",
           "fortune_3",
           "silk_touch",
-          "auto_smelt"
+          "auto_smelt",
+          "best_workbench"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABgUlEQVR4nGNgGAWjgAZA3Mz+PwgTo5aRWhbik3956iAjVR0gjsfC5o2T4Oxa/zyCjmCkpoW4AMwh2BzBSIqFxFhGyBHoDmHEZzElFhLrCBZ0RedObmQwMveniuXIFoIAj6U5mP5y/CRcjAVdk11BG9gRIECOQ5AthVkIsxTZYpwOgDmC2NDA50tkC5Xq88H0vcaJKOoZ0dMAsqtB4NCEKjC99cVDMC1w7jIDMaCfgQtMbxI8Dhfze28JdwDONIArNEAOAYXG5PpUhpqmmQz4QEtdOtxikKX4AAsDkYDteCvDlQlmDPvfI8Tc/bxR1OzctBXOJmQx0Q44EQ7Jmb8sq6EhoM9ACkCPApIdYLESkkwOEechDItpGgX4wMiIgp1IiW5kRUFLXTpxrqCGAyzQogBWwpEK0Itgoh1ALkC3EFtNCAIoDoCWz+AwR68TKLUQRqO3iljQDUJSgFExUcNCoqPgJTQ00B0Bs5hcC9EBIyEFsGYarjgk1UK6dDZGAQMJAAA2nNq6Q6VvmwAAAABJRU5ErkJggg=="
@@ -4766,7 +4775,8 @@
         "SP-M02",
         "SP-M03",
         "SP-M04",
-        "SP-M05"
+        "SP-M05",
+        "BEST-M01"
       ],
       "primary_recipe": "MC-C01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
@@ -4793,7 +4803,8 @@
           "auto_smith",
           "auto_stonecutter",
           "auto_blast_furnace",
-          "auto_smoker"
+          "auto_smoker",
+          "best_workbench"
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB4klEQVR4nO1XLU8DQRC9vZzhH6CRJKDJEURVBab9BRUkIKsIgqSEJhUEVQkJgl9ADQKFaLigIUFWY9DIkjk6l3fLzu3s3dUxSXN77cy8Nx+7O42if2lZtrbTJT59krQJynJ0fsPvy8VHZqpsTRuAJJ3+wKn7/HCfPyUipi6oBCgJEXGRMFpADShHG5INUwWqBbRtNESYhMEf3h4vCwK90yenExsUo6EAUJ908X2Yfhbr3cMLU9oFdvTz15dodHXrjNLX2WgzPjsu1l/zcYR45EfchgROxiNFJyP5HBBAyQ+Tml13/9galxNMG0fA2WASqE/ZsgFtkTJpkAAD27VDIgd7+7VB7f4QCaCx1ETTbFMdpeS/sgfAuGQYGmXju2CxIkHrYdp1Onf1hVZijRID0NnwvtErzgj63rclWyFgpzf0HmiNQIho6k+yNgIsvr6I1wVMZeJSVZGI2wSlhrybnJSa0tcvcZP6uYSiJXv0wSToIONP5TnQWd3pfGOFEMAzQRNI7KthncMlZLBJkHmnP5DGsEoSmvGN3qfZ7xr7JEElaZTCMUsCDhnfsLQJKkG9nRdQ3jzfs2gnJYfhM6OrnxLfBRRy7NYZ3xLpB182JNDQXWM0SlxrnJiagNaW0D+eGvkBwTg1Hx0L4bQAAAAASUVORK5CYII="
@@ -9972,6 +9983,241 @@
         ]
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABFUlEQVR4nGNgGAUDDBixCTZPX/2fFpbVZoZi2MdEL8txmc2ITcHUnhaaOCC7pAYjJFhwKX6UpEhVy+Xm3ccqzoJPk/6WXwQNvujDRlAdSA0uwMRABYDPAkKAiVoWk+sIJkotphQwUdNychzGRLIOApaR6ggmalhKiSOYKLWcNUKHaMsocgA+y7E5gthQYKJlqidGHxMxBmEr6dB9TW5UMDHQEBBTlDORYxgu35ITCiwk62BgYPi94gqGhTAxmkaB/pZfKCEBsxTdcnR1VHMANguwWU61KLhIRvYjVQ8LqS0YagMWQgrQm2bUdhgTwwADRno2y7H1DZgIKYhS2w/G1BDD1jEhCO7uzfoPwtQSG3RpgGGgAQAaunxY6UPUOAAAAABJRU5ErkJggg=="
+    },
+    "best_workbench": {
+      "id": "best_workbench",
+      "name": "贝斯特工务装配台",
+      "unit": "件",
+      "icon": "machine",
+      "note": "贝斯特首批；专用菜单人工装配与个人学习校验，使用、供能与热量参数见本物品元数据和首批文档。",
+      "external": false,
+      "mass": null,
+      "english": "Best Engineering Workbench",
+      "registry_id": "starfall_blueprint:best_workbench",
+      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
+      "personal_learning": {
+        "basic_engineering": {
+          "name": "基础工务",
+          "inputs": [
+            {
+              "item": "steel",
+              "qty": 2
+            },
+            {
+              "item": "board",
+              "qty": 1
+            }
+          ]
+        },
+        "engineering_cutting": {
+          "name": "工程钻切",
+          "requires": [
+            "basic_engineering"
+          ],
+          "inputs": [
+            {
+              "item": "load",
+              "qty": 1
+            },
+            {
+              "item": "conductor",
+              "qty": 1
+            }
+          ]
+        }
+      },
+      "learning_persistence": "player_saved_data_and_death_clone",
+      "catalogue": true,
+      "category": "机器与设施",
+      "subcategory": "加工与建造",
+      "recipes": [
+        "BEST-M01"
+      ],
+      "uses": [],
+      "primary_recipe": "BEST-M01",
+      "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
+      "purpose": {
+        "summary": "学习贝斯特基础工务与人工装配轻型工程装备",
+        "benefit": "个人学习、制造与维修集中在专用菜单。",
+        "operation": "公共工作台合成台体；骨架与钻切器逐人校验学习，人工装配，不接入自动制造。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/klEQVR4nGNgGAUDDBjxSUprm/5H5j+9ehqvemSw4/SF/x6mBgTVMxFScLJZBoxJASDLkWl8gIUkk4m0GASI8T0IMA2k5SBAMATMa5/QxGIYYERPdHMXzGagJUhOSEVJzCzoChYuWMpAT8BEV9sGowNY0AUOHThAVwcwklMCossTqw5bScqCy2V2Dg54QyRqXTcKf1lQKVnmMDEMMGAaaAewkKsRV5DTxQFPSaiWKXbAXEjRTLBaxQUIlawsxJbf5ABi6hUWUgwktmFCqAYdVLmAacQ7gIWUECAlbqnqgLk0bCWxkNqEIgWAakNYZUSyAw5RqV1A7/bFKGAgFQAAswlcDML6AtsAAAAASUVORK5CYII="
+    },
+    "best_frame": {
+      "id": "best_frame",
+      "name": "轻型助力骨架",
+      "unit": "件",
+      "icon": "tool",
+      "note": "贝斯特首批；专用菜单人工装配与个人学习校验，使用、供能与热量参数见本物品元数据和首批文档。",
+      "external": false,
+      "mass": null,
+      "english": "Lightweight Assist Frame",
+      "registry_id": "starfall_blueprint:best_frame",
+      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
+      "manual_assembly": {
+        "station": "best_workbench",
+        "personal_learning": true,
+        "automatic": false,
+        "requires": [
+          "basic_engineering"
+        ],
+        "inputs": [
+          {
+            "item": "steel",
+            "qty": 4
+          },
+          {
+            "item": "load",
+            "qty": 2
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 2
+          }
+        ],
+        "output_count": 1
+      },
+      "energy_storage": {
+        "capacity": 200000,
+        "unit": "XH",
+        "source": "s01",
+        "inventory_supply": true,
+        "initially_empty": true,
+        "activation": "sneak_hold_use",
+        "transfer_per_tick": 512,
+        "additional_loss": false
+      },
+      "manual_repair": {
+        "station": "best_workbench",
+        "material": "steel",
+        "count": 1,
+        "durability": 200,
+        "unequip": true,
+        "main_hand": true
+      },
+      "equipment_slot": "legs",
+      "armor_bonus": 0,
+      "equipment_texture": "starfall_blueprint:textures/models/armor/best_frame_layer_2.png",
+      "operation": {
+        "ground_sprint_speed_bonus": 0.15,
+        "energy_per_tick": 16,
+        "heat_per_tick": 6,
+        "durability_per_work_ticks": 100
+      },
+      "max_durability": 1200,
+      "broken_behavior": "stop_without_disappearing",
+      "thermal": {
+        "overheat": 1000,
+        "resume": 400,
+        "cooling_per_tick": 2
+      },
+      "player_learning_required_to_use": true,
+      "catalogue": true,
+      "category": "装备与武器",
+      "subcategory": "贝斯特工程装备",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "purpose": {
+        "summary": "腿部穿戴的轻型工程助力骨架",
+        "benefit": "地面疾跑＋15%，16XH／刻、发热6／刻，不增加护甲；缓存200000XH。",
+        "operation": "本人学习基础工务后装配及使用；潜行按住右键从库存s01每刻补512XH，脱下持主手在装配台维修，钢1恢复200耐久。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABFUlEQVR4nGNgGAUDDBgJKZDWNv1PiQVPr57GawcLMYbYOTjA2d3Od/CqLd2rAmcfOnCAoNlMDAMMmAbaASykakAOYmoARlomQGISIwspCRCUqEAG7Th94b+HqQGKgchiIIej66MoDcjkeaNYhEzjEkPXR5EDkAE2n+OSo1ku8IBaRKnlZDsAl4Po6gAPqKWUWA4CJGdDQmU7qfpYCBl2slkGzjavfUJIOcn6mPD5AtkQmKGECidS9TExDDBgGrQOeHr1NCN63IH4hBIhqfpYCLmQlIRHjj4WQgrmLpgNZycnpBLtAGL1MTEMMGAadQDDAANGbIL4Sjty6wJc+llwKURuUpHSzidVPwsuA0ixjBb6GUYMAAD+CoGlyAeSVgAAAABJRU5ErkJggg=="
+    },
+    "best_cutter": {
+      "id": "best_cutter",
+      "name": "工程钻切器",
+      "unit": "件",
+      "icon": "tool",
+      "note": "贝斯特首批；专用菜单人工装配与个人学习校验，使用、供能与热量参数见本物品元数据和首批文档。",
+      "external": false,
+      "mass": null,
+      "english": "Engineering Drill-Cutter",
+      "registry_id": "starfall_blueprint:best_cutter",
+      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
+      "manual_assembly": {
+        "station": "best_workbench",
+        "personal_learning": true,
+        "automatic": false,
+        "requires": [
+          "basic_engineering",
+          "engineering_cutting"
+        ],
+        "inputs": [
+          {
+            "item": "steel",
+            "qty": 3
+          },
+          {
+            "item": "conductor",
+            "qty": 2
+          },
+          {
+            "item": "head",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          }
+        ],
+        "output_count": 1
+      },
+      "energy_storage": {
+        "capacity": 200000,
+        "unit": "XH",
+        "source": "s01",
+        "inventory_supply": true,
+        "initially_empty": true,
+        "activation": "sneak_hold_use",
+        "transfer_per_tick": 512,
+        "additional_loss": false
+      },
+      "manual_repair": {
+        "station": "best_workbench",
+        "material": "steel",
+        "count": 1,
+        "durability": 200,
+        "unequip": true,
+        "main_hand": true
+      },
+      "operation": {
+        "harvest_tier": "iron",
+        "effective_speed": 12,
+        "energy_per_nonzero_hardness_block": 256,
+        "heat_per_nonzero_hardness_block": 120,
+        "durability_per_block": 1
+      },
+      "max_durability": 1200,
+      "broken_behavior": "stop_without_disappearing",
+      "thermal": {
+        "overheat": 1000,
+        "resume": 400,
+        "cooling_per_tick": 2
+      },
+      "player_learning_required_to_use": true,
+      "catalogue": true,
+      "category": "装备与武器",
+      "subcategory": "贝斯特工程装备",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "purpose": {
+        "summary": "用于工程钻切的手持动力工具",
+        "benefit": "铁级单点采掘，有效速度12；非零硬度方块耗256XH、发热120、耐久1，缓存200000XH。",
+        "operation": "本人学习基础工务与工程钻切后装配及使用；潜行按住右键从库存s01每刻补512XH，持主手在装配台维修，钢1恢复200耐久。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABdElEQVR4nO2Wv07DMBDGnchvASNbZ8RWVeINGGEgUtVH6MjE2EdASGWAkTdAqrqhzmyM8BxFX9BFV+ccn/9ky0+qHCfn++7OOafGTEwU4Gx2ecQvZa1NFeTz+WLRjntjjr9fhyrGV5UjKLHf7cxQEOSLbGyuIOe+ufsPwphOxPX1vH1qx2WzaqtlJeGQIAn5wHpUAv5IkFg2qy4I0KuANtuX7WvQhmXbXWOkOapQq9QixDfX32IgEJXm1ucIJZTgFZLEfPDMid474HL7vjmZv92sezbrj4voIEgcY9IWpIhzeJta9wFaiMosZZwDsnfPiLqogiA4JA6SjmItEESr0bVkY8cMYEg4GMBceSBRu3J7XwtLVNJNHKGhDw7x+Xhurh5+Tp7HfBGtdJO6wZcZRKU1WtFgANwhb0ufeA42ZMCrUVocqM6BofJi/1PLrw5gTGqNEbpijPKrAxiTWmOEPXZ7vRQ2dWGpgKoYY/4PN+fNnzCMPySttgKnF4lqAAAAAElFTkSuQmCC"
     }
   },
   "recipes": [
@@ -24127,6 +24373,109 @@
         "note": "每个非空格每次消耗1件；同种原料需要多件时分开放入多格。"
       },
       "automatic": true
+    },
+    {
+      "id": "BEST-M01",
+      "name": "贝斯特工务装配台合成",
+      "station": "workbench",
+      "unlock": "公共工务；钢制机电部件",
+      "inputs": [
+        {
+          "item": "machine_frame",
+          "qty": 1
+        },
+        {
+          "item": "steel",
+          "qty": 2
+        },
+        {
+          "item": "iron_plate",
+          "qty": 2
+        },
+        {
+          "item": "board",
+          "qty": 1
+        },
+        {
+          "item": "steel_fix",
+          "qty": 1
+        },
+        {
+          "item": "plank",
+          "qty": 2
+        }
+      ],
+      "outputs": [
+        {
+          "item": "best_workbench",
+          "qty": 1
+        }
+      ],
+      "kind": "机器",
+      "seconds": 0,
+      "energy": 0,
+      "tools": [],
+      "note": "公共九格配方；仅装配台本体可普通合成。骨架与钻切器由专用菜单人工装配，逐人校验学习，不接入自动制造。",
+      "quality": "",
+      "inherited": false,
+      "balance": false,
+      "layout": [
+        "SIS",
+        "FBJ",
+        "PIP"
+      ],
+      "layout_key": {
+        "S": "steel",
+        "I": "iron_plate",
+        "F": "machine_frame",
+        "B": "board",
+        "J": "steel_fix",
+        "P": "plank"
+      },
+      "craft": {
+        "mode": "定形九宫格",
+        "cells": [
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "steel",
+            "qty": 1
+          },
+          {
+            "item": "machine_frame",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "steel_fix",
+            "qty": 1
+          },
+          {
+            "item": "plank",
+            "qty": 1
+          },
+          {
+            "item": "iron_plate",
+            "qty": 1
+          },
+          {
+            "item": "plank",
+            "qty": 1
+          }
+        ],
+        "tools": [],
+        "note": "按图排列；每个非空格每次消耗1件。"
+      },
+      "automatic": true
     }
   ],
   "catalogue": [
@@ -24295,6 +24644,9 @@
     "fortune_2",
     "fortune_3",
     "silk_touch",
-    "auto_smelt"
+    "auto_smelt",
+    "best_workbench",
+    "best_frame",
+    "best_cutter"
   ]
 }

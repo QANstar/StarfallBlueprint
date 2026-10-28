@@ -14,7 +14,8 @@ neoForge {
         server { server(); programArgument '--nogui' }
         gameTestServer {
             type = 'gameTestServer'
-            systemProperty 'neoforge.enabledGameTestNamespaces', 'starfall_blueprint'
+            systemProperty 'neoforge.enabledGameTestNamespaces', providers.gradleProperty('gameTestNamespaces')
+                .getOrElse('starfall_blueprint,starfall_blueprint_servicing,starfall_blueprint_mobility')
         }
     }
     mods { starfall_blueprint { sourceSet(sourceSets.main) } }

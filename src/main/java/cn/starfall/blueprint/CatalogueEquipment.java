@@ -24,6 +24,8 @@ public final class CatalogueEquipment {
     public static Item create(String key,Item.Properties p){
         if(key.equals("best_frame"))return new BestEquipment.Frame(p);
         if(key.equals("best_cutter"))return new BestEquipment.Cutter(p);
+        if(key.equals("best_service_kit"))return new BestServiceKit(p);
+        if(key.equals("best_stride_module"))return new Item(p.stacksTo(1));
         if(key.equals("s01"))p.stacksTo(1);
         if(key.equals("lined_box")||key.equals("coated_box"))return new SealedSampleItem(p);
         if(key.equals("sample_pick"))return new SamplePick(p);

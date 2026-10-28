@@ -280,5 +280,18 @@
   "block.starfall_blueprint.auto_smoker": "Auto Smoker",
   "item.starfall_blueprint.best_frame": "Lightweight Assist Frame",
   "item.starfall_blueprint.best_cutter": "Engineering Drill-Cutter",
-  "block.starfall_blueprint.best_workbench": "Best Engineering Workbench"
+  "block.starfall_blueprint.best_workbench": "Best Engineering Workbench",
+  "item.starfall_blueprint.best_service_kit": "Field Service Kit",
+  "tooltip.starfall_blueprint.best_service_kit.usage": "Hold kit in main hand and damaged frame/cutter in offhand; right-click to repair. Requires Field Servicing.",
+  "tooltip.starfall_blueprint.best_service_kit.cost": "Consumes 1 ordinary steel and 1 kit durability to restore 200 equipment durability; energy and heat stay unchanged.",
+  "message.starfall_blueprint.best_service_kit.knowledge": "Learn Field Servicing first.",
+  "message.starfall_blueprint.best_service_kit.target": "Hold a damaged frame or drill-cutter in your offhand.",
+  "message.starfall_blueprint.best_service_kit.exhausted": "The service kit is exhausted.",
+  "message.starfall_blueprint.best_service_kit.steel": "No usable ordinary steel in inventory.",
+  "message.starfall_blueprint.best_service_kit.repaired": "Repair complete; energy and temperature are unchanged.",
+  "item.starfall_blueprint.best_stride_module": "Stride Assist Module",
+  "tooltip.starfall_blueprint.best_stride_module.usage": "Assemble manually at the workbench; install one on a main-hand frame. Defaults to Sprint mode. Requires personal Field Servicing (level 3) and Light Mobility.",
+  "tooltip.starfall_blueprint.best_stride_module.cost": "Stride mode: +0.4 step height. Standing ready on ground also costs 24 XH/t and 4 heat/t (2 net after cooling); 1 wear per 100 work ticks.",
+  "tooltip.starfall_blueprint.best_frame.stride": "Stride and +15% sprint assist are exclusive. Requires ready, grounded, non-sneaking, non-sprinting, out of water, non-flying, non-gliding and unmounted. Jumping, fall damage and armor stay unchanged.",
+  "tooltip.starfall_blueprint.best_frame.stride_idle": "Stride mode consumes power even while standing on ground. Switch to Sprint at the workbench or unequip to stop. Removal requires inventory space and preserves frame energy, heat, wear, name and work ticks."
 }

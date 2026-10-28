@@ -280,5 +280,18 @@
   "block.starfall_blueprint.auto_smoker": "烟岚熏制炉",
   "item.starfall_blueprint.best_frame": "轻型助力骨架",
   "item.starfall_blueprint.best_cutter": "工程钻切器",
-  "block.starfall_blueprint.best_workbench": "贝斯特工务装配台"
+  "block.starfall_blueprint.best_workbench": "贝斯特工务装配台",
+  "item.starfall_blueprint.best_service_kit": "便携整备包",
+  "tooltip.starfall_blueprint.best_service_kit.usage": "主手持整备包，副手持受损骨架／钻切器，右键维修；须学习野外整备",
+  "tooltip.starfall_blueprint.best_service_kit.cost": "消耗1普通钢与1次整备包耐久，恢复200工务耐久；不补能、不降温",
+  "message.starfall_blueprint.best_service_kit.knowledge": "请先学习野外整备",
+  "message.starfall_blueprint.best_service_kit.target": "副手需持受损的骨架或钻切器",
+  "message.starfall_blueprint.best_service_kit.exhausted": "整备包已耗尽",
+  "message.starfall_blueprint.best_service_kit.steel": "背包缺少可用的普通钢",
+  "message.starfall_blueprint.best_service_kit.repaired": "维修完成；电量与温度保持原状",
+  "item.starfall_blueprint.best_stride_module": "跨步组件",
+  "tooltip.starfall_blueprint.best_stride_module.usage": "仅在工务装配台人工制造；主手骨架安装1件，默认疾跑档；需本人三级野外整备与轻载通行",
+  "tooltip.starfall_blueprint.best_stride_module.cost": "跨步档高度＋0.4；地面站定也耗24XH／刻、发热4（自然冷2→净2），100工作刻磨损1",
+  "tooltip.starfall_blueprint.best_frame.stride": "跨步与疾跑＋15%互斥；地面、非潜行／疾跑／水／飞行／滑翔／骑乘且就绪时生效；不改跳跃、摔伤或护甲",
+  "tooltip.starfall_blueprint.best_frame.stride_idle": "跨步档地面站定仍耗能；工位切回疾跑档或脱下停用。拆回需背包空间，保留骨架电热、磨损、名字与工作刻"
 }

@@ -11,6 +11,8 @@ import net.minecraft.world.entity.player.Inventory;
 
 /** Vanilla widgets and solid fills, with no external GUI texture. */
 public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkbenchMenu> {
+    private int page;
+
     public BestWorkbenchScreen(BestWorkbenchMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 300;
@@ -23,11 +25,14 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
 
     @Override protected void init() {
         super.init();
-        addAction(0, 8, 41, 138);
-        addAction(1, 154, 41, 138);
-        addAction(2, 8, 64, 138);
-        addAction(3, 154, 64, 138);
-        addAction(4, 8, 87, 284);
+        int[] actions = page == 0 ? new int[]{0, 1, 2, 3, 5, 6, 4, 7} : new int[]{8, 9, 10, 11, 12};
+        for (int i = 0; i < actions.length; i++) addAction(actions[i], 8 + (i % 2) * 146, 40 + (i / 2) * 22, 138);
+        addRenderableWidget(Button.builder(Component.literal(page == 0 ? "轻载 >" : "< 工务"), button -> {
+            page = 1 - page;
+            rebuildWidgets();
+        }).bounds(leftPos + 238, topPos + 3, 54, 18)
+                .tooltip(Tooltip.create(Component.literal("个人研究3级后可学习轻载通行；解锁组件装配、安装、切档与拆回")))
+                .build());
     }
 
     private void addAction(int action, int x, int y, int buttonWidth) {
@@ -57,14 +62,9 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
 
     @Override protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, titleLabelX, titleLabelY, 0xffedf4eb, false);
-        String progress = switch (menu.researchLevel()) {
-            case 0 -> "基础未学习";
-            case 1 -> "基础已学习 · 钻切未学习";
-            default -> "基础、钻切均已学习";
-        };
+        String progress = "研究 " + menu.researchLevel() + "/3 · 轻载" + (menu.hasLightMobility() ? "已学" : "未学");
         graphics.drawString(font, "个人进度：" + progress, 10, 27, 0xff344f43, false);
-        graphics.drawString(font, "装备脱下持主手可维修；", 10, 114, 0xff435b50, false);
-        graphics.drawString(font, "主手潜行右键从背包能匣补能", 10, 126, 0xff435b50, false);
+        graphics.drawString(font, page == 0 ? "维修/冷却持主手；整备包主手、装备副手" : "装卸/切档持主手骨架；跨步档站立也耗能", 10, 128, 0xff435b50, false);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff344f43, false);
     }
 

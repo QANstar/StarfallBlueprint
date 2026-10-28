@@ -16,6 +16,8 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 public final class BestEquipment {
     public static final int CAPACITY=200000, MAX_HEAT=1000, RECOVER_HEAT=400, MAX_WEAR=1200;
     public static boolean isEquipment(ItemStack stack){return stack.getItem() instanceof Frame||stack.getItem() instanceof Cutter;}
+    public static boolean strideInstalled(ItemStack stack){return stack.getItem() instanceof Frame&&CatalogueEquipment.getData(stack).getBoolean("BestStrideInstalled");}
+    public static boolean strideEnabled(ItemStack stack){return strideInstalled(stack)&&CatalogueEquipment.getData(stack).getBoolean("BestStrideEnabled");}
     public static int charge(ItemStack stack){return Math.clamp(CatalogueEquipment.getData(stack).getInt("BestEnergy"),0,CAPACITY);}
     public static int heat(ItemStack stack){return Math.clamp(CatalogueEquipment.getData(stack).getInt("BestHeat"),0,MAX_HEAT);}
     public static int wear(ItemStack stack){return Math.clamp(CatalogueEquipment.getData(stack).getInt("BestWear"),0,MAX_WEAR);}
@@ -24,13 +26,14 @@ public final class BestEquipment {
     public static void spend(ItemStack stack,int energy,int heating){
         var data=CatalogueEquipment.getData(stack);data.putInt("BestEnergy",Math.max(0,charge(stack)-energy));int h=Math.min(MAX_HEAT,heat(stack)+heating);data.putInt("BestHeat",h);if(h==MAX_HEAT)data.putBoolean("BestOverheated",true);CatalogueEquipment.setData(stack,data);
     }
-    public static void cool(ItemStack stack){
-        int old=heat(stack),next=Math.max(0,old-2);if(old==0&&!CatalogueEquipment.getData(stack).getBoolean("BestOverheated"))return;
+    public static void cool(ItemStack stack){cool(stack,2);}
+    public static void cool(ItemStack stack,int amount){
+        int old=heat(stack),next=Math.max(0,old-Math.max(0,amount));if(old==0&&!CatalogueEquipment.getData(stack).getBoolean("BestOverheated"))return;
         var data=CatalogueEquipment.getData(stack);data.putInt("BestHeat",next);if(next<=RECOVER_HEAT)data.putBoolean("BestOverheated",false);CatalogueEquipment.setData(stack,data);
     }
     public static String status(ItemStack stack){
-        String state=wear(stack)>=MAX_WEAR?"需维修":CatalogueEquipment.getData(stack).getBoolean("BestOverheated")?"过热停机":charge(stack)<(stack.getItem() instanceof Cutter?256:16)?"电量不足":"就绪";
-        return state+" · "+charge(stack)+"/"+CAPACITY+"XH · 温度 "+heat(stack)+"/"+MAX_HEAT+" · 耐久 "+(MAX_WEAR-wear(stack))+"/"+MAX_WEAR;
+        String state=wear(stack)>=MAX_WEAR?"需维修":CatalogueEquipment.getData(stack).getBoolean("BestOverheated")?"过热停机":charge(stack)<(stack.getItem() instanceof Cutter?256:strideEnabled(stack)?24:16)?"电量不足":"就绪";
+        return state+" · "+charge(stack)+"/"+CAPACITY+"XH · 温度 "+heat(stack)+"/"+MAX_HEAT+" · 耐久 "+(MAX_WEAR-wear(stack))+"/"+MAX_WEAR+(stack.getItem() instanceof Frame?strideInstalled(stack)?" · 组件已装 · 跨步档"+(strideEnabled(stack)?"开启":"关闭"):" · 未装跨步组件":"");
     }
     public static IEnergyStorage energy(ItemStack stack){return new IEnergyStorage(){
         private long tick(){var server=net.neoforged.neoforge.server.ServerLifecycleHooks.getCurrentServer();return server==null?0:server.overworld().getGameTime();}
@@ -56,6 +59,11 @@ public final class BestEquipment {
         lines.add(Component.literal(status(stack)));lines.add(Component.literal("主手潜行按住右键：从背包工具能匣补能（512XH/刻）"));
         lines.add(Component.literal("过热后冷却至400恢复；装配台持主手维修，1钢恢复200耐久"));
         lines.add(Component.literal(stack.getItem() instanceof Frame?"腿部穿戴；基础工务；地面疾跑速度+15%，16XH/刻":"工程钻切；铁级单点采掘；每块256XH、热量120、耐久1"));
+        if(stack.getItem() instanceof Frame){
+            lines.add(Component.literal("轻载通行：本人学习后于工位安装、切档或拆回；脱下即停用"));
+            lines.add(Component.literal("持续地面跨步档：跨步高度+0.4；24XH、热4/刻，站立也耗能"));
+            lines.add(Component.literal("跨步档与疾跑助力互斥；地面非疾跑、非潜行且未涉水、骑乘或飞行时工作"));
+        }
     }
     public static final class Frame extends ArmorItem {
         public Frame(Properties p){super(ArmorMaterials.LEATHER,Type.LEGGINGS,p.stacksTo(1).attributes(ItemAttributeModifiers.EMPTY));}

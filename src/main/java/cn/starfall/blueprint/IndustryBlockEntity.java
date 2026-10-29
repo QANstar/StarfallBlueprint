@@ -76,6 +76,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
     public boolean hasEnergyPort(){return !ConduitBlock.isConduit(kind())&&!Set.of("damper","supply_crate").contains(kind());}
     public boolean redstoneStopped(){if(stopped)return true;if(level==null)return false;if(AggregateMachines.large(kind()))for(int p=0;p<LargeMachineBlock.parts(kind());p++){var pos=worldPosition.offset(LargeMachineBlock.offset(facing(),p));if(level.hasChunkAt(pos)&&level.hasNeighborSignal(pos))return true;}return level.hasNeighborSignal(worldPosition);}
     public static void tick(Level level,BlockPos pos,BlockState state,IndustryBlockEntity be){
+        if(Lingchuan.isStation(be.kind())){Lingchuan.tickStation(be);return;}
         if(be.redstoneStopped()){be.status=8;}else{IndustryEnergy.tick(be);IndustryProcessing.tick(be);}
         IndustryNetworks.tick(be);
         boolean lit=be.status==1;if(state.hasProperty(IndustryBlock.ACTIVE)&&state.getValue(IndustryBlock.ACTIVE)!=lit){if(AggregateMachines.large(be.kind()))AggregateMachines.syncActive(be,lit);else level.setBlock(pos,state.setValue(IndustryBlock.ACTIVE,lit),3);}
@@ -151,7 +152,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         MiningUpgrades.load(this,tag);
     }
     public Component getDisplayName(){return Component.translatable("block.starfall_blueprint."+kind());}
-    public AbstractContainerMenu createMenu(int id,Inventory inv,Player p){return new IndustryMenu(id,inv,this,processData);}
+    public AbstractContainerMenu createMenu(int id,Inventory inv,Player p){return Lingchuan.isStation(kind())?new LingchuanMenu(id,inv,this):new IndustryMenu(id,inv,this,processData);}
     public int getContainerSize(){return kind().equals("autocrafter")?72:27;}
     public boolean isEmpty(){return stock.stream().allMatch(ItemStack::isEmpty)&&extraCraftingInputs.stream().allMatch(ItemStack::isEmpty)&&upgrades.extraIsEmpty();}
     public ItemStack getItem(int i){return i<27?stock.get(i):extraCraftingInputs.get(i-27);}
@@ -165,6 +166,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         return workCanPlace(i,s);
     }
     public boolean workCanPlace(int i,ItemStack s){
+        if(Lingchuan.isStation(kind()))return Lingchuan.accepts(kind(),i,s);
         if(MachineUpgrades.isSlot(kind(),i))return MachineUpgrades.accepts(this,s);
         if(SpecialProcessing.supports(kind()))return i==18?s.is(CatalogueContent.item("s01")):kind().equals("auto_stonecutter")&&i==CRAFTING_SAMPLE||SpecialProcessing.accepts(this,i,s);
         if(kind().equals("press"))return i>=0&&i<9&&(s.is(Items.IRON_INGOT)||s.is(Items.COPPER_INGOT));
@@ -186,7 +188,7 @@ public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer
         return i>=0&&i<9&&!nested(s);
     }
     public int[]getSlotsForFace(Direction d){return workSlots(d);}
-    public int[]workSlots(Direction d){if(SpecialProcessing.supports(kind())){if(d==Direction.DOWN)return new int[]{9,10,11,12};return switch(kind()){case "auto_brewer"->d==Direction.UP?new int[]{3,4}:new int[]{0,1,2};case "auto_smith"->d==Direction.UP?new int[]{0}:d==facing().getOpposite()?new int[]{2}:new int[]{1};case "auto_stonecutter"->new int[]{0};default->new int[]{0,1,2,3,4,5,6,7,8};};}if(kind().equals("phase_extractor"))return d==Direction.DOWN?new int[]{9,10,11,12}:new int[]{};if(kind().equals("press"))return d==Direction.DOWN?new int[]{9,10,11,12}:d==Direction.UP?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(AggregateMachines.large(kind()))return d==Direction.DOWN||d==facing().getOpposite()?new int[]{9,10,11,12}:kind().equals("crusher")?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(ConduitBlock.isConduit(kind())||Set.of("damper","terminal").contains(kind()))return new int[]{};if(kind().equals("supply_crate"))return java.util.stream.IntStream.range(0,27).toArray();if(d==Direction.DOWN)return new int[]{9,10,11,12};if(kind().equals("plant_cultivator"))return d==Direction.UP?new int[]{0,1,2}:new int[]{};if(kind().equals("autocrafter"))return craftingInputSlots();if(d==Direction.UP)return generator()?new int[]{13}:new int[]{0,1,2,3,4,5,6,7,8};return new int[]{13};}
+    public int[]workSlots(Direction d){if(Lingchuan.isStation(kind()))return new int[]{};if(SpecialProcessing.supports(kind())){if(d==Direction.DOWN)return new int[]{9,10,11,12};return switch(kind()){case "auto_brewer"->d==Direction.UP?new int[]{3,4}:new int[]{0,1,2};case "auto_smith"->d==Direction.UP?new int[]{0}:d==facing().getOpposite()?new int[]{2}:new int[]{1};case "auto_stonecutter"->new int[]{0};default->new int[]{0,1,2,3,4,5,6,7,8};};}if(kind().equals("phase_extractor"))return d==Direction.DOWN?new int[]{9,10,11,12}:new int[]{};if(kind().equals("press"))return d==Direction.DOWN?new int[]{9,10,11,12}:d==Direction.UP?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(AggregateMachines.large(kind()))return d==Direction.DOWN||d==facing().getOpposite()?new int[]{9,10,11,12}:kind().equals("crusher")?new int[]{0,1,2,3,4,5,6,7,8}:new int[]{};if(ConduitBlock.isConduit(kind())||Set.of("damper","terminal").contains(kind()))return new int[]{};if(kind().equals("supply_crate"))return java.util.stream.IntStream.range(0,27).toArray();if(d==Direction.DOWN)return new int[]{9,10,11,12};if(kind().equals("plant_cultivator"))return d==Direction.UP?new int[]{0,1,2}:new int[]{};if(kind().equals("autocrafter"))return craftingInputSlots();if(d==Direction.UP)return generator()?new int[]{13}:new int[]{0,1,2,3,4,5,6,7,8};return new int[]{13};}
     public boolean canPlaceItemThroughFace(int i,ItemStack s,Direction d){return !MachineUpgrades.isSlot(kind(),i)&&!redstoneStopped()&&canPlaceItem(i,s);}
     public boolean canTakeItemThroughFace(int i,ItemStack s,Direction d){return !redstoneStopped()&&(kind().equals("supply_crate")||(d==Direction.DOWN||AggregateMachines.large(kind())&&d==facing().getOpposite())&&i>=9&&i<=12);}
     public void awardExperience(Player player){if(player.level()instanceof net.minecraft.server.level.ServerLevel server&&experience>0){int amount=(int)experience;if(server.random.nextFloat()<experience-amount)amount++;experience=0;setChanged();if(amount>0)net.minecraft.world.entity.ExperienceOrb.award(server,player.position(),amount);}}

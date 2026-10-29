@@ -26,7 +26,7 @@ public final class LargeMachineBlock extends IndustryBlock {
     public LargeMachineBlock(String kind,Properties p){super(kind,p);registerDefaultState(defaultBlockState().setValue(PART,0));}
     @Override protected MapCodec<? extends BaseEntityBlock> codec(){return simpleCodec(p->new LargeMachineBlock(kind,p));}
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block,BlockState> b){super.createBlockStateDefinition(b);b.add(PART);}
-    public static int parts(String kind){return kind.equals("phase_extractor")?8:4;}
+    public static int parts(String kind){return kind.equals("phase_extractor")||kind.startsWith("lc_")?8:4;}
     public static BlockPos offset(Direction facing,int part){return BlockPos.ZERO.relative(facing.getClockWise(),part&1).relative(facing.getOpposite(),(part>>1)&1).above(part>>2);}
     public static BlockPos anchor(BlockPos pos,BlockState state){return pos.subtract(offset(state.getValue(FACING),state.getValue(PART)));}
     public static IndustryBlockEntity controller(Level level,BlockPos pos){

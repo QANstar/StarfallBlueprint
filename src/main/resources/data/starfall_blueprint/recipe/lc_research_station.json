@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SCS",
+    "BDB",
+    "SFS"
+  ],
+  "key": {
+    "S": {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    "C": {
+      "item": "starfall_blueprint:control_board"
+    },
+    "B": {
+      "item": "starfall_blueprint:stable_crystal"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "F": {
+      "item": "starfall_blueprint:machine_frame"
+    }
+  },
+  "result": {
+    "id": "starfall_blueprint:lc_research_station",
+    "count": 1
+  }
+}

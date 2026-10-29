@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SCS",
+    "BDB",
+    "SFS"
+  ],
+  "key": {
+    "S": {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    "C": {
+      "item": "starfall_blueprint:control_board"
+    },
+    "B": {
+      "item": "starfall_blueprint:stable_crystal"
+    },
+    "D": {
+      "item": "starfall_blueprint:laminar_alloy"
+    },
+    "F": {
+      "item": "starfall_blueprint:machine_frame"
+    }
+  },
+  "result": {
+    "id": "starfall_blueprint:lc_parts_fabricator",
+    "count": 1
+  }
+}

@@ -223,4 +223,5 @@ import runpy
 runpy.run_path(str(ROOT/'tools/generate_structural_resources.py'), run_name='__main__')
 runpy.run_path(str(ROOT/'tools/sync_catalogue.py'), run_name='__main__')
 runpy.run_path(str(ROOT/'tools/generate_catalogue_resources.py'), run_name='__main__')
+runpy.run_path(str(ROOT/'tools/generate_lingchuan_resources.py'), run_name='__main__')
 print('Generated textures, models, recipes, languages, advancements, worldgen and test template.')

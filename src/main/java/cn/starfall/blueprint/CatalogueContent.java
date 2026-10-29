@@ -23,7 +23,7 @@ public final class CatalogueContent {
     public static final Map<String,DeferredBlock<Block>> ORES=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<Block>> RESONANCE_BASES=new LinkedHashMap<>();
     public static final Map<String,DeferredBlock<Block>> PHASE_MATRICES=new LinkedHashMap<>();
-    public static final Set<String> MACHINE_KEYS=Set.of("phase_extractor","press","quarry","crusher","plant_cultivator","refiner","recycler","g01","g02","g03","g04","g06","g07","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","auto_brewer","auto_smith","auto_stonecutter","auto_blast_furnace","auto_smoker","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
+    public static final Set<String> MACHINE_KEYS=Set.of("lc_alloy_forge","lc_parts_fabricator","lc_armor_assembler","lc_armor_charger","lc_research_station","phase_extractor","press","quarry","crusher","plant_cultivator","refiner","recycler","g01","g02","g03","g04","g06","g07","pump","dew","cable","pipe","s02","bio_processor","g05","autocrafter","auto_furnace","auto_brewer","auto_smith","auto_stonecutter","auto_blast_furnace","auto_smoker","supply_crate","energy_junction","item_duct","item_extractor","item_router","fluid_valve","terminal","busjoint","damper");
     // Chenghai/Linhai content awaits a future official Minecraft dimension; keep registry IDs for saves only.
     public static final Set<String> RETIRED_BASES=Set.of("resonance_base_ore_meteor_phase","resonance_base_deepslate_ore_meteor_phase","resonance_base_rutile_ore","resonance_base_borate_ore");
     public static final Set<String> RESERVED_ITEMS=Set.of("moon","lunar","moon_tail","liner","lined_box","anima","anima_basic","staff_blank");
@@ -37,6 +37,11 @@ public final class CatalogueContent {
         try(var stream=CatalogueContent.class.getResourceAsStream("/assets/starfall_blueprint/catalogue.json")) {
             if(stream==null)throw new IllegalStateException("Missing canonical catalogue");
             DATA=JsonParser.parseReader(new InputStreamReader(stream,StandardCharsets.UTF_8)).getAsJsonObject();
+        }catch(IOException e){throw new ExceptionInInitializerError(e);}
+        try(var extra=CatalogueContent.class.getResourceAsStream("/assets/starfall_blueprint/lingchuan.json")) {
+            if(extra==null)throw new IllegalStateException("Missing Lingchuan definitions");
+            JsonParser.parseReader(new InputStreamReader(extra,StandardCharsets.UTF_8)).getAsJsonObject().entrySet()
+                .forEach(e->DATA.getAsJsonObject("items").add(e.getKey(),e.getValue()));
         }catch(IOException e){throw new ExceptionInInitializerError(e);}
         DATA.getAsJsonObject("items").entrySet().forEach(e->DEFINITIONS.put(e.getKey(),e.getValue().getAsJsonObject()));
         DATA.getAsJsonArray("recipes").forEach(r->RECIPES.put(r.getAsJsonObject().get("id").getAsString(),r.getAsJsonObject()));

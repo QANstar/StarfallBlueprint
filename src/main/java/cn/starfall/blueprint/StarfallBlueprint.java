@@ -91,7 +91,7 @@ public final class StarfallBlueprint {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("industry", () -> CreativeModeTab.builder()
             .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint"))
             .icon(() -> new ItemStack(CRYSTAL.get())).displayItems((parameters, output) -> {
-                output.accept(BestEngineering.WORKBENCH_ITEM.get());output.accept(GUIDE.get()); output.accept(Blueprints.BUILDER_ITEM.get());output.accept(Blueprints.PLAN.get());output.accept(Blueprints.SURVEYOR.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get()); output.accept(SUPPLY_TERMINAL_ITEM.get());
+                output.accept(GUIDE.get()); output.accept(Blueprints.BUILDER_ITEM.get());output.accept(Blueprints.PLAN.get());output.accept(Blueprints.SURVEYOR.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get()); output.accept(SUPPLY_TERMINAL_ITEM.get());
                 for (int grade : new int[]{6,12,24}) {
                     ItemStack ore = new ItemStack(RAW.get()); ore.set(BATCH.get(), MaterialBatch.ore(grade, 40)); output.accept(ore);
                 }
@@ -99,12 +99,24 @@ public final class StarfallBlueprint {
                 output.accept(CRYSTAL.get()); output.accept(CONNECTOR.get()); output.accept(TOOL_BRACE.get()); output.accept(SHIELD_LINING.get()); output.accept(SCANNER.get()); output.accept(TAILINGS.get());
                 output.accept(Blueprints.CREATIVE_CORE.get());output.accept(ALLOY_ITEM.get());
                 STRUCTURAL_ITEMS.forEach((name, item) -> { if (!name.endsWith("_portion")) output.accept(item.get()); });
-                CatalogueContent.ITEMS.forEach((key, item) -> { if (!CatalogueContent.RESERVED_ITEMS.contains(key)&&!CatalogueContent.RETIRED_BASES.contains(key)) output.accept(item.get()); });
+                CatalogueContent.ITEMS.forEach((key, item) -> { if (!CatalogueContent.RESERVED_ITEMS.contains(key)&&!CatalogueContent.RETIRED_BASES.contains(key)&&!key.startsWith("best_")&&!Lingchuan.isContent(key)) output.accept(item.get()); });
                 CatalogueFluids.ENTRIES.values().forEach(fluid -> output.accept(fluid.bucket().get()));
             }).build());
 
+    public static final DeferredHolder<CreativeModeTab,CreativeModeTab> BEST_TAB=TABS.register("best_engineering",()->CreativeModeTab.builder()
+        .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint.best"))
+        .icon(()->new ItemStack(CatalogueContent.item("best_frame"))).displayItems((p,o)->{
+            o.accept(BestEngineering.WORKBENCH_ITEM.get());
+            CatalogueContent.ITEMS.forEach((k,v)->{if(k.startsWith("best_"))o.accept(v.get());});
+        }).build());
+    public static final DeferredHolder<CreativeModeTab,CreativeModeTab> LINGCHUAN_TAB=TABS.register("lingchuan",()->CreativeModeTab.builder()
+        .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint.lingchuan"))
+        .icon(()->new ItemStack(CatalogueContent.item("blackdog_watch"))).displayItems((p,o)->{
+            CatalogueContent.ITEMS.forEach((k,v)->{if(Lingchuan.isContent(k)&&!k.startsWith("blackdog_armor_")&&!Lingchuan.legacy(k))o.accept(v.get());});
+        }).build());
+
     public StarfallBlueprint(IEventBus bus) {
-        CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();Blueprints.initialize();AggregateMachines.initialize();BestEngineering.initialize();
+        CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();Blueprints.initialize();AggregateMachines.initialize();BestEngineering.initialize();Lingchuan.initialize();
         CatalogueFluids.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus); RECIPE_TYPES.register(bus);
         bus.addListener(this::capabilities);
@@ -113,6 +125,10 @@ public final class StarfallBlueprint {
         NeoForge.EVENT_BUS.addListener(CatalogueEquipment::playerTick);
         NeoForge.EVENT_BUS.addListener(CatalogueEquipment::breakSpeed);
         NeoForge.EVENT_BUS.addListener(BestEngineering::playerTick);
+        NeoForge.EVENT_BUS.addListener(BlackDogArmor::playerTick);
+        NeoForge.EVENT_BUS.addListener(BlackDogArmor::incomingDamage);
+        NeoForge.EVENT_BUS.addListener(BlackDogArmor::drops);
+        NeoForge.EVENT_BUS.addListener(BlackDogArmor::clonePlayer);
         NeoForge.EVENT_BUS.addListener(BestEngineering::breakSpeed);
         NeoForge.EVENT_BUS.addListener(BestEngineering::clonePlayer);
         NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST,BestEngineering::breakBlock);

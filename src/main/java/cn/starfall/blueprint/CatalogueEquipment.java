@@ -22,6 +22,10 @@ public final class CatalogueEquipment {
     public static final DeferredHolder<MenuType<?>,MenuType<MiningBagMenu>> BAG_MENU=StarfallBlueprint.MENUS.register("mining_bag",()->new MenuType<>(MiningBagMenu::new,net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS));
     public static void initialize(){}
     public static Item create(String key,Item.Properties p){
+        if(key.equals("blackdog_fire_control"))return new BlackDogArmor.FireControl(p);
+        if(key.equals("blackdog_watch"))return new BlackDogArmor.Watch(p);
+        if(key.startsWith("blackdog_armor_"))return BlackDogArmor.createProjection(key,p);
+        if(key.startsWith("blackdog_"))return Lingchuan.moduleItem(key,p);
         if(key.equals("best_frame"))return new BestEquipment.Frame(p);
         if(key.equals("best_cutter"))return new BestEquipment.Cutter(p);
         if(key.equals("best_service_kit"))return new BestServiceKit(p);

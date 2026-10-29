@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public final class AggregateMachines {
-    public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<LargeMachinePartEntity>> PART_ENTITY=StarfallBlueprint.ENTITIES.register("large_machine_part",()->BlockEntityType.Builder.of(LargeMachinePartEntity::new,CatalogueContent.BLOCKS.get("quarry").get(),CatalogueContent.BLOCKS.get("crusher").get(),CatalogueContent.BLOCKS.get("phase_extractor").get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<LargeMachinePartEntity>> PART_ENTITY=StarfallBlueprint.ENTITIES.register("large_machine_part",()->BlockEntityType.Builder.of(LargeMachinePartEntity::new,CatalogueContent.BLOCKS.get("quarry").get(),CatalogueContent.BLOCKS.get("crusher").get(),CatalogueContent.BLOCKS.get("phase_extractor").get(),CatalogueContent.BLOCKS.get("lc_alloy_forge").get(),CatalogueContent.BLOCKS.get("lc_parts_fabricator").get(),CatalogueContent.BLOCKS.get("lc_armor_assembler").get(),CatalogueContent.BLOCKS.get("lc_armor_charger").get(),CatalogueContent.BLOCKS.get("lc_research_station").get()).build(null));
     public static void initialize(){}
     /** One transition update per part; animation frames themselves are client atlas data. */
     public static void syncActive(IndustryBlockEntity be,boolean active){
@@ -15,7 +15,7 @@ public final class AggregateMachines {
             var state=level.getBlockState(pos);if(state.getBlock()==be.getBlockState().getBlock()&&state.getValue(LargeMachineBlock.PART)==part&&state.getValue(IndustryBlock.ACTIVE)!=active)level.setBlock(pos,state.setValue(IndustryBlock.ACTIVE,active),2);
         }
     }
-    public static boolean large(String kind){return kind.equals("quarry")||kind.equals("crusher")||kind.equals("phase_extractor");}
+    public static boolean large(String kind){return kind.startsWith("lc_")||kind.equals("quarry")||kind.equals("crusher")||kind.equals("phase_extractor");}
     public static boolean ready(IndustryBlockEntity be){
         var level=be.getLevel();if(level==null)return false;var root=be.getBlockPos();var facing=be.facing();
         for(int part=0;part<LargeMachineBlock.parts(be.kind());part++){

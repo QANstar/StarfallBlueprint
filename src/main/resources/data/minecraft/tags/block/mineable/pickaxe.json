@@ -85,6 +85,11 @@
     "starfall_blueprint:auto_brewer",
     "starfall_blueprint:auto_smith",
     "starfall_blueprint:auto_smoker",
-    "starfall_blueprint:best_workbench"
+    "starfall_blueprint:best_workbench",
+    "starfall_blueprint:lc_alloy_forge",
+    "starfall_blueprint:lc_parts_fabricator",
+    "starfall_blueprint:lc_armor_assembler",
+    "starfall_blueprint:lc_armor_charger",
+    "starfall_blueprint:lc_research_station"
   ]
 }

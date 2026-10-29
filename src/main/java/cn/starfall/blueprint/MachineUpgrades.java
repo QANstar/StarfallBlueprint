@@ -42,7 +42,7 @@ public final class MachineUpgrades {
         BigInteger accelerated=ceil(BigInteger.valueOf(base).multiply(BigInteger.valueOf(premium)),100);
         return ceil(accelerated.multiply(BigInteger.valueOf(9)),9+saving).min(BigInteger.valueOf(Long.MAX_VALUE)).longValue();
     }
-    public static int baseCapacity(String kind){return kind.equals("s02")?2_000_000:kind.equals("g05")?1_000_000:320_000;}
+    public static int baseCapacity(String kind){return kind.startsWith("lc_")?2_000_000:kind.equals("s02")?2_000_000:kind.equals("g05")?1_000_000:320_000;}
     private static int expanded(int base,long weight,int percent){return (int)Math.min(Integer.MAX_VALUE,(long)base+((long)base*percent/100)*weight);}
     private static long weight(IndustryBlockEntity be,String key){return count(be,key+"_1")+2*count(be,key+"_2");}
     public static int capacity(IndustryBlockEntity be){return expanded(baseCapacity(be.kind()),weight(be,"capacity"),50);}

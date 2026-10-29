@@ -42,6 +42,11 @@
     "starfall_blueprint:resonance_base_glowstone",
     "starfall_blueprint:phase_matrix_meteor",
     "starfall_blueprint:phase_matrix_rutile",
-    "starfall_blueprint:phase_matrix_borate"
+    "starfall_blueprint:phase_matrix_borate",
+    "starfall_blueprint:lc_alloy_forge",
+    "starfall_blueprint:lc_parts_fabricator",
+    "starfall_blueprint:lc_armor_assembler",
+    "starfall_blueprint:lc_armor_charger",
+    "starfall_blueprint:lc_research_station"
   ]
 }

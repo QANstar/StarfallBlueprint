@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "starfall_blueprint:item/blackdog_shoulders_reinforced"
+  }
+}

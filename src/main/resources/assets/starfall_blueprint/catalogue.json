@@ -10070,7 +10070,39 @@
               "qty": 1
             }
           ]
+        },
+        "diagnostics": {
+          "name": "工务诊断",
+          "english": "Field Diagnostics",
+          "requires": [
+            "field_servicing"
+          ],
+          "independent": true,
+          "minimum_research_level": 3,
+          "storage_key": "BestDiagnostics",
+          "storage_type": "boolean",
+          "persistence": "player_saved_data_and_death_clone",
+          "inputs": [
+            {
+              "item": "load",
+              "qty": 1
+            },
+            {
+              "item": "conductor",
+              "qty": 2
+            },
+            {
+              "item": "board",
+              "qty": 1
+            }
+          ]
         }
+      },
+      "diagnostics_actions": {
+        "learn": 13,
+        "assemble": 14,
+        "isolate": 15,
+        "connect": 16
       },
       "learning_persistence": "player_saved_data_and_death_clone",
       "catalogue": true,
@@ -10084,7 +10116,7 @@
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "学习贝斯特工程知识与人工装配工务装备",
-        "benefit": "个人三级及独立轻载通行学习、制造、维修、水桶冷却与骨架模块管理集中在专用菜单。",
+        "benefit": "个人三级及独立轻载通行／工务诊断学习、制造、维修、水桶冷却、骨架模块管理与电池隔离集中在专用菜单。",
         "operation": "公共工作台合成台体；骨架、钻切器、整备包与跨步组件逐人校验学习，人工装配；主手骨架可安装、切档、拆回模块；持主手设备，每水桶降热400返空桶，热0拒绝，需对应使用知识。",
         "targets": []
       },
@@ -10272,6 +10304,37 @@
         "cooling_per_tick": 2
       },
       "player_learning_required_to_use": true,
+      "battery_isolation": {
+        "station": "best_workbench",
+        "main_hand": true,
+        "requires": [
+          "field_servicing",
+          "diagnostics"
+        ],
+        "minimum_research_level": 3,
+        "storage_key": "BestBatteryIsolated",
+        "storage_type": "boolean",
+        "default": false,
+        "isolate_action": 15,
+        "connect_action": 16,
+        "stops_powered_operation": true,
+        "rejects_all_charging": true,
+        "rejects_energy_capability_receive": true,
+        "allows_manual_repair": true,
+        "allows_field_repair": true,
+        "allows_manual_cooling": true,
+        "reconnect_adds_energy": false,
+        "persistence": "item_custom_data",
+        "preserves": [
+          "energy",
+          "heat",
+          "overheat",
+          "wear",
+          "custom_name",
+          "work_ticks",
+          "all_other_item_data"
+        ]
+      },
       "catalogue": true,
       "category": "装备与武器",
       "subcategory": "贝斯特工程装备",
@@ -10282,7 +10345,7 @@
       "purpose": {
         "summary": "腿部穿戴的轻型工程助力骨架",
         "benefit": "原疾跑＋15%，16XH／刻、热6；可装跨步组件，跨步＋0.4与疾跑互斥，24XH／刻、热4（净2），地面站定也计费；无护甲，缓存200000XH。",
-        "operation": "基础工务可装配及使用原档；跨步须本人三级及独立轻载通行，工位主手安装1组件默认疾跑档，工位切档或脱下停止跨步待命；拆回空间不足失败不变，保留电热磨损名字和工作刻；潜行右键库存s01补512XH／刻，钢1维修200。",
+        "operation": "基础工务可装配及使用原档；跨步须本人三级及独立轻载通行，工位主手安装1组件默认疾跑档，工位切档或脱下停止跨步待命；拆回空间不足失败不变，保留电热磨损名字和工作刻；潜行右键库存s01补512XH／刻，钢1维修200。工务诊断可只读检查，工位隔离停止动力和全部补能，维修冷却保留隔离，接通不补电。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABFUlEQVR4nGNgGAUDDBgJKZDWNv1PiQVPr57GawcLMYbYOTjA2d3Od/CqLd2rAmcfOnCAoNlMDAMMmAbaASykakAOYmoARlomQGISIwspCRCUqEAG7Th94b+HqQGKgchiIIej66MoDcjkeaNYhEzjEkPXR5EDkAE2n+OSo1ku8IBaRKnlZDsAl4Po6gAPqKWUWA4CJGdDQmU7qfpYCBl2slkGzjavfUJIOcn6mPD5AtkQmKGECidS9TExDDBgGrQOeHr1NCN63IH4hBIhqfpYCLmQlIRHjj4WQgrmLpgNZycnpBLtAGL1MTEMMGAadQDDAANGbIL4Sjty6wJc+llwKURuUpHSzidVPwsuA0ixjBb6GUYMAAD+CoGlyAeSVgAAAABJRU5ErkJggg=="
@@ -10380,6 +10443,37 @@
         "cooling_per_tick": 2
       },
       "player_learning_required_to_use": true,
+      "battery_isolation": {
+        "station": "best_workbench",
+        "main_hand": true,
+        "requires": [
+          "field_servicing",
+          "diagnostics"
+        ],
+        "minimum_research_level": 3,
+        "storage_key": "BestBatteryIsolated",
+        "storage_type": "boolean",
+        "default": false,
+        "isolate_action": 15,
+        "connect_action": 16,
+        "stops_powered_operation": true,
+        "rejects_all_charging": true,
+        "rejects_energy_capability_receive": true,
+        "allows_manual_repair": true,
+        "allows_field_repair": true,
+        "allows_manual_cooling": true,
+        "reconnect_adds_energy": false,
+        "persistence": "item_custom_data",
+        "preserves": [
+          "energy",
+          "heat",
+          "overheat",
+          "wear",
+          "custom_name",
+          "work_ticks",
+          "all_other_item_data"
+        ]
+      },
       "catalogue": true,
       "category": "装备与武器",
       "subcategory": "贝斯特工程装备",
@@ -10390,7 +10484,7 @@
       "purpose": {
         "summary": "用于工程钻切的手持动力工具",
         "benefit": "铁级单点采掘，有效速度12；非零硬度方块耗256XH、发热120、耐久1，缓存200000XH。",
-        "operation": "本人学习基础工务与工程钻切后装配及使用；潜行按住右键从库存s01每刻补512XH，持主手在装配台维修，钢1恢复200耐久。",
+        "operation": "本人学习基础工务与工程钻切后装配及使用；潜行按住右键从库存s01每刻补512XH，持主手在装配台维修，钢1恢复200耐久。诊断器只读检查；工位隔离拒绝动力和全部补能，保留储能电热磨损与其它数据，原维修冷却不解除隔离。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABdElEQVR4nO2Wv07DMBDGnchvASNbZ8RWVeINGGEgUtVH6MjE2EdASGWAkTdAqrqhzmyM8BxFX9BFV+ccn/9ky0+qHCfn++7OOafGTEwU4Gx2ecQvZa1NFeTz+WLRjntjjr9fhyrGV5UjKLHf7cxQEOSLbGyuIOe+ufsPwphOxPX1vH1qx2WzaqtlJeGQIAn5wHpUAv5IkFg2qy4I0KuANtuX7WvQhmXbXWOkOapQq9QixDfX32IgEJXm1ucIJZTgFZLEfPDMid474HL7vjmZv92sezbrj4voIEgcY9IWpIhzeJta9wFaiMosZZwDsnfPiLqogiA4JA6SjmItEESr0bVkY8cMYEg4GMBceSBRu3J7XwtLVNJNHKGhDw7x+Xhurh5+Tp7HfBGtdJO6wZcZRKU1WtFgANwhb0ufeA42ZMCrUVocqM6BofJi/1PLrw5gTGqNEbpijPKrAxiTWmOEPXZ7vRQ2dWGpgKoYY/4PN+fNnzCMPySttgKnF4lqAAAAAElFTkSuQmCC"
@@ -10531,6 +10625,101 @@
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABkUlEQVR4nO1WvU7DMBB2Ir9FyxPAwFJ1Qx1ZyQgDkao8QscKIUYeoaqUDjCWlTHqhrowwMBM8xxBBzicHZ//iBfoJ1WNHefu8+fvLmFsj/+ORDc5OBw11AP161b7TCg4deNkMunMbapKGu/WZx2iw+wh6YXAZX5hJRCSUEWqk1+3+1jg1I1VeUeqITwynu8kv4T4g7NAnK9vpfF9NusQ1EElyVkkuJj4VwTwjimoR9cbgbrHXsB9ytD3jIWRTbE4lXyaF+14WS6k5E83QzLgeM5Ick4EluXiMzl2+TQrWhKm5OI+lCdlzA1jDVYp9WFrS47XYcOZjiJlkaCScD6C09Fx8rh9bkB2AZD/6P1aWqfKrFMHe8eZACbReiAvpASQXC1FMB9e83JwRRrZC4PvkoN/eP2aSlCsAfJwPXur2h+MxbxXI6otTUcN+HU0Pzu3gbsuBCIgs46QTl4svxoniEBIC8bvC9FfVHAWEVgZSK7bAHcNZjIfBagm2xcW9wkYUkqwa7X9YiQxFej7E36Pv4kP92bKE1W++tIAAAAASUVORK5CYII="
+    },
+    "best_diagnostic_tool": {
+      "id": "best_diagnostic_tool",
+      "name": "工务诊断器",
+      "unit": "件",
+      "icon": "tool",
+      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "external": false,
+      "mass": null,
+      "english": "Field Diagnostic Tool",
+      "registry_id": "starfall_blueprint:best_diagnostic_tool",
+      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
+      "manual_assembly": {
+        "station": "best_workbench",
+        "personal_learning": true,
+        "automatic": false,
+        "requires": [
+          "field_servicing",
+          "diagnostics"
+        ],
+        "inputs": [
+          {
+            "item": "steel",
+            "qty": 2
+          },
+          {
+            "item": "conductor",
+            "qty": 1
+          },
+          {
+            "item": "sensor",
+            "qty": 1
+          },
+          {
+            "item": "board",
+            "qty": 1
+          },
+          {
+            "item": "sheath",
+            "qty": 1
+          }
+        ],
+        "output_count": 1
+      },
+      "max_stack_size": 1,
+      "max_durability": 0,
+      "item_type": "ordinary",
+      "attribute_modifiers": [],
+      "diagnostics": {
+        "activation": "main_hand_use",
+        "target_hand": "offhand",
+        "targets": [
+          "best_frame",
+          "best_cutter"
+        ],
+        "requires": [
+          "field_servicing",
+          "diagnostics"
+        ],
+        "minimum_research_level": 3,
+        "read_only": true,
+        "reusable": true,
+        "readings": [
+          "energy",
+          "capacity",
+          "heat",
+          "overheat",
+          "wear",
+          "battery_isolated"
+        ],
+        "frame_readings": [
+          "stride_installed",
+          "stride_mode",
+          "wearer_light_mobility_available"
+        ],
+        "changes_energy": false,
+        "changes_heat": false,
+        "changes_wear": false,
+        "changes_overheat": false,
+        "changes_item_data": false
+      },
+      "catalogue": true,
+      "category": "装备与武器",
+      "subcategory": "贝斯特工程装备",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "purpose": {
+        "summary": "只读检查副手贝斯特骨架或钻切器",
+        "benefit": "可重复使用的普通工具，stack 1，无耐久、电量、热量或属性；本人三级及独立工务诊断，工位人工装配，无公共配方。",
+        "operation": "主手诊断器右键读取副手设备电量、热、过热锁、剩余耐久、隔离及知识状态，骨架另报组件安装／模式／轻载知识；不维修、不充电、不降温。工位主手设备可隔离／接通，隔离停止动力与全部补能，保留储能和全部其它数据，原维修冷却可用且保留隔离。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABnElEQVR4nMVXPU7DMBR2LN+C7gywIrYqV2hHGKiEOEJGBsTYIyCkMtAxXMHKhpgZmAkX4AJBz+JJjmvH7zlO80lRnWfH3+fPzz8VYmYUoYqTs4sOyz+fH8F2YyGHKp93T1lIYDD4uHUKC2296lVe3rciJ2Awt5s7UX1pw7M9LYuoA8eAcgOL9ZtRBnaBYiyndE7JHUX5GARw8+Fl9yoaITrsBwcTFdDWqw5dQPJlWZoOObjZXJtfW8Q/em5KLNikIMJNSi7Ovx+MCBA/NIXKfkERSI6jt0dERWUci7umfEEQ4nMgNI8ufPmCy8+FDHViT4kPV/VWpADWP+4BgOAq4KIn6DdM7sZkKtl+XR24ADF4qOQAlgMh21FQChSnsUvic4ELOeprS8hsAvYjyAGsKUi5HzRaDx5KitoR9yyYxIFG6947btNunR3PKgDw/rg4uDEBuT09sGVTRUgxMxT3g9x3RcVpHLIV4vZJOWkONE4ijoUcqoT1m5twtANLhr0UFJRG7p2OKiK2C5IFxAT5hFHIkwVQhE35hzYr/gBSuquZ7++eugAAAABJRU5ErkJggg=="
     }
   },
   "recipes": [
@@ -24962,6 +25151,7 @@
     "best_frame",
     "best_cutter",
     "best_service_kit",
-    "best_stride_module"
+    "best_stride_module",
+    "best_diagnostic_tool"
   ]
 }

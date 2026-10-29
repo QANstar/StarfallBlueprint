@@ -93,9 +93,41 @@ def main():
         for entry, pair in mobility_messages.items():
             prefix, owner, suffix = entry.split('.')
             names[f'{prefix}.{MOD}.{owner}.{suffix}'] = pair[index]
+        diagnostics_messages = {
+            'best_diagnostics_learned': ('已学习工务诊断', 'Field Diagnostics learned.'),
+            'best_diagnostics_required': ('需要本人三级野外整备与工务诊断', 'Requires your Field Servicing (level 3) and Field Diagnostics.'),
+            'best_battery_isolated': ('电池已隔离：停止动力与全部补能，储能和其它状态保留', 'Battery isolated: powered operation and all charging stopped; stored energy and other state preserved.'),
+            'best_battery_connected': ('电池已接通；电量与其它状态保持原状', 'Battery connected; energy and other state unchanged.'),
+            'best_already_isolated': ('电池已经隔离', 'Battery is already isolated.'),
+            'best_already_connected': ('电池已经接通', 'Battery is already connected.'),
+            'best_diagnostic_target': ('副手需持轻型助力骨架或工程钻切器', 'Hold an assist frame or drill-cutter in your offhand.'),
+            'best_diagnostic_report': ('%1$s｜电量 %2$s/%3$s XH｜热量 %4$s（停机 %5$s／恢复 %6$s）｜过热锁 %7$s｜工务耐久 %8$s/%9$s｜电池隔离 %10$s｜本人使用知识 %11$s', '%1$s | Energy %2$s/%3$s XH | Heat %4$s (stop %5$s / resume %6$s) | Heat lock %7$s | Durability %8$s/%9$s | Battery isolated %10$s | Personal operation knowledge %11$s'),
+            'best_diagnostic_frame': ('跨步组件安装 %1$s｜跨步档启用 %2$s｜本人轻载知识可用 %3$s', 'Stride module installed %1$s | Stride mode enabled %2$s | Personal Light Mobility available %3$s'),
+            'best_state_yes': ('是', 'Yes'),
+            'best_state_no': ('否', 'No'),
+            'best_diagnostic_hint': ('主手诊断器右键检查副手骨架／钻切器；只读，不维修、补能或降温', 'Use this tool in your main hand to inspect an offhand frame/cutter. Read-only: no repair, charging or cooling.'),
+            'best_diagnostic_assembled': ('已装配工务诊断器', 'Field Diagnostic Tool assembled.'),
+            'best_diagnostics_cost': ('需本人三级野外整备；承相结构嵌材1、导相铜复材板2、控制板1；独立知识，不要求轻载通行', 'Requires personal Field Servicing (level 3); 1 load insert, 2 conductive plates, 1 control board. Independent knowledge; no Light Mobility prerequisite.'),
+            'best_diagnostic_tool_cost': ('需本人三级与工务诊断；普通钢2、导相铜复材板1、感相计量预坯1、控制板1、陶瓷护套1', 'Requires level 3 and Field Diagnostics; 2 steel, 1 conductive plate, 1 sensing preform, 1 control board, 1 ceramic sheath.'),
+            'best_isolate_cost': ('需本人三级与工务诊断；主手骨架／钻切器；停止动力与全部补能，保留储能与其它数据', 'Requires level 3 and Field Diagnostics; main-hand frame/cutter. Stops powered operation and all charging; preserves stored energy and other data.'),
+            'best_connect_cost': ('需本人三级与工务诊断；主手骨架／钻切器；仅接通，不补电、不维修、不降温', 'Requires level 3 and Field Diagnostics; main-hand frame/cutter. Reconnects only; no charging, repair or cooling.'),
+            'best_action_13': ('学习工务诊断', 'Learn Field Diagnostics'),
+            'best_action_14': ('制造工务诊断器', 'Assemble Diagnostic Tool'),
+            'best_action_15': ('隔离主手设备电池', 'Isolate Main-Hand Battery'),
+            'best_action_16': ('接通主手设备电池', 'Connect Main-Hand Battery'),
+            'best_page_0': ('工务', 'Work'),
+            'best_page_1': ('轻载', 'Stride'),
+            'best_page_2': ('诊断', 'Diag'),
+            'best_next_page': ('下一页', 'Next Page'),
+            'best_diagnostics_progress': ('研究 %1$s/3｜轻载 %2$s｜诊断 %3$s', 'Research %1$s/3 | Mobility %2$s | Diagnostics %3$s'),
+            'best_diagnostics_hint': ('诊断器主手右键检查副手；隔离仅在工位操作，维修冷却保留隔离', 'Tool: main hand; device: offhand. Isolate at bench.'),
+            'best_isolation_target': ('请将骨架或钻切器持于主手', 'Hold a frame or drill-cutter in your main hand.'),
+        }
+        for entry, pair in diagnostics_messages.items():
+            names[f'message.{MOD}.{entry}'] = pair[index]
         write(path, names)
     (ROOT / 'docs/BEST_ENGINEERING.md').write_text(best.BEST_DOC, encoding='utf-8', newline='\n')
-    print(f'Generated {len(best.BEST_NAMES)} Best textures/models/names, public bench resources and engineering/field service/light mobility documentation.')
+    print(f'Generated {len(best.BEST_NAMES)} Best textures/models/names, public bench resources and engineering/field service/light mobility/diagnostics documentation.')
 
 
 if __name__ == '__main__':

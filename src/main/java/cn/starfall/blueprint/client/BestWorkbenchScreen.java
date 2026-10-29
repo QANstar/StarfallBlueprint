@@ -25,24 +25,24 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
 
     @Override protected void init() {
         super.init();
-        int[] actions = page == 0 ? new int[]{0, 1, 2, 3, 5, 6, 4, 7} : new int[]{8, 9, 10, 11, 12};
+        int[] actions = switch(page){case 0 -> new int[]{0, 1, 2, 3, 5, 6, 4, 7};case 1 -> new int[]{8, 9, 10, 11, 12};default -> new int[]{13, 14, 15, 16};};
         for (int i = 0; i < actions.length; i++) addAction(actions[i], 8 + (i % 2) * 146, 40 + (i / 2) * 22, 138);
-        addRenderableWidget(Button.builder(Component.literal(page == 0 ? "轻载 >" : "< 工务"), button -> {
-            page = 1 - page;
+        addRenderableWidget(Button.builder(Component.translatable("message.starfall_blueprint.best_page_"+page).append(" >"), button -> {
+            page = (page + 1) % 3;
             rebuildWidgets();
         }).bounds(leftPos + 238, topPos + 3, 54, 18)
-                .tooltip(Tooltip.create(Component.literal("个人研究3级后可学习轻载通行；解锁组件装配、安装、切档与拆回")))
+                .tooltip(Tooltip.create(Component.translatable("message.starfall_blueprint.best_next_page")))
                 .build());
     }
 
     private void addAction(int action, int x, int y, int buttonWidth) {
-        addRenderableWidget(Button.builder(Component.literal(BestEngineering.actionLabel(action)), button -> {
+        addRenderableWidget(Button.builder(BestEngineering.actionLabelComponent(action), button -> {
             if (minecraft != null && minecraft.gameMode != null) {
                 minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action);
             }
         }).bounds(leftPos + x, topPos + y, buttonWidth, 20)
                 // Vanilla tooltips wrap their text and position it within the screen bounds.
-                .tooltip(Tooltip.create(Component.literal("消耗：" + BestEngineering.actionCost(action))))
+                .tooltip(Tooltip.create(BestEngineering.actionCostComponent(action)))
                 .build());
     }
 
@@ -62,9 +62,13 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
 
     @Override protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, titleLabelX, titleLabelY, 0xffedf4eb, false);
-        String progress = "研究 " + menu.researchLevel() + "/3 · 轻载" + (menu.hasLightMobility() ? "已学" : "未学");
-        graphics.drawString(font, "个人进度：" + progress, 10, 27, 0xff344f43, false);
-        graphics.drawString(font, page == 0 ? "维修/冷却持主手；整备包主手、装备副手" : "装卸/切档持主手骨架；跨步档站立也耗能", 10, 128, 0xff435b50, false);
+        Component progress = Component.translatable("message.starfall_blueprint.best_diagnostics_progress", menu.researchLevel(),
+                Component.translatable("message.starfall_blueprint.best_state_"+(menu.hasLightMobility()?"yes":"no")),
+                Component.translatable("message.starfall_blueprint.best_state_"+(menu.hasDiagnostics()?"yes":"no")));
+        graphics.drawString(font, progress, 10, 27, 0xff344f43, false);
+        Component hint = page == 2 ? Component.translatable("message.starfall_blueprint.best_diagnostics_hint")
+                : Component.literal(page == 0 ? "维修/冷却持主手；整备包主手、装备副手" : "装卸/切档持主手骨架；跨步档站立也耗能");
+        graphics.drawString(font, hint, 10, 128, 0xff435b50, false);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff344f43, false);
     }
 

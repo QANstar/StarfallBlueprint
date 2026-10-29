@@ -13,6 +13,7 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
     private int syncedResearchLevel;
     private boolean syncedLightMobility;
+    private boolean syncedDiagnostics;
 
     public BestWorkbenchMenu(int id, Inventory inventory) {
         this(id, inventory, ContainerLevelAccess.NULL);
@@ -41,17 +42,25 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
             }
             @Override public void set(int value) { syncedLightMobility = value != 0; }
         });
+        addDataSlot(new DataSlot() {
+            @Override public int get() {
+                return (inventory.player.level().isClientSide
+                        ? syncedDiagnostics : BestEngineering.hasDiagnostics(inventory.player)) ? 1 : 0;
+            }
+            @Override public void set(int value) { syncedDiagnostics = value != 0; }
+        });
     }
 
     public int researchLevel() { return syncedResearchLevel; }
     public boolean hasLightMobility() { return syncedLightMobility; }
+    public boolean hasDiagnostics() { return syncedDiagnostics; }
 
     @Override public boolean stillValid(Player player) {
         return stillValid(access, player, BestEngineering.WORKBENCH.get());
     }
 
     @Override public boolean clickMenuButton(Player player, int action) {
-        if (player.level().isClientSide || action < 0 || action > 12 || !stillValid(player)) return false;
+        if (player.level().isClientSide || action < 0 || action > 16 || !stillValid(player)) return false;
         boolean performed = BestEngineering.perform(player, action);
         broadcastChanges();
         return performed;

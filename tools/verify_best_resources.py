@@ -136,7 +136,56 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     assert '地面站立待命也照常耗能' in text and '不增加第四研究等级' in text
     assert '静态生成检查不代替运行时验收' in text
     assert '客户端双页菜单、原生穿戴和多人实机仍待验收' in text
-assert (len(items), len(recipes), len(canonical['catalogue'])) == (305, 245, 171)
+# Diagnostics is a parallel personal boolean, with a reusable ordinary read-only tool.
+learning = LEARNING['diagnostics']
+assert learning['requires'] == ['field_servicing'] and learning['minimum_research_level'] == 3
+assert learning['independent'] and learning['storage_key'] == 'BestDiagnostics'
+assert (learning['storage_type'], learning['persistence']) == ('boolean', 'player_saved_data_and_death_clone')
+assert learning['inputs'] == [dict(item='load', qty=1), dict(item='conductor', qty=2), dict(item='board', qty=1)]
+tool = items['best_diagnostic_tool']
+assert ASSEMBLY['best_diagnostic_tool'] == [('steel', 2), ('conductor', 1), ('sensor', 1), ('board', 1), ('sheath', 1)]
+assert ASSEMBLY_KNOWLEDGE['best_diagnostic_tool'] == ['field_servicing', 'diagnostics']
+assert (tool['item_type'], tool['max_stack_size'], tool['max_durability']) == ('ordinary', 1, 0)
+assert tool['attribute_modifiers'] == []
+assert not any(key in tool for key in ('energy_storage', 'thermal', 'manual_repair', 'operation', 'durability_system', 'equipment_slot'))
+readings = tool['diagnostics']
+assert (readings['activation'], readings['target_hand']) == ('main_hand_use', 'offhand')
+assert readings['targets'] == list(POWERED_EQUIPMENT)
+assert readings['requires'] == ['field_servicing', 'diagnostics'] and readings['minimum_research_level'] == 3
+assert readings['read_only'] and readings['reusable']
+assert readings['readings'] == ['energy', 'capacity', 'heat', 'overheat', 'wear', 'battery_isolated']
+assert readings['frame_readings'] == ['stride_installed', 'stride_mode', 'wearer_light_mobility_available']
+assert not any(readings[key] for key in ('changes_energy', 'changes_heat', 'changes_wear', 'changes_overheat', 'changes_item_data'))
+for key in POWERED_EQUIPMENT:
+    isolation = items[key]['battery_isolation']
+    assert isolation['station'] == 'best_workbench' and isolation['main_hand']
+    assert isolation['requires'] == ['field_servicing', 'diagnostics'] and isolation['minimum_research_level'] == 3
+    assert (isolation['storage_key'], isolation['storage_type'], isolation['default']) == ('BestBatteryIsolated', 'boolean', False)
+    assert (isolation['isolate_action'], isolation['connect_action']) == (15, 16)
+    assert isolation['stops_powered_operation'] and isolation['rejects_all_charging'] and isolation['rejects_energy_capability_receive']
+    assert all(isolation[entry] for entry in ('allows_manual_repair', 'allows_field_repair', 'allows_manual_cooling'))
+    assert not isolation['reconnect_adds_energy'] and isolation['persistence'] == 'item_custom_data'
+    assert isolation['preserves'] == ['energy', 'heat', 'overheat', 'wear', 'custom_name', 'work_ticks', 'all_other_item_data']
+assert items['best_workbench']['diagnostics_actions'] == dict(learn=13, assemble=14, isolate=15, connect=16)
+with Image.open(ART / 'textures/item/best_diagnostic_tool.png') as image:
+    assert image.size == (32, 32) and image.mode == 'RGBA'
+    assert 0 < sum(image.getchannel('A').histogram()[1:]) < 32 * 32
+for lang in ('zh_cn', 'en_us'):
+    names = json.loads((ART / 'lang' / f'{lang}.json').read_text(encoding='utf-8'))
+    for suffix in ('best_diagnostics_learned', 'best_diagnostics_required', 'best_battery_isolated', 'best_battery_connected',
+                   'best_already_isolated', 'best_already_connected', 'best_diagnostic_target', 'best_state_yes', 'best_state_no',
+                   'best_diagnostic_hint', 'best_diagnostic_assembled', 'best_diagnostics_cost', 'best_diagnostic_tool_cost',
+                   'best_isolate_cost', 'best_connect_cost', 'best_action_13', 'best_action_14', 'best_action_15', 'best_action_16',
+                   'best_page_0', 'best_page_1', 'best_page_2', 'best_next_page', 'best_diagnostics_hint'):
+        assert names[f'message.starfall_blueprint.{suffix}']
+    for suffix, argument_count in (('best_diagnostic_report', 11), ('best_diagnostic_frame', 3), ('best_diagnostics_progress', 3)):
+        value = names[f'message.starfall_blueprint.{suffix}']
+        assert all(f'%{i}$s' in value for i in range(1, argument_count + 1))
+for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻型工程首批.md'):
+    text = doc.read_text(encoding='utf-8')
+    assert '5/5通过' in text and 'BestDiagnostics' in text and 'BestBatteryIsolated' in text
+    assert '本节不宣称本轮服务端或客户端通过' in text
+assert (len(items), len(recipes), len(canonical['catalogue'])) == (306, 245, 172)
 armor = ART / 'textures/models/armor/best_frame_layer_2.png'
 assert armor.read_bytes() == (ATLAS / 'item-art/best_frame_layer_2.png').read_bytes()
 with Image.open(armor) as image:
@@ -146,4 +195,4 @@ with Image.open(armor) as image:
     assert image.crop((0,20,16,32)).getbbox() and image.crop((16,20,40,27)).getbbox()
 assert items['best_frame']['equipment_texture'].endswith('models/armor/best_frame_layer_2.png')
 assert len(json.loads((ART / 'blockstates/best_workbench.json').read_text())['variants']) == 4
-print('PASS: Best nine-cell bench, three-level manual assembly, field kit durability/repair and bucket cooling metadata, independent Light Mobility boolean, stride module install/modes/removal/standing cost and preserved frame data, no public equipment recipes, synced art/models/names; 305 items / 245 recipes / 171 catalogue entries.')
+print('PASS: Best nine-cell bench, three-level manual assembly, field kit durability/repair and bucket cooling metadata, independent Light Mobility boolean, stride module install/modes/removal/standing cost and preserved frame data, no public equipment recipes, synced art/models/names; read-only ordinary Diagnostic Tool, independent Diagnostics knowledge and battery isolation preservation; 306 items / 245 recipes / 172 catalogue entries.')

@@ -15,7 +15,7 @@ neoForge {
         gameTestServer {
             type = 'gameTestServer'
             systemProperty 'neoforge.enabledGameTestNamespaces', providers.gradleProperty('gameTestNamespaces')
-                .getOrElse('starfall_blueprint,starfall_blueprint_servicing,starfall_blueprint_mobility')
+                .getOrElse('starfall_blueprint,starfall_blueprint_servicing,starfall_blueprint_mobility,starfall_blueprint_diagnostics')
         }
     }
     mods { starfall_blueprint { sourceSet(sourceSets.main) } }

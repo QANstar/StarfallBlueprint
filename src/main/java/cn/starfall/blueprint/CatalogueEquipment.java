@@ -25,6 +25,7 @@ public final class CatalogueEquipment {
         if(key.equals("best_frame"))return new BestEquipment.Frame(p);
         if(key.equals("best_cutter"))return new BestEquipment.Cutter(p);
         if(key.equals("best_service_kit"))return new BestServiceKit(p);
+        if(key.equals("best_diagnostic_tool"))return new BestDiagnosticTool(p);
         if(key.equals("best_stride_module"))return new Item(p.stacksTo(1));
         if(key.equals("s01"))p.stacksTo(1);
         if(key.equals("lined_box")||key.equals("coated_box"))return new SealedSampleItem(p);

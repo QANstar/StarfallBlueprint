@@ -16,13 +16,14 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 public final class BestEquipment {
     public static final int CAPACITY=200000, MAX_HEAT=1000, RECOVER_HEAT=400, MAX_WEAR=1200;
     public static boolean isEquipment(ItemStack stack){return stack.getItem() instanceof Frame||stack.getItem() instanceof Cutter;}
+    public static boolean isIsolated(ItemStack stack){return isEquipment(stack)&&CatalogueEquipment.getData(stack).getBoolean("BestBatteryIsolated");}
     public static boolean strideInstalled(ItemStack stack){return stack.getItem() instanceof Frame&&CatalogueEquipment.getData(stack).getBoolean("BestStrideInstalled");}
     public static boolean strideEnabled(ItemStack stack){return strideInstalled(stack)&&CatalogueEquipment.getData(stack).getBoolean("BestStrideEnabled");}
     public static int charge(ItemStack stack){return Math.clamp(CatalogueEquipment.getData(stack).getInt("BestEnergy"),0,CAPACITY);}
     public static int heat(ItemStack stack){return Math.clamp(CatalogueEquipment.getData(stack).getInt("BestHeat"),0,MAX_HEAT);}
     public static int wear(ItemStack stack){return Math.clamp(CatalogueEquipment.getData(stack).getInt("BestWear"),0,MAX_WEAR);}
     public static void setWear(ItemStack stack,int wear){var data=CatalogueEquipment.getData(stack);data.putInt("BestWear",Math.clamp(wear,0,MAX_WEAR));CatalogueEquipment.setData(stack,data);}
-    public static boolean ready(ItemStack stack,int energy){return isEquipment(stack)&&charge(stack)>=energy&&wear(stack)<MAX_WEAR&&!CatalogueEquipment.getData(stack).getBoolean("BestOverheated")&&heat(stack)<MAX_HEAT;}
+    public static boolean ready(ItemStack stack,int energy){return isEquipment(stack)&&!isIsolated(stack)&&charge(stack)>=energy&&wear(stack)<MAX_WEAR&&!CatalogueEquipment.getData(stack).getBoolean("BestOverheated")&&heat(stack)<MAX_HEAT;}
     public static void spend(ItemStack stack,int energy,int heating){
         var data=CatalogueEquipment.getData(stack);data.putInt("BestEnergy",Math.max(0,charge(stack)-energy));int h=Math.min(MAX_HEAT,heat(stack)+heating);data.putInt("BestHeat",h);if(h==MAX_HEAT)data.putBoolean("BestOverheated",true);CatalogueEquipment.setData(stack,data);
     }
@@ -32,17 +33,17 @@ public final class BestEquipment {
         var data=CatalogueEquipment.getData(stack);data.putInt("BestHeat",next);if(next<=RECOVER_HEAT)data.putBoolean("BestOverheated",false);CatalogueEquipment.setData(stack,data);
     }
     public static String status(ItemStack stack){
-        String state=wear(stack)>=MAX_WEAR?"需维修":CatalogueEquipment.getData(stack).getBoolean("BestOverheated")?"过热停机":charge(stack)<(stack.getItem() instanceof Cutter?256:strideEnabled(stack)?24:16)?"电量不足":"就绪";
+        String state=isIsolated(stack)?Component.translatable("message.starfall_blueprint.best_battery_isolated").getString():wear(stack)>=MAX_WEAR?"需维修":CatalogueEquipment.getData(stack).getBoolean("BestOverheated")?"过热停机":charge(stack)<(stack.getItem() instanceof Cutter?256:strideEnabled(stack)?24:16)?"电量不足":"就绪";
         return state+" · "+charge(stack)+"/"+CAPACITY+"XH · 温度 "+heat(stack)+"/"+MAX_HEAT+" · 耐久 "+(MAX_WEAR-wear(stack))+"/"+MAX_WEAR+(stack.getItem() instanceof Frame?strideInstalled(stack)?" · 组件已装 · 跨步档"+(strideEnabled(stack)?"开启":"关闭"):" · 未装跨步组件":"");
     }
     public static IEnergyStorage energy(ItemStack stack){return new IEnergyStorage(){
         private long tick(){var server=net.neoforged.neoforge.server.ServerLifecycleHooks.getCurrentServer();return server==null?0:server.overworld().getGameTime();}
-        public int receiveEnergy(int max,boolean simulate){var data=CatalogueEquipment.getData(stack);int used=data.getLong("BestChargeTick")==tick()?data.getInt("BestChargeUsed"):0;int n=Math.max(0,Math.min(Math.min(max,512-used),CAPACITY-charge(stack)));if(n>0&&!simulate){data.putInt("BestEnergy",charge(stack)+n);data.putLong("BestChargeTick",tick());data.putInt("BestChargeUsed",used+n);CatalogueEquipment.setData(stack,data);}return n;}
+        public int receiveEnergy(int max,boolean simulate){if(isIsolated(stack))return 0;var data=CatalogueEquipment.getData(stack);int used=data.getLong("BestChargeTick")==tick()?data.getInt("BestChargeUsed"):0;int n=Math.max(0,Math.min(Math.min(max,512-used),CAPACITY-charge(stack)));if(n>0&&!simulate){data.putInt("BestEnergy",charge(stack)+n);data.putLong("BestChargeTick",tick());data.putInt("BestChargeUsed",used+n);CatalogueEquipment.setData(stack,data);}return n;}
         public int extractEnergy(int max,boolean simulate){return 0;}
-        public int getEnergyStored(){return charge(stack);}public int getMaxEnergyStored(){return CAPACITY;}public boolean canReceive(){return true;}public boolean canExtract(){return false;}
+        public int getEnergyStored(){return charge(stack);}public int getMaxEnergyStored(){return CAPACITY;}public boolean canReceive(){return !isIsolated(stack);}public boolean canExtract(){return false;}
     };}
     public static int recharge(Player player,ItemStack target){
-        if(player.level().isClientSide||!isEquipment(target))return 0;
+        if(player.level().isClientSide||!isEquipment(target)||isIsolated(target))return 0;
         int total=0;
         for(int i=0;i<36;i++){
             var source=player.getInventory().getItem(i);if(!source.is(CatalogueContent.item("s01")))continue;
@@ -85,6 +86,7 @@ public final class BestEquipment {
         @Override public float getDestroySpeed(ItemStack stack,BlockState state){return ready(stack,256)?super.getDestroySpeed(stack,state)*2:0;}
         @Override public boolean canAttackBlock(BlockState state,Level level,BlockPos pos,Player player){return BestEngineering.researchLevel(player)>=2&&ready(player.getMainHandItem(),256)&&super.canAttackBlock(state,level,pos,player);}
         @Override public boolean mineBlock(ItemStack stack,Level level,BlockState state,BlockPos pos,LivingEntity entity){
+            if(isIsolated(stack))return false;
             if(!level.isClientSide&&state.getDestroySpeed(level,pos)!=0){if(!ready(stack,256))return false;spend(stack,256,120);setWear(stack,wear(stack)+1);}return true;
         }
         @Override public boolean hurtEnemy(ItemStack stack,LivingEntity target,LivingEntity attacker){return true;}

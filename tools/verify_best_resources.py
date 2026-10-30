@@ -186,7 +186,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     text = doc.read_text(encoding='utf-8')
     assert '5/5通过' in text and 'BestDiagnostics' in text and 'BestBatteryIsolated' in text
     assert '本节不宣称本轮服务端或客户端通过' in text
-assert (len(items), len(recipes), len(canonical['catalogue'])) == (300 + len(BEST_NAMES), 245, 166 + len(BEST_NAMES))
+assert (len(items), len(recipes), len(canonical['catalogue'])) == (312, 245, 178)
 armor = ART / 'textures/models/armor/best_frame_layer_2.png'
 assert armor.read_bytes() == (ATLAS / 'item-art/best_frame_layer_2.png').read_bytes()
 with Image.open(armor) as image:
@@ -225,7 +225,7 @@ assert drill['harvest_tier']=='iron' and drill['ordinary_drops']
 assert drill['deny']==['block_entities','unbreakable','protected_blocks']
 assert mech['field_service']['repair'] == dict(material='steel',count=1,wear_restored=200,health_restored=5)
 assert mech['field_service']['cooling'] == dict(material='water_bucket',count=1,heat_reduction=400,returns='bucket')
-assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20)
+assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20,drill_arm=21,excavator_arm=22,reinforced_body=23)
 for path, size in [(ART / 'textures/item/best_mech.png',(32,32)),(ART / 'textures/entity/best_engineering_mech.png',(128,128))]:
     with Image.open(path) as image:
         assert image.size == size and image.mode == 'RGBA'
@@ -235,7 +235,7 @@ for lang in ('zh_cn','en_us'):
     assert names['entity.starfall_blueprint.best_engineering_mech']
     for suffix, translations in BEST_UI_MESSAGES.items():
         assert names[f'ui.starfall_blueprint.best_{suffix}'] == translations[0 if lang == 'zh_cn' else 1]
-    for suffix in ('title','health','energy','heat','wear','ready','destroyed','isolated','thermal_locked','worn_out','unqualified','no_power','drill_power','hot','low_power','worn','request','standby','controls'):
+    for suffix in ('title','health','energy','heat','wear','ready','destroyed','isolated','thermal_locked','worn_out','unqualified','no_power','drill_power','no_arm','work_power','arm','hot','low_power','worn','request','standby','controls'):
         assert names[f'hud.starfall_blueprint.mech.panel.{suffix}']
     assert names['key.starfall_blueprint.mech_drill'] and names['key.categories.starfall_blueprint']
     for key in ('title','energy','heat','wear','isolation','drill','wait','controls'):
@@ -252,4 +252,129 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     assert '客户端预览不扣料、不学习、不改变装备状态' in text
     assert '冷却到600仍保持热锁提示，须降至400恢复' in text
     assert 'G键输入、骑乘手感与多人实机仍须另行验收' in text
+# Engineering arms share existing knowledge and work checks; no new recipes or power storage.
+assert len(LEARNING) == 6
+assert ASSEMBLY['best_mech_drill_arm'] == [('steel',8), ('conductor',4), ('head',2), ('board',1), ('steel_fix',4)]
+assert ASSEMBLY['best_mech_excavator_arm'] == [('steel',8), ('load',4), ('conductor',2), ('steel_fix',4), ('sheath',2)]
+slot = mech['engineering_arm_slot']
+assert (slot['storage_key'], slot['max_installed'], slot['independent_of']) == ('EngineeringArm', 1, 'UtilityModule')
+assert (slot['factory_default'], slot['missing_legacy_value'], slot['explicit_empty'], slot['unknown_value']) == ('drill','drill','none','none')
+assert slot['conditions'] == ['isolated', 'unoccupied', 'alive', 'stationary', 'grounded', 'nonfluid']
+assert slot['requires'] == ASSEMBLY_KNOWLEDGE['best_mech']
+assert not slot['install']['hot_swap'] and slot['install']['require_empty_slot']
+assert slot['remove']['inventory_slots'] == 36 and slot['remove']['require_empty_main_inventory_slot']
+assert not any(slot['remove'][k] for k in ('consumes_pickaxe','damages_pickaxe','failure_falls_through_to_isolation'))
+assert 'EngineeringArm' in mech['packed_state']['preserves']
+work = mech['engineering_work']
+assert work['networking_action'] == 0 and work['server_chooses_installed_arm'] and work['success_only_costs']
+assert work['no_arm_allows_movement'] and not work['no_arm_allows_work'] and not work['automatic_area_operation']
+assert work['deny'] == ['block_entities', 'fluids', 'unbreakable', 'protected_blocks']
+for key, energy, heat, tool, tag in [('best_mech_drill_arm',32000,120,'minecraft:iron_pickaxe','minecraft:mineable/pickaxe'), ('best_mech_excavator_arm',12000,45,'minecraft:iron_shovel','minecraft:mineable/shovel')]:
+    arm = items[key]
+    assert (arm['real_item'],arm['max_stack_size'],arm['max_durability'],arm['item_type']) == (True,1,0,'ordinary')
+    assert not any(k in arm for k in ('energy_storage','thermal','durability_system','equipment_slot'))
+    assert ASSEMBLY_KNOWLEDGE[key] == ASSEMBLY_KNOWLEDGE['best_mech']
+    spec = arm['engineering_arm']
+    assert (spec['energy'],spec['heat'],spec['wear'],spec['cooldown_ticks'],spec['tool'],spec['mineable_tag']) == (energy,heat,1,20,tool,tag)
+    assert arm['manual_assembly']['output_count'] == 1
+    with Image.open(ART / 'textures/item' / f'{key}.png') as image:
+        assert image.size == (32,32) and image.mode == 'RGBA'
+        assert 0 < sum(image.getchannel('A').histogram()[1:]) < 1024
+assert (ART / 'textures/item/best_mech_drill_arm.png').read_bytes() != (ART / 'textures/item/best_mech_excavator_arm.png').read_bytes()
+for lang in ('zh_cn','en_us'):
+    names = json.loads((ART / 'lang' / f'{lang}.json').read_text(encoding='utf-8'))
+    for suffix in ('best_action_21','best_action_22','best_mech_drill_arm_cost','best_mech_excavator_arm_cost','best_mech_drill_arm_assembled','best_mech_excavator_arm_assembled'):
+        assert names[f'message.starfall_blueprint.{suffix}']
+    for suffix in ('none','installed','controls','failed'):
+        assert names[f'mech.starfall_blueprint.arm.{suffix}']
+    assert names['mech.starfall_blueprint.arm.installed'].count('%s') == 1
+    assert names['hud.starfall_blueprint.mech.panel.arm'].count('%s') == 1
+    assert '%1$s' in names['hud.starfall_blueprint.mech.panel.standby'] and '%2$s' in names['hud.starfall_blueprint.mech.panel.standby']
+    for key in ('best_mech_drill_arm','best_mech_excavator_arm','best_mech_arm_install'):
+        assert names[f'tooltip.starfall_blueprint.{key}']
+for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻型工程首批.md'):
+    text = doc.read_text(encoding='utf-8')
+    assert 'EngineeringArm' in text and 'MEC-06部分实现' in text and '12,000 XH' in text
+# Body/cargo is one incremental MEC-04 step; manual-only and independent of both old slots.
+assert len(BEST_NAMES) == 12 and len(LEARNING) == 6
+body = items['best_mech_reinforced_body']
+assert ASSEMBLY['best_mech_reinforced_body'] == [('steel',24), ('load',12), ('conductor',8), ('steel_fix',16), ('sheath',8)]
+assert ASSEMBLY_KNOWLEDGE['best_mech_reinforced_body'] == ASSEMBLY_KNOWLEDGE['best_mech']
+assert (body['real_item'], body['item_type'], body['max_stack_size'], body['max_durability']) == (True, 'ordinary', 1, 0)
+assert body['manual_assembly']['output_count'] == 1 and body['attribute_modifiers'] == []
+assert not any(k in body for k in ('energy_storage', 'thermal', 'durability_system', 'equipment_slot'))
+slot = mech['body_slot']
+assert (slot['storage_key'], slot['max_installed'], slot['independent_of']) == ('Body', 1, ['UtilityModule','EngineeringArm'])
+assert all(slot[k] == '' for k in ('default','missing_legacy_value','unknown_value','standard_value'))
+assert slot['reinforced_value'] == 'best_mech_reinforced_body'
+assert slot['minimum_research_level'] == 3 and slot['requires'] == ASSEMBLY_KNOWLEDGE['best_mech']
+assert slot['conditions'] == ['isolated','unoccupied','alive','stationary','grounded','nonfluid']
+assert slot['install'] == dict(activation='crouch_main_hand_body_use_on_actual_mech', consumes=1,
+    require_standard_body=True, failure_changes_nothing=True, heals=False)
+removal = slot['remove']
+assert removal['activation'] == 'crouch_main_hand_diagnostic_offhand_minecraft_iron_block_use_on_actual_mech'
+assert not removal['consumes_iron_block'] and removal['returns'] == dict(item='best_mech_reinforced_body',qty=1)
+assert removal['inventory_slots'] == 36 and removal['require_empty_main_inventory_slot']
+assert (removal['reject_energy_above'], removal['reject_health_above'], removal['require_empty_cargo_slots']) == (20000000,100,list(range(9,18)))
+assert removal['failure_changes_nothing'] and not removal['discards_excess'] and not removal['failure_falls_through_to_isolation']
+assert set(slot['preserves']) >= {'exact_health','energy','UtilityModule','EngineeringArm','Cargo','all_other_state'}
+assert mech['body_profiles'] == dict(
+    standard=dict(capacity=20000000,max_health=100,cargo_slots=9,movement_speed=0.22,drive_speed=0.28,movement_energy=400,drive_movement_energy=600,movement_heat=4,drive_movement_heat=6),
+    reinforced=dict(capacity=30000000,max_health=160,cargo_slots=18,movement_speed=0.18,drive_speed=0.23,movement_energy=600,drive_movement_energy=900,movement_heat=6,drive_movement_heat=8))
+assert mech['thermal'] == dict(overheat=1000,resume=400,cooling_per_tick=2) and mech['max_wear'] == 2400
+assert set(mech['packed_state']['preserves']) >= {'Body','Cargo','UtilityModule','EngineeringArm'}
+cargo = mech['cargo']
+assert cargo['storage_key'] == 'Cargo' and cargo['initially_empty'] and cargo['actual_inventory']
+assert (cargo['standard_slots'],cargo['reinforced_slots']) == (9,18)
+assert cargo['open']['activation'] == 'crouch_main_hand_minecraft_chest_use_on_actual_mech'
+assert cargo['open']['maximum_distance'] == 8 and cargo['open']['recheck_while_open']
+assert cargo['open']['conditions'] == slot['conditions'] and cargo['open']['requires'] == slot['requires']
+assert not any(cargo[k] for k in ('new_learning','automatic_pickup','packed_mech_nesting','downgrade_discards_excess'))
+assert not cargo['open']['consumes_chest'] and cargo['persistence'] == ['entity_nbt','packed_item','deploy']
+assert cargo['death'] == dict(drop_contents_separately=True,clear_dead_packed_item=True,respects_entity_drops_rule=True)
+for key, speed, energy, heat, cooling in [('best_mech_radiator',0.18,600,6,4),('best_mech_drive',0.23,900,8,2)]:
+    profile=items[key]['utility_module']['body_profiles']['reinforced']
+    assert (profile['movement_speed'],profile['energy_per_actual_ground_movement_tick'],profile['heat_per_actual_ground_movement_tick'],profile['passive_cooling_per_tick']) == (speed,energy,heat,cooling)
+with Image.open(ART/'textures/item/best_mech_reinforced_body.png') as image:
+    assert image.size == (32,32) and image.mode == 'RGBA'
+    assert 0 < sum(image.getchannel('A').histogram()[1:]) < 1024
+    assert len(image.getcolors(1024)) > 5
+body_bytes=(ART/'textures/item/best_mech_reinforced_body.png').read_bytes()
+assert all(body_bytes != (ART/'textures/item'/f'{key}.png').read_bytes() for key in BEST_NAMES if key != 'best_mech_reinforced_body')
+for lang in ('zh_cn','en_us'):
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    for prefix,suffixes in [('message',('best_action_23','best_mech_reinforced_body_cost','best_mech_reinforced_body_assembled')),
+            ('ui',('best_action_23','best_material_action_23','mech_cargo_hint')),
+            ('tooltip',('best_mech_reinforced_body','best_mech_body_install')),
+            ('mech',('body.none','body.installed','body.controls','body.failed'))]:
+        for suffix in suffixes: assert names[f'{prefix}.starfall_blueprint.{suffix}']
+    assert names['mech.starfall_blueprint.body.installed'].count('%s') == 1
+    assert names['hud.starfall_blueprint.mech.panel.body'].count('%s') == 1
+    assert names['menu.starfall_blueprint.best_mech_cargo'] == ('机甲货舱' if lang == 'zh_cn' else 'Mech cargo')
+    if lang == 'zh_cn': assert names['ui.starfall_blueprint.mech_cargo_hint'] == '隔离整备 · 禁止存入收纳机甲'
+for doc in (ROOT/'docs/BEST_ENGINEERING.md',ATLAS.parent/'18_贝斯特轻型工程首批.md',ATLAS.parent/'02_科技树设定/02_贝斯特机械科技树.md'):
+    text=doc.read_text(encoding='utf-8')
+    assert all(s in text for s in ('2026-10-30','MEC-04容量步骤','精确当前生命','9..17','30,000,000 XH','不进行UI测试'))
+# Fresh proof for both repositories, existing arm art and all preexisting translation key presence.
+boundary = ROOT.parent/'body_resources_preservation.json'
+assert boundary.is_file(), 'Capture the protected-resource boundary before generation'
+saved=json.loads(boundary.read_text(encoding='utf-8'))
+for filename,digest in saved['files'].items():
+    assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
+for lang,entries in saved['lang'].items():
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert set(saved['existing_keys'][lang]) <= names.keys(),lang
+print(f'PASS: reinforced body/cargo boundaries; preserved {len(saved["files"])} both-repo resource/arm hashes and {sum(map(len,saved["lang"].values()))} remote bilingual values; all existing translation keys retained.')
+
+# Optional persisted pre-generation boundary: preserves the merged Lingchuan resources and keys.
+boundary = ROOT.parent / 'arm_resources_preservation.json'
+if boundary.is_file():
+    saved = json.loads(boundary.read_text(encoding='utf-8'))
+    for filename, digest in saved['files'].items():
+        assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest, filename
+    for lang, entries in saved['lang'].items():
+        names = json.loads((ART / 'lang' / f'{lang}.json').read_text(encoding='utf-8'))
+        assert all(names.get(k) == v for k,v in entries.items()), lang
+    print(f'PASS: preserved {len(saved["files"])} Lingchuan resource hashes and {sum(map(len,saved["lang"].values()))} bilingual keys.')
 print(f'PASS: Best manual-only assembly, historical servicing/mobility/diagnostics boundaries, independent Mech Operation, packed state and server-authoritative ride/drill metadata; synced original art/models/bilingual names; {len(items)} items / {len(recipes)} recipes / {len(canonical["catalogue"])} catalogue entries.')

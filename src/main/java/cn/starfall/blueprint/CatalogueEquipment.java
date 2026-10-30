@@ -33,6 +33,18 @@ public final class CatalogueEquipment {
                 lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_module_install"));
             }
         };
+        if(key.equals("best_mech_drill_arm")||key.equals("best_mech_excavator_arm"))return new Item(p.stacksTo(1)){
+            @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
+                lines.add(Component.translatable("tooltip.starfall_blueprint."+key));
+                lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_arm_install"));
+            }
+        };
+        if(key.equals("best_mech_reinforced_body"))return new Item(p.stacksTo(1)){
+            @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
+                lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_reinforced_body"));
+                lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_body_install"));
+            }
+        };
         if(key.equals("best_frame"))return new BestEquipment.Frame(p);
         if(key.equals("best_cutter"))return new BestEquipment.Cutter(p);
         if(key.equals("best_service_kit"))return new BestServiceKit(p);

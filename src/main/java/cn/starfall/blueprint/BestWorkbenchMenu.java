@@ -27,10 +27,10 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
         this.inventory = inventory;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                addSlot(new Slot(inventory, 9 + row * 9 + col, 70 + col * 18, 170 + row * 18));
+                addSlot(new Slot(inventory, 9 + row * 9 + col, 70 + col * 18, 188 + row * 18));
             }
         }
-        for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, 70 + col * 18, 228));
+        for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, 70 + col * 18, 246));
         addDataSlot(new DataSlot() {
             @Override public int get() {
                 return inventory.player.level().isClientSide
@@ -77,7 +77,7 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
     }
 
     @Override public boolean clickMenuButton(Player player, int action) {
-        if (player.level().isClientSide || action < 0 || action > 20 || !stillValid(player)) return false;
+        if (player.level().isClientSide || action < 0 || action > 23 || !stillValid(player)) return false;
         boolean performed = BestEngineering.perform(player, action);
         broadcastChanges();
         return performed;

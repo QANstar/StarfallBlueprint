@@ -1,6 +1,7 @@
 package cn.starfall.blueprint.client;
 
 import cn.starfall.blueprint.BestMechEntity;
+import cn.starfall.blueprint.BestMechArms;
 import cn.starfall.blueprint.BestMechNetworking;
 import cn.starfall.blueprint.StarfallBlueprint;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -26,7 +27,7 @@ import java.util.Locale;
 public final class BestMechClient {
     private static final KeyMapping DRILL = new KeyMapping("key.starfall_blueprint.mech_drill",KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_G,"key.categories.starfall_blueprint");
-    // This rate-limits requests, not successful server drilling. No unsynchronized entity fields are read.
+    // This rate-limits requests, not successful server work. No unsynchronized entity fields are read.
     private static int requestTicks;
     private static BestMechEntity lastVehicle;
 
@@ -57,7 +58,19 @@ public final class BestMechClient {
     /** Immutable synchronized inputs. requestTicks is only the local request throttle, never drill cooldown. */
     static record Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                            boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
-                           int requestTicks, int movementCost) {
+                           int requestTicks, int movementCost, String armKey, int workCost, int capacity) {
+        Snapshot(float health, float maxHealth, int energy, int heat, int wear,
+                 boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
+                 int requestTicks, int movementCost, String armKey, int workCost) {
+            this(health, maxHealth, energy, heat, wear, alive, isolated, thermalLocked, qualified,
+                    requestTicks, movementCost, armKey, workCost, BestMechEntity.CAPACITY);
+        }
+        Snapshot(float health, float maxHealth, int energy, int heat, int wear,
+                 boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
+                 int requestTicks, int movementCost) {
+            this(health, maxHealth, energy, heat, wear, alive, isolated, thermalLocked, qualified,
+                    requestTicks, movementCost, BestMechArms.DRILL, 32000);
+        }
         Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                  boolean alive, boolean isolated, boolean thermalLocked, boolean qualified, int requestTicks) {
             this(health, maxHealth, energy, heat, wear, alive, isolated, thermalLocked, qualified, requestTicks, 400);
@@ -68,7 +81,7 @@ public final class BestMechClient {
         Minecraft mc=Minecraft.getInstance();
         if(mc.options.hideGui || mc.player==null || !(mc.player.getVehicle() instanceof BestMechEntity mech))return;
         Snapshot sample = new Snapshot(mech.getHealth(), mech.getMaxHealth(), mech.energy(), mech.heat(), mech.wear(),
-                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost());
+                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.armKey(), mech.workCost(), mech.capacity());
         renderPanel(graphics, 8, 8, sample);
     }
 
@@ -80,7 +93,7 @@ public final class BestMechClient {
         graphics.fill(x, y, x + 3, y + PANEL_HEIGHT, status.color());
         graphics.fill(x + 3, y, x + PANEL_WIDTH, y + 20, 0xff22333d);
         graphics.fill(x + 8, y + 20, x + 240, y + 21, 0xff42555b);
-        drawFit(graphics, label("title"), x + 9, y + 6, 230, TEXT);
+        drawFit(graphics, label("title").copy().append(" · ").append(label("arm", BestMechArms.name(sample.armKey()))), x + 9, y + 6, 230, TEXT);
         int lineY = y + 25;
         for(var line : mc.font.split(label(status.key()), 230)) {
             if(lineY >= y + 43) break;
@@ -89,15 +102,16 @@ public final class BestMechClient {
         }
         resource(graphics, x, y + 46, "health", decimal(sample.health()) + " / " + decimal(sample.maxHealth()),
                 sample.health(), sample.maxHealth(), sample.health() <= sample.maxHealth() * 0.25f ? DANGER : NORMAL);
-        resource(graphics, x, y + 63, "energy", compactEnergy(sample.energy()) + " / " + compactEnergy(BestMechEntity.CAPACITY) + " XH",
-                sample.energy(), BestMechEntity.CAPACITY, sample.energy() < sample.movementCost() ? DANGER : sample.energy() < BestMechEntity.CAPACITY / 10 ? WARNING : NORMAL);
+        resource(graphics, x, y + 63, "energy", compactEnergy(sample.energy()) + " / " + compactEnergy(sample.capacity()) + " XH",
+                sample.energy(), sample.capacity(), sample.energy() < sample.movementCost() ? DANGER : sample.energy() < sample.capacity() / 10 ? WARNING : NORMAL);
         resource(graphics, x, y + 80, "heat", sample.heat() + " / " + BestMechEntity.MAX_HEAT,
                 sample.heat(), BestMechEntity.MAX_HEAT, sample.thermalLocked() || sample.heat() >= BestMechEntity.MAX_HEAT ? DANGER : sample.heat() >= 800 ? WARNING : NORMAL);
         resource(graphics, x, y + 97, "wear", sample.wear() + " / " + BestMechEntity.MAX_WEAR,
                 sample.wear(), BestMechEntity.MAX_WEAR, sample.wear() >= BestMechEntity.MAX_WEAR ? WORN : sample.wear() >= 2160 ? WARNING : NORMAL);
         Component request = sample.requestTicks() > 0
                 ? label("request", DRILL.getTranslatedKeyMessage(), sample.requestTicks())
-                : label("standby", DRILL.getTranslatedKeyMessage());
+                : sample.armKey().isEmpty() ? label("no_arm")
+                : label("standby", DRILL.getTranslatedKeyMessage(), compactEnergy(sample.workCost()));
         drawFit(graphics, request, x + 9, y + 116, 230, sample.requestTicks() > 0 ? WARNING : TEXT);
         drawFit(graphics, label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
                 x + 9, y + 129, 230, MUTED);
@@ -105,7 +119,7 @@ public final class BestMechClient {
 
     private record PanelStatus(String key, int color) {}
 
-    /** System readiness only; no claim of movement, a valid drill target, or a successful request. */
+    /** System readiness only; no claim of movement, a valid work target, or a successful request. */
     private static PanelStatus status(Snapshot sample) {
         if(!sample.alive() || sample.health() <= 0) return new PanelStatus("destroyed", DANGER);
         if(sample.isolated()) return new PanelStatus("isolated", ISOLATED);
@@ -113,9 +127,10 @@ public final class BestMechClient {
         if(sample.wear() >= BestMechEntity.MAX_WEAR) return new PanelStatus("worn_out", WORN);
         if(!sample.qualified()) return new PanelStatus("unqualified", ISOLATED);
         if(sample.energy() < sample.movementCost()) return new PanelStatus("no_power", DANGER);
-        if(sample.energy() < 32000) return new PanelStatus("drill_power", WARNING);
+        if(sample.armKey().isEmpty()) return new PanelStatus("no_arm", WARNING);
+        if(sample.energy() < sample.workCost()) return new PanelStatus("work_power", WARNING);
         if(sample.heat() >= 800) return new PanelStatus("hot", WARNING);
-        if(sample.energy() < BestMechEntity.CAPACITY / 10) return new PanelStatus("low_power", WARNING);
+        if(sample.energy() < sample.capacity() / 10) return new PanelStatus("low_power", WARNING);
         if(sample.wear() >= 2160) return new PanelStatus("worn", WARNING);
         return new PanelStatus("ready", NORMAL);
     }

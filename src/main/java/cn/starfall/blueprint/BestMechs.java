@@ -14,6 +14,8 @@ public final class BestMechs {
     public static final DeferredHolder<EntityType<?>, EntityType<BestMechEntity>> TYPE = TYPES.register("best_engineering_mech",
             () -> EntityType.Builder.of(BestMechEntity::new, MobCategory.MISC).sized(1.8f, 3.2f).passengerAttachments(2.2f)
                     .clientTrackingRange(10).updateInterval(1).build(StarfallBlueprint.id("best_engineering_mech").toString()));
+    public static final DeferredHolder<net.minecraft.world.inventory.MenuType<?>, net.minecraft.world.inventory.MenuType<BestMechCargoMenu>> CARGO_MENU = StarfallBlueprint.MENUS.register("best_mech_cargo",
+            () -> net.neoforged.neoforge.common.extensions.IMenuTypeExtension.create(BestMechCargoMenu::new));
     public static void initialize() {}
     public static void register(IEventBus bus) {
         TYPES.register(bus);

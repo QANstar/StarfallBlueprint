@@ -17,11 +17,11 @@ def write(path, value):
 
 
 MECH_MESSAGES = {
- 'message.best_mech_report': ('工程机甲｜电量 %1$s/%2$s XH｜热 %3$s/1000｜磨损 %4$s/2400｜结构 %5$s/100｜隔离 %6$s｜热锁 %7$s（400恢复）｜工时 %8$s/100｜钻臂冷却 %9$s/20刻', 'Engineering Mech | Energy %1$s/%2$s XH | Heat %3$s/1000 | Wear %4$s/2400 | Structure %5$s/100 | Isolated %6$s | Heat lock %7$s (recover 400) | Work ticks %8$s/100 | Drill cooldown %9$s/20 ticks'),
+ 'message.best_mech_report': ('工程机甲｜电量 %1$s/%2$s XH｜热 %3$s/1000｜磨损 %4$s/2400｜结构 %5$s｜隔离 %6$s｜热锁 %7$s（400恢复）｜工时 %8$s/100｜作业冷却 %9$s/20刻', 'Engineering Mech | Energy %1$s/%2$s XH | Heat %3$s/1000 | Wear %4$s/2400 | Structure %5$s | Isolated %6$s | Heat lock %7$s (recover 400) | Work ticks %8$s/100 | Work cooldown %9$s/20 ticks'),
  'message.best_mech_power': ('机甲电源隔离：%1$s｜电量 %2$s XH', 'Mech battery isolated: %1$s | Energy %2$s XH'),
  'message.best_mech_charging': ('机甲蓄能 %1$s/%2$s XH', 'Mech charging %1$s/%2$s XH'),
  'tooltip.best_mech.resources': ('%1$s/%2$s XH｜热 %3$s｜磨损 %4$s', '%1$s/%2$s XH | Heat %3$s | Wear %4$s'),
- 'tooltip.best_mech.structure': ('结构 %1$s/100｜电池隔离 %2$s', 'Structure %1$s/100 | Battery isolated %2$s'),
+ 'tooltip.best_mech.structure': ('结构 %1$s｜电池隔离 %2$s', 'Structure %1$s | Battery isolated %2$s'),
  'tooltip.best_mech.charge': ('潜行按住右键瞄准基地储能块：≤5000 XH/刻', 'Sneak + hold use on base storage: up to 5000 XH/t'),
  'tooltip.best_mech.deploy': ('非潜行右键地面部署；须3×3承托净空', 'Use on ground to deploy; needs 3x3 support/clearance'),
  'tooltip.best_mech.isolation': ('主手机甲、副手诊断器：非潜行对空气右键切换隔离', 'Mech in main hand, diagnostic offhand: use in air to toggle isolation'),
@@ -38,8 +38,8 @@ MECH_MESSAGES = {
  'mech.module.installed': ('通用槽：%s', 'Utility slot: %s'),
  'mech.module.controls': ('潜行主手模组右键安装；潜行主手诊断器＋副手钢制固定件拆回（不耗固定件）；无固定件时潜行诊断切换隔离', 'Sneak-use a main-hand module to install; sneak-use a main-hand diagnostic tool with an offhand steel fastener to remove (fastener retained). Without the fastener, sneak-diagnose toggles isolation.'),
  'mech.module.failed': ('装拆失败：需本人驾驶全知识，机甲隔离、空载、存活、停稳落地且不在流体；安装须空槽，拆回须主背包空间', 'Module change rejected: requires all personal mech knowledge and an isolated, unoccupied, living, stationary mech on dry ground. Installation needs an empty slot; removal needs main-inventory room.'),
- 'tooltip.best_mech_radiator': ('自然散热4／刻（基础2）；移动仍为速度0.22、400 XH／刻、热4／刻', 'Passive cooling 4/t (base 2); movement remains speed 0.22, 400 XH/t and 4 heat/t.'),
- 'tooltip.best_mech_drive': ('移动速度0.28（基础0.22）；实际地面移动600 XH／刻、热6／刻；自然散热2／刻', 'Movement speed 0.28 (base 0.22); actual grounded movement costs 600 XH/t and 6 heat/t; passive cooling 2/t.'),
+ 'tooltip.best_mech_radiator': ('自然散热4／刻（基础2）；标准机体速度0.22、移动400 XH／刻热4；强化机体速度0.18、600 XH／刻热6', 'Passive cooling 4/t (base 2); standard body: speed 0.22, 400 XH/t, 4 heat/t; reinforced body: speed 0.18, 600 XH/t, 6 heat/t.'),
+ 'tooltip.best_mech_drive': ('标准机体速度0.28、移动600 XH／刻热6；强化机体速度0.23、900 XH／刻热8；自然散热2／刻', 'Standard body: speed 0.28, movement 600 XH/t and 6 heat/t; reinforced body: speed 0.23, 900 XH/t and 8 heat/t. Passive cooling 2/t.'),
  'tooltip.best_mech_module_install': ('仅1个互斥通用槽；主手持模组潜行右键已部署机甲安装，需驾驶全知识、隔离空载、存活、停稳落地且不在流体；先拆后换', 'One exclusive utility slot. Sneak-use a main-hand module on a deployed mech; requires all mech knowledge, isolation, no passengers, alive and stationary on dry ground. Remove before swapping.'),
  'message.best_mech_learning_cost': ('需三级、轻载与诊断；承相4、导相4、感相2、控制板2', 'Requires level 3, Mobility and Diagnostics; 4 load inserts, 4 conductive plates, 2 sensing preforms, 2 boards.'),
  'message.best_mech_assembly_cost': ('需三级、轻载、诊断与驾驶；钢32、承相16、导相8、板4、固定件16、磨头2、感相2、护套8；不耗能匣，出厂空电', 'Requires level 3, Mobility, Diagnostics and Mech Operation; 32 steel, 16 load inserts, 8 conductive plates, 4 boards, 16 fasteners, 2 drill heads, 2 sensors, 8 sheaths. No cells consumed; starts empty.'),
@@ -47,16 +47,16 @@ MECH_MESSAGES = {
  'message.best_mech_assembled': ('已装配工程机甲原型；储能为空', 'Engineering Mech Prototype assembled; energy starts empty.'),
  'message.best_mech_required': ('需要本人三级、轻载通行、工务诊断与机甲驾驶', 'Requires your level 3, Light Mobility, Diagnostics and Mech Operation.'),
  'message.best_mech_progress': ('研究%1$s｜轻%2$s 诊%3$s 驾%4$s', 'R%1$s | Mob %2$s Diag %3$s Pilot %4$s'),
- 'message.best_mech_hint': ('WASD驾驶；G钻切；隔离空载后可收纳', 'WASD drive; G drill; isolate before packing.'),
+ 'message.best_mech_hint': ('WASD驾驶；G工程臂作业；隔离空载后可收纳', 'WASD drive; G arm action; isolate before packing.'),
  'hud.mech.title': ('工程机甲原型', 'Engineering Mech Prototype'),
  'hud.mech.energy': ('电量 %1$s / %2$s XH', 'Energy %1$s / %2$s XH'),
  'hud.mech.heat': ('热量 %1$s / %2$s；恢复≤%3$s', 'Heat %1$s / %2$s; recover at %3$s'),
  'hud.mech.wear': ('磨损 %1$s / %2$s', 'Wear %1$s / %2$s'),
  'hud.mech.isolation': ('电池隔离：%1$s', 'Battery isolated: %1$s'),
- 'hud.mech.drill': ('[%1$s] 单点钻切 · 32,000 XH / 20刻', '[%1$s] Drill: 32,000 XH / 20 ticks'),
+ 'hud.mech.drill': ('[%1$s] 工程臂单点作业 · 20刻冷却', '[%1$s] Single-block arm action · 20-tick cooldown'),
  'hud.mech.wait': ('[%1$s] 请求等待 %2$s 刻（服务端校验）', '[%1$s] Request wait: %2$s ticks (server checked)'),
  'hud.mech.controls': ('WASD驾驶 · Shift下车 · 无跳跃', 'WASD drive / Shift dismount / no jump'),
- 'key.mech_drill': ('机甲单点钻切', 'Mech Single-Block Drill'),
+ 'key.mech_drill': ('工程臂作业', 'Engineering arm action'),
  'key.categories': ('星落蓝图', 'Starfall Blueprint'),
 }
 
@@ -74,19 +74,59 @@ MECH_MESSAGES.update({
  'hud.mech.panel.worn_out': ('停机 · 磨损耗尽', 'WORN OUT · Service required'),
  'hud.mech.panel.unqualified': ('停机 · 驾驶知识不足', 'OFFLINE · Training required'),
  'hud.mech.panel.no_power': ('停机 · 移动电量不足', 'NO POWER · Movement disabled'),
- 'hud.mech.panel.drill_power': ('运行 · 钻切电量不足', 'ONLINE · Low drill energy'),
+ 'hud.mech.panel.drill_power': ('运行 · 作业电量不足', 'ONLINE · Low work energy'),
  'hud.mech.panel.hot': ('运行 · 接近高热', 'ONLINE · High heat'),
  'hud.mech.panel.low_power': ('运行 · 电量偏低', 'ONLINE · Low energy'),
  'hud.mech.panel.worn': ('运行 · 接近磨损上限', 'ONLINE · High wear'),
- 'hud.mech.panel.request': ('[%1$s] 请求等待 %2$s 刻', '[%1$s] Request wait: %2$s ticks'),
- 'hud.mech.panel.standby': ('[%1$s] 请求钻切 · 32k XH', '[%1$s] Request drill · 32k XH'),
+ 'hud.mech.panel.request': ('[%1$s] 作业请求等待 %2$s 刻', '[%1$s] Work request wait: %2$s ticks'),
+ 'hud.mech.panel.standby': ('[%1$s] 工程臂作业 · %2$s XH', '[%1$s] Arm action · %2$s XH'),
  'hud.mech.panel.controls': ('%1$s 移动 · %2$s 下车', '%1$s move · %2$s dismount'),
 })
 
 
+MECH_MESSAGES.update({
+ 'message.best_page_4': ('工程臂', 'Tool arms'),
+ 'message.best_action_21': ('制造钻切工程臂', 'Assemble drilling arm'),
+ 'message.best_action_22': ('制造挖掘工程臂', 'Assemble excavator arm'),
+ 'message.best_mech_drill_arm_cost': ('需本人三级、轻载、诊断与驾驶；钢8、导相4、磨头2、控制板1、钢制固定件4', 'Requires your level 3, Mobility, Diagnostics and Mech Operation; 8 steel, 4 conductive plates, 2 drill heads, 1 board, 4 steel fasteners.'),
+ 'message.best_mech_excavator_arm_cost': ('需本人三级、轻载、诊断与驾驶；钢8、承相4、导相2、钢制固定件4、护套2', 'Requires your level 3, Mobility, Diagnostics and Mech Operation; 8 steel, 4 load inserts, 2 conductive plates, 4 steel fasteners, 2 sheaths.'),
+ 'message.best_mech_drill_arm_assembled': ('已制造钻切工程臂', 'Drilling arm assembled.'),
+ 'message.best_mech_excavator_arm_assembled': ('已制造挖掘工程臂', 'Excavator arm assembled.'),
+ 'tooltip.best_mech_drill_arm': ('铁镐级单点钻切：32,000 XH、热120、磨损1、20刻冷却；仅成功作业计费', 'Iron-pickaxe single-block drilling: 32,000 XH, 120 heat, 1 wear, 20-tick cooldown; charged only on success.'),
+ 'tooltip.best_mech_excavator_arm': ('仅铁铲可采方块单点挖掘：12,000 XH、热45、磨损1、20刻冷却；普通掉落', 'Single-block excavation of shovel-mineable blocks only: 12,000 XH, 45 heat, 1 wear, 20-tick cooldown; normal drops.'),
+ 'tooltip.best_mech_arm_install': ('独立工程臂槽最多1件；完整驾驶知识，隔离空载、存活、停稳落地且非流体，潜行主手持臂安装空槽；先拆后换', 'One separate arm slot. All mech knowledge required; sneak-use a main-hand arm on an empty slot of an isolated, unoccupied, living, stationary mech on dry ground. Remove before swapping.'),
+ 'mech.arm.none': ('工程臂：空', 'Tool arm: empty'),
+ 'mech.arm.installed': ('工程臂：%s', 'Tool arm: %s'),
+ 'mech.arm.controls': ('潜行主手工程臂右键安装；主手诊断器＋副手原版铁镐潜行拆回（铁镐不耗不损）；无臂仍可驾驶', 'Sneak-use a main-hand arm to install; sneak-use a main-hand diagnostic tool + offhand vanilla iron pickaxe to remove (pickaxe retained and undamaged). Driving works without an arm.'),
+ 'mech.arm.failed': ('工程臂装拆失败：需完整驾驶知识，机甲隔离、空载、存活、停稳落地且非流体；安装须空槽，拆回须36格主背包有空格', 'Arm change rejected: all mech knowledge and an isolated, unoccupied, living, stationary mech on dry ground required. Install into an empty slot; removal needs an empty slot in the 36-slot main inventory.'),
+ 'hud.mech.panel.no_arm': ('运行 · 未安装工程臂，仍可移动', 'ONLINE · No tool arm installed; movement available'),
+ 'hud.mech.panel.work_power': ('运行 · 作业电量不足', 'ONLINE · Insufficient work energy'),
+ 'hud.mech.panel.arm': ('%s', '%s'),
+})
+
+MECH_MESSAGES.update({
+ 'message.best_action_23': ('制造强化机体', 'Assemble reinforced body'),
+ 'message.best_mech_reinforced_body_cost': ('需本人三级、轻载、诊断与驾驶；普通钢24、承相12、导相8、钢制固定件16、护套8', 'Requires your level 3, Mobility, Diagnostics and Mech Operation; 24 steel, 12 load inserts, 8 conductive plates, 16 steel fasteners, 8 sheaths.'),
+ 'message.best_mech_reinforced_body_assembled': ('已制造强化机体', 'Reinforced Mech Body assembled.'),
+ 'tooltip.best_mech_reinforced_body': ('容量30M XH、生命上限160、货舱18格；基础／强化驱动速度0.18／0.23，移动600／900 XH与热6／8每刻；磨损2400、热1000／400、自然冷却2／散热4，工程臂不变', '30M XH capacity, 160 max health, 18 cargo slots; base/drive speed 0.18/0.23, movement 600/900 XH and 6/8 heat per tick. Wear 2400, heat 1000/400, cooling 2/radiator 4; tool arms unchanged.'),
+ 'tooltip.best_mech_body_install': ('独立机体槽；本人完整驾驶知识，隔离空载存活停稳落地非流体时潜行主手安装，保留精确生命与全部状态，不治疗；诊断器主手＋铁块副手潜行拆回，铁块不耗，36格主背包须空格；电量>20M、生命>100或货格9..17非空拒绝', 'Separate body slot. With all mech knowledge, sneak-use in main hand on an isolated, unoccupied, living, stationary mech on dry ground; preserves exact health and all state, without healing. Sneak-use diagnostic + offhand iron block to remove (block retained); needs an empty main-inventory slot. Rejects energy >20M, health >100 or occupied cargo slots 9..17.'),
+ 'mech.body.none': ('标准机体', 'Standard body'),
+ 'mech.body.installed': ('机体：%s', 'Body: %s'),
+ 'mech.body.controls': ('潜行主手强化机体安装；主手诊断器＋副手铁块潜行拆回（铁块不耗）；拆回须主背包空格、电量≤20M、生命≤100且货格9..17为空', 'Sneak-use a main-hand reinforced body to install; diagnostic + offhand iron block to remove (block retained). Removal needs an empty main-inventory slot, energy ≤20M, health ≤100 and empty cargo slots 9..17.'),
+ 'mech.body.failed': ('机体整备失败：须本人驾驶全知识、隔离空载存活停稳落地非流体；安装仅标准机体，拆回须主背包空格且电量≤20M、生命≤100、货格9..17为空；状态不变', 'Body change rejected: all mech knowledge and an isolated, unoccupied, living, stationary mech on dry ground required. Install only on a standard body; removal needs an empty main-inventory slot, energy ≤20M, health ≤100 and empty cargo slots 9..17. State preserved.'),
+ 'menu.best_mech_cargo': ('机甲货舱', 'Mech cargo'),
+ 'ui.mech_cargo_hint': ('隔离整备 · 禁止存入收纳机甲', 'Isolated service · No packed mechs'),
+ 'hud.mech.panel.body': ('机体：%s', 'Body: %s'),
+})
+
+
 BEST_UI_MESSAGES = {
- 'tab_0': ('工务', 'Engineering'), 'tab_1': ('轻载', 'Mobility'),
- 'tab_2': ('诊断', 'Diagnostics'), 'tab_3': ('机甲', 'Mech'),
+ 'tab_0': ('工务', 'Workshop'), 'tab_1': ('轻载', 'Mobility'),
+ 'tab_2': ('诊断', 'Service'), 'tab_3': ('机甲', 'Mech'),
+ 'tab_4': ('工程臂', 'Tool arms'),
+ 'material_action_23': ('强化机体', 'Reinforced body'),
+ 'material_action_21': ('钻切工程臂', 'Drilling arm'), 'material_action_22': ('挖掘工程臂', 'Excavator arm'),
+ 'hint_4': ('独立工程臂槽；先拆后换。诊断器主手＋铁镐副手潜行拆回，须主背包空格', 'Separate arm slot; remove before swapping. Sneak-use diagnostic + offhand iron pickaxe to remove; main inventory needs an empty slot.'),
  'knowledge_research': ('工务知识：%s', 'Engineering: %s'),
  'knowledge_light': ('轻载通行：%s', 'Light mobility: %s'),
  'knowledge_diagnostics': ('装备诊断：%s', 'Diagnostics: %s'),
@@ -102,7 +142,7 @@ BEST_UI_MESSAGES = {
  'hint_0': ('维修/冷却持主手；整备包主手、装备副手', 'Repair/cool: hold equipment. Service: kit in main hand, gear in offhand.'),
  'hint_1': ('装卸/切档持主手骨架；跨步档站立也耗能', 'Hold frame to modify; stride mode uses energy while standing.'),
  'hint_2': ('隔离/接通时，将装备持于主手', 'Hold equipment in your main hand to isolate or reconnect.'),
- 'hint_3': ('数量为已有/所需；悬停学习、机甲装配或模组制造切换材料表', 'Have/need shown; hover study, mech assembly or module manufacture to inspect materials.'),
+ 'hint_3': ('数量为已有/所需；悬停学习、装配、模组或强化机体切换材料表', 'Have/need shown; hover study, assembly, modules or reinforced body to inspect materials.'),
  'detail_4': ('恢复200点工务耐久；电量与温度不变', 'Restores 200 engineering durability; preserves charge and heat.'),
  'detail_7': ('降低400温度并返还空桶', 'Removes 400 heat and returns an empty bucket.'),
  'detail_10': ('安装后跨步档默认关闭', 'Stride mode is off after installation.'),
@@ -142,6 +182,8 @@ for action, labels in enumerate([
  ('接通装备电池', 'Reconnect battery'), ('学习机甲驾驶', 'Study mech operation'),
  ('装配工程机甲', 'Assemble engineering mech'),
  ('制造散热模组', 'Assemble radiator module'), ('制造强化驱动模组', 'Assemble reinforced drive'),
+ ('制造钻切工程臂', 'Assemble drilling arm'), ('制造挖掘工程臂', 'Assemble excavator arm'),
+ ('制造强化机体', 'Assemble reinforced body'),
 ]):
     BEST_UI_MESSAGES[f'action_{action}'] = labels
 MECH_MESSAGES.update({f'ui.best_{key}': value for key, value in BEST_UI_MESSAGES.items()})

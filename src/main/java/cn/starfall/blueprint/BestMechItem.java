@@ -31,13 +31,13 @@ public final class BestMechItem extends Item {
             CompoundTag tag = state(stack);
             if(tag.getBoolean("Isolated") || (tag.contains("Health") && !(tag.getFloat("Health") > 0))) return 0;
             long now = tick(); int used = tag.getLong("ChargeTick") == now ? Math.clamp(tag.getInt("ChargeUsed"), 0, 5000) : 0;
-            int stored = getEnergyStored(), n = Math.max(0, Math.min(Math.min(max, 5000 - used), BestMechEntity.CAPACITY - stored));
+            int stored = getEnergyStored(), n = Math.max(0, Math.min(Math.min(max, 5000 - used), getMaxEnergyStored() - stored));
             if(!simulate && n > 0) { tag.putInt("Energy", stored + n); tag.putLong("ChargeTick", now); tag.putInt("ChargeUsed", used + n); setState(stack, tag); }
             return n;
         }
         public int extractEnergy(int max, boolean simulate) { return 0; }
-        public int getEnergyStored() { return Math.clamp(state(stack).getInt("Energy"), 0, BestMechEntity.CAPACITY); }
-        public int getMaxEnergyStored() { return BestMechEntity.CAPACITY; }
+        public int getEnergyStored() { return Math.clamp(state(stack).getInt("Energy"), 0, getMaxEnergyStored()); }
+        public int getMaxEnergyStored() { return BestMechBodies.capacity(BestMechBodies.read(state(stack))); }
         public boolean canReceive() { var tag = state(stack); return !tag.getBoolean("Isolated") && (!tag.contains("Health") || tag.getFloat("Health") > 0); }
         public boolean canExtract() { return false; }
     }; }
@@ -101,17 +101,22 @@ public final class BestMechItem extends Item {
         if(interaction.isCanceled() || interaction.getUseItem().isFalse()) { player.stopUsingItem(); return; }
         IEnergyStorage target = energy(stack); int n = target.receiveEnergy(source.extractEnergy(5000, true), true);
         if(n > 0) target.receiveEnergy(source.extractEnergy(n, false), false);
-        if(player.tickCount % 20 == 0) player.displayClientMessage(Component.literal("机甲蓄能 " + target.getEnergyStored() + "/" + BestMechEntity.CAPACITY + " XH"), true);
+        if(player.tickCount % 20 == 0) player.displayClientMessage(Component.literal("机甲蓄能 " + target.getEnergyStored() + "/" + target.getMaxEnergyStored() + " XH"), true);
     }
     @Override public boolean isBarVisible(ItemStack stack) { return energy(stack).getEnergyStored() > 0; }
-    @Override public int getBarWidth(ItemStack stack) { return (int)((long)energy(stack).getEnergyStored() * 13 / BestMechEntity.CAPACITY); }
+    @Override public int getBarWidth(ItemStack stack) { return (int)((long)energy(stack).getEnergyStored() * 13 / energy(stack).getMaxEnergyStored()); }
     @Override public int getBarColor(ItemStack stack) { return 0x49bca3; }
     @Override public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
-        var tag = state(stack); lines.add(Component.literal(energy(stack).getEnergyStored() + " / " + BestMechEntity.CAPACITY + " XH · 热 " + tag.getInt("Heat") + " · 磨损 " + tag.getInt("Wear")));
-        lines.add(Component.literal("结构 " + (tag.contains("Health") ? tag.getFloat("Health") : 100) + "/100 · " + (tag.getBoolean("Isolated") ? "已隔离" : "已接通")));
+        var tag = state(stack); lines.add(Component.literal(energy(stack).getEnergyStored() + " / " + energy(stack).getMaxEnergyStored() + " XH · 热 " + tag.getInt("Heat") + " · 磨损 " + tag.getInt("Wear")));
+        float maxHealth = BestMechBodies.maxHealth(BestMechBodies.read(tag));
+        lines.add(Component.literal("结构 " + (tag.contains("Health") ? tag.getFloat("Health") : maxHealth) + "/" + maxHealth + " · " + (tag.getBoolean("Isolated") ? "已隔离" : "已接通")));
         lines.add(Component.literal("潜行按住右键对准基地储能方块：蓄能 ≤5000 XH/t；普通右键地面部署"));
         lines.add(Component.literal("副手诊断器，主手机甲普通右键空气：切换隔离/接通"));
         lines.add(BestMechModules.installed(tag.getString(BestMechModules.STATE)));
         lines.add(BestMechModules.controls());
+        lines.add(BestMechArms.installed(BestMechArms.read(tag)));
+        lines.add(BestMechArms.controls());
+        lines.add(BestMechBodies.installed(BestMechBodies.read(tag)));
+        lines.add(BestMechBodies.controls());
     }
 }

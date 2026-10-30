@@ -16,7 +16,7 @@ public final class BestMechNetworking {
     public static void register(RegisterPayloadHandlersEvent event) {
         event.registrar("1").playToServer(Action.TYPE, Action.CODEC, (payload, context) -> context.enqueueWork(() -> {
             if (payload.action == 0 && context.player().getVehicle() instanceof BestMechEntity mech)
-                mech.drill(context.player());
+                mech.work(context.player());
         }));
     }
     private BestMechNetworking() {}

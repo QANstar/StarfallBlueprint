@@ -14,32 +14,42 @@ import net.minecraft.world.entity.player.Inventory;
 public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkbenchMenu> {
     private int page;
     private int selectedMechAction = 18;
+    private int selectedArmAction = 21;
     private final List<ActionButton> actionButtons = new ArrayList<>();
     private record ActionButton(int action, Button button) {}
 
     public BestWorkbenchScreen(BestWorkbenchMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 300;
-        imageHeight = 254;
+        imageHeight = 272;
         titleLabelX = 10;
         titleLabelY = 7;
         inventoryLabelX = 70;
-        inventoryLabelY = 158;
+        inventoryLabelY = 176;
     }
 
-    /** Fixture/accessibility entry point: 0 engineering, 1 mobility, 2 diagnostics, 3 mech. */
+    /** Fixture/accessibility entry point: 0 engineering, 1 mobility, 2 diagnostics, 3 mech, 4 tool arms. */
     public void selectPage(int page) {
-        if (page < 0 || page > 3) throw new IllegalArgumentException("page must be 0..3");
+        if (page < 0 || page > 4) throw new IllegalArgumentException("page must be 0..4");
         this.page = page;
         if (minecraft != null) rebuildWidgets();
     }
     public int page() { return page; }
     /** Select the material table independently of execution, including disabled learned actions. */
     public void selectMechAction(int action) {
-        if (action < 17 || action > 20) throw new IllegalArgumentException("mech action must be 17..20");
+        if (action < 17 || (action > 20 && action != 23)) throw new IllegalArgumentException("mech action must be 17..20 or 23");
         selectedMechAction = action;
     }
     public int selectedMechAction() { return selectedMechAction; }
+    public void selectArmAction(int action) {
+        if (action < 21 || action > 22) throw new IllegalArgumentException("arm action must be 21..22");
+        selectedArmAction = action;
+    }
+    private int materialAction() { return page == 4 ? selectedArmAction : selectedMechAction; }
+    private void selectMaterialAction(int action) {
+        if (action == 21 || action == 22) selectArmAction(action);
+        else selectMechAction(action);
+    }
     private static Component text(String key, Object... args) {
         return Component.translatable("ui.starfall_blueprint.best_" + key, args);
     }
@@ -47,22 +57,23 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     @Override protected void init() {
         super.init();
         actionButtons.clear();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             final int target = i;
             Button tab = addRenderableWidget(Button.builder(text("tab_" + i), button -> selectPage(target))
-                    .bounds(leftPos + 8 + i * 73, topPos + 44, 65, 16).build());
+                    .bounds(leftPos + 8 + i * 57, topPos + 44, 52, 16).build());
             tab.active = page != i;
         }
         int[] actions = switch(page) {
             case 0 -> new int[]{0, 1, 2, 3, 5, 6, 4, 7};
             case 1 -> new int[]{8, 9, 10, 11, 12};
             case 2 -> new int[]{13, 14, 15, 16};
-            default -> new int[]{17, 18, 19, 20};
+            case 3 -> new int[]{17, 18, 19, 20, 23};
+            default -> new int[]{21, 22};
         };
         for (int i = 0; i < actions.length; i++) {
             int action = actions[i];
             Button button = addRenderableWidget(Button.builder(text("action_" + action), clicked -> {
-                if (action >= 17) selectMechAction(action);
+                if (action >= 17) selectMaterialAction(action);
                 if (minecraft != null && minecraft.gameMode != null && menu.preview(action).executable())
                     minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action);
             }).bounds(leftPos + 8 + (i % 2) * 146, topPos + 63 + (i / 2) * 16, 138, 14).build());
@@ -93,7 +104,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         graphics.fill(x, y, x + imageWidth, y + imageHeight, 0xff233a40);
         graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + imageHeight - 2, 0xffdce5df);
         graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + 19, 0xff344f55);
-        graphics.fill(x + 8, y + 155, x + imageWidth - 8, y + 156, 0xffa5b8ac);
+        graphics.fill(x + 8, y + 173, x + imageWidth - 8, y + 174, 0xffa5b8ac);
         for (var slot : menu.slots) {
             int sx = x + slot.x, sy = y + slot.y;
             graphics.fill(sx - 1, sy - 1, sx + 17, sy + 17, 0xff485b55);
@@ -108,26 +119,26 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         fitted(graphics, text("knowledge_light", text(menu.hasLightMobility() ? "learned" : "unlearned")), 154, 22, 136, 0xff344f43);
         fitted(graphics, text("knowledge_diagnostics", text(menu.hasDiagnostics() ? "learned" : "unlearned")), 10, 33, 138, 0xff344f43);
         fitted(graphics, text("knowledge_mech", text(menu.hasMechOperation() ? "learned" : "unlearned")), 154, 33, 136, 0xff344f43);
-        if (page == 3) {
-            BestEngineering.Preview preview = menu.preview(selectedMechAction);
-            fitted(graphics, text("materials_for", text("material_action_" + selectedMechAction), preview.reason()), 10, 99, 280, preview.executable() ? 0xff27653f : 0xff88402f);
+        if (page >= 3) {
+            BestEngineering.Preview preview = menu.preview(materialAction());
+            fitted(graphics, text("materials_for", text("material_action_" + materialAction()), preview.reason()), 10, 117, 280, preview.executable() ? 0xff27653f : 0xff88402f);
             List<BestEngineering.MaterialRequirement> materials = preview.materials();
             for (int i = 0; i < materials.size(); i++) {
                 var material = materials.get(i);
-                int x = 10 + i % 4 * 71, y = 110 + i / 4 * 18;
+                int x = 10 + i % 4 * 71, y = 128 + i / 4 * 18;
                 graphics.renderItem(material.item(), x, y);
                 fitted(graphics, text("material_count", material.available(), material.required()), x + 18, y + 4, 51,
                         material.available() >= material.required() ? 0xff27653f : 0xffa3332c);
             }
         }
-        fitted(graphics, text("hint_" + page), 10, 146, 280, 0xff435b50);
+        fitted(graphics, text("hint_" + page), 10, 164, 280, 0xff435b50);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff344f43, false);
     }
 
     @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         updateActions();
         for (ActionButton entry : actionButtons) {
-            if (page == 3 && hovered(entry.button(), mouseX, mouseY)) selectMechAction(entry.action());
+            if (page >= 3 && hovered(entry.button(), mouseX, mouseY)) selectMaterialAction(entry.action());
         }
         super.render(graphics, mouseX, mouseY, partialTick);
         renderTooltip(graphics, mouseX, mouseY);
@@ -145,10 +156,10 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
                 return;
             }
         }
-        if (page == 3) {
-            List<BestEngineering.MaterialRequirement> materials = menu.preview(selectedMechAction).materials();
+        if (page >= 3) {
+            List<BestEngineering.MaterialRequirement> materials = menu.preview(materialAction()).materials();
             for (int i = 0; i < materials.size(); i++) {
-                int x = leftPos + 10 + i % 4 * 71, y = topPos + 110 + i / 4 * 18;
+                int x = leftPos + 10 + i % 4 * 71, y = topPos + 128 + i / 4 * 18;
                 if (mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16) {
                     graphics.renderTooltip(font, materials.get(i).item(), mouseX, mouseY);
                     return;

@@ -2,9 +2,10 @@ package cn.starfall.blueprint.client;
 
 import cn.starfall.blueprint.BestEngineering;
 import cn.starfall.blueprint.BestWorkbenchMenu;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,45 +13,86 @@ import net.minecraft.world.entity.player.Inventory;
 /** Vanilla widgets and solid fills, with no external GUI texture. */
 public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkbenchMenu> {
     private int page;
+    private int selectedMechAction = 18;
+    private final List<ActionButton> actionButtons = new ArrayList<>();
+    private record ActionButton(int action, Button button) {}
 
     public BestWorkbenchScreen(BestWorkbenchMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 300;
         imageHeight = 236;
         titleLabelX = 10;
-        titleLabelY = 9;
+        titleLabelY = 7;
         inventoryLabelX = 70;
         inventoryLabelY = 140;
     }
 
-    @Override protected void init() {
-        super.init();
-        int[] actions = switch(page){case 0 -> new int[]{0, 1, 2, 3, 5, 6, 4, 7};case 1 -> new int[]{8, 9, 10, 11, 12};default -> new int[]{13, 14, 15, 16};};
-        for (int i = 0; i < actions.length; i++) addAction(actions[i], 8 + (i % 2) * 146, 40 + (i / 2) * 22, 138);
-        addRenderableWidget(Button.builder(Component.translatable("message.starfall_blueprint.best_page_"+page).append(" >"), button -> {
-            page = (page + 1) % 3;
-            rebuildWidgets();
-        }).bounds(leftPos + 238, topPos + 3, 54, 18)
-                .tooltip(Tooltip.create(Component.translatable("message.starfall_blueprint.best_next_page")))
-                .build());
+    /** Fixture/accessibility entry point: 0 engineering, 1 mobility, 2 diagnostics, 3 mech. */
+    public void selectPage(int page) {
+        if (page < 0 || page > 3) throw new IllegalArgumentException("page must be 0..3");
+        this.page = page;
+        if (minecraft != null) rebuildWidgets();
+    }
+    public int page() { return page; }
+    /** Select the material table independently of execution, including disabled learned actions. */
+    public void selectMechAction(int action) {
+        if (action != 17 && action != 18) throw new IllegalArgumentException("mech action must be 17 or 18");
+        selectedMechAction = action;
+    }
+    public int selectedMechAction() { return selectedMechAction; }
+    private static Component text(String key, Object... args) {
+        return Component.translatable("ui.starfall_blueprint.best_" + key, args);
     }
 
-    private void addAction(int action, int x, int y, int buttonWidth) {
-        addRenderableWidget(Button.builder(BestEngineering.actionLabelComponent(action), button -> {
-            if (minecraft != null && minecraft.gameMode != null) {
-                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action);
-            }
-        }).bounds(leftPos + x, topPos + y, buttonWidth, 20)
-                // Vanilla tooltips wrap their text and position it within the screen bounds.
-                .tooltip(Tooltip.create(BestEngineering.actionCostComponent(action)))
-                .build());
+    @Override protected void init() {
+        super.init();
+        actionButtons.clear();
+        for (int i = 0; i < 4; i++) {
+            final int target = i;
+            Button tab = addRenderableWidget(Button.builder(text("tab_" + i), button -> selectPage(target))
+                    .bounds(leftPos + 8 + i * 73, topPos + 44, 65, 16).build());
+            tab.active = page != i;
+        }
+        int[] actions = switch(page) {
+            case 0 -> new int[]{0, 1, 2, 3, 5, 6, 4, 7};
+            case 1 -> new int[]{8, 9, 10, 11, 12};
+            case 2 -> new int[]{13, 14, 15, 16};
+            default -> new int[]{17, 18};
+        };
+        for (int i = 0; i < actions.length; i++) {
+            int action = actions[i];
+            Button button = addRenderableWidget(Button.builder(text("action_" + action), clicked -> {
+                if (action >= 17) selectMechAction(action);
+                if (minecraft != null && minecraft.gameMode != null && menu.preview(action).executable())
+                    minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action);
+            }).bounds(leftPos + 8 + (i % 2) * 146, topPos + 63 + (i / 2) * 16, 138, 14).build());
+            actionButtons.add(new ActionButton(action, button));
+        }
+        updateActions();
+    }
+
+    private void updateActions() {
+        for (ActionButton entry : actionButtons) entry.button().active = menu.preview(entry.action()).executable();
+    }
+    private boolean hovered(Button button, int mouseX, int mouseY) {
+        return mouseX >= button.getX() && mouseX < button.getX() + button.getWidth()
+                && mouseY >= button.getY() && mouseY < button.getY() + button.getHeight();
+    }
+    private void fitted(GuiGraphics graphics, Component value, int x, int y, int width, int color) {
+        // Scale only unusually long translations; keep every knowledge label visible at narrow GUI sizes.
+        float scale = Math.min(1f, (float) width / Math.max(1, font.width(value)));
+        graphics.pose().pushPose();
+        graphics.pose().translate(x, y, 0);
+        graphics.pose().scale(scale, scale, 1);
+        graphics.drawString(font, value, 0, 0, color, false);
+        graphics.pose().popPose();
     }
 
     @Override protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
         graphics.fill(x, y, x + imageWidth, y + imageHeight, 0xff233a40);
         graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + imageHeight - 2, 0xffdce5df);
-        graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + 22, 0xff344f55);
+        graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + 19, 0xff344f55);
         graphics.fill(x + 8, y + 137, x + imageWidth - 8, y + 138, 0xffa5b8ac);
         for (var slot : menu.slots) {
             int sx = x + slot.x, sy = y + slot.y;
@@ -61,19 +103,57 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     }
 
     @Override protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, titleLabelX, titleLabelY, 0xffedf4eb, false);
-        Component progress = Component.translatable("message.starfall_blueprint.best_diagnostics_progress", menu.researchLevel(),
-                Component.translatable("message.starfall_blueprint.best_state_"+(menu.hasLightMobility()?"yes":"no")),
-                Component.translatable("message.starfall_blueprint.best_state_"+(menu.hasDiagnostics()?"yes":"no")));
-        graphics.drawString(font, progress, 10, 27, 0xff344f43, false);
-        Component hint = page == 2 ? Component.translatable("message.starfall_blueprint.best_diagnostics_hint")
-                : Component.literal(page == 0 ? "维修/冷却持主手；整备包主手、装备副手" : "装卸/切档持主手骨架；跨步档站立也耗能");
-        graphics.drawString(font, hint, 10, 128, 0xff435b50, false);
+        fitted(graphics, title, titleLabelX, titleLabelY, 280, 0xffedf4eb);
+        fitted(graphics, text("knowledge_research", text("research_" + menu.researchLevel())), 10, 22, 138, 0xff344f43);
+        fitted(graphics, text("knowledge_light", text(menu.hasLightMobility() ? "learned" : "unlearned")), 154, 22, 136, 0xff344f43);
+        fitted(graphics, text("knowledge_diagnostics", text(menu.hasDiagnostics() ? "learned" : "unlearned")), 10, 33, 138, 0xff344f43);
+        fitted(graphics, text("knowledge_mech", text(menu.hasMechOperation() ? "learned" : "unlearned")), 154, 33, 136, 0xff344f43);
+        if (page == 3) {
+            BestEngineering.Preview preview = menu.preview(selectedMechAction);
+            fitted(graphics, text("materials_for", text("material_action_" + selectedMechAction), preview.reason()), 10, 81, 280, preview.executable() ? 0xff27653f : 0xff88402f);
+            List<BestEngineering.MaterialRequirement> materials = preview.materials();
+            for (int i = 0; i < materials.size(); i++) {
+                var material = materials.get(i);
+                int x = 10 + i % 4 * 71, y = 92 + i / 4 * 18;
+                graphics.renderItem(material.item(), x, y);
+                fitted(graphics, text("material_count", material.available(), material.required()), x + 18, y + 4, 51,
+                        material.available() >= material.required() ? 0xff27653f : 0xffa3332c);
+            }
+        }
+        fitted(graphics, text("hint_" + page), 10, 128, 280, 0xff435b50);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff344f43, false);
     }
 
     @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        updateActions();
+        for (ActionButton entry : actionButtons) {
+            if (page == 3 && hovered(entry.button(), mouseX, mouseY)) selectMechAction(entry.action());
+        }
         super.render(graphics, mouseX, mouseY, partialTick);
         renderTooltip(graphics, mouseX, mouseY);
+        // Inactive vanilla buttons do not consistently expose tooltips; test bounds directly.
+        for (ActionButton entry : actionButtons) {
+            if (hovered(entry.button(), mouseX, mouseY)) {
+                var preview = menu.preview(entry.action());
+                Component tooltip = text("action_" + entry.action()).copy().append("\n").append(preview.reason());
+                for (var material : preview.materials())
+                    tooltip = tooltip.copy().append("\n").append(text("cost_entry", material.item().getHoverName(), material.available(), material.required()));
+                if (preview.materials().isEmpty()) tooltip = tooltip.copy().append("\n").append(text("no_materials"));
+                if (entry.action() == 4 || entry.action() == 7 || entry.action() == 10 || entry.action() == 11 || entry.action() == 12)
+                    tooltip = tooltip.copy().append("\n").append(text("detail_" + entry.action()));
+                graphics.renderTooltip(font, font.split(tooltip, Math.min(280, width - 20)), mouseX, mouseY);
+                return;
+            }
+        }
+        if (page == 3) {
+            List<BestEngineering.MaterialRequirement> materials = menu.preview(selectedMechAction).materials();
+            for (int i = 0; i < materials.size(); i++) {
+                int x = leftPos + 10 + i % 4 * 71, y = topPos + 92 + i / 4 * 18;
+                if (mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16) {
+                    graphics.renderTooltip(font, materials.get(i).item(), mouseX, mouseY);
+                    return;
+                }
+            }
+        }
     }
 }

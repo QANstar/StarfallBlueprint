@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -29,80 +30,124 @@ public final class BestEngineering {
     public static int researchLevel(Player player){return Math.clamp(player.getPersistentData().getInt(RESEARCH),0,3);}
     public static boolean hasLightMobility(Player player){return player.getPersistentData().getBoolean(LIGHT_MOBILITY);}
     public static boolean hasDiagnostics(Player player){return player.getPersistentData().getBoolean(DIAGNOSTICS);}
+    public static boolean hasMechOperation(Player player){return player.getPersistentData().getBoolean("BestMechOperation");}
     public static void clonePlayer(PlayerEvent.Clone event){
         event.getEntity().getPersistentData().putInt(RESEARCH,researchLevel(event.getOriginal()));
         event.getEntity().getPersistentData().putBoolean(LIGHT_MOBILITY,hasLightMobility(event.getOriginal()));
         event.getEntity().getPersistentData().putBoolean(DIAGNOSTICS,hasDiagnostics(event.getOriginal()));
+        event.getEntity().getPersistentData().putBoolean("BestMechOperation",hasMechOperation(event.getOriginal()));
     }
-    public static Component actionLabelComponent(int action){return action>=13&&action<=16?Component.translatable("message.starfall_blueprint.best_action_"+action):Component.literal(actionLabel(action));}
-    public static Component actionCostComponent(int action){return action>=13&&action<=16?Component.translatable("message.starfall_blueprint."+switch(action){case 13->"best_diagnostics_cost";case 14->"best_diagnostic_tool_cost";case 15->"best_isolate_cost";default->"best_connect_cost";}):Component.literal(actionCost(action));}
-    public static String actionLabel(int action){if(action>=13&&action<=16)return actionLabelComponent(action).getString();return switch(action){case 0->"学习：基础工务";case 1->"学习：工程钻切";case 2->"装配轻型助力骨架";case 3->"装配工程钻切器";case 4->"维修主手装备";case 5->"学习：野外整备";case 6->"装配便携整备包";case 7->"冷却主手装备";case 8->"学习：轻载通行";case 9->"装配跨步组件";case 10->"安装主手骨架组件";case 11->"切换主手骨架跨步档";case 12->"拆回主手骨架组件";default->"未知操作";};}
-    public static String actionCost(int action){if(action>=13&&action<=16)return actionCostComponent(action).getString();return switch(action){case 0->"普通钢×2、基础控制板×1";case 1->"承相结构嵌材×1、导相铜复材板×1；需基础工务";case 2->"普通钢×4、承相结构嵌材×2、基础控制板×1、钢制固定件×2";case 3->"普通钢×3、导相铜复材板×2、钻石磨头×1、基础控制板×1";case 4->"普通钢×1，恢复主手装备200点工务耐久";case 5->"承相结构嵌材×2、导相铜复材板×1、基础控制板×1；需工程钻切";case 6->"普通钢×3、钢制固定件×2、陶瓷护套×1、基础控制板×1；需野外整备";case 7->"水桶×1，返还空桶；主手装备降温400，需对应使用知识";case 8->"承相结构嵌材×2、导相铜复材板×1、基础控制板×1；需野外整备，解锁轻载组件装配、安装、切档与拆回";case 9->"普通钢×4、承相结构嵌材×2、钢制固定件×2、基础控制板×1；需本人轻载通行知识";case 10->"跨步组件×1；主手持未安装骨架，需本人轻载通行知识，安装后默认关闭";case 11->"免费；主手持已安装骨架，需本人轻载通行知识；持续地面跨步档站立也耗能";case 12->"返还跨步组件×1；主手持已安装骨架，需本人轻载通行知识及背包空间";default->"";};}
-    private static Map<String,Integer> cost(int action){return switch(action){case 0->Map.of("steel",2,"board",1);case 1->Map.of("load",1,"conductor",1);case 2->Map.of("steel",4,"load",2,"board",1,"steel_fix",2);case 3->Map.of("steel",3,"conductor",2,"head",1,"board",1);case 4->Map.of("steel",1);case 5->Map.of("load",2,"conductor",1,"board",1);case 6->Map.of("steel",3,"steel_fix",2,"sheath",1,"board",1);case 7->Map.of("minecraft:water_bucket",1);case 8->Map.of("load",2,"conductor",1,"board",1);case 9->Map.of("steel",4,"load",2,"steel_fix",2,"board",1);case 10->Map.of("best_stride_module",1);case 13->Map.of("load",1,"conductor",2,"board",1);case 14->Map.of("steel",2,"conductor",1,"sensor",1,"board",1,"sheath",1);default->Map.of();};}
+    public static Component actionLabelComponent(int action){return action>=13&&action<=18?Component.translatable("message.starfall_blueprint.best_action_"+action):Component.literal(actionLabel(action));}
+    public static Component actionCostComponent(int action){return action>=13&&action<=18?Component.translatable("message.starfall_blueprint."+switch(action){case 13->"best_diagnostics_cost";case 14->"best_diagnostic_tool_cost";case 15->"best_isolate_cost";case 16->"best_connect_cost";case 17->"best_mech_learning_cost";default->"best_mech_assembly_cost";}):Component.literal(actionCost(action));}
+    public static String actionLabel(int action){if(action>=13&&action<=18)return actionLabelComponent(action).getString();return switch(action){case 0->"学习：基础工务";case 1->"学习：工程钻切";case 2->"装配轻型助力骨架";case 3->"装配工程钻切器";case 4->"维修主手装备";case 5->"学习：野外整备";case 6->"装配便携整备包";case 7->"冷却主手装备";case 8->"学习：轻载通行";case 9->"装配跨步组件";case 10->"安装主手骨架组件";case 11->"切换主手骨架跨步档";case 12->"拆回主手骨架组件";default->"未知操作";};}
+    public static String actionCost(int action){if(action>=13&&action<=18)return actionCostComponent(action).getString();return switch(action){case 0->"普通钢×2、基础控制板×1";case 1->"承相结构嵌材×1、导相铜复材板×1；需基础工务";case 2->"普通钢×4、承相结构嵌材×2、基础控制板×1、钢制固定件×2";case 3->"普通钢×3、导相铜复材板×2、钻石磨头×1、基础控制板×1";case 4->"普通钢×1，恢复主手装备200点工务耐久";case 5->"承相结构嵌材×2、导相铜复材板×1、基础控制板×1；需工程钻切";case 6->"普通钢×3、钢制固定件×2、陶瓷护套×1、基础控制板×1；需野外整备";case 7->"水桶×1，返还空桶；主手装备降温400，需对应使用知识";case 8->"承相结构嵌材×2、导相铜复材板×1、基础控制板×1；需野外整备，解锁轻载组件装配、安装、切档与拆回";case 9->"普通钢×4、承相结构嵌材×2、钢制固定件×2、基础控制板×1；需本人轻载通行知识";case 10->"跨步组件×1；主手持未安装骨架，需本人轻载通行知识，安装后默认关闭";case 11->"免费；主手持已安装骨架，需本人轻载通行知识；持续地面跨步档站立也耗能";case 12->"返还跨步组件×1；主手持已安装骨架，需本人轻载通行知识及背包空间";default->"";};}
+    private static Map<String,Integer> cost(int action){return switch(action){case 0->Map.of("steel",2,"board",1);case 1->Map.of("load",1,"conductor",1);case 2->Map.of("steel",4,"load",2,"board",1,"steel_fix",2);case 3->Map.of("steel",3,"conductor",2,"head",1,"board",1);case 4->Map.of("steel",1);case 5->Map.of("load",2,"conductor",1,"board",1);case 6->Map.of("steel",3,"steel_fix",2,"sheath",1,"board",1);case 7->Map.of("minecraft:water_bucket",1);case 8->Map.of("load",2,"conductor",1,"board",1);case 9->Map.of("steel",4,"load",2,"steel_fix",2,"board",1);case 10->Map.of("best_stride_module",1);case 13->Map.of("load",1,"conductor",2,"board",1);case 14->Map.of("steel",2,"conductor",1,"sensor",1,"board",1,"sheath",1);case 17->Map.of("load",4,"conductor",4,"sensor",2,"board",2);case 18->Map.of("steel",32,"load",16,"conductor",8,"board",4,"steel_fix",16,"head",2,"sensor",2,"sheath",8);default->Map.of();};}
     private static boolean diagnosticFail(Player player,String key){player.displayClientMessage(Component.translatable("message.starfall_blueprint."+key),true);return false;}
     private static boolean fail(Player player,String text){player.displayClientMessage(Component.literal(text),true);return false;}
-    /** Copy, validate and commit the complete inventory transaction; failure never eats inputs. */
-    public static boolean perform(Player player,int action){
-        if(player.level().isClientSide||action<0||action>16)return false;
-        int learned=researchLevel(player);
+    public record Knowledge(int researchLevel, boolean lightMobility, boolean diagnostics, boolean mechOperation) {
+        public static Knowledge of(Player player) { return new Knowledge(BestEngineering.researchLevel(player), hasLightMobility(player), hasDiagnostics(player), hasMechOperation(player)); }
+    }
+    public enum Status { READY, ALREADY_LEARNED, PREREQUISITE, MATERIALS, TARGET, SPACE, INVALID }
+    public record MaterialRequirement(ItemStack item, int required, int available) {}
+    public record Preview(Status status, Component reason, List<MaterialRequirement> materials) {
+        public boolean executable() { return status == Status.READY; }
+    }
+    private record Plan(Preview preview, List<ItemStack> inventory, int nextLevel) {}
+    /** Read-only: all inventory/equipment simulation uses copies; never learns, commits or sends messages. */
+    public static Preview preview(Player player, int action) { return preview(player, action, Knowledge.of(player)); }
+    /** Client menus pass their synchronized knowledge; the server always derives its own knowledge. */
+    public static Preview preview(Player player, int action, Knowledge knowledge) { return preview(player.getInventory(), action, knowledge); }
+    public static Preview preview(Inventory inventory, int action, Knowledge knowledge) { return plan(inventory, action, knowledge).preview(); }
+    private static Plan rejected(Status status, String reason, List<MaterialRequirement> materials) {
+        return new Plan(new Preview(status, Component.translatable("ui.starfall_blueprint.best_" + reason), materials), List.of(), 0);
+    }
+    private static Plan plan(Inventory inventory, int action, Knowledge knowledge) {
+        List<MaterialRequirement> materials = new ArrayList<>();
+        for (var input : cost(action).entrySet().stream().sorted(Map.Entry.comparingByKey()).toList()) {
+            int available = 0;
+            for (int i = 0; i < 36; i++) {
+                ItemStack stack = inventory.getItem(i);
+                if (CatalogueContent.matches(input.getKey(), stack) && usableMaterial(stack)) available += stack.getCount();
+            }
+            materials.add(new MaterialRequirement(CatalogueContent.stack(input.getKey(), 1), input.getValue(), available));
+        }
+        materials = List.copyOf(materials);
+        if(action<0||action>18)return rejected(Status.INVALID,"unavailable",materials);
+        int learned=knowledge.researchLevel();
         int nextLevel=switch(action){case 0->1;case 1->2;case 5->3;default->0;};
-        if(nextLevel>0&&learned>=nextLevel)return fail(player,"这项工务知识已经掌握");
-        if(action==8&&hasLightMobility(player))return fail(player,"这项工务知识已经掌握");
+        if((nextLevel>0&&learned>=nextLevel)||(action==8&&knowledge.lightMobility())
+                ||(action==13&&knowledge.diagnostics())||(action==17&&knowledge.mechOperation()))
+            return rejected(Status.ALREADY_LEARNED,"already_learned",materials);
+        if(action>=17&&(learned<3||!knowledge.diagnostics()||!knowledge.lightMobility()||(action==18&&!knowledge.mechOperation())))
+            return rejected(Status.PREREQUISITE,action==18?"requires_mech":"requires_mech_basics",materials);
         int required=switch(action){case 1,2,4,7->1;case 3,5->2;case 6,8,9,10,11,12,13,14,15,16->3;default->0;};
-        if(learned<required)return fail(player,"先学习对应的工务知识");
-        if(action>=9&&action<=12&&!hasLightMobility(player))return fail(player,"先学习轻载通行，再操作组件");
-        if(action==13&&hasDiagnostics(player))return fail(player,"这项工务知识已经掌握");
-        if(action>=14&&!hasDiagnostics(player))return diagnosticFail(player,"best_diagnostics_required");
-        ItemStack held=player.getMainHandItem();
+        if(learned<required)return rejected(Status.PREREQUISITE,"requires_research_"+required,materials);
+        if(action>=9&&action<=12&&!knowledge.lightMobility())return rejected(Status.PREREQUISITE,"requires_light",materials);
+        if(action>=14&&!knowledge.diagnostics())return rejected(Status.PREREQUISITE,"requires_diagnostics",materials);
+        ItemStack held=inventory.getItem(inventory.selected);
         if(action==15||action==16){
-            if(!BestEquipment.isEquipment(held))return diagnosticFail(player,"best_isolation_target");
-            if(action==15&&BestEquipment.isIsolated(held))return diagnosticFail(player,"best_already_isolated");
-            if(action==16&&!BestEquipment.isIsolated(held))return diagnosticFail(player,"best_already_connected");
+            if(!BestEquipment.isEquipment(held))return rejected(Status.TARGET,"target_equipment",materials);
+            if(action==15&&BestEquipment.isIsolated(held))return rejected(Status.TARGET,"already_isolated",materials);
+            if(action==16&&!BestEquipment.isIsolated(held))return rejected(Status.TARGET,"already_connected",materials);
         }
         if(action>=10&&action<=12){
-            if(!held.is(CatalogueContent.item("best_frame")))return fail(player,"请脱下骨架并持于主手");
+            if(!held.is(CatalogueContent.item("best_frame")))return rejected(Status.TARGET,"target_frame",materials);
             boolean installed=BestEquipment.strideInstalled(held);
-            if(action==10&&installed)return fail(player,"这具骨架已安装跨步组件");
-            if(action!=10&&!installed)return fail(player,"这具骨架尚未安装跨步组件");
+            if(action==10&&installed)return rejected(Status.TARGET,"already_installed",materials);
+            if(action!=10&&!installed)return rejected(Status.TARGET,"not_installed",materials);
         }
-        if(action==4&&(!BestEquipment.isEquipment(held)||BestEquipment.wear(held)==0))return fail(player,"请脱下需要维修的骨架或钻切器，并持于主手");
-        if(action==7&&(!BestEquipment.isEquipment(held)||BestEquipment.heat(held)==0))return fail(player,"请将需要降温的骨架或钻切器持于主手");
-        if((action==4||action==7)&&held.is(CatalogueContent.item("best_cutter"))&&learned<2)return fail(player,"先学习工程钻切，再整备钻切器");
-        List<ItemStack> plan=new ArrayList<>();for(int i=0;i<36;i++)plan.add(player.getInventory().getItem(i).copy());
+        if(action==4&&(!BestEquipment.isEquipment(held)||BestEquipment.wear(held)==0))return rejected(Status.TARGET,"target_worn",materials);
+        if(action==7&&(!BestEquipment.isEquipment(held)||BestEquipment.heat(held)==0))return rejected(Status.TARGET,"target_hot",materials);
+        if((action==4||action==7)&&held.is(CatalogueContent.item("best_cutter"))&&learned<2)return rejected(Status.PREREQUISITE,"requires_research_2",materials);
+        List<ItemStack> plan=new ArrayList<>();for(int i=0;i<36;i++)plan.add(inventory.getItem(i).copy());
         for(var input:cost(action).entrySet()){
             int need=input.getValue();
             for(ItemStack stack:plan)if(CatalogueContent.matches(input.getKey(),stack)&&usableMaterial(stack)){
                 int n=Math.min(need,stack.getCount());stack.shrink(n);need-=n;if(need==0)break;
             }
-            if(need>0)return fail(player,"材料不足或晶材受污染："+actionCost(action));
+            if(need>0)return rejected(Status.MATERIALS,"missing_materials",materials);
         }
-        if(action==2||action==3||action==6||action==9||action==14){
-            ItemStack out=CatalogueContent.stack(action==2?"best_frame":action==3?"best_cutter":action==6?"best_service_kit":action==9?"best_stride_module":"best_diagnostic_tool",1);
-            if(!insert(plan,out))return fail(player,"背包需腾出一格存放装配成品");
+        if(action==2||action==3||action==6||action==9||action==14||action==18){
+            ItemStack out=CatalogueContent.stack(action==2?"best_frame":action==3?"best_cutter":action==6?"best_service_kit":action==9?"best_stride_module":action==14?"best_diagnostic_tool":"best_mech",1);
+            if(!insert(plan,out))return rejected(Status.SPACE,"space_output",materials);
         }
-        if(action==4){ItemStack repaired=plan.get(player.getInventory().selected);BestEquipment.setWear(repaired,Math.max(0,BestEquipment.wear(repaired)-200));}
+        if(action==4){ItemStack repaired=plan.get(inventory.selected);BestEquipment.setWear(repaired,Math.max(0,BestEquipment.wear(repaired)-200));}
         if(action==7){
-            if(!insert(plan,new ItemStack(Items.BUCKET)))return fail(player,"背包需腾出位置存放返还的空桶");
-            BestEquipment.cool(plan.get(player.getInventory().selected),400);
+            if(!insert(plan,new ItemStack(Items.BUCKET)))return rejected(Status.SPACE,"space_bucket",materials);
+            BestEquipment.cool(plan.get(inventory.selected),400);
         }
-        if(action==12&&!insert(plan,CatalogueContent.stack("best_stride_module",1)))return fail(player,"背包需腾出一格存放拆回的组件");
+        if(action==12&&!insert(plan,CatalogueContent.stack("best_stride_module",1)))return rejected(Status.SPACE,"space_module",materials);
         if(action>=10&&action<=12){
-            ItemStack changed=plan.get(player.getInventory().selected);
+            ItemStack changed=plan.get(inventory.selected);
             var data=CatalogueEquipment.getData(changed);
             data.putBoolean("BestStrideInstalled",action!=12);
             data.putBoolean("BestStrideEnabled",action==11&&!data.getBoolean("BestStrideEnabled"));
             CatalogueEquipment.setData(changed,data);
         }
         if(action==15||action==16){
-            ItemStack changed=plan.get(player.getInventory().selected);
+            ItemStack changed=plan.get(inventory.selected);
             var data=CatalogueEquipment.getData(changed);data.putBoolean("BestBatteryIsolated",action==15);CatalogueEquipment.setData(changed,data);
         }
-        for(int i=0;i<36;i++)player.getInventory().setItem(i,plan.get(i));
+        return new Plan(new Preview(Status.READY,Component.translatable("ui.starfall_blueprint.best_ready"),materials),plan,nextLevel);
+    }
+    /** Server-authoritative validation and atomic commit of the same plan used by previews. */
+    public static boolean perform(Player player,int action){
+        if(player.level().isClientSide||action<0||action>18)return false;
+        Inventory inventory=player.getInventory();
+        Plan transaction=plan(inventory,action,Knowledge.of(player));
+        if(!transaction.preview().executable()){
+            player.displayClientMessage(transaction.preview().reason(),true);
+            return false;
+        }
+        List<ItemStack> plan=transaction.inventory();
+        int nextLevel=transaction.nextLevel();
+        for(int i=0;i<36;i++)inventory.setItem(i,plan.get(i));
         if(nextLevel>0)player.getPersistentData().putInt(RESEARCH,nextLevel);
         if(action==8)player.getPersistentData().putBoolean(LIGHT_MOBILITY,true);
         if(action==13)player.getPersistentData().putBoolean(DIAGNOSTICS,true);
-        player.getInventory().setChanged();player.inventoryMenu.broadcastChanges();player.containerMenu.broadcastChanges();
-        if(action>=13){player.displayClientMessage(Component.translatable("message.starfall_blueprint."+switch(action){case 13->"best_diagnostics_learned";case 14->"best_diagnostic_assembled";case 15->"best_battery_isolated";default->"best_battery_connected";}),true);return true;}
+        if(action==17)player.getPersistentData().putBoolean("BestMechOperation",true);
+        inventory.setChanged();player.inventoryMenu.broadcastChanges();player.containerMenu.broadcastChanges();
+        if(action>=13){player.displayClientMessage(Component.translatable("message.starfall_blueprint."+switch(action){case 13->"best_diagnostics_learned";case 14->"best_diagnostic_assembled";case 15->"best_battery_isolated";case 16->"best_battery_connected";case 17->"best_mech_learned";default->"best_mech_assembled";}),true);return true;}
         player.displayClientMessage(Component.literal(nextLevel>0||action==8?"已掌握："+actionLabel(action).replace("学习：",""):action==4?"维修完成；电量与温度保持原状":action==7?"冷却完成；已返还空桶":action==6?"整备包装配完成；主手持包、副手持受损装备右键维修":action==9?"跨步组件装配完成":action==10?"组件安装完成；跨步档已关闭":action==11?"持续地面跨步档："+(BestEquipment.strideEnabled(player.getMainHandItem())?"开启，站立也耗能":"关闭"):action==12?"组件已拆回；骨架电热与耐久保持原状":"装配完成；请用已充电的工具能匣补能"),true);
         return true;
     }

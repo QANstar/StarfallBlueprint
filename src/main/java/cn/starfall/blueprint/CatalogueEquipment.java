@@ -26,6 +26,7 @@ public final class CatalogueEquipment {
         if(key.equals("blackdog_watch"))return new BlackDogArmor.Watch(p);
         if(key.startsWith("blackdog_armor_"))return BlackDogArmor.createProjection(key,p);
         if(key.startsWith("blackdog_"))return Lingchuan.moduleItem(key,p);
+        if(key.equals("best_mech"))return new BestMechItem(p);
         if(key.equals("best_frame"))return new BestEquipment.Frame(p);
         if(key.equals("best_cutter"))return new BestEquipment.Cutter(p);
         if(key.equals("best_service_kit"))return new BestServiceKit(p);

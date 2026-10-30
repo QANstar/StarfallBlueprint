@@ -1,0 +1,4 @@
+*
+!.gitignore
+!screenshots/
+!screenshots/*.png

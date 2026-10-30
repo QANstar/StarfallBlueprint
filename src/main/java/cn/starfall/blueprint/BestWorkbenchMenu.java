@@ -11,9 +11,11 @@ import net.minecraft.world.item.ItemStack;
 /** No private inventory or result slots; closing this menu never moves or drops items. */
 public final class BestWorkbenchMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
+    private final Inventory inventory;
     private int syncedResearchLevel;
     private boolean syncedLightMobility;
     private boolean syncedDiagnostics;
+    private boolean syncedMechOperation;
 
     public BestWorkbenchMenu(int id, Inventory inventory) {
         this(id, inventory, ContainerLevelAccess.NULL);
@@ -22,6 +24,7 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
     public BestWorkbenchMenu(int id, Inventory inventory, ContainerLevelAccess access) {
         super(BestEngineering.MENU.get(), id);
         this.access = access;
+        this.inventory = inventory;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
                 addSlot(new Slot(inventory, 9 + row * 9 + col, 70 + col * 18, 152 + row * 18));
@@ -49,18 +52,32 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
             }
             @Override public void set(int value) { syncedDiagnostics = value != 0; }
         });
+        addDataSlot(new DataSlot() {
+            @Override public int get() {
+                return (inventory.player.level().isClientSide
+                        ? syncedMechOperation : BestEngineering.hasMechOperation(inventory.player)) ? 1 : 0;
+            }
+            @Override public void set(int value) { syncedMechOperation = value != 0; }
+        });
     }
 
     public int researchLevel() { return syncedResearchLevel; }
     public boolean hasLightMobility() { return syncedLightMobility; }
     public boolean hasDiagnostics() { return syncedDiagnostics; }
+    public boolean hasMechOperation() { return syncedMechOperation; }
+    public BestEngineering.Preview preview(int action) {
+        BestEngineering.Knowledge knowledge = inventory.player != null && !inventory.player.level().isClientSide
+                ? BestEngineering.Knowledge.of(inventory.player)
+                : new BestEngineering.Knowledge(researchLevel(), hasLightMobility(), hasDiagnostics(), hasMechOperation());
+        return BestEngineering.preview(inventory, action, knowledge);
+    }
 
     @Override public boolean stillValid(Player player) {
         return stillValid(access, player, BestEngineering.WORKBENCH.get());
     }
 
     @Override public boolean clickMenuButton(Player player, int action) {
-        if (player.level().isClientSide || action < 0 || action > 16 || !stillValid(player)) return false;
+        if (player.level().isClientSide || action < 0 || action > 18 || !stillValid(player)) return false;
         boolean performed = BestEngineering.perform(player, action);
         broadcastChanges();
         return performed;

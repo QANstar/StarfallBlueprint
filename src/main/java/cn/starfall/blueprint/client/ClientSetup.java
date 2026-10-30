@@ -18,6 +18,10 @@ public final class ClientSetup {
             }
         },cn.starfall.blueprint.CatalogueContent.item("blackdog_armor_head"),cn.starfall.blueprint.CatalogueContent.item("blackdog_armor_chest"),cn.starfall.blueprint.CatalogueContent.item("blackdog_armor_legs"),cn.starfall.blueprint.CatalogueContent.item("blackdog_armor_feet"));
     }
+    @SubscribeEvent public static void mechRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) { event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.TYPE.get(), BestMechRenderer::new); }
+    @SubscribeEvent public static void mechLayers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions event) { event.registerLayerDefinition(BestMechModel.LAYER, BestMechModel::createLayer); }
+    @SubscribeEvent public static void mechKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) { BestMechClient.keys(event); }
+    @SubscribeEvent public static void mechHud(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) { BestMechClient.layers(event); }
     @SubscribeEvent public static void fluids(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event){
         cn.starfall.blueprint.CatalogueFluids.ENTRIES.forEach((key,entry)->event.registerFluidType(new net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions(){
             public net.minecraft.resources.ResourceLocation getStillTexture(){return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_still");}

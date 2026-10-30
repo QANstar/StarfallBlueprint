@@ -1,0 +1,6 @@
+*
+!.gitignore
+!zh_cn/
+!en_us/
+!*/screenshots/
+!*/screenshots/*.png

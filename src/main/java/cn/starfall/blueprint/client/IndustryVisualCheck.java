@@ -25,6 +25,7 @@ public final class IndustryVisualCheck {
     private static IndustryScreen recipeReview;
     private static int phase,ticks;
     public static void tick(ClientTickEvent.Post event){
+        if(Boolean.getBoolean("starfall.bestMechVisualCheck")){BestMechVisualCheck.tick(event);return;}
         var mc=Minecraft.getInstance();
         if(mc.getOverlay()!=null)return;
         if(phase==0){

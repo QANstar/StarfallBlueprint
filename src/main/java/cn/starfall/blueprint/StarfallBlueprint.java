@@ -117,6 +117,7 @@ public final class StarfallBlueprint {
 
     public StarfallBlueprint(IEventBus bus) {
         CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();Blueprints.initialize();AggregateMachines.initialize();BestEngineering.initialize();Lingchuan.initialize();
+        BestMechs.initialize(); BestMechs.register(bus);
         CatalogueFluids.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus); RECIPE_TYPES.register(bus);
         bus.addListener(this::capabilities);
@@ -149,6 +150,8 @@ public final class StarfallBlueprint {
         }
     }
     private void capabilities(RegisterCapabilitiesEvent event) {
+        event.registerEntity(Capabilities.EnergyStorage.ENTITY, BestMechs.TYPE.get(), (mech, context) -> mech.energyPort());
+        event.registerItem(Capabilities.EnergyStorage.ITEM, (stack, context) -> BestMechItem.energy(stack), CatalogueContent.item("best_mech"));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK,AggregateMachines.PART_ENTITY.get(),(part,side)->{var owner=part.owner();return owner!=null&&owner.hasFluidPort()?owner.fluidPort():null;});
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK,AggregateMachines.PART_ENTITY.get(),(part,side)->{var owner=part.owner();return owner==null?null:owner.energyPort(side);});
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,AggregateMachines.PART_ENTITY.get(),(part,side)->{var owner=part.owner();return owner==null?null:new SidedInvWrapper(owner.workInventory(),side==null?net.minecraft.core.Direction.UP:side);});

@@ -9996,6 +9996,38 @@
       "registry_id": "starfall_blueprint:best_workbench",
       "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
       "personal_learning": {
+        "mech_operation": {
+          "name": "机甲驾驶",
+          "english": "Mech Operation",
+          "requires": [
+            "field_servicing",
+            "light_mobility",
+            "diagnostics"
+          ],
+          "independent": true,
+          "minimum_research_level": 3,
+          "storage_key": "BestMechOperation",
+          "storage_type": "boolean",
+          "persistence": "player_saved_data_and_death_clone",
+          "inputs": [
+            {
+              "item": "load",
+              "qty": 4
+            },
+            {
+              "item": "conductor",
+              "qty": 4
+            },
+            {
+              "item": "sensor",
+              "qty": 2
+            },
+            {
+              "item": "board",
+              "qty": 2
+            }
+          ]
+        },
         "basic_engineering": {
           "name": "基础工务",
           "inputs": [
@@ -10105,6 +10137,10 @@
         "connect": 16
       },
       "learning_persistence": "player_saved_data_and_death_clone",
+      "mech_actions": {
+        "learn": 17,
+        "assemble": 18
+      },
       "catalogue": true,
       "category": "机器与设施",
       "subcategory": "加工与建造",
@@ -10121,6 +10157,181 @@
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/klEQVR4nGNgGAUDDBjxSUprm/5H5j+9ehqvemSw4/SF/x6mBgTVMxFScLJZBoxJASDLkWl8gIUkk4m0GASI8T0IMA2k5SBAMATMa5/QxGIYYERPdHMXzGagJUhOSEVJzCzoChYuWMpAT8BEV9sGowNY0AUOHThAVwcwklMCossTqw5bScqCy2V2Dg54QyRqXTcKf1lQKVnmMDEMMGAaaAewkKsRV5DTxQFPSaiWKXbAXEjRTLBaxQUIlawsxJbf5ABi6hUWUgwktmFCqAYdVLmAacQ7gIWUECAlbqnqgLk0bCWxkNqEIgWAakNYZUSyAw5RqV1A7/bFKGAgFQAAswlcDML6AtsAAAAASUVORK5CYII="
+    },
+    "best_mech": {
+      "id": "best_mech",
+      "name": "工程机甲原型",
+      "unit": "件",
+      "icon": "tool",
+      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "external": false,
+      "mass": null,
+      "english": "Engineering Mech Prototype",
+      "registry_id": "starfall_blueprint:best_mech",
+      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
+      "manual_assembly": {
+        "station": "best_workbench",
+        "personal_learning": true,
+        "automatic": false,
+        "requires": [
+          "field_servicing",
+          "light_mobility",
+          "diagnostics",
+          "mech_operation"
+        ],
+        "inputs": [
+          {
+            "item": "steel",
+            "qty": 32
+          },
+          {
+            "item": "load",
+            "qty": 16
+          },
+          {
+            "item": "conductor",
+            "qty": 8
+          },
+          {
+            "item": "board",
+            "qty": 4
+          },
+          {
+            "item": "steel_fix",
+            "qty": 16
+          },
+          {
+            "item": "head",
+            "qty": 2
+          },
+          {
+            "item": "sensor",
+            "qty": 2
+          },
+          {
+            "item": "sheath",
+            "qty": 8
+          }
+        ],
+        "output_count": 1
+      },
+      "max_stack_size": 1,
+      "item_type": "packed_entity",
+      "entity_id": "starfall_blueprint:best_engineering_mech",
+      "entity_dimensions": {
+        "width": 1.8,
+        "height": 3.2,
+        "rider_seat_height": 2.2
+      },
+      "entity_texture": "starfall_blueprint:textures/entity/best_engineering_mech.png",
+      "packed_state": {
+        "preserves": [
+          "health",
+          "energy",
+          "heat",
+          "wear",
+          "isolated",
+          "work_ticks",
+          "custom_name"
+        ],
+        "initially_empty": true,
+        "occupied_pack_rejected": true,
+        "isolation_required": true,
+        "stationary_grounded_required": true,
+        "full_inventory_rejected": true,
+        "destroyed_health_cannot_deploy": true,
+        "worn_out_can_deploy": true,
+        "deploy_support_and_clearance": "3x3",
+        "packed_isolation_toggle": "main_hand_packed_item_normal_air_use_offhand_diagnostic_tool"
+      },
+      "energy_storage": {
+        "capacity": 20000000,
+        "unit": "XH",
+        "initially_empty": true,
+        "source": "s01",
+        "cell_transfer_per_tick": 512,
+        "entity_receive_per_tick": 512,
+        "packed_base_transfer_per_tick": 5000,
+        "isolated_rejects_charging": true,
+        "same_tick_transfer_budget": true,
+        "automatic_rider_inventory_supply": false
+      },
+      "thermal": {
+        "overheat": 1000,
+        "resume": 400,
+        "cooling_per_tick": 2
+      },
+      "max_wear": 2400,
+      "driver_knowledge": {
+        "minimum_research_level": 3,
+        "requires": [
+          "field_servicing",
+          "light_mobility",
+          "diagnostics",
+          "mech_operation"
+        ]
+      },
+      "operation": {
+        "controls": "vanilla_ground_wasd",
+        "flight": false,
+        "jump": false,
+        "energy_per_commanded_movement_tick": 400,
+        "heat_per_commanded_movement_tick": 4,
+        "wear_per_work_ticks": 100,
+        "unmanned_consumption": false,
+        "idle_consumption": false
+      },
+      "drill": {
+        "key": "G",
+        "networking_action": 0,
+        "targeting": "single_block",
+        "harvest_tier": "iron",
+        "energy": 32000,
+        "heat": 120,
+        "wear": 1,
+        "cooldown_ticks": 20,
+        "ordinary_drops": true,
+        "deny": [
+          "block_entities",
+          "unbreakable",
+          "protected_blocks"
+        ]
+      },
+      "field_service": {
+        "diagnostics": "noncrouching_diagnostic_tool_read_only",
+        "isolation": "crouching_diagnostic_tool",
+        "requires_isolation_and_no_passengers": [
+          "repair",
+          "cooling"
+        ],
+        "charging_requires_connected_and_no_passengers": true,
+        "repair": {
+          "material": "steel",
+          "count": 1,
+          "wear_restored": 200,
+          "health_restored": 5
+        },
+        "cooling": {
+          "material": "water_bucket",
+          "count": 1,
+          "heat_reduction": 400,
+          "returns": "bucket"
+        }
+      },
+      "catalogue": true,
+      "category": "装备与武器",
+      "subcategory": "贝斯特工程装备",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "purpose": {
+        "summary": "驾驶工业双足机甲并进行铁级单点钻切",
+        "benefit": "本人三级与独立轻载、诊断、机甲驾驶后人工装配；20MXH空电出厂，无公共配方，收纳保存生命、电热和磨损。",
+        "operation": "WASD地面驾驶，指令移动400XH／刻、热4、每100工作刻磨损1；无人无指令免巡航计费。G单点钻切32000XH、热120、磨损1、20刻冷却。空手骑乘／Shift下车；隔离空载静止落地、空手潜行收纳且须背包空格。隔离空载钢修／水冷；接通空载s01补512XH／刻。收纳物主手、副手诊断器对空气右键接通，再潜行对基地储能方块按住右键补能≤5000XH／刻。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABtklEQVR4nGNgGGDASEiBtLbpf0oteXr1NE57WIgx4GSzDNmWm9c+wSvPQg1DaBoFMLDj9IX/yQmpDMSCuQtmM3iYGhA0n4WBRDDv8HoMsT2v76DwlwWVEm0eC6kOAFl2ZOpWMLuhIZ+hoWEiirxNtjdJ5jExkAmwWU4OYBpIy8lygIuoCtUsBwEWUgsc9ASHD+AzE1Y4sSAL2jk4oCg6dOAAhhgpCQ2mF90cEJ/sXLCMhCxG01xALcBCimJQ6TZgDli4YCnVLcdwAHLiwAW6nQnngtK9KuSlgbkLZsODGV8dTg4AeS4+IRqMkQELqQaR4jtkAPXQf3TPsRDSSEy0UAIYiSkBkVtEMkHr8UbNk3WBGObB9IDaFCAauZ3AQih7kdIIIQRAFoMcAcIwRzCB4gNkCTaLQGKUtAeJASwwBigUYI5ADpErsvXwMoCY9ABqP4L0E6uHBURAQ+E/zGJqBjsygKUBDAcgA1pYjs1imBgLTAA5FNAdgRyMoFyDrZBCz03IekDmYWslgxzBiG4IzAHY2gEwg3E5gFQ9IIBSFMNyBD0BE8MAA0ZsgoRKR2LSADF6BgUAAJoT0H6/J+66AAAAAElFTkSuQmCC"
     },
     "best_frame": {
       "id": "best_frame",
@@ -25148,6 +25359,7 @@
     "silk_touch",
     "auto_smelt",
     "best_workbench",
+    "best_mech",
     "best_frame",
     "best_cutter",
     "best_service_kit",

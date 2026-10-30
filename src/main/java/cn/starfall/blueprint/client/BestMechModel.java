@@ -18,11 +18,12 @@ import net.minecraft.util.Mth;
 /** Original industrial walker: open cockpit, braced chassis and interchangeable right tool arm. */
 public final class BestMechModel extends EntityModel<BestMechEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID, "best_engineering_mech"), "main");
-    private final ModelPart root, leftLeg, rightLeg, leftArm, rightArm, drillHead, bucketHead, reinforcement;
+    private final ModelPart root, leftLeg, rightLeg, leftArm, rightArm, drillHead, bucketHead, reinforcement, generator;
 
     public BestMechModel(ModelPart root) {
         this.root = root;
         reinforcement = root.getChild("reinforcement");
+        generator = root.getChild("generator");
         leftLeg = root.getChild("left_leg"); rightLeg = root.getChild("right_leg");
         leftArm = root.getChild("left_arm"); rightArm = root.getChild("right_arm");
         drillHead = rightArm.getChild("drill_head"); bucketHead = rightArm.getChild("bucket_head");
@@ -48,6 +49,11 @@ public final class BestMechModel extends EntityModel<BestMechEntity> {
                 .texOffs(0,48).addBox(-10,-13,-7,3,10,14)
                 .texOffs(0,48).addBox(7,-13,-7,3,10,14)
                 .texOffs(64,24).addBox(-9,-7,-8,18,4,2), PartPose.ZERO);
+        // Compact rear generator and twin exhausts; cockpit and the original collision box stay clear.
+        root.addOrReplaceChild("generator", CubeListBuilder.create()
+                .texOffs(64,84).addBox(-4,-25,9,8,8,5.25f)
+                .texOffs(80,0).addBox(-8,-26,10,3,11,3)
+                .texOffs(80,0).addBox(5,-26,10,3,11,3), PartPose.ZERO);
         for (int side : new int[]{-1,1}) {
             root.addOrReplaceChild(side < 0 ? "right_leg" : "left_leg", CubeListBuilder.create()
                     .texOffs(0,48).addBox(-3,0,-3,6,14,6)
@@ -84,6 +90,7 @@ public final class BestMechModel extends EntityModel<BestMechEntity> {
 
     @Override public void setupAnim(BestMechEntity entity, float limbSwing, float limbSwingAmount, float age, float yaw, float pitch) {
         reinforcement.visible = cn.starfall.blueprint.BestMechBodies.REINFORCED.equals(entity.bodyKey());
+        generator.visible = cn.starfall.blueprint.BestMechCores.GENERATOR.equals(entity.coreKey());
         drillHead.visible = BestMechArms.DRILL.equals(entity.armKey());
         bucketHead.visible = BestMechArms.EXCAVATOR.equals(entity.armKey());
         float stride = Mth.cos(limbSwing*0.65F)*Math.min(limbSwingAmount,0.65F);

@@ -120,10 +120,27 @@ MECH_MESSAGES.update({
 })
 
 
+MECH_MESSAGES.update({
+ 'message.best_page_5': ('核心', 'Core'),
+ 'message.best_action_24': ('制造固燃发电核心', 'Assemble generator core'),
+ 'message.best_mech_generator_core_cost': ('需本人三级、轻载、诊断与驾驶；普通钢16、承相8、导相8、控制板4、护套8、钢制固定件8', 'Requires your level 3, Mobility, Diagnostics and Mech Operation; 16 steel, 8 load inserts, 8 conductive plates, 4 boards, 8 sheaths, 8 steel fasteners.'),
+ 'message.best_mech_generator_core_assembled': ('已制造固燃发电核心', 'Solid-fuel generator core assembled.'),
+ 'tooltip.best_mech_generator_core': ('独立Core槽；仅货舱无余物熔炉固燃，运行每刻1000 XH／热2，每1000发电刻磨损1；余量不足1000、隔离、热锁或磨尽暂停且保留已付燃料，无需骑手', 'Separate Core slot; burns remainder-free furnace fuel from cargo only. Generates 1000 XH and 2 heat/t; 1 wear per 1000 generator ticks. Pauses with paid fuel retained when isolated, heat locked, worn out or room <1000 XH; no rider needed.'),
+ 'tooltip.best_mech_core_install': ('完整驾驶知识，隔离空载存活停稳落地非流体时潜行主手安装空核心槽；先拆后换。诊断主手＋熔炉副手潜行拆回，熔炉不耗、36格主背包须空格且已付燃料刻为0', 'All mech knowledge required; sneak-use in main hand on an empty Core slot of an isolated, unoccupied, living, stationary mech on dry ground. Remove before swapping: diagnostic + offhand furnace (retained), an empty main-inventory slot and zero paid fuel ticks required.'),
+ 'mech.core.none': ('核心：空（纯电）', 'Core: empty (electric)'),
+ 'mech.core.installed': ('核心：%s', 'Core: %s'),
+ 'mech.core.controls': ('潜行主手核心安装；主手诊断器＋副手熔炉潜行拆回（熔炉不耗）；须无剩余燃料刻及主背包空格', 'Sneak-use a main-hand core to install; diagnostic + offhand furnace to remove (furnace retained). Requires zero paid fuel ticks and an empty main-inventory slot.'),
+ 'mech.core.failed': ('核心装拆失败：需完整驾驶知识、隔离空载存活停稳落地非流体；安装须空槽，拆回须36格主背包空格且剩余燃料刻为0；状态与隔离不变', 'Core change rejected: all mech knowledge and an isolated, unoccupied, living, stationary mech on dry ground required. Installation needs an empty slot; removal needs an empty main-inventory slot and zero paid fuel ticks. State and isolation preserved.'),
+ 'mech.core.fuel': ('已付燃料：%s 刻', 'Paid fuel: %s ticks'),
+ 'hud.mech.panel.core': ('核心：%s', 'Core: %s'),
+})
+
 BEST_UI_MESSAGES = {
- 'tab_0': ('工务', 'Workshop'), 'tab_1': ('轻载', 'Mobility'),
+ 'tab_0': ('工务', 'Build'), 'tab_1': ('轻载', 'Mobility'),
  'tab_2': ('诊断', 'Service'), 'tab_3': ('机甲', 'Mech'),
- 'tab_4': ('工程臂', 'Tool arms'),
+ 'tab_4': ('工程臂', 'Arms'), 'tab_5': ('核心', 'Core'),
+ 'material_action_24': ('固燃发电核心', 'Generator core'),
+ 'hint_5': ('独立核心槽；货舱固燃，1000 XH／刻；诊断器＋副手熔炉拆回，须无剩余燃料刻', 'Separate Core slot; cargo fuel, 1000 XH/t. Remove with diagnostic + offhand furnace; requires zero paid fuel ticks.'),
  'material_action_23': ('强化机体', 'Reinforced body'),
  'material_action_21': ('钻切工程臂', 'Drilling arm'), 'material_action_22': ('挖掘工程臂', 'Excavator arm'),
  'hint_4': ('独立工程臂槽；先拆后换。诊断器主手＋铁镐副手潜行拆回，须主背包空格', 'Separate arm slot; remove before swapping. Sneak-use diagnostic + offhand iron pickaxe to remove; main inventory needs an empty slot.'),
@@ -184,6 +201,7 @@ for action, labels in enumerate([
  ('制造散热模组', 'Assemble radiator module'), ('制造强化驱动模组', 'Assemble reinforced drive'),
  ('制造钻切工程臂', 'Assemble drilling arm'), ('制造挖掘工程臂', 'Assemble excavator arm'),
  ('制造强化机体', 'Assemble reinforced body'),
+ ('制造固燃发电核心', 'Assemble generator core'),
 ]):
     BEST_UI_MESSAGES[f'action_{action}'] = labels
 MECH_MESSAGES.update({f'ui.best_{key}': value for key, value in BEST_UI_MESSAGES.items()})

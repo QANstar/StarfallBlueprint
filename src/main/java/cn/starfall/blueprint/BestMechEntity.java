@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
 import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -33,6 +34,9 @@ public final class BestMechEntity extends PathfinderMob {
     private static final EntityDataAccessor<String> UTILITY_MODULE = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> ENGINEERING_ARM = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> BODY = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> CORE = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Integer> CORE_FUEL_TICKS = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.INT);
+    private int coreWorkTicks;
     // Keep one container for the entity's entire lifetime so open menus never retain a replaced inventory.
     private final SimpleContainer cargo = new SimpleContainer(18) {
         @Override public boolean canPlaceItem(int slot, ItemStack stack) {
@@ -53,6 +57,7 @@ public final class BestMechEntity extends PathfinderMob {
         super.defineSynchedData(builder); builder.define(ENERGY, 0); builder.define(HEAT, 0); builder.define(WEAR, 0);
         builder.define(ISOLATED, false); builder.define(LOCKED, false); builder.define(OPERATOR_QUALIFIED, false);
         builder.define(UTILITY_MODULE, ""); builder.define(ENGINEERING_ARM, BestMechArms.DRILL); builder.define(BODY, "");
+        builder.define(CORE, ""); builder.define(CORE_FUEL_TICKS, 0);
     }
     public int energy() { return entityData.get(ENERGY); }
     public int heat() { return entityData.get(HEAT); }
@@ -63,6 +68,40 @@ public final class BestMechEntity extends PathfinderMob {
     public String moduleKey() { return entityData.get(UTILITY_MODULE); }
     public String armKey() { return entityData.get(ENGINEERING_ARM); }
     public String bodyKey() { return entityData.get(BODY); }
+    public String coreKey() { return entityData.get(CORE); }
+    public int coreFuelTicks() { return entityData.get(CORE_FUEL_TICKS); }
+    public boolean installCore(Player player, InteractionHand hand) {
+        ItemStack held = player.getItemInHand(hand);
+        if(hand != InteractionHand.MAIN_HAND || !player.isShiftKeyDown() || !canServiceModule(player)
+                || !coreKey().isEmpty() || BestMechCores.key(held).isEmpty()) return false;
+        entityData.set(CORE, BestMechCores.GENERATOR); held.shrink(1); player.getInventory().setChanged(); return true;
+    }
+    public boolean removeCore(Player player) {
+        if(!canServiceModule(player) || coreKey().isEmpty() || coreFuelTicks() > 0) return false;
+        int slot = player.getInventory().getFreeSlot(); if(slot < 0) return false;
+        player.getInventory().setItem(slot, CatalogueContent.stack(coreKey(), 1)); entityData.set(CORE, "");
+        player.getInventory().setChanged(); return true;
+    }
+    /** Internal generation follows cooling and latch recovery, before vanilla movement. */
+    private void tickCore() {
+        if(level().isClientSide || !BestMechCores.GENERATOR.equals(coreKey()) || !ready(0) || capacity() - energy() < 1000) return;
+        if(coreFuelTicks() == 0) {
+            for(int slot = 0; slot < cargoSlots(); slot++) {
+                ItemStack fuel = cargo.getItem(slot);
+                if(fuel.isEmpty() || fuel.hasCraftingRemainingItem()) continue;
+                int ticks = fuel.getBurnTime(RecipeType.SMELTING);
+                if(ticks <= 0 || ticks > BestMechCores.MAX_FUEL_TICKS) continue;
+                fuel.shrink(1); cargo.setChanged();
+                entityData.set(CORE_FUEL_TICKS, ticks); break;
+            }
+        }
+        if(coreFuelTicks() == 0) return;
+        entityData.set(ENERGY, energy() + 1000);
+        entityData.set(CORE_FUEL_TICKS, coreFuelTicks() - 1);
+        int wear = ++coreWorkTicks >= 1000 ? 1 : 0;
+        if(wear != 0) coreWorkTicks = 0;
+        spend(0, 2, wear);
+    }
     public int capacity() { return BestMechBodies.capacity(bodyKey()); }
     public int cargoSlots() { return BestMechBodies.cargoSlots(bodyKey()); }
     public SimpleContainer cargo() { return cargo; }
@@ -142,6 +181,7 @@ public final class BestMechEntity extends PathfinderMob {
             if(drillCooldown > 0) drillCooldown--;
             entityData.set(HEAT, Math.max(0, heat() - coolingRate()));
             if(heat() <= RECOVER_HEAT) entityData.set(LOCKED, false);
+            tickCore();
             if(!(getControllingPassenger() instanceof Player p) || !qualified(p) || !ready(movementCost())) stopHorizontal();
         }
         super.tick();
@@ -220,6 +260,7 @@ public final class BestMechEntity extends PathfinderMob {
         tag.putInt("WorkTicks", workTicks); tag.putInt("DrillCooldown", drillCooldown); tag.putFloat("Health", getHealth());
         tag.putLong("ChargeTick", chargeTick); tag.putInt("ChargeUsed", chargeUsed);
         tag.putString(BestMechModules.STATE, moduleKey()); tag.putString(BestMechArms.STATE, armKey()); tag.putString(BestMechBodies.STATE, bodyKey());
+        tag.putString(BestMechCores.STATE, coreKey()); tag.putInt("CoreFuelTicks", coreFuelTicks()); tag.putInt("CoreWorkTicks", coreWorkTicks);
         ListTag items = new ListTag();
         for(int i = 0; i < cargo.getContainerSize(); i++) if(!cargo.getItem(i).isEmpty()) {
             CompoundTag entry = new CompoundTag(); entry.putInt("Slot", i);
@@ -233,6 +274,9 @@ public final class BestMechEntity extends PathfinderMob {
         entityData.set(UTILITY_MODULE, BestMechModules.sanitize(tag.getString(BestMechModules.STATE)));
         entityData.set(ENGINEERING_ARM, BestMechArms.read(tag));
         syncBody(BestMechBodies.read(tag));
+        entityData.set(CORE, BestMechCores.read(tag));
+        entityData.set(CORE_FUEL_TICKS, Math.clamp(tag.getInt("CoreFuelTicks"), 0, BestMechCores.MAX_FUEL_TICKS));
+        coreWorkTicks = Math.clamp(tag.getInt("CoreWorkTicks"), 0, 999);
         entityData.set(ENERGY, Math.clamp(tag.getInt("Energy"), 0, capacity()));
         cargo.clearContent(); ListTag items = tag.getList("Cargo", Tag.TAG_COMPOUND);
         for(int i = 0; i < items.size(); i++) {
@@ -309,7 +353,10 @@ public final class BestMechEntity extends PathfinderMob {
                 .append(Component.literal(" · ")).append(BestMechArms.installed(armKey()))
                 .append(Component.literal(" · ")).append(BestMechArms.controls())
                 .append(Component.literal(" · ")).append(BestMechBodies.installed(bodyKey()))
-                .append(Component.literal(" · ")).append(BestMechBodies.controls());
+                .append(Component.literal(" · ")).append(BestMechBodies.controls())
+                .append(Component.literal(" · ")).append(BestMechCores.installed(coreKey()))
+                .append(Component.literal(" · ")).append(BestMechCores.controls())
+                .append(Component.literal(" · ")).append(BestMechCores.fuel(coreFuelTicks()));
     }
     @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
@@ -317,6 +364,10 @@ public final class BestMechEntity extends PathfinderMob {
         if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND && held.is(Items.CHEST)) {
             if(canAccessCargo(player)) BestMechCargoMenu.open(player, this);
             return InteractionResult.CONSUME;
+        }
+        if(!BestMechCores.key(held).isEmpty()) {
+            if(!installCore(player, hand)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.core.failed"), false);
+            player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
         }
         if(!BestMechBodies.key(held).isEmpty()) {
             if(!installBody(player, hand)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.body.failed"), false);
@@ -333,6 +384,10 @@ public final class BestMechEntity extends PathfinderMob {
         }
         boolean diagnostic = held.is(CatalogueContent.item("best_diagnostic_tool"));
         if(diagnostic) {
+            if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND && player.getOffhandItem().is(Items.FURNACE)) {
+                if(!removeCore(player)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.core.failed"), false);
+                player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
+            }
             if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND && player.getOffhandItem().is(Items.IRON_BLOCK)) {
                 if(!removeBody(player)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.body.failed"), false);
                 player.displayClientMessage(status(), false); return InteractionResult.CONSUME;

@@ -1,0 +1,9 @@
+{
+  "chain_runs": 1,
+  "protected_files": 207,
+  "remote_values": 124,
+  "existing_keys": 1392,
+  "restored_files": [],
+  "icon_sha256": "72e0bbcb700ec832b40df603ff67dadc03a98de3ea8081dcfb8e2da4184b9a5e",
+  "manifest_sha256": "041baaac849e5b36acfe0eee70f258829f76eeb46d37d275573bec32c115a959"
+}

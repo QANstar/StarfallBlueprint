@@ -118,5 +118,8 @@ public final class BestMechItem extends Item {
         lines.add(BestMechArms.controls());
         lines.add(BestMechBodies.installed(BestMechBodies.read(tag)));
         lines.add(BestMechBodies.controls());
+        lines.add(BestMechCores.installed(BestMechCores.read(tag)));
+        lines.add(BestMechCores.controls());
+        lines.add(BestMechCores.fuel(Math.clamp(tag.getInt("CoreFuelTicks"), 0, BestMechCores.MAX_FUEL_TICKS)));
     }
 }

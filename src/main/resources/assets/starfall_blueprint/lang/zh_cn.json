@@ -694,5 +694,22 @@
   "ui.starfall_blueprint.mech_cargo_hint": "隔离整备 · 禁止存入收纳机甲",
   "hud.starfall_blueprint.mech.panel.body": "机体：%s",
   "ui.starfall_blueprint.best_material_action_23": "强化机体",
-  "ui.starfall_blueprint.best_action_23": "制造强化机体"
+  "ui.starfall_blueprint.best_action_23": "制造强化机体",
+  "item.starfall_blueprint.best_mech_generator_core": "固燃发电核心",
+  "message.starfall_blueprint.best_page_5": "核心",
+  "message.starfall_blueprint.best_action_24": "制造固燃发电核心",
+  "message.starfall_blueprint.best_mech_generator_core_cost": "需本人三级、轻载、诊断与驾驶；普通钢16、承相8、导相8、控制板4、护套8、钢制固定件8",
+  "message.starfall_blueprint.best_mech_generator_core_assembled": "已制造固燃发电核心",
+  "tooltip.starfall_blueprint.best_mech_generator_core": "独立Core槽；仅货舱无余物熔炉固燃，运行每刻1000 XH／热2，每1000发电刻磨损1；余量不足1000、隔离、热锁或磨尽暂停且保留已付燃料，无需骑手",
+  "tooltip.starfall_blueprint.best_mech_core_install": "完整驾驶知识，隔离空载存活停稳落地非流体时潜行主手安装空核心槽；先拆后换。诊断主手＋熔炉副手潜行拆回，熔炉不耗、36格主背包须空格且已付燃料刻为0",
+  "mech.starfall_blueprint.core.none": "核心：空（纯电）",
+  "mech.starfall_blueprint.core.installed": "核心：%s",
+  "mech.starfall_blueprint.core.controls": "潜行主手核心安装；主手诊断器＋副手熔炉潜行拆回（熔炉不耗）；须无剩余燃料刻及主背包空格",
+  "mech.starfall_blueprint.core.failed": "核心装拆失败：需完整驾驶知识、隔离空载存活停稳落地非流体；安装须空槽，拆回须36格主背包空格且剩余燃料刻为0；状态与隔离不变",
+  "mech.starfall_blueprint.core.fuel": "已付燃料：%s 刻",
+  "hud.starfall_blueprint.mech.panel.core": "核心：%s",
+  "ui.starfall_blueprint.best_tab_5": "核心",
+  "ui.starfall_blueprint.best_material_action_24": "固燃发电核心",
+  "ui.starfall_blueprint.best_hint_5": "独立核心槽；货舱固燃，1000 XH／刻；诊断器＋副手熔炉拆回，须无剩余燃料刻",
+  "ui.starfall_blueprint.best_action_24": "制造固燃发电核心"
 }

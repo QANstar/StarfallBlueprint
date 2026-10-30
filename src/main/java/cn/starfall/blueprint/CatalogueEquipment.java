@@ -45,6 +45,12 @@ public final class CatalogueEquipment {
                 lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_body_install"));
             }
         };
+        if(key.equals("best_mech_generator_core"))return new Item(p.stacksTo(1)){
+            @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
+                lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_generator_core"));
+                lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_core_install"));
+            }
+        };
         if(key.equals("best_frame"))return new BestEquipment.Frame(p);
         if(key.equals("best_cutter"))return new BestEquipment.Cutter(p);
         if(key.equals("best_service_kit"))return new BestServiceKit(p);

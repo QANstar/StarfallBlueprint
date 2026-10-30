@@ -15,7 +15,7 @@ neoForge {
         gameTestServer {
             type = 'gameTestServer'
             systemProperty 'neoforge.enabledGameTestNamespaces', providers.gradleProperty('gameTestNamespaces')
-                .getOrElse('starfall_blueprint,starfall_blueprint_servicing,starfall_blueprint_mobility,starfall_blueprint_diagnostics,starfall_blueprint_lingchuan,starfall_blueprint_mech,starfall_blueprint_mech_modules,starfall_blueprint_mech_arms,starfall_blueprint_mech_body')
+                .getOrElse('starfall_blueprint,starfall_blueprint_servicing,starfall_blueprint_mobility,starfall_blueprint_diagnostics,starfall_blueprint_lingchuan,starfall_blueprint_mech,starfall_blueprint_mech_modules,starfall_blueprint_mech_arms,starfall_blueprint_mech_body,starfall_blueprint_mech_core')
         }
     }
     mods { starfall_blueprint { sourceSet(sourceSets.main) } }

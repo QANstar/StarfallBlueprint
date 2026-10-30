@@ -186,7 +186,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     text = doc.read_text(encoding='utf-8')
     assert '5/5通过' in text and 'BestDiagnostics' in text and 'BestBatteryIsolated' in text
     assert '本节不宣称本轮服务端或客户端通过' in text
-assert (len(items), len(recipes), len(canonical['catalogue'])) == (312, 245, 178)
+assert (len(items), len(recipes), len(canonical['catalogue'])) == (313, 245, 179)
 armor = ART / 'textures/models/armor/best_frame_layer_2.png'
 assert armor.read_bytes() == (ATLAS / 'item-art/best_frame_layer_2.png').read_bytes()
 with Image.open(armor) as image:
@@ -225,7 +225,7 @@ assert drill['harvest_tier']=='iron' and drill['ordinary_drops']
 assert drill['deny']==['block_entities','unbreakable','protected_blocks']
 assert mech['field_service']['repair'] == dict(material='steel',count=1,wear_restored=200,health_restored=5)
 assert mech['field_service']['cooling'] == dict(material='water_bucket',count=1,heat_reduction=400,returns='bucket')
-assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20,drill_arm=21,excavator_arm=22,reinforced_body=23)
+assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20,drill_arm=21,excavator_arm=22,reinforced_body=23,generator_core=24)
 for path, size in [(ART / 'textures/item/best_mech.png',(32,32)),(ART / 'textures/entity/best_engineering_mech.png',(128,128))]:
     with Image.open(path) as image:
         assert image.size == size and image.mode == 'RGBA'
@@ -296,7 +296,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     text = doc.read_text(encoding='utf-8')
     assert 'EngineeringArm' in text and 'MEC-06部分实现' in text and '12,000 XH' in text
 # Body/cargo is one incremental MEC-04 step; manual-only and independent of both old slots.
-assert len(BEST_NAMES) == 12 and len(LEARNING) == 6
+assert len(BEST_NAMES) == 13 and len(LEARNING) == 6
 body = items['best_mech_reinforced_body']
 assert ASSEMBLY['best_mech_reinforced_body'] == [('steel',24), ('load',12), ('conductor',8), ('steel_fix',16), ('sheath',8)]
 assert ASSEMBLY_KNOWLEDGE['best_mech_reinforced_body'] == ASSEMBLY_KNOWLEDGE['best_mech']
@@ -355,6 +355,73 @@ for lang in ('zh_cn','en_us'):
 for doc in (ROOT/'docs/BEST_ENGINEERING.md',ATLAS.parent/'18_贝斯特轻型工程首批.md',ATLAS.parent/'02_科技树设定/02_贝斯特机械科技树.md'):
     text=doc.read_text(encoding='utf-8')
     assert all(s in text for s in ('2026-10-30','MEC-04容量步骤','精确当前生命','9..17','30,000,000 XH','不进行UI测试'))
+# Core is manual-only, independent, and retains paid fuel through every persistence boundary.
+core = items['best_mech_generator_core']
+assert ASSEMBLY['best_mech_generator_core'] == [('steel',16),('load',8),('conductor',8),('board',4),('sheath',8),('steel_fix',8)]
+assert ASSEMBLY_KNOWLEDGE['best_mech_generator_core'] == ASSEMBLY_KNOWLEDGE['best_mech']
+assert (core['real_item'],core['item_type'],core['max_stack_size'],core['max_durability']) == (True,'ordinary',1,0)
+assert core['attribute_modifiers'] == [] and core['manual_assembly']['output_count'] == 1
+assert not any(k in core for k in ('energy_storage','thermal','durability_system','equipment_slot'))
+slot = mech['core_slot']
+assert (slot['storage_key'],slot['max_installed'],slot['independent_of']) == ('Core',1,['UtilityModule','Body','EngineeringArm'])
+assert all(slot[k] == '' for k in ('default','missing_legacy_value','unknown_value'))
+assert slot['conditions'] == ['isolated','unoccupied','alive','stationary','grounded','nonfluid']
+assert slot['requires'] == ASSEMBLY_KNOWLEDGE['best_mech'] and slot['minimum_research_level'] == 3
+assert slot['install'] == dict(activation='crouch_main_hand_core_use_on_actual_mech',consumes=1,require_empty_slot=True,hot_swap=False,failure_changes_nothing=True)
+removal = slot['remove']
+assert removal['activation'] == 'crouch_main_hand_diagnostic_offhand_minecraft_furnace_use_on_actual_mech'
+assert not removal['consumes_furnace'] and removal['require_fuel_ticks_zero']
+assert removal['returns'] == dict(item='best_mech_generator_core',qty=1)
+assert removal['require_empty_main_inventory_slot'] and removal['inventory_slots'] == 36
+assert removal['failure_changes_nothing'] and not removal['failure_falls_through_to_isolation']
+generation = mech['solid_fuel_generation']
+assert (generation['fuel_storage_key'],generation['work_storage_key']) == ('CoreFuelTicks','CoreWorkTicks')
+assert generation['fuel_source'] == 'active_cargo_only'
+assert (generation['standard_cargo_slots'],generation['reinforced_cargo_slots']) == (9,18)
+assert generation['fuel_rule'] == 'vanilla_furnace_burn_time_positive_and_no_crafting_remainder'
+assert generation['rejects'] == ['lava_bucket','fuel_containers_with_crafting_remainder']
+assert generation['consume_one_only_when_runnable_and_fuel_zero']
+assert (generation['energy_per_operating_tick'],generation['heat_per_operating_tick'],generation['fuel_ticks_per_operating_tick'],generation['wear_per_operating_ticks']) == (1000,2,1,1000)
+assert generation['internal_generation'] and generation['bypass_external_receiver_budget'] and not generation['requires_rider']
+assert generation['requires'] == ['alive','connected','not_thermal_locked','not_worn_out','capacity_room_at_least_1000']
+assert generation['pause_on'] == ['isolated','capacity_room_below_1000','thermal_lock','worn_out','dead']
+assert not any(generation[k] for k in ('pause_consumes_fuel','pause_decrements_fuel_ticks','pause_increments_work_ticks','random_explosion','automatic_pickup'))
+assert generation['phase_order'] == ['existing_cooling','core_generation','movement']
+assert generation['persistence'] == ['entity_nbt','packed_item','deploy','dead_packed_item']
+assert set(mech['packed_state']['preserves']) >= {'Core','CoreFuelTicks','CoreWorkTicks'}
+assert (mech['energy_storage']['entity_receive_per_tick'],mech['energy_storage']['packed_base_transfer_per_tick']) == (512,5000)
+assert items['best_workbench']['tabs'] == ['workshop','mobility','service','mech','arms','core']
+assert len(LEARNING) == 6
+with Image.open(ART/'textures/item/best_mech_generator_core.png') as image:
+    assert image.size == (32,32) and image.mode == 'RGBA'
+    assert 0 < sum(image.getchannel('A').histogram()[1:]) < 1024
+    assert len(image.getcolors(1024)) > 5
+core_bytes = (ART/'textures/item/best_mech_generator_core.png').read_bytes()
+assert all(core_bytes != (ART/'textures/item'/f'{key}.png').read_bytes() for key in BEST_NAMES if key != 'best_mech_generator_core')
+for lang in ('zh_cn','en_us'):
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    for prefix,suffixes in [('message',('best_page_5','best_action_24','best_mech_generator_core_cost','best_mech_generator_core_assembled')),
+            ('ui',('best_action_24','best_material_action_24','best_tab_5','best_hint_5')),
+            ('tooltip',('best_mech_generator_core','best_mech_core_install')),
+            ('mech',('core.none','core.installed','core.controls','core.failed','core.fuel'))]:
+        for suffix in suffixes: assert names[f'{prefix}.starfall_blueprint.{suffix}']
+    for key in ('mech.starfall_blueprint.core.installed','mech.starfall_blueprint.core.fuel','hud.starfall_blueprint.mech.panel.core'):
+        assert names[key].count('%s') == 1
+for doc in (ROOT/'docs/BEST_ENGINEERING.md',ATLAS.parent/'18_贝斯特轻型工程首批.md',ATLAS.parent/'02_科技树设定/02_贝斯特机械科技树.md'):
+    text=doc.read_text(encoding='utf-8')
+    assert text.index('## 强化机体与真实货舱') < text.index('## 固燃发电核心')
+    assert all(s in text for s in ('2026-10-30','MEC-03/05','CoreFuelTicks','CoreWorkTicks','minecraft:furnace','冷却→核心发电→移动','1000 XH','不进行UI测试'))
+boundary = ROOT.parent/'core_resources_preservation.json'
+assert boundary.is_file(), 'Capture the protected-resource boundary before core generation'
+saved=json.loads(boundary.read_text(encoding='utf-8'))
+for filename,digest in saved['files'].items():
+    assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
+for lang,entries in saved['lang'].items():
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert set(saved['existing_keys'][lang]) <= names.keys(),lang
+print(f'PASS: solid-fuel core boundaries; preserved {len(saved["files"])} both-repo remote/Best art hashes and {sum(map(len,saved["lang"].values()))} remote bilingual values; all prior keys retained.')
+
 # Fresh proof for both repositories, existing arm art and all preexisting translation key presence.
 boundary = ROOT.parent/'body_resources_preservation.json'
 assert boundary.is_file(), 'Capture the protected-resource boundary before generation'

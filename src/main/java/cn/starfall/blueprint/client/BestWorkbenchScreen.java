@@ -20,11 +20,11 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     public BestWorkbenchScreen(BestWorkbenchMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 300;
-        imageHeight = 236;
+        imageHeight = 254;
         titleLabelX = 10;
         titleLabelY = 7;
         inventoryLabelX = 70;
-        inventoryLabelY = 140;
+        inventoryLabelY = 158;
     }
 
     /** Fixture/accessibility entry point: 0 engineering, 1 mobility, 2 diagnostics, 3 mech. */
@@ -36,7 +36,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     public int page() { return page; }
     /** Select the material table independently of execution, including disabled learned actions. */
     public void selectMechAction(int action) {
-        if (action != 17 && action != 18) throw new IllegalArgumentException("mech action must be 17 or 18");
+        if (action < 17 || action > 20) throw new IllegalArgumentException("mech action must be 17..20");
         selectedMechAction = action;
     }
     public int selectedMechAction() { return selectedMechAction; }
@@ -57,7 +57,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
             case 0 -> new int[]{0, 1, 2, 3, 5, 6, 4, 7};
             case 1 -> new int[]{8, 9, 10, 11, 12};
             case 2 -> new int[]{13, 14, 15, 16};
-            default -> new int[]{17, 18};
+            default -> new int[]{17, 18, 19, 20};
         };
         for (int i = 0; i < actions.length; i++) {
             int action = actions[i];
@@ -93,7 +93,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         graphics.fill(x, y, x + imageWidth, y + imageHeight, 0xff233a40);
         graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + imageHeight - 2, 0xffdce5df);
         graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + 19, 0xff344f55);
-        graphics.fill(x + 8, y + 137, x + imageWidth - 8, y + 138, 0xffa5b8ac);
+        graphics.fill(x + 8, y + 155, x + imageWidth - 8, y + 156, 0xffa5b8ac);
         for (var slot : menu.slots) {
             int sx = x + slot.x, sy = y + slot.y;
             graphics.fill(sx - 1, sy - 1, sx + 17, sy + 17, 0xff485b55);
@@ -110,17 +110,17 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         fitted(graphics, text("knowledge_mech", text(menu.hasMechOperation() ? "learned" : "unlearned")), 154, 33, 136, 0xff344f43);
         if (page == 3) {
             BestEngineering.Preview preview = menu.preview(selectedMechAction);
-            fitted(graphics, text("materials_for", text("material_action_" + selectedMechAction), preview.reason()), 10, 81, 280, preview.executable() ? 0xff27653f : 0xff88402f);
+            fitted(graphics, text("materials_for", text("material_action_" + selectedMechAction), preview.reason()), 10, 99, 280, preview.executable() ? 0xff27653f : 0xff88402f);
             List<BestEngineering.MaterialRequirement> materials = preview.materials();
             for (int i = 0; i < materials.size(); i++) {
                 var material = materials.get(i);
-                int x = 10 + i % 4 * 71, y = 92 + i / 4 * 18;
+                int x = 10 + i % 4 * 71, y = 110 + i / 4 * 18;
                 graphics.renderItem(material.item(), x, y);
                 fitted(graphics, text("material_count", material.available(), material.required()), x + 18, y + 4, 51,
                         material.available() >= material.required() ? 0xff27653f : 0xffa3332c);
             }
         }
-        fitted(graphics, text("hint_" + page), 10, 128, 280, 0xff435b50);
+        fitted(graphics, text("hint_" + page), 10, 146, 280, 0xff435b50);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff344f43, false);
     }
 
@@ -148,7 +148,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         if (page == 3) {
             List<BestEngineering.MaterialRequirement> materials = menu.preview(selectedMechAction).materials();
             for (int i = 0; i < materials.size(); i++) {
-                int x = leftPos + 10 + i % 4 * 71, y = topPos + 92 + i / 4 * 18;
+                int x = leftPos + 10 + i % 4 * 71, y = topPos + 110 + i / 4 * 18;
                 if (mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16) {
                     graphics.renderTooltip(font, materials.get(i).item(), mouseX, mouseY);
                     return;

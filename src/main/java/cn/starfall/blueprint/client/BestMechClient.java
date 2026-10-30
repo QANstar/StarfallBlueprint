@@ -57,13 +57,18 @@ public final class BestMechClient {
     /** Immutable synchronized inputs. requestTicks is only the local request throttle, never drill cooldown. */
     static record Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                            boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
-                           int requestTicks) {}
+                           int requestTicks, int movementCost) {
+        Snapshot(float health, float maxHealth, int energy, int heat, int wear,
+                 boolean alive, boolean isolated, boolean thermalLocked, boolean qualified, int requestTicks) {
+            this(health, maxHealth, energy, heat, wear, alive, isolated, thermalLocked, qualified, requestTicks, 400);
+        }
+    }
 
     private static void render(GuiGraphics graphics) {
         Minecraft mc=Minecraft.getInstance();
         if(mc.options.hideGui || mc.player==null || !(mc.player.getVehicle() instanceof BestMechEntity mech))return;
         Snapshot sample = new Snapshot(mech.getHealth(), mech.getMaxHealth(), mech.energy(), mech.heat(), mech.wear(),
-                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks);
+                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost());
         renderPanel(graphics, 8, 8, sample);
     }
 
@@ -85,7 +90,7 @@ public final class BestMechClient {
         resource(graphics, x, y + 46, "health", decimal(sample.health()) + " / " + decimal(sample.maxHealth()),
                 sample.health(), sample.maxHealth(), sample.health() <= sample.maxHealth() * 0.25f ? DANGER : NORMAL);
         resource(graphics, x, y + 63, "energy", compactEnergy(sample.energy()) + " / " + compactEnergy(BestMechEntity.CAPACITY) + " XH",
-                sample.energy(), BestMechEntity.CAPACITY, sample.energy() < 400 ? DANGER : sample.energy() < BestMechEntity.CAPACITY / 10 ? WARNING : NORMAL);
+                sample.energy(), BestMechEntity.CAPACITY, sample.energy() < sample.movementCost() ? DANGER : sample.energy() < BestMechEntity.CAPACITY / 10 ? WARNING : NORMAL);
         resource(graphics, x, y + 80, "heat", sample.heat() + " / " + BestMechEntity.MAX_HEAT,
                 sample.heat(), BestMechEntity.MAX_HEAT, sample.thermalLocked() || sample.heat() >= BestMechEntity.MAX_HEAT ? DANGER : sample.heat() >= 800 ? WARNING : NORMAL);
         resource(graphics, x, y + 97, "wear", sample.wear() + " / " + BestMechEntity.MAX_WEAR,
@@ -107,7 +112,7 @@ public final class BestMechClient {
         if(sample.thermalLocked() || sample.heat() >= BestMechEntity.MAX_HEAT) return new PanelStatus("thermal_locked", DANGER);
         if(sample.wear() >= BestMechEntity.MAX_WEAR) return new PanelStatus("worn_out", WORN);
         if(!sample.qualified()) return new PanelStatus("unqualified", ISOLATED);
-        if(sample.energy() < 400) return new PanelStatus("no_power", DANGER);
+        if(sample.energy() < sample.movementCost()) return new PanelStatus("no_power", DANGER);
         if(sample.energy() < 32000) return new PanelStatus("drill_power", WARNING);
         if(sample.heat() >= 800) return new PanelStatus("hot", WARNING);
         if(sample.energy() < BestMechEntity.CAPACITY / 10) return new PanelStatus("low_power", WARNING);

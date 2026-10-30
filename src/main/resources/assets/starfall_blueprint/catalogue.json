@@ -10139,7 +10139,9 @@
       "learning_persistence": "player_saved_data_and_death_clone",
       "mech_actions": {
         "learn": 17,
-        "assemble": 18
+        "assemble": 18,
+        "radiator": 19,
+        "drive": 20
       },
       "catalogue": true,
       "category": "机器与设施",
@@ -10232,7 +10234,11 @@
           "wear",
           "isolated",
           "work_ticks",
-          "custom_name"
+          "custom_name",
+          "drill_cooldown",
+          "thermal_lock",
+          "charge_budget",
+          "UtilityModule"
         ],
         "initially_empty": true,
         "occupied_pack_rejected": true,
@@ -10271,10 +10277,70 @@
           "mech_operation"
         ]
       },
+      "utility_slot": {
+        "max_installed": 1,
+        "mutually_exclusive": true,
+        "storage_key": "UtilityModule",
+        "allowed_items": [
+          "best_mech_radiator",
+          "best_mech_drive"
+        ],
+        "default": "none",
+        "unknown_value": "none",
+        "persistence": [
+          "entity_nbt",
+          "packed_item",
+          "deploy",
+          "death_drop"
+        ],
+        "minimum_research_level": 3,
+        "requires": [
+          "field_servicing",
+          "light_mobility",
+          "diagnostics",
+          "mech_operation"
+        ],
+        "conditions": [
+          "isolated",
+          "unoccupied",
+          "alive",
+          "stationary",
+          "grounded",
+          "nonfluid"
+        ],
+        "install": {
+          "activation": "crouch_main_hand_module_use_on_actual_mech",
+          "consumes": 1,
+          "hot_swap": false,
+          "require_empty_slot": true,
+          "failure_changes_nothing": true
+        },
+        "remove": {
+          "activation": "crouch_main_hand_diagnostic_offhand_steel_fix_use_on_actual_mech",
+          "consumes_fastener": false,
+          "returns_installed_module": 1,
+          "require_main_inventory_space": true,
+          "failure_changes_nothing": true
+        },
+        "plain_crouch_diagnostic": "toggle_isolation",
+        "preserves": [
+          "Energy",
+          "Heat",
+          "Wear",
+          "Health",
+          "WorkTicks",
+          "DrillCooldown",
+          "ThermalLock",
+          "charge_budget",
+          "all_other_state"
+        ]
+      },
       "operation": {
         "controls": "vanilla_ground_wasd",
         "flight": false,
         "jump": false,
+        "movement_speed": 0.22,
+        "charges_only_actual_ground_movement": true,
         "energy_per_commanded_movement_tick": 400,
         "heat_per_commanded_movement_tick": 4,
         "wear_per_work_ticks": 100,
@@ -10328,10 +10394,164 @@
       "purpose": {
         "summary": "驾驶工业双足机甲并进行铁级单点钻切",
         "benefit": "本人三级与独立轻载、诊断、机甲驾驶后人工装配；20MXH空电出厂，无公共配方，收纳保存生命、电热和磨损。",
-        "operation": "WASD地面驾驶，指令移动400XH／刻、热4、每100工作刻磨损1；无人无指令免巡航计费。G单点钻切32000XH、热120、磨损1、20刻冷却。空手骑乘／Shift下车；隔离空载静止落地、空手潜行收纳且须背包空格。隔离空载钢修／水冷；接通空载s01补512XH／刻。收纳物主手、副手诊断器对空气右键接通，再潜行对基地储能方块按住右键补能≤5000XH／刻。",
+        "operation": "WASD基础速度0.22，仅实际地面移动400XH／刻、热4、每100工作刻磨损1。单个互斥UtilityModule槽：散热模组自然冷4／刻；强化驱动速度0.28、实际移动600XH／刻热6、冷2。模组随NBT收纳部署死亡掉落保留；隔离空载停稳落地非流体时潜行主手模组安装，诊断器主手＋钢固定件副手潜行拆回且不耗固定件，需主背包空间；无固定件潜行诊断仍切换隔离。G单点钻切32000XH、热120、磨损1、20刻冷却。空手骑乘／Shift下车；隔离空载静止落地、空手潜行收纳且须背包空格。隔离空载钢修／水冷；接通空载s01补512XH／刻。收纳物主手、副手诊断器对空气右键接通，再潜行对基地储能方块按住右键补能≤5000XH／刻。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABtklEQVR4nGNgGGDASEiBtLbpf0oteXr1NE57WIgx4GSzDNmWm9c+wSvPQg1DaBoFMLDj9IX/yQmpDMSCuQtmM3iYGhA0n4WBRDDv8HoMsT2v76DwlwWVEm0eC6kOAFl2ZOpWMLuhIZ+hoWEiirxNtjdJ5jExkAmwWU4OYBpIy8lygIuoCtUsBwEWUgsc9ASHD+AzE1Y4sSAL2jk4oCg6dOAAhhgpCQ2mF90cEJ/sXLCMhCxG01xALcBCimJQ6TZgDli4YCnVLcdwAHLiwAW6nQnngtK9KuSlgbkLZsODGV8dTg4AeS4+IRqMkQELqQaR4jtkAPXQf3TPsRDSSEy0UAIYiSkBkVtEMkHr8UbNk3WBGObB9IDaFCAauZ3AQih7kdIIIQRAFoMcAcIwRzCB4gNkCTaLQGKUtAeJASwwBigUYI5ADpErsvXwMoCY9ABqP4L0E6uHBURAQ+E/zGJqBjsygKUBDAcgA1pYjs1imBgLTAA5FNAdgRyMoFyDrZBCz03IekDmYWslgxzBiG4IzAHY2gEwg3E5gFQ9IIBSFMNyBD0BE8MAA0ZsgoRKR2LSADF6BgUAAJoT0H6/J+66AAAAAElFTkSuQmCC"
+    },
+    "best_mech_radiator": {
+      "id": "best_mech_radiator",
+      "name": "散热模组",
+      "unit": "件",
+      "icon": "tool",
+      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "external": false,
+      "mass": null,
+      "english": "Mech Radiator Module",
+      "registry_id": "starfall_blueprint:best_mech_radiator",
+      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
+      "manual_assembly": {
+        "station": "best_workbench",
+        "personal_learning": true,
+        "automatic": false,
+        "requires": [
+          "field_servicing",
+          "light_mobility",
+          "diagnostics",
+          "mech_operation"
+        ],
+        "inputs": [
+          {
+            "item": "steel",
+            "qty": 6
+          },
+          {
+            "item": "conductor",
+            "qty": 4
+          },
+          {
+            "item": "sheath",
+            "qty": 4
+          },
+          {
+            "item": "steel_fix",
+            "qty": 4
+          }
+        ],
+        "output_count": 1
+      },
+      "real_item": true,
+      "max_stack_size": 1,
+      "max_durability": 0,
+      "item_type": "ordinary",
+      "attribute_modifiers": [],
+      "utility_module": {
+        "slot": "utility",
+        "mutually_exclusive": true,
+        "max_installed": 1,
+        "target": "best_mech",
+        "storage_key": "UtilityModule",
+        "movement_speed": 0.22,
+        "energy_per_actual_ground_movement_tick": 400,
+        "heat_per_actual_ground_movement_tick": 4,
+        "passive_cooling_per_tick": 4,
+        "changes_capacity": false,
+        "changes_health": false,
+        "changes_wear_limit": false
+      },
+      "catalogue": true,
+      "category": "装备与武器",
+      "subcategory": "贝斯特工程装备",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "purpose": {
+        "summary": "提高工程机甲自然散热",
+        "benefit": "真实不可堆叠普通物品，无电量或耐久；单个互斥UtilityModule通用槽，自然散热4／刻，速度0.22、实际移动400XH／刻和热4不变。",
+        "operation": "本人三级与轻载、诊断、机甲驾驶；动作19钢6、导相4、护套4、钢固定件4人工制造。主手模组潜行右键隔离、空载、存活、停稳落地且非流体的机甲安装；先拆后换。主手诊断器＋副手钢固定件潜行右键拆回，不耗固定件；主背包无空间整笔拒绝，保留全部机体状态。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABC0lEQVR4nGNgGAUDDBixCe6s8P9PjGb3jo1Y9ZMCWJA50tqmRFlMKkA39+nV04xYHQAC83ylwHTS5mcMdg4ODNhAAu8tMB2ZXUqUgw8dOIBiLjJgwabhf3AjA8PmVLBGrAbCWaiGkQNYsAkyrq0H01HruhlcRFUosmDP6zsMy4JKSXMAugG0BCz4JGEulwsKJsvwR+vWUuYAUgwiF7DgkxxNA8tG08C60XKgFJwbRssBSsBoXUAIsBBUMVoXvB4m7YH/wY3wlhbRDrCDNUrfvSXKQlhjdcFnNTCtANUPaltisxwEGIltPhMDYP0J9P4C0c3ypyRaSCzAZy4jNS0i1KPC1pNioqYDhiQAABIuibmsF9aJAAAAAElFTkSuQmCC"
+    },
+    "best_mech_drive": {
+      "id": "best_mech_drive",
+      "name": "强化驱动模组",
+      "unit": "件",
+      "icon": "tool",
+      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "external": false,
+      "mass": null,
+      "english": "Reinforced Mech Drive Module",
+      "registry_id": "starfall_blueprint:best_mech_drive",
+      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
+      "manual_assembly": {
+        "station": "best_workbench",
+        "personal_learning": true,
+        "automatic": false,
+        "requires": [
+          "field_servicing",
+          "light_mobility",
+          "diagnostics",
+          "mech_operation"
+        ],
+        "inputs": [
+          {
+            "item": "steel",
+            "qty": 8
+          },
+          {
+            "item": "load",
+            "qty": 4
+          },
+          {
+            "item": "conductor",
+            "qty": 4
+          },
+          {
+            "item": "board",
+            "qty": 2
+          },
+          {
+            "item": "steel_fix",
+            "qty": 4
+          }
+        ],
+        "output_count": 1
+      },
+      "real_item": true,
+      "max_stack_size": 1,
+      "max_durability": 0,
+      "item_type": "ordinary",
+      "attribute_modifiers": [],
+      "utility_module": {
+        "slot": "utility",
+        "mutually_exclusive": true,
+        "max_installed": 1,
+        "target": "best_mech",
+        "storage_key": "UtilityModule",
+        "movement_speed": 0.28,
+        "energy_per_actual_ground_movement_tick": 600,
+        "heat_per_actual_ground_movement_tick": 6,
+        "passive_cooling_per_tick": 2,
+        "changes_capacity": false,
+        "changes_health": false,
+        "changes_wear_limit": false
+      },
+      "catalogue": true,
+      "category": "装备与武器",
+      "subcategory": "贝斯特工程装备",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "purpose": {
+        "summary": "提高工程机甲地面移动速度",
+        "benefit": "真实不可堆叠普通物品，无电量或耐久；互斥通用槽，速度0.28，实际地面移动600XH／刻、热6，自然散热2；不增加容量、生命或磨损上限。",
+        "operation": "本人三级与轻载、诊断、机甲驾驶；动作20钢8、承相4、导相4、控制板2、钢固定件4人工制造，无公共配方。安装须隔离空载、存活、停稳落地且非流体，潜行主手模组右键实际机甲；主手诊断器＋副手钢固定件潜行拆回，固定件不耗且需主背包空间，失败状态不变。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABwElEQVR4nO2XvUrEQBDHZ4e8gYXImSewsTns5EprSy3uQLS1stTm7K6yVYRLoeW1gtVxnVj7BGph4TNEJjBhbt3ZTBJzgviHkP2Y7Px2NpudAPzrl+W40Nvq51XG7y/PrlOA3cGgKA9Hh6VBNr0r7ov5vBOIxG8g50ej47J+O70pIQhwAZDHILRIas8k2kBP403YOX/71m6BOJhNlur3+2eaKagAIee8DDzTn1iOxG+gcFPYZZ31+DCD14/PokzLpEHEZtxqF2ykKWTXV0sQbaOAXOCBaI35IlE0yDFdpOHJKaTra2WfBdwEwBBynQmCZnk5vgApCUFqA4F+Q10Ifl+aQmCocZUQqHWsCgJjnVYIVhMIrDLwIVgSwt8ZdSAw1smDSAiOgi9/Z5CdBQI1x3w6xiBi7wPZWiAw5Fx+iLRBrBC1ItBTcgKG6GJnoKywA3beBoLOC4LgaGoQLtRIxtqJSM4JQkaL262SB5jTjJpAcF9VaicBMEYqnVqWI5Ta8SWfr/UpzgIQchYxCE7tWn+KMw/CT0JiEKHUzpQTLg0OkLPzvf62q7KrSu2kHBhlTULr/uA46FASpou/KvgT+gLEYHBArlSBzgAAAABJRU5ErkJggg=="
     },
     "best_frame": {
       "id": "best_frame",
@@ -25360,6 +25580,8 @@
     "auto_smelt",
     "best_workbench",
     "best_mech",
+    "best_mech_radiator",
+    "best_mech_drive",
     "best_frame",
     "best_cutter",
     "best_service_kit",

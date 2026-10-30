@@ -225,7 +225,7 @@ assert drill['harvest_tier']=='iron' and drill['ordinary_drops']
 assert drill['deny']==['block_entities','unbreakable','protected_blocks']
 assert mech['field_service']['repair'] == dict(material='steel',count=1,wear_restored=200,health_restored=5)
 assert mech['field_service']['cooling'] == dict(material='water_bucket',count=1,heat_reduction=400,returns='bucket')
-assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18)
+assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20)
 for path, size in [(ART / 'textures/item/best_mech.png',(32,32)),(ART / 'textures/entity/best_engineering_mech.png',(128,128))]:
     with Image.open(path) as image:
         assert image.size == size and image.mode == 'RGBA'

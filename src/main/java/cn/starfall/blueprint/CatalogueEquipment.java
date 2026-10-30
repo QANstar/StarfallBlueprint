@@ -27,6 +27,12 @@ public final class CatalogueEquipment {
         if(key.startsWith("blackdog_armor_"))return BlackDogArmor.createProjection(key,p);
         if(key.startsWith("blackdog_"))return Lingchuan.moduleItem(key,p);
         if(key.equals("best_mech"))return new BestMechItem(p);
+        if(key.equals("best_mech_radiator")||key.equals("best_mech_drive"))return new Item(p.stacksTo(1)){
+            @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
+                lines.add(Component.translatable("tooltip.starfall_blueprint."+key));
+                lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_module_install"));
+            }
+        };
         if(key.equals("best_frame"))return new BestEquipment.Frame(p);
         if(key.equals("best_cutter"))return new BestEquipment.Cutter(p);
         if(key.equals("best_service_kit"))return new BestServiceKit(p);

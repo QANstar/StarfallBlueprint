@@ -28,6 +28,7 @@ public final class BestMechEntity extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> LOCKED = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.BOOLEAN);
     // Presentation snapshot of the actual operator; player persistent knowledge is not synced to clients.
     private static final EntityDataAccessor<Boolean> OPERATOR_QUALIFIED = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> UTILITY_MODULE = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
     private int workTicks, drillCooldown, chargeUsed;
     private long chargeTick = Long.MIN_VALUE;
     private boolean packed;
@@ -41,6 +42,7 @@ public final class BestMechEntity extends PathfinderMob {
     @Override protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder); builder.define(ENERGY, 0); builder.define(HEAT, 0); builder.define(WEAR, 0);
         builder.define(ISOLATED, false); builder.define(LOCKED, false); builder.define(OPERATOR_QUALIFIED, false);
+        builder.define(UTILITY_MODULE, "");
     }
     public int energy() { return entityData.get(ENERGY); }
     public int heat() { return entityData.get(HEAT); }
@@ -48,6 +50,27 @@ public final class BestMechEntity extends PathfinderMob {
     public boolean isolated() { return entityData.get(ISOLATED); }
     public boolean thermalLocked() { return entityData.get(LOCKED); }
     public boolean operatorQualified() { return entityData.get(OPERATOR_QUALIFIED); }
+    public String moduleKey() { return entityData.get(UTILITY_MODULE); }
+    public int movementCost() { return BestMechModules.movementCost(moduleKey()); }
+    public int movementHeat() { return BestMechModules.movementHeat(moduleKey()); }
+    public int coolingRate() { return BestMechModules.coolingRate(moduleKey()); }
+    private boolean canServiceModule(Player player) {
+        return !level().isClientSide && qualified(player) && isAlive() && isolated() && getPassengers().isEmpty()
+                && onGround() && getDeltaMovement().horizontalDistanceSqr() <= 0.001
+                && Math.abs(getDeltaMovement().y) <= 0.1 && !isInWater() && !isInLava();
+    }
+    public boolean installModule(Player player, InteractionHand hand) {
+        ItemStack held = player.getItemInHand(hand); String key = BestMechModules.key(held);
+        if(!canServiceModule(player) || !moduleKey().isEmpty() || key.isEmpty()) return false;
+        entityData.set(UTILITY_MODULE, key); held.shrink(1); player.getInventory().setChanged(); return true;
+    }
+    public boolean removeModule(Player player) {
+        if(!canServiceModule(player) || moduleKey().isEmpty()) return false;
+        int slot = player.getInventory().getFreeSlot(); if(slot < 0) return false;
+        ItemStack module = CatalogueContent.stack(moduleKey(), 1);
+        player.getInventory().setItem(slot, module); entityData.set(UTILITY_MODULE, "");
+        player.getInventory().setChanged(); return true;
+    }
     public void setIsolated(boolean value) { entityData.set(ISOLATED, value); if(value) stopHorizontal(); }
     public boolean ready(int cost) { return isAlive() && !isolated() && !entityData.get(LOCKED) && heat() < MAX_HEAT && wear() < MAX_WEAR && energy() >= Math.max(0, cost); }
     public static boolean qualified(Player player) {
@@ -60,15 +83,15 @@ public final class BestMechEntity extends PathfinderMob {
         entityData.set(HEAT, Math.min(MAX_HEAT, heat() + heat));
         entityData.set(WEAR, Math.min(MAX_WEAR, wear() + wear));
         if(heat() >= MAX_HEAT) entityData.set(LOCKED, true);
-        if(!ready(400)) stopHorizontal();
+        if(!ready(movementCost())) stopHorizontal();
     }
     @Override public void tick() {
         if(!level().isClientSide) {
             entityData.set(OPERATOR_QUALIFIED, getControllingPassenger() instanceof Player operator && qualified(operator));
             if(drillCooldown > 0) drillCooldown--;
-            entityData.set(HEAT, Math.max(0, heat() - 2));
+            entityData.set(HEAT, Math.max(0, heat() - coolingRate()));
             if(heat() <= RECOVER_HEAT) entityData.set(LOCKED, false);
-            if(!(getControllingPassenger() instanceof Player p) || !qualified(p) || !ready(400)) stopHorizontal();
+            if(!(getControllingPassenger() instanceof Player p) || !qualified(p) || !ready(movementCost())) stopHorizontal();
         }
         super.tick();
     }
@@ -77,27 +100,27 @@ public final class BestMechEntity extends PathfinderMob {
     /** The server runs vanilla riding input, collision and gravity; clients interpolate tracking updates. */
     @Override public boolean isControlledByLocalInstance() { return !level().isClientSide; }
     @Override protected Vec3 getRiddenInput(Player player, Vec3 input) {
-        return qualified(player) && ready(400) && onGround() && !isInWater() && !isInLava()
+        return qualified(player) && ready(movementCost()) && onGround() && !isInWater() && !isInLava()
                 ? new Vec3(player.xxa * 0.5, 0, player.zza * (player.zza < 0 ? 0.5 : 1)) : Vec3.ZERO;
     }
     @Override protected void tickRidden(Player player, Vec3 input) {
-        if(!level().isClientSide && qualified(player) && ready(400)) {
+        if(!level().isClientSide && qualified(player) && ready(movementCost())) {
             setYRot(player.getYRot()); setXRot(0); yBodyRot = getYRot(); yHeadRot = getYRot();
         }
         setJumping(false);
     }
-    @Override protected float getRiddenSpeed(Player player) { return 0.22f; }
+    @Override protected float getRiddenSpeed(Player player) { return BestMechModules.speed(moduleKey()); }
     @Override public void travel(Vec3 input) {
         boolean commanded = !level().isClientSide && getControllingPassenger() instanceof Player p && qualified(p)
-                && ready(400) && onGround() && !isInWater() && !isInLava() && input.horizontalDistanceSqr() > 1.0E-6;
+                && ready(movementCost()) && onGround() && !isInWater() && !isInLava() && input.horizontalDistanceSqr() > 1.0E-6;
         // No acceleration or residual powered motion without a valid grounded command.
         stopHorizontal();
         double beforeX = getX(), beforeZ = getZ();
         super.travel(commanded ? input : Vec3.ZERO);
         if(commanded && Math.abs(getX() - beforeX) + Math.abs(getZ() - beforeZ) > 1.0E-6) {
-            spend(400, 4, 0); if(++workTicks >= 100) { workTicks = 0; entityData.set(WEAR, Math.min(MAX_WEAR, wear() + 1)); }
+            spend(movementCost(), movementHeat(), 0); if(++workTicks >= 100) { workTicks = 0; entityData.set(WEAR, Math.min(MAX_WEAR, wear() + 1)); }
         }
-        if(!commanded || !ready(400)) stopHorizontal();
+        if(!commanded || !ready(movementCost())) stopHorizontal();
     }
     @Override public boolean removeWhenFarAway(double distance) { return false; }
     @Override public boolean canBeLeashed() { return false; }
@@ -143,10 +166,12 @@ public final class BestMechEntity extends PathfinderMob {
         tag.putBoolean("Isolated", isolated()); tag.putBoolean("ThermalLock", entityData.get(LOCKED));
         tag.putInt("WorkTicks", workTicks); tag.putInt("DrillCooldown", drillCooldown); tag.putFloat("Health", getHealth());
         tag.putLong("ChargeTick", chargeTick); tag.putInt("ChargeUsed", chargeUsed);
+        tag.putString(BestMechModules.STATE, moduleKey());
         if(hasCustomName()) tag.putString("Name", Component.Serializer.toJson(getCustomName(), registryAccess()));
         return tag;
     }
     public void loadState(CompoundTag tag) {
+        entityData.set(UTILITY_MODULE, BestMechModules.sanitize(tag.getString(BestMechModules.STATE)));
         entityData.set(ENERGY, Math.clamp(tag.getInt("Energy"), 0, CAPACITY));
         entityData.set(HEAT, Math.clamp(tag.getInt("Heat"), 0, MAX_HEAT)); entityData.set(WEAR, Math.clamp(tag.getInt("Wear"), 0, MAX_WEAR));
         entityData.set(ISOLATED, tag.getBoolean("Isolated")); entityData.set(LOCKED, tag.getBoolean("ThermalLock") || heat() >= MAX_HEAT);
@@ -197,13 +222,26 @@ public final class BestMechEntity extends PathfinderMob {
     public Component status() {
         return Component.literal("工程机甲 · " + energy() + "/" + CAPACITY + " XH · 热 " + heat() + "/1000 · 磨损 " + wear() + "/2400 · 结构 "
                 + getHealth() + "/100 · " + (isolated() ? "已隔离" : "已接通") + (entityData.get(LOCKED) ? " · 热锁定（400恢复）" : "")
-                + " · 工时 " + workTicks + "/100 · 钻臂冷却 " + drillCooldown + "/20t");
+                + " · 工时 " + workTicks + "/100 · 钻臂冷却 " + drillCooldown + "/20t")
+                .append(Component.literal(" · ")).append(BestMechModules.installed(moduleKey()))
+                .append(Component.literal(" · ")).append(BestMechModules.controls());
     }
     @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
         if(level().isClientSide) return InteractionResult.SUCCESS;
+        if(!BestMechModules.key(held).isEmpty()) {
+            if(!player.isShiftKeyDown() || !installModule(player, hand))
+                player.displayClientMessage(Component.translatable("mech.starfall_blueprint.module.failed"), false);
+            player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
+        }
         boolean diagnostic = held.is(CatalogueContent.item("best_diagnostic_tool"));
         if(diagnostic) {
+            if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND
+                    && player.getOffhandItem().is(CatalogueContent.item("steel_fix"))) {
+                // An explicit tool selects removal even on failure; never fall through to isolation toggle.
+                if(!removeModule(player)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.module.failed"), false);
+                player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
+            }
             if(!BestEngineering.hasDiagnostics(player)) return InteractionResult.FAIL;
             if(player.isShiftKeyDown() && getPassengers().isEmpty()) setIsolated(!isolated());
             player.displayClientMessage(status(), false); return InteractionResult.CONSUME;

@@ -111,5 +111,7 @@ public final class BestMechItem extends Item {
         lines.add(Component.literal("结构 " + (tag.contains("Health") ? tag.getFloat("Health") : 100) + "/100 · " + (tag.getBoolean("Isolated") ? "已隔离" : "已接通")));
         lines.add(Component.literal("潜行按住右键对准基地储能方块：蓄能 ≤5000 XH/t；普通右键地面部署"));
         lines.add(Component.literal("副手诊断器，主手机甲普通右键空气：切换隔离/接通"));
+        lines.add(BestMechModules.installed(tag.getString(BestMechModules.STATE)));
+        lines.add(BestMechModules.controls());
     }
 }

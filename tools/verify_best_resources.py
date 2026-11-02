@@ -186,7 +186,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     text = doc.read_text(encoding='utf-8')
     assert '5/5通过' in text and 'BestDiagnostics' in text and 'BestBatteryIsolated' in text
     assert '本节不宣称本轮服务端或客户端通过' in text
-assert (len(items), len(recipes), len(canonical['catalogue'])) == (313, 245, 179)
+assert (len(items), len(recipes), len(canonical['catalogue'])) == (316, 245, 182)
 armor = ART / 'textures/models/armor/best_frame_layer_2.png'
 assert armor.read_bytes() == (ATLAS / 'item-art/best_frame_layer_2.png').read_bytes()
 with Image.open(armor) as image:
@@ -225,7 +225,7 @@ assert drill['harvest_tier']=='iron' and drill['ordinary_drops']
 assert drill['deny']==['block_entities','unbreakable','protected_blocks']
 assert mech['field_service']['repair'] == dict(material='steel',count=1,wear_restored=200,health_restored=5)
 assert mech['field_service']['cooling'] == dict(material='water_bucket',count=1,heat_reduction=400,returns='bucket')
-assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20,drill_arm=21,excavator_arm=22,reinforced_body=23,generator_core=24)
+assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20,drill_arm=21,excavator_arm=22,reinforced_body=23,generator_core=24,cruise_wheels=25,heavy_mech=26,heavy_drill_arm=27)
 for path, size in [(ART / 'textures/item/best_mech.png',(32,32)),(ART / 'textures/entity/best_engineering_mech.png',(128,128))]:
     with Image.open(path) as image:
         assert image.size == size and image.mode == 'RGBA'
@@ -296,7 +296,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     text = doc.read_text(encoding='utf-8')
     assert 'EngineeringArm' in text and 'MEC-06部分实现' in text and '12,000 XH' in text
 # Body/cargo is one incremental MEC-04 step; manual-only and independent of both old slots.
-assert len(BEST_NAMES) == 13 and len(LEARNING) == 6
+assert len(BEST_NAMES) == 16 and len(LEARNING) == 6
 body = items['best_mech_reinforced_body']
 assert ASSEMBLY['best_mech_reinforced_body'] == [('steel',24), ('load',12), ('conductor',8), ('steel_fix',16), ('sheath',8)]
 assert ASSEMBLY_KNOWLEDGE['best_mech_reinforced_body'] == ASSEMBLY_KNOWLEDGE['best_mech']
@@ -390,7 +390,7 @@ assert generation['phase_order'] == ['existing_cooling','core_generation','movem
 assert generation['persistence'] == ['entity_nbt','packed_item','deploy','dead_packed_item']
 assert set(mech['packed_state']['preserves']) >= {'Core','CoreFuelTicks','CoreWorkTicks'}
 assert (mech['energy_storage']['entity_receive_per_tick'],mech['energy_storage']['packed_base_transfer_per_tick']) == (512,5000)
-assert items['best_workbench']['tabs'] == ['workshop','mobility','service','mech','arms','core']
+assert items['best_workbench']['tabs'] == ['workshop','mobility','service','mech','arms','core','locomotion']
 assert len(LEARNING) == 6
 with Image.open(ART/'textures/item/best_mech_generator_core.png') as image:
     assert image.size == (32,32) and image.mode == 'RGBA'
@@ -445,3 +445,202 @@ if boundary.is_file():
         assert all(names.get(k) == v for k,v in entries.items()), lang
     print(f'PASS: preserved {len(saved["files"])} Lingchuan resource hashes and {sum(map(len,saved["lang"].values()))} bilingual keys.')
 print(f'PASS: Best manual-only assembly, historical servicing/mobility/diagnostics boundaries, independent Mech Operation, packed state and server-authoritative ride/drill metadata; synced original art/models/bilingual names; {len(items)} items / {len(recipes)} recipes / {len(canonical["catalogue"])} catalogue entries.')
+
+# Cruise wheels preserve the existing walking profiles and all independent module state.
+wheels = items['best_mech_cruise_wheels']
+assert ASSEMBLY['best_mech_cruise_wheels'] == [('steel',12),('load',6),('conductor',4),('steel_fix',8),('sheath',4)]
+assert ASSEMBLY_KNOWLEDGE['best_mech_cruise_wheels'] == ASSEMBLY_KNOWLEDGE['best_mech']
+assert (wheels['real_item'],wheels['item_type'],wheels['max_stack_size'],wheels['max_durability']) == (True,'ordinary',1,0)
+assert wheels['attribute_modifiers'] == [] and wheels['manual_assembly']['output_count'] == 1
+assert not any(k in wheels for k in ('energy_storage','thermal','durability_system','equipment_slot','operation'))
+assert len(LEARNING) == 6 and len(BEST_NAMES) == 16
+slot = mech['legs_slot']
+assert (slot['storage_key'],slot['max_installed'],slot['independent_of']) == ('Legs',1,['Body','EngineeringArm','UtilityModule','Core'])
+assert all(slot[k] == '' for k in ('default','missing_legacy_value','unknown_value','walking_value'))
+assert slot['wheels_value'] == 'best_mech_cruise_wheels' and not slot['legacy_missing_grants_item']
+assert slot['requires'] == ASSEMBLY_KNOWLEDGE['best_mech'] and slot['minimum_research_level'] == 3
+assert slot['conditions'] == ['isolated','unoccupied','alive','stationary','grounded','nonfluid']
+assert slot['install'] == dict(activation='crouch_main_hand_wheels_use_on_actual_mech',consumes=1,require_empty_slot=True,hot_swap=False,failure_changes_nothing=True)
+removal = slot['remove']
+assert removal['activation'] == 'crouch_main_hand_diagnostic_offhand_minecraft_minecart_use_on_actual_mech'
+assert not removal['consumes_minecart'] and removal['returns'] == dict(item='best_mech_cruise_wheels',qty=1)
+assert removal['require_empty_main_inventory_slot'] and removal['inventory_slots'] == 36
+assert removal['failure_changes_nothing'] and not removal['failure_falls_through_to_isolation']
+assert set(slot['preserves']) >= {'exact_health','energy','heat','wear','isolated','work_ticks','custom_name','Body','EngineeringArm','UtilityModule','Core','CoreFuelTicks','CoreWorkTicks','Cargo','all_other_state'}
+assert slot['persistence'] == ['entity_nbt','packed_item','deploy','death_drop'] and 'Legs' in mech['packed_state']['preserves']
+performance = mech['cruise_wheels']
+assert (performance['speed_multiplier'],performance['movement_energy_numerator'],performance['movement_energy_denominator'],performance['movement_heat_reduction']) == (1.25,3,4,1)
+assert (performance['walking_step_height'],performance['wheels_step_height']) == (1.0,0.6)
+assert all(performance[k] for k in ('preserves_unrelated_step_modifiers','half_block_passes','full_block_blocked','charges_only_actual_ground_movement'))
+assert performance['wear_per_work_ticks'] == 100
+assert not any(performance[k] for k in ('changes_cooling','changes_arm_work','changes_other_resources','flight','jump','automatic_pickup'))
+for body,base,drive,energy,drive_energy,heat,drive_heat in [('standard',0.275,0.35,300,450,3,5),('reinforced',0.225,0.2875,450,675,5,7)]:
+    assert performance['profiles'][body] == dict(base_speed=base,drive_speed=drive,base_energy=energy,drive_energy=drive_energy,base_heat=heat,drive_heat=drive_heat)
+assert items['best_workbench']['locomotion_actions'] == dict(cruise_wheels=25)
+assert items['best_workbench']['tab_layout'] == dict(window_width=300,window_height=272,x=8,width=38,stride=41,last_x=254,last_end=292,inventory_unchanged=True)
+assert [BEST_UI_MESSAGES[f'tab_{i}'][1] for i in range(7)] == ['Build','Move','Care','Mech','Arms','Core','Wheels']
+with Image.open(ART/'textures/item/best_mech_cruise_wheels.png') as image:
+    assert image.size == (32,32) and image.mode == 'RGBA'
+    assert 0 < sum(image.getchannel('A').histogram()[1:]) < 1024
+    assert len(image.getcolors(1024)) > 5
+wheel_bytes = (ART/'textures/item/best_mech_cruise_wheels.png').read_bytes()
+assert all(wheel_bytes != (ART/'textures/item'/f'{key}.png').read_bytes() for key in BEST_NAMES if key != 'best_mech_cruise_wheels')
+for lang in ('zh_cn','en_us'):
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    for prefix,suffixes in [('message',('best_page_6','best_action_25','best_mech_cruise_wheels_cost','best_mech_cruise_wheels_assembled')),
+            ('ui',('best_action_25','best_material_action_25','best_tab_6','best_hint_6')),
+            ('tooltip',('best_mech_cruise_wheels','best_mech_legs_install')),
+            ('mech',('legs.none','legs.installed','legs.controls','legs.failed'))]:
+        for suffix in suffixes: assert names[f'{prefix}.starfall_blueprint.{suffix}']
+    assert names['mech.starfall_blueprint.legs.installed'].count('%s') == 1
+for doc in (ROOT/'docs/BEST_ENGINEERING.md',ATLAS.parent/'18_贝斯特轻型工程首批.md',ATLAS.parent/'02_科技树设定/02_贝斯特机械科技树.md'):
+    text=doc.read_text(encoding='utf-8')
+    assert text.index('## 固燃发电核心') < text.index('## 巡航轮组')
+    assert all(v in text for v in ('2026-11-02','MEC-04腿部槽','MEC-15','0.2875','675','minecraft:minecart','CoreFuelTicks','七标签','宽38','步距41','不进行UI测试'))
+boundary=ROOT.parent/'wheels_resources_preservation.json'
+saved=json.loads(boundary.read_text(encoding='utf-8'))
+for filename,digest in saved['files'].items():
+    assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
+for lang,entries in saved['lang'].items():
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert set(saved['existing_keys'][lang]) <= names.keys(),lang
+report=dict(date='2026-11-02',status='PASS',chain='build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources',
+    chain_runs=1,items=len(items),recipes=len(recipes),catalogue=len(canonical['catalogue']),best_items=len(BEST_NAMES),
+    preserved_files=len(saved['files']),preserved_remote_translation_values=sum(map(len,saved['lang'].values())),
+    existing_translation_keys={lang:len(keys) for lang,keys in saved['existing_keys'].items()},
+    coverage=['manual action25 and exact materials','independent Legs and guarded install/remove','four movement profiles and step-height metadata','original 32RGBA art and bilingual keys','both-repository prior remote resources and all Best art','dated guides and tree'],
+    runtime_tested=False,ui_tested=False)
+# The prior cruise-wheels report remains a record of that batch; this run writes the heavy report below.
+print(f'PASS: cruise wheels; {len(items)} items / {len(recipes)} recipes / {len(canonical["catalogue"])} catalogue / {len(BEST_NAMES)} Best; preserved {len(saved["files"])} remote/Best files and all old translation keys. No UI or runtime claims.')
+
+# First heavy MEC-09 platform: distinct manual-only item/entity and unchanged shared services.
+heavy = items['best_heavy_mech']
+assert ASSEMBLY['best_heavy_mech'] == [('steel',96),('load',48),('conductor',24),('board',12),('steel_fix',48),('head',4),('sensor',6),('sheath',24)]
+assert ASSEMBLY_KNOWLEDGE['best_heavy_mech'] == ASSEMBLY_KNOWLEDGE['best_mech']
+assert len(LEARNING) == 6 and len(BEST_NAMES) == 16
+assert (heavy['id'],heavy['item_type'],heavy['max_stack_size']) == ('best_heavy_mech','packed_entity',1)
+assert heavy['entity_id'] == 'starfall_blueprint:best_heavy_engineering_mech'
+assert heavy['entity_dimensions'] == dict(width=2.6,height=4.4,rider_seat_height=3.1)
+assert heavy['factory_defaults'] == dict(energy=0,arm='drill',cargo=[],core='',fuel_ticks=0,core_work_ticks=0)
+assert heavy['max_health'] == 300 and heavy['energy_storage']['capacity'] == 60000000
+assert (heavy['energy_storage']['entity_receive_per_tick'],heavy['energy_storage']['packed_base_transfer_per_tick']) == (512,5000)
+assert heavy['energy_storage']['same_tick_transfer_budget'] and heavy['energy_storage']['source_caps_apply']
+assert heavy['thermal'] == mech['thermal'] and heavy['max_wear'] == 2400
+assert heavy['body_profiles']['heavy'] == dict(capacity=60000000,max_health=300,cargo_slots=27,movement_speed=0.14,drive_speed=0.18,movement_energy=1600,drive_movement_energy=2400,movement_heat=10,drive_movement_heat=14)
+assert heavy['cruise_wheels']['profiles']['heavy'] == dict(base_speed=0.175,drive_speed=0.225,base_energy=1200,drive_energy=1800,base_heat=9,drive_heat=13)
+assert (heavy['cruise_wheels']['speed_multiplier'],heavy['cruise_wheels']['movement_energy_numerator'],heavy['cruise_wheels']['movement_energy_denominator'],heavy['cruise_wheels']['movement_heat_reduction']) == (1.25,3,4,1)
+assert (heavy['cruise_wheels']['walking_step_height'],heavy['cruise_wheels']['wheels_step_height']) == (1.0,0.6)
+assert all(heavy['deployment'].values())
+assert not heavy['body_slot']['compatible'] and heavy['body_slot']['explicit_rejection']
+assert heavy['body_slot']['failure_changes_nothing'] and not heavy['body_slot']['failure_falls_through_to_isolation']
+assert items['best_mech_reinforced_body']['body_upgrade']['rejects_heavy']
+for slot in ('utility_slot','core_slot','legs_slot'):
+    assert heavy[slot] == mech[slot],slot
+assert {k:v for k,v in heavy['engineering_arm_slot'].items() if k != 'allowed_items'} == {k:v for k,v in mech['engineering_arm_slot'].items() if k != 'allowed_items'}
+assert {k:v for k,v in heavy['engineering_work'].items() if k != 'heavy_area_operation'} == mech['engineering_work']
+assert heavy['field_service'] == mech['field_service']
+assert heavy['cargo']['slots'] == 27 and heavy['cargo']['actual_inventory']
+assert heavy['cargo']['open'] == mech['cargo']['open'] and not heavy['cargo']['packed_mech_nesting']
+assert heavy['cargo']['rejected_packed_items'] == ['best_mech','best_heavy_mech']
+assert heavy['cargo']['death']['contents_before_dead_packed_item']
+assert heavy['solid_fuel_generation']['cannot_sustain_walking_alone']
+assert (heavy['solid_fuel_generation']['energy_per_operating_tick'],heavy['solid_fuel_generation']['heat_per_operating_tick'],heavy['solid_fuel_generation']['wear_per_operating_ticks']) == (1000,2,1000)
+assert heavy['solid_fuel_generation']['fuel_rule'] == mech['solid_fuel_generation']['fuel_rule']
+assert heavy['solid_fuel_generation']['energy_per_operating_tick'] < heavy['cruise_wheels']['profiles']['heavy']['base_energy']
+assert heavy['packed_state']['item'] == heavy['packed_state']['death_item'] == 'best_heavy_mech'
+assert set(heavy['packed_state']['preserves']) >= set(mech['packed_state']['preserves'])
+assert heavy['packed_state']['destroyed_health_cannot_deploy'] and not any(heavy['weapons'].values())
+assert items['best_workbench']['mech_page_actions'] == [17,18,19,20,23,26]
+assert len(items['best_workbench']['tabs']) == 7
+for key,field in [('best_mech_radiator','utility_module'),('best_mech_drive','utility_module'),('best_mech_drill_arm','engineering_arm'),('best_mech_excavator_arm','engineering_arm'),('best_mech_generator_core','generator_core'),('best_mech_cruise_wheels','locomotion_module')]:
+    assert items[key][field]['compatible_platforms'] == ['best_mech','best_heavy_mech']
+for key,speed,energy,heat,cooling in [('best_mech_radiator',0.14,1600,10,4),('best_mech_drive',0.18,2400,14,2)]:
+    assert items[key]['utility_module']['body_profiles']['heavy'] == dict(movement_speed=speed,energy_per_actual_ground_movement_tick=energy,heat_per_actual_ground_movement_tick=heat,passive_cooling_per_tick=cooling)
+for path,size in [(ART/'textures/item/best_heavy_mech.png',(32,32)),(ART/'textures/entity/best_heavy_engineering_mech.png',(128,128))]:
+    with Image.open(path) as image:
+        assert image.size == size and image.mode == 'RGBA'
+        assert len(image.getcolors(size[0]*size[1])) > 5
+heavy_art=(ART/'textures/item/best_heavy_mech.png').read_bytes()
+assert all(heavy_art != (ART/'textures/item'/f'{key}.png').read_bytes() for key in BEST_NAMES if key != 'best_heavy_mech')
+for lang in ('zh_cn','en_us'):
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    for prefix,suffixes in [('message',('best_action_26','best_heavy_mech_cost','best_heavy_mech_assembled')),('ui',('best_action_26','best_material_action_26')),('tooltip',('best_heavy_mech',)),('mech',('platform.heavy','platform.standard','body.heavy_rejected')),('entity',('best_heavy_engineering_mech',))]:
+        for suffix in suffixes: assert names[f'{prefix}.starfall_blueprint.{suffix}']
+for doc in (ROOT/'docs/BEST_ENGINEERING.md',ATLAS.parent/'18_贝斯特轻型工程首批.md',ATLAS.parent/'02_科技树设定/02_贝斯特机械科技树.md'):
+    text=doc.read_text(encoding='utf-8')
+    assert all(v in text for v in ('MEC-09首个平台','60,000,000 XH','1600','2400','27格','动作26','CoreFuelTicks','不进行UI测试'))
+saved=json.loads((ROOT.parent/'heavy_resources_preservation.json').read_text(encoding='utf-8'))
+for filename,digest in saved['files'].items():
+    assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
+for lang,entries in saved['lang'].items():
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert set(saved['existing_keys'][lang]) <= names.keys(),lang
+report=dict(date='2026-11-02',status='PASS',chain='build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources',chain_runs=1,
+    items=len(items),recipes=len(recipes),catalogue=len(canonical['catalogue']),best_items=len(BEST_NAMES),preserved_files=len(saved['files']),
+    exact_prior_translation_values=sum(map(len,saved['lang'].values())),existing_translation_keys={lang:len(keys) for lang,keys in saved['existing_keys'].items()},
+    coverage=['action26 exact manual materials and existing knowledge','independent heavy packed identity and factory defaults','heavy footprint and movement metadata','27 cargo slots and death ordering','shared service guards, fuel and state preservation','light body rejection','original item/entity art and bilingual names','prior remote and Best resource hashes, every old translation value','dated guide and MEC-09 boundaries'],runtime_tested=False,ui_tested=False,build_run=False)
+# Preserve the prior heavy-platform report; write this batch below.
+print(f'PASS: first heavy platform; {len(items)} items / {len(recipes)} recipes / {len(canonical["catalogue"])} catalogue / {len(BEST_NAMES)} Best; {len(saved["files"])} protected files and {sum(map(len,saved["lang"].values()))} exact old translations retained. No UI/build/runtime claims.')
+
+
+# MEC-06 heavy-only 3x3 drill: static canonical/resources contract, no runtime claim.
+key = 'best_mech_heavy_drill_arm'
+arm = items[key]
+spec = arm['engineering_arm']
+assert ASSEMBLY[key] == [('steel',24),('load',12),('conductor',8),('head',8),('board',4),('steel_fix',12),('sheath',8)]
+assert ASSEMBLY_KNOWLEDGE[key] == ASSEMBLY_KNOWLEDGE['best_mech']
+assert (arm['real_item'],arm['item_type'],arm['max_stack_size'],arm['max_durability']) == (True,'ordinary',1,0)
+assert not any(k in arm for k in ('energy_storage','thermal','durability_system','equipment_slot'))
+assert arm['manual_assembly']['output_count'] == 1 and arm['attribute_modifiers'] == []
+assert not any(k == entry['item'] for recipe in recipes for entry in recipe['outputs'] for k in (key,))
+assert spec['compatible_platforms'] == ['best_heavy_mech']
+assert (spec['manual_action'],spec['networking_action'],spec['energy'],spec['heat'],spec['wear'],spec['cooldown_ticks']) == (27,0,48000,35,1,40)
+assert spec['tool'] == 'minecraft:diamond_pickaxe' and spec['harvest_tier'] == 'diamond'
+assert spec['cost_basis'] == 'per_successful_block' and spec['cooldown_basis'] == 'per_action_first_success'
+assert spec['ordinary_drops'] and spec['success_only_costs'] and not spec['single_block']
+assert spec['stops_on'] == ['insufficient_energy','thermal_lock','worn_out']
+target = spec['targeting']
+assert target['shape'] == '3x3_plane_perpendicular_to_hit_face' and target['max_blocks'] == 9
+assert all(target[k] for k in ('center_first','center_success_required','invalid_center_aborts_batch','invalid_center_spends_nothing','recheck_each_block'))
+assert not any(target[k] for k in ('invalid_center_sets_cooldown','all_nine_guaranteed','vein_mining'))
+assert target['neighbor_failures'] == 'skip_independently'
+assert target['reach'] == 'min(5, player_block_interaction_range)'
+assert target['block_checks'] == ['protection','BreakEvent','actual_player_reach','loaded_chunk','world_border','no_block_entity','nonfluid','breakable','correct_tool']
+assert key not in mech['engineering_arm_slot']['allowed_items'] and key in heavy['engineering_arm_slot']['allowed_items']
+for platform in (mech, heavy):
+    slot = platform['engineering_arm_slot']
+    assert key in slot['known_items'] and slot['heavy_only_items'] == [key]
+    assert slot['light_loaded_heavy_arm'] == dict(retain_identity=True,removable=True,allows_install=False,allows_work=False,free_conversion=False)
+    assert slot['install']['platform_compatibility_required']
+    assert platform['engineering_work']['shared_cooldown_max_ticks'] == 40
+    assert platform['engineering_work']['cooldown_persistence'] == ['arm_swap','entity_nbt','packed_item','deploy','death_drop']
+assert items['best_workbench']['arms_page_actions'] == [21,22,27]
+new_art = (ART/'textures/item'/f'{key}.png').read_bytes()
+assert new_art == (ATLAS/'item-art'/f'{key}.png').read_bytes()
+assert all(new_art != (ART/'textures/item'/f'{old}.png').read_bytes() for old in BEST_NAMES if old != key)
+with Image.open(ART/'textures/item'/f'{key}.png') as image:
+    assert image.size == (32,32) and image.mode == 'RGBA'
+    assert 0 < sum(image.getchannel('A').histogram()[1:]) < 1024
+for lang in ('zh_cn','en_us'):
+    names = json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    for prefix,suffixes in [('item',(key,)),('message',('best_action_27',key+'_cost',key+'_assembled')),('ui',('best_action_27','best_material_action_27')),('tooltip',(key,key+'_install')),('mech',('arm.heavy_only','arm.heavy_required')),('hud',('mech.panel.incompatible_arm','mech.panel.heavy_standby','mech.panel.work_cost_per_block'))]:
+        for suffix in suffixes: assert names[f'{prefix}.starfall_blueprint.{suffix}']
+    assert all(f'%{i}$s' in names['hud.starfall_blueprint.mech.panel.heavy_standby'] for i in (1,2))
+for doc in (ROOT/'docs/BEST_ENGINEERING.md',ATLAS.parent/'18_贝斯特轻型工程首批.md',ATLAS.parent/'02_科技树设定/02_贝斯特机械科技树.md'):
+    text=doc.read_text(encoding='utf-8')
+    assert all(v in text for v in ('MEC-06重型工具增量','动作27','48,000 XH','热35','40刻','BreakEvent','最多9块','中心','min(5, player_block_interaction_range)','不进行UI测试或构建'))
+saved=json.loads((ROOT.parent/'heavy_drill_resources_preservation.json').read_text(encoding='utf-8'))
+for filename,digest in saved['files'].items():
+    assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
+for lang,entries in saved['lang'].items():
+    names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
+    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert set(saved['existing_keys'][lang]) <= names.keys(),lang
+report=dict(date='2026-11-02',status='PASS',chain='build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources',chain_runs=1,
+    items=len(items),recipes=len(recipes),catalogue=len(canonical['catalogue']),best_items=len(BEST_NAMES),preserved_files=len(saved['files']),
+    exact_prior_translation_values=sum(map(len,saved['lang'].values())),existing_translation_keys={lang:len(keys) for lang,keys in saved['existing_keys'].items()},
+    coverage=['action27 exact manual materials and existing knowledge','heavy-only known arm and light removal-only metadata','center-first bounded 3x3 plane and per-block independent checks','successful-block costs and first-success shared40 cooldown metadata','unchanged old20 arms and service state','original 32RGBA art and bilingual keys','all prior heavy/wheels/Best/remote resource hashes and exact translation values','dated MEC-06 tool increment, no full weapons claim'],runtime_tested=False,ui_tested=False,build_run=False)
+(ROOT/'docs/verification/2026-11-02-heavy-drill-resources.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(f'PASS: heavy drill resources; {len(items)} items / {len(recipes)} recipes / {len(canonical["catalogue"])} catalogue / {len(BEST_NAMES)} Best; {len(saved["files"])} protected files and {sum(map(len,saved["lang"].values()))} exact old translations retained. No UI/build/runtime claims.')

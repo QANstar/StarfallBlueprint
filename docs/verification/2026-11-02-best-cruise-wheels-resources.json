@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-02",
+  "status": "PASS",
+  "chain": "build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources",
+  "chain_runs": 1,
+  "items": 314,
+  "recipes": 245,
+  "catalogue": 180,
+  "best_items": 14,
+  "preserved_files": 209,
+  "preserved_remote_translation_values": 124,
+  "existing_translation_keys": {
+    "zh_cn": 713,
+    "en_us": 713
+  },
+  "coverage": [
+    "manual action25 and exact materials",
+    "independent Legs and guarded install/remove",
+    "four movement profiles and step-height metadata",
+    "original 32RGBA art and bilingual keys",
+    "both-repository prior remote resources and all Best art",
+    "dated guides and tree"
+  ],
+  "runtime_tested": false,
+  "ui_tested": false
+}

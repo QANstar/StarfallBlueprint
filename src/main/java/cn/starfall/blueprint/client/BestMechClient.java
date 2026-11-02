@@ -58,7 +58,13 @@ public final class BestMechClient {
     /** Immutable synchronized inputs. requestTicks is only the local request throttle, never drill cooldown. */
     static record Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                            boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
-                           int requestTicks, int movementCost, String armKey, int workCost, int capacity) {
+                           int requestTicks, int movementCost, String armKey, int workCost, int capacity, boolean heavy) {
+        Snapshot(float health, float maxHealth, int energy, int heat, int wear,
+                 boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
+                 int requestTicks, int movementCost, String armKey, int workCost, int capacity) {
+            this(health, maxHealth, energy, heat, wear, alive, isolated, thermalLocked, qualified,
+                    requestTicks, movementCost, armKey, workCost, capacity, false);
+        }
         Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                  boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
                  int requestTicks, int movementCost, String armKey, int workCost) {
@@ -81,7 +87,7 @@ public final class BestMechClient {
         Minecraft mc=Minecraft.getInstance();
         if(mc.options.hideGui || mc.player==null || !(mc.player.getVehicle() instanceof BestMechEntity mech))return;
         Snapshot sample = new Snapshot(mech.getHealth(), mech.getMaxHealth(), mech.energy(), mech.heat(), mech.wear(),
-                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.armKey(), mech.workCost(), mech.capacity());
+                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.armKey(), mech.workCost(), mech.capacity(), mech.heavy());
         renderPanel(graphics, 8, 8, sample);
     }
 
@@ -93,7 +99,7 @@ public final class BestMechClient {
         graphics.fill(x, y, x + 3, y + PANEL_HEIGHT, status.color());
         graphics.fill(x + 3, y, x + PANEL_WIDTH, y + 20, 0xff22333d);
         graphics.fill(x + 8, y + 20, x + 240, y + 21, 0xff42555b);
-        drawFit(graphics, label("title").copy().append(" · ").append(label("arm", BestMechArms.name(sample.armKey()))), x + 9, y + 6, 230, TEXT);
+        drawFit(graphics, (sample.heavy() ? Component.translatable("mech.starfall_blueprint.platform.heavy") : label("title")).copy().append(" · ").append(label("arm", BestMechArms.name(sample.armKey()))), x + 9, y + 6, 230, TEXT);
         int lineY = y + 25;
         for(var line : mc.font.split(label(status.key()), 230)) {
             if(lineY >= y + 43) break;
@@ -111,7 +117,8 @@ public final class BestMechClient {
         Component request = sample.requestTicks() > 0
                 ? label("request", DRILL.getTranslatedKeyMessage(), sample.requestTicks())
                 : sample.armKey().isEmpty() ? label("no_arm")
-                : label("standby", DRILL.getTranslatedKeyMessage(), compactEnergy(sample.workCost()));
+                : BestMechArms.HEAVY_DRILL.equals(sample.armKey()) && !sample.heavy() ? label("incompatible_arm")
+                : label(BestMechArms.HEAVY_DRILL.equals(sample.armKey()) ? "heavy_standby" : "standby", DRILL.getTranslatedKeyMessage(), compactEnergy(sample.workCost()));
         drawFit(graphics, request, x + 9, y + 116, 230, sample.requestTicks() > 0 ? WARNING : TEXT);
         drawFit(graphics, label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
                 x + 9, y + 129, 230, MUTED);
@@ -128,6 +135,7 @@ public final class BestMechClient {
         if(!sample.qualified()) return new PanelStatus("unqualified", ISOLATED);
         if(sample.energy() < sample.movementCost()) return new PanelStatus("no_power", DANGER);
         if(sample.armKey().isEmpty()) return new PanelStatus("no_arm", WARNING);
+        if(BestMechArms.HEAVY_DRILL.equals(sample.armKey()) && !sample.heavy()) return new PanelStatus("incompatible_arm", WARNING);
         if(sample.energy() < sample.workCost()) return new PanelStatus("work_power", WARNING);
         if(sample.heat() >= 800) return new PanelStatus("hot", WARNING);
         if(sample.energy() < sample.capacity() / 10) return new PanelStatus("low_power", WARNING);

@@ -36,9 +36,11 @@ public final class BestMechEntity extends PathfinderMob {
     private static final EntityDataAccessor<String> BODY = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> CORE = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> CORE_FUEL_TICKS = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<String> LEGS = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
+    private static final net.minecraft.resources.ResourceLocation CRUISE_STEP = StarfallBlueprint.id("best_mech_cruise_step");
     private int coreWorkTicks;
     // Keep one container for the entity's entire lifetime so open menus never retain a replaced inventory.
-    private final SimpleContainer cargo = new SimpleContainer(18) {
+    private final SimpleContainer cargo = new SimpleContainer(27) {
         @Override public boolean canPlaceItem(int slot, ItemStack stack) {
             return slot >= 0 && slot < cargoSlots() && !(stack.getItem() instanceof BestMechItem);
         }
@@ -47,7 +49,7 @@ public final class BestMechEntity extends PathfinderMob {
     private long chargeTick = Long.MIN_VALUE;
     private boolean packed;
     public BestMechEntity(EntityType<? extends BestMechEntity> type, Level level) {
-        super(type, level); setNoAi(true); setPersistenceRequired(); setHealth(100);
+        super(type, level); setNoAi(true); setPersistenceRequired(); setHealth(getMaxHealth());
     }
     public static AttributeSupplier.Builder attributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 100).add(Attributes.MOVEMENT_SPEED, 0.22)
@@ -57,7 +59,7 @@ public final class BestMechEntity extends PathfinderMob {
         super.defineSynchedData(builder); builder.define(ENERGY, 0); builder.define(HEAT, 0); builder.define(WEAR, 0);
         builder.define(ISOLATED, false); builder.define(LOCKED, false); builder.define(OPERATOR_QUALIFIED, false);
         builder.define(UTILITY_MODULE, ""); builder.define(ENGINEERING_ARM, BestMechArms.DRILL); builder.define(BODY, "");
-        builder.define(CORE, ""); builder.define(CORE_FUEL_TICKS, 0);
+        builder.define(CORE, ""); builder.define(CORE_FUEL_TICKS, 0); builder.define(LEGS, "");
     }
     public int energy() { return entityData.get(ENERGY); }
     public int heat() { return entityData.get(HEAT); }
@@ -70,6 +72,27 @@ public final class BestMechEntity extends PathfinderMob {
     public String bodyKey() { return entityData.get(BODY); }
     public String coreKey() { return entityData.get(CORE); }
     public int coreFuelTicks() { return entityData.get(CORE_FUEL_TICKS); }
+    public String legsKey() { return entityData.get(LEGS); }
+    private void syncLegs(String key) {
+        entityData.set(LEGS, BestMechLegs.sanitize(key));
+        if(!level().isClientSide) {
+            var step = getAttribute(Attributes.STEP_HEIGHT);
+            step.removeModifier(CRUISE_STEP);
+            if(!legsKey().isEmpty()) step.addTransientModifier(new AttributeModifier(CRUISE_STEP, -.4, AttributeModifier.Operation.ADD_VALUE));
+        }
+    }
+    public boolean installLegs(Player player, InteractionHand hand) {
+        ItemStack held = player.getItemInHand(hand);
+        if(hand != InteractionHand.MAIN_HAND || !player.isShiftKeyDown() || !canServiceModule(player)
+                || !legsKey().isEmpty() || BestMechLegs.key(held).isEmpty()) return false;
+        syncLegs(BestMechLegs.CRUISE); held.shrink(1); player.getInventory().setChanged(); return true;
+    }
+    public boolean removeLegs(Player player) {
+        if(!canServiceModule(player) || legsKey().isEmpty()) return false;
+        int slot = player.getInventory().getFreeSlot(); if(slot < 0) return false;
+        player.getInventory().setItem(slot, CatalogueContent.stack(legsKey(), 1)); syncLegs("");
+        player.getInventory().setChanged(); return true;
+    }
     public boolean installCore(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
         if(hand != InteractionHand.MAIN_HAND || !player.isShiftKeyDown() || !canServiceModule(player)
@@ -102,16 +125,19 @@ public final class BestMechEntity extends PathfinderMob {
         if(wear != 0) coreWorkTicks = 0;
         spend(0, 2, wear);
     }
-    public int capacity() { return BestMechBodies.capacity(bodyKey()); }
-    public int cargoSlots() { return BestMechBodies.cargoSlots(bodyKey()); }
+    // Platform identity belongs to the registered entity type, never to mutable packed state.
+    public boolean heavy() { return getType() == BestMechs.HEAVY_TYPE.get(); }
+    public int capacity() { return heavy() ? 60_000_000 : BestMechBodies.capacity(bodyKey()); }
+    public int cargoSlots() { return heavy() ? 27 : BestMechBodies.cargoSlots(bodyKey()); }
     public SimpleContainer cargo() { return cargo; }
     public boolean canAccessCargo(Player player) { return canServiceModule(player) && distanceToSqr(player) <= 64; }
     private void syncBody(String key) {
-        entityData.set(BODY, BestMechBodies.sanitize(key));
-        getAttribute(Attributes.MAX_HEALTH).setBaseValue(BestMechBodies.maxHealth(bodyKey()));
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(bodyKey().isEmpty() ? .22 : .18);
+        entityData.set(BODY, heavy() ? "" : BestMechBodies.sanitize(key));
+        getAttribute(Attributes.MAX_HEALTH).setBaseValue(heavy() ? 300 : BestMechBodies.maxHealth(bodyKey()));
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(heavy() ? .14 : bodyKey().isEmpty() ? .22 : .18);
     }
     public boolean installBody(Player player, InteractionHand hand) {
+        if(heavy()) return false;
         ItemStack held = player.getItemInHand(hand);
         if(hand != InteractionHand.MAIN_HAND || !player.isShiftKeyDown() || !canServiceModule(player)
                 || !bodyKey().isEmpty() || BestMechBodies.key(held).isEmpty()) return false;
@@ -119,6 +145,7 @@ public final class BestMechEntity extends PathfinderMob {
         held.shrink(1); player.getInventory().setChanged(); return true;
     }
     public boolean removeBody(Player player) {
+        if(heavy()) return false;
         if(!canServiceModule(player) || bodyKey().isEmpty() || energy() > CAPACITY || getHealth() > 100) return false;
         for(int i = 9; i < 18; i++) if(!cargo.getItem(i).isEmpty()) return false;
         int slot = player.getInventory().getFreeSlot(); if(slot < 0) return false;
@@ -126,13 +153,14 @@ public final class BestMechEntity extends PathfinderMob {
         player.getInventory().setItem(slot, CatalogueContent.stack(BestMechBodies.REINFORCED, 1));
         player.getInventory().setChanged(); return true;
     }
+    public boolean armCompatible() { return heavy() || !BestMechArms.HEAVY_DRILL.equals(armKey()); }
     public int workCost() { return BestMechArms.workCost(armKey()); }
     public int workHeat() { return BestMechArms.workHeat(armKey()); }
     public int workCooldown() { return BestMechArms.cooldown(armKey()); }
     public boolean installArm(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand); String key = BestMechArms.key(held);
         if(hand != InteractionHand.MAIN_HAND || !player.isShiftKeyDown() || !canServiceModule(player)
-                || !armKey().isEmpty() || key.isEmpty()) return false;
+                || !armKey().isEmpty() || key.isEmpty() || (!heavy() && BestMechArms.HEAVY_DRILL.equals(key))) return false;
         entityData.set(ENGINEERING_ARM, key); held.shrink(1); player.getInventory().setChanged(); return true;
     }
     public boolean removeArm(Player player) {
@@ -141,8 +169,18 @@ public final class BestMechEntity extends PathfinderMob {
         player.getInventory().setItem(slot, CatalogueContent.stack(armKey(), 1)); entityData.set(ENGINEERING_ARM, "");
         player.getInventory().setChanged(); return true;
     }
-    public int movementCost() { return bodyKey().isEmpty() ? BestMechModules.movementCost(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? 900 : 600; }
-    public int movementHeat() { return bodyKey().isEmpty() ? BestMechModules.movementHeat(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? 8 : 6; }
+    public float movementSpeed() {
+        float base = heavy() ? (BestMechModules.DRIVE.equals(moduleKey()) ? .18f : .14f) : bodyKey().isEmpty() ? BestMechModules.speed(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? .23f : .18f;
+        return legsKey().isEmpty() ? base : base * 1.25f;
+    }
+    public int movementCost() {
+        int base = heavy() ? (BestMechModules.DRIVE.equals(moduleKey()) ? 2400 : 1600) : bodyKey().isEmpty() ? BestMechModules.movementCost(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? 900 : 600;
+        return legsKey().isEmpty() ? base : base * 3 / 4;
+    }
+    public int movementHeat() {
+        int base = heavy() ? (BestMechModules.DRIVE.equals(moduleKey()) ? 14 : 10) : bodyKey().isEmpty() ? BestMechModules.movementHeat(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? 8 : 6;
+        return legsKey().isEmpty() ? base : base - 1;
+    }
     public int coolingRate() { return BestMechModules.coolingRate(moduleKey()); }
     private boolean canServiceModule(Player player) {
         return !level().isClientSide && qualified(player) && isAlive() && isolated() && getPassengers().isEmpty()
@@ -201,7 +239,7 @@ public final class BestMechEntity extends PathfinderMob {
         setJumping(false);
     }
     @Override protected float getRiddenSpeed(Player player) {
-        return bodyKey().isEmpty() ? BestMechModules.speed(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? .23f : .18f;
+        return movementSpeed();
     }
     @Override public void travel(Vec3 input) {
         boolean commanded = !level().isClientSide && getControllingPassenger() instanceof Player p && qualified(p)
@@ -261,8 +299,9 @@ public final class BestMechEntity extends PathfinderMob {
         tag.putLong("ChargeTick", chargeTick); tag.putInt("ChargeUsed", chargeUsed);
         tag.putString(BestMechModules.STATE, moduleKey()); tag.putString(BestMechArms.STATE, armKey()); tag.putString(BestMechBodies.STATE, bodyKey());
         tag.putString(BestMechCores.STATE, coreKey()); tag.putInt("CoreFuelTicks", coreFuelTicks()); tag.putInt("CoreWorkTicks", coreWorkTicks);
+        tag.putString(BestMechLegs.STATE, legsKey());
         ListTag items = new ListTag();
-        for(int i = 0; i < cargo.getContainerSize(); i++) if(!cargo.getItem(i).isEmpty()) {
+        for(int i = 0; i < (heavy() ? 27 : 18); i++) if(!cargo.getItem(i).isEmpty()) {
             CompoundTag entry = new CompoundTag(); entry.putInt("Slot", i);
             entry.put("Item", cargo.getItem(i).save(registryAccess())); items.add(entry);
         }
@@ -274,6 +313,7 @@ public final class BestMechEntity extends PathfinderMob {
         entityData.set(UTILITY_MODULE, BestMechModules.sanitize(tag.getString(BestMechModules.STATE)));
         entityData.set(ENGINEERING_ARM, BestMechArms.read(tag));
         syncBody(BestMechBodies.read(tag));
+        syncLegs(BestMechLegs.read(tag));
         entityData.set(CORE, BestMechCores.read(tag));
         entityData.set(CORE_FUEL_TICKS, Math.clamp(tag.getInt("CoreFuelTicks"), 0, BestMechCores.MAX_FUEL_TICKS));
         coreWorkTicks = Math.clamp(tag.getInt("CoreWorkTicks"), 0, 999);
@@ -282,12 +322,12 @@ public final class BestMechEntity extends PathfinderMob {
         for(int i = 0; i < items.size(); i++) {
             CompoundTag entry = items.getCompound(i); int slot = entry.getInt("Slot");
             ItemStack stack = ItemStack.parseOptional(registryAccess(), entry.getCompound("Item"));
-            // Preserve all eighteen physical slots, including legacy/malformed standard-body overflow.
-            if(slot >= 0 && slot < 18 && !(stack.getItem() instanceof BestMechItem)) cargo.setItem(slot, stack);
+            // Preserve legacy light overflow without letting packed light state select the heavy platform.
+            if(slot >= 0 && slot < (heavy() ? 27 : 18) && !(stack.getItem() instanceof BestMechItem)) cargo.setItem(slot, stack);
         }
         entityData.set(HEAT, Math.clamp(tag.getInt("Heat"), 0, MAX_HEAT)); entityData.set(WEAR, Math.clamp(tag.getInt("Wear"), 0, MAX_WEAR));
         entityData.set(ISOLATED, tag.getBoolean("Isolated")); entityData.set(LOCKED, tag.getBoolean("ThermalLock") || heat() >= MAX_HEAT);
-        workTicks = Math.clamp(tag.getInt("WorkTicks"), 0, 99); drillCooldown = Math.clamp(tag.getInt("DrillCooldown"), 0, 20);
+        workTicks = Math.clamp(tag.getInt("WorkTicks"), 0, 99); drillCooldown = Math.clamp(tag.getInt("DrillCooldown"), 0, 40);
         chargeTick = tag.contains("ChargeTick") ? tag.getLong("ChargeTick") : Long.MIN_VALUE;
         chargeUsed = Math.clamp(tag.getInt("ChargeUsed"), 0, 5000);
         setHealth(tag.contains("Health") ? Math.clamp(tag.getFloat("Health"), 0, getMaxHealth()) : getMaxHealth());
@@ -301,7 +341,7 @@ public final class BestMechEntity extends PathfinderMob {
         setNoAi(true); setPersistenceRequired();
     }
     private ItemStack packedStack() {
-        ItemStack stack = CatalogueContent.stack("best_mech", 1); BestMechItem.setState(stack, stateTag());
+        ItemStack stack = CatalogueContent.stack(heavy() ? "best_heavy_mech" : "best_mech", 1); BestMechItem.setState(stack, stateTag());
         if(hasCustomName()) stack.set(DataComponents.CUSTOM_NAME, getCustomName()); return stack;
     }
     public boolean pack(Player player) {
@@ -325,38 +365,69 @@ public final class BestMechEntity extends PathfinderMob {
     }
     public boolean drill(Player player) { return work(player); }
     public boolean work(Player player) {
-        if(armKey().isEmpty() || !(player instanceof ServerPlayer server) || player.getVehicle() != this || getControllingPassenger() != player
+        if(armKey().isEmpty() || !armCompatible() || !(player instanceof ServerPlayer server) || player.getVehicle() != this || getControllingPassenger() != player
                 || !qualified(player) || !ready(workCost()) || drillCooldown > 0 || !onGround() || isInWater() || isInLava()
                 || player.isCreative() || !player.mayBuild()) return false;
         Vec3 from = player.getEyePosition(); double reach = Math.min(5, player.blockInteractionRange());
         BlockHitResult hit = level().clip(new ClipContext(from, from.add(player.getLookAngle().scale(reach)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
         if(hit.getType() != HitResult.Type.BLOCK) return false;
-        BlockPos pos = hit.getBlockPos(); if(!level().hasChunkAt(pos) || !level().mayInteract(player, pos) || !level().getWorldBorder().isWithinBounds(pos)) return false;
+        BlockPos center = hit.getBlockPos();
+        boolean heavyDrill = BestMechArms.HEAVY_DRILL.equals(armKey());
+        if(!breakWorkBlock(server, center, from, reach, heavyDrill)) return false;
+        // Cooldown belongs to the action. Candidate breaks deliberately do not re-enter work().
+        drillCooldown = workCooldown();
+        if(heavyDrill) {
+            var axis = hit.getDirection().getAxis();
+            // Rows ascend in the second plane coordinate; columns ascend in the first.
+            for(int row = -1; row <= 1; row++) for(int column = -1; column <= 1; column++) {
+                if(row == 0 && column == 0) continue;
+                if(!ready(48000)) return true;
+                BlockPos candidate = switch(axis) {
+                    case X -> center.offset(0, column, row);
+                    case Y -> center.offset(column, 0, row);
+                    case Z -> center.offset(column, row, 0);
+                };
+                breakWorkBlock(server, candidate, from, reach, true);
+            }
+        }
+        return true;
+    }
+    private boolean breakWorkBlock(ServerPlayer player, BlockPos pos, Vec3 eye, double reach, boolean heavyDrill) {
+        if(!level().hasChunkAt(pos) || !level().getWorldBorder().isWithinBounds(pos) || !level().mayInteract(player, pos)) return false;
+        if(heavyDrill) {
+            double x = net.minecraft.util.Mth.clamp(eye.x, pos.getX(), pos.getX() + 1.0);
+            double y = net.minecraft.util.Mth.clamp(eye.y, pos.getY(), pos.getY() + 1.0);
+            double z = net.minecraft.util.Mth.clamp(eye.z, pos.getZ(), pos.getZ() + 1.0);
+            if(eye.distanceToSqr(x, y, z) > reach * reach) return false;
+        }
         var state = level().getBlockState(pos); boolean excavator = BestMechArms.EXCAVATOR.equals(armKey());
-        ItemStack tool = new ItemStack(excavator ? Items.IRON_SHOVEL : Items.IRON_PICKAXE);
+        ItemStack tool = new ItemStack(heavyDrill ? Items.DIAMOND_PICKAXE : excavator ? Items.IRON_SHOVEL : Items.IRON_PICKAXE);
         if((excavator && !state.is(net.minecraft.tags.BlockTags.MINEABLE_WITH_SHOVEL))
                 || state.isAir() || state.hasBlockEntity() || !level().getFluidState(pos).isEmpty() || state.getDestroySpeed(level(), pos) < 0
                 || (state.requiresCorrectToolForDrops() && !tool.isCorrectToolForDrops(state))) return false;
         ItemStack held = player.getMainHandItem(); boolean success;
         player.setItemInHand(InteractionHand.MAIN_HAND, tool);
-        try { success = server.gameMode.destroyBlock(pos); }
+        try { success = player.gameMode.destroyBlock(pos); }
         finally { player.setItemInHand(InteractionHand.MAIN_HAND, held); }
         if(!success || level().getBlockState(pos).equals(state)) return false;
-        spend(workCost(), workHeat(), 1); drillCooldown = workCooldown(); return true;
+        spend(workCost(), workHeat(), 1); return true;
     }
     public Component status() {
         return Component.literal("工程机甲 · " + energy() + "/" + capacity() + " XH · 热 " + heat() + "/1000 · 磨损 " + wear() + "/2400 · 结构 "
                 + getHealth() + "/" + getMaxHealth() + " · " + (isolated() ? "已隔离" : "已接通") + (entityData.get(LOCKED) ? " · 热锁定（400恢复）" : "")
-                + " · 工时 " + workTicks + "/100 · 工程臂冷却 " + drillCooldown + "/20t")
+                + " · 工时 " + workTicks + "/100 · 工程臂冷却 " + drillCooldown + "/" + Math.max(20, Math.max(workCooldown(), drillCooldown)) + "t")
                 .append(Component.literal(" · ")).append(BestMechModules.installed(moduleKey()))
                 .append(Component.literal(" · ")).append(BestMechModules.controls())
                 .append(Component.literal(" · ")).append(BestMechArms.installed(armKey()))
+                .append(armCompatible() ? Component.empty() : Component.translatable("mech.starfall_blueprint.arm.heavy_required"))
                 .append(Component.literal(" · ")).append(BestMechArms.controls())
-                .append(Component.literal(" · ")).append(BestMechBodies.installed(bodyKey()))
-                .append(Component.literal(" · ")).append(BestMechBodies.controls())
+                .append(Component.literal(" · ")).append(heavy() ? Component.translatable("mech.starfall_blueprint.platform.heavy") : BestMechBodies.installed(bodyKey()))
+                .append(Component.literal(" · ")).append(heavy() ? Component.translatable("mech.starfall_blueprint.body.heavy_rejected") : BestMechBodies.controls())
                 .append(Component.literal(" · ")).append(BestMechCores.installed(coreKey()))
                 .append(Component.literal(" · ")).append(BestMechCores.controls())
-                .append(Component.literal(" · ")).append(BestMechCores.fuel(coreFuelTicks()));
+                .append(Component.literal(" · ")).append(BestMechCores.fuel(coreFuelTicks()))
+                .append(Component.literal(" · ")).append(BestMechLegs.installed(legsKey()))
+                .append(Component.literal(" · ")).append(BestMechLegs.controls());
     }
     @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
@@ -365,12 +436,16 @@ public final class BestMechEntity extends PathfinderMob {
             if(canAccessCargo(player)) BestMechCargoMenu.open(player, this);
             return InteractionResult.CONSUME;
         }
+        if(!BestMechLegs.key(held).isEmpty()) {
+            if(!installLegs(player, hand)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.legs.failed"), false);
+            player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
+        }
         if(!BestMechCores.key(held).isEmpty()) {
             if(!installCore(player, hand)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.core.failed"), false);
             player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
         }
         if(!BestMechBodies.key(held).isEmpty()) {
-            if(!installBody(player, hand)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.body.failed"), false);
+            if(!installBody(player, hand)) player.displayClientMessage(Component.translatable(heavy() ? "mech.starfall_blueprint.body.heavy_rejected" : "mech.starfall_blueprint.body.failed"), false);
             player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
         }
         if(!BestMechArms.key(held).isEmpty()) {
@@ -384,12 +459,16 @@ public final class BestMechEntity extends PathfinderMob {
         }
         boolean diagnostic = held.is(CatalogueContent.item("best_diagnostic_tool"));
         if(diagnostic) {
+            if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND && player.getOffhandItem().is(Items.MINECART)) {
+                if(!removeLegs(player)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.legs.failed"), false);
+                player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
+            }
             if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND && player.getOffhandItem().is(Items.FURNACE)) {
                 if(!removeCore(player)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.core.failed"), false);
                 player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
             }
             if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND && player.getOffhandItem().is(Items.IRON_BLOCK)) {
-                if(!removeBody(player)) player.displayClientMessage(Component.translatable("mech.starfall_blueprint.body.failed"), false);
+                if(!removeBody(player)) player.displayClientMessage(Component.translatable(heavy() ? "mech.starfall_blueprint.body.heavy_rejected" : "mech.starfall_blueprint.body.failed"), false);
                 player.displayClientMessage(status(), false); return InteractionResult.CONSUME;
             }
             if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND && player.getOffhandItem().is(Items.IRON_PICKAXE)) {

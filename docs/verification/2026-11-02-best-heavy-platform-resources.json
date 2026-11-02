@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-02",
+  "status": "PASS",
+  "chain": "build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources",
+  "chain_runs": 1,
+  "items": 315,
+  "recipes": 245,
+  "catalogue": 181,
+  "best_items": 15,
+  "preserved_files": 228,
+  "exact_prior_translation_values": 1456,
+  "existing_translation_keys": {
+    "zh_cn": 728,
+    "en_us": 728
+  },
+  "coverage": [
+    "action26 exact manual materials and existing knowledge",
+    "independent heavy packed identity and factory defaults",
+    "heavy footprint and movement metadata",
+    "27 cargo slots and death ordering",
+    "shared service guards, fuel and state preservation",
+    "light body rejection",
+    "original item/entity art and bilingual names",
+    "prior remote and Best resource hashes, every old translation value",
+    "dated guide and MEC-09 boundaries"
+  ],
+  "runtime_tested": false,
+  "ui_tested": false,
+  "build_run": false
+}

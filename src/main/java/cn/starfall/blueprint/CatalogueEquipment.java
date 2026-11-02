@@ -27,13 +27,14 @@ public final class CatalogueEquipment {
         if(key.startsWith("blackdog_armor_"))return BlackDogArmor.createProjection(key,p);
         if(key.startsWith("blackdog_"))return Lingchuan.moduleItem(key,p);
         if(key.equals("best_mech"))return new BestMechItem(p);
+        if(key.equals("best_heavy_mech"))return new BestMechItem(p,true);
         if(key.equals("best_mech_radiator")||key.equals("best_mech_drive"))return new Item(p.stacksTo(1)){
             @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
                 lines.add(Component.translatable("tooltip.starfall_blueprint."+key));
                 lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_module_install"));
             }
         };
-        if(key.equals("best_mech_drill_arm")||key.equals("best_mech_excavator_arm"))return new Item(p.stacksTo(1)){
+        if(key.equals("best_mech_drill_arm")||key.equals("best_mech_excavator_arm")||key.equals("best_mech_heavy_drill_arm"))return new Item(p.stacksTo(1)){
             @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
                 lines.add(Component.translatable("tooltip.starfall_blueprint."+key));
                 lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_arm_install"));
@@ -49,6 +50,12 @@ public final class CatalogueEquipment {
             @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
                 lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_generator_core"));
                 lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_core_install"));
+            }
+        };
+        if(key.equals("best_mech_cruise_wheels"))return new Item(p.stacksTo(1)){
+            @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
+                lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_cruise_wheels"));
+                lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_legs_install"));
             }
         };
         if(key.equals("best_frame"))return new BestEquipment.Frame(p);

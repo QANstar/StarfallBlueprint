@@ -28,27 +28,27 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         inventoryLabelY = 176;
     }
 
-    /** Fixture/accessibility entry point: 0 engineering, 1 mobility, 2 diagnostics, 3 mech, 4 tool arms, 5 power core. */
+    /** Fixture/accessibility entry point: 0 engineering, 1 mobility, 2 diagnostics, 3 mech, 4 tool arms, 5 power core, 6 locomotion. */
     public void selectPage(int page) {
-        if (page < 0 || page > 5) throw new IllegalArgumentException("page must be 0..5");
+        if (page < 0 || page > 6) throw new IllegalArgumentException("page must be 0..6");
         this.page = page;
         if (minecraft != null) rebuildWidgets();
     }
     public int page() { return page; }
     /** Select the material table independently of execution, including disabled learned actions. */
     public void selectMechAction(int action) {
-        if (action < 17 || (action > 20 && action != 23)) throw new IllegalArgumentException("mech action must be 17..20 or 23");
+        if (action < 17 || (action > 20 && action != 23 && action != 26)) throw new IllegalArgumentException("mech action must be 17..20, 23 or 26");
         selectedMechAction = action;
     }
     public int selectedMechAction() { return selectedMechAction; }
     public void selectArmAction(int action) {
-        if (action < 21 || action > 22) throw new IllegalArgumentException("arm action must be 21..22");
+        if ((action < 21 || action > 22) && action != 27) throw new IllegalArgumentException("arm action must be 21..22 or 27");
         selectedArmAction = action;
     }
-    private int materialAction() { return page == 5 ? 24 : page == 4 ? selectedArmAction : selectedMechAction; }
+    private int materialAction() { return page == 6 ? 25 : page == 5 ? 24 : page == 4 ? selectedArmAction : selectedMechAction; }
     private void selectMaterialAction(int action) {
-        if (action == 24) return;
-        if (action == 21 || action == 22) selectArmAction(action);
+        if (action == 24 || action == 25) return;
+        if (action == 21 || action == 22 || action == 27) selectArmAction(action);
         else selectMechAction(action);
     }
     private static Component text(String key, Object... args) {
@@ -58,19 +58,20 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     @Override protected void init() {
         super.init();
         actionButtons.clear();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             final int target = i;
             Button tab = addRenderableWidget(Button.builder(text("tab_" + i), button -> selectPage(target))
-                    .bounds(leftPos + 8 + i * 48, topPos + 44, 44, 16).build());
+                    .bounds(leftPos + 8 + i * 41, topPos + 44, 38, 16).build());
             tab.active = page != i;
         }
         int[] actions = switch(page) {
             case 0 -> new int[]{0, 1, 2, 3, 5, 6, 4, 7};
             case 1 -> new int[]{8, 9, 10, 11, 12};
             case 2 -> new int[]{13, 14, 15, 16};
-            case 3 -> new int[]{17, 18, 19, 20, 23};
-            case 4 -> new int[]{21, 22};
-            default -> new int[]{24};
+            case 3 -> new int[]{17, 18, 19, 20, 23, 26};
+            case 4 -> new int[]{21, 22, 27};
+            case 5 -> new int[]{24};
+            default -> new int[]{25};
         };
         for (int i = 0; i < actions.length; i++) {
             int action = actions[i];

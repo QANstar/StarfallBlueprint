@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-02",
+  "status": "PASS",
+  "chain": "build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources",
+  "chain_runs": 1,
+  "items": 316,
+  "recipes": 245,
+  "catalogue": 182,
+  "best_items": 16,
+  "preserved_files": 232,
+  "exact_prior_translation_values": 1478,
+  "existing_translation_keys": {
+    "zh_cn": 739,
+    "en_us": 739
+  },
+  "coverage": [
+    "action27 exact manual materials and existing knowledge",
+    "heavy-only known arm and light removal-only metadata",
+    "center-first bounded 3x3 plane and per-block independent checks",
+    "successful-block costs and first-success shared40 cooldown metadata",
+    "unchanged old20 arms and service state",
+    "original 32RGBA art and bilingual keys",
+    "all prior heavy/wheels/Best/remote resource hashes and exact translation values",
+    "dated MEC-06 tool increment, no full weapons claim"
+  ],
+  "runtime_tested": false,
+  "ui_tested": false,
+  "build_run": false
+}

@@ -14,6 +14,9 @@ public final class BestMechs {
     public static final DeferredHolder<EntityType<?>, EntityType<BestMechEntity>> TYPE = TYPES.register("best_engineering_mech",
             () -> EntityType.Builder.of(BestMechEntity::new, MobCategory.MISC).sized(1.8f, 3.2f).passengerAttachments(2.2f)
                     .clientTrackingRange(10).updateInterval(1).build(StarfallBlueprint.id("best_engineering_mech").toString()));
+    public static final DeferredHolder<EntityType<?>, EntityType<BestMechEntity>> HEAVY_TYPE = TYPES.register("best_heavy_engineering_mech",
+            () -> EntityType.Builder.of(BestMechEntity::new, MobCategory.MISC).sized(2.6f, 4.4f).passengerAttachments(3.1f)
+                    .clientTrackingRange(12).updateInterval(1).build(StarfallBlueprint.id("best_heavy_engineering_mech").toString()));
     public static final DeferredHolder<net.minecraft.world.inventory.MenuType<?>, net.minecraft.world.inventory.MenuType<BestMechCargoMenu>> CARGO_MENU = StarfallBlueprint.MENUS.register("best_mech_cargo",
             () -> net.neoforged.neoforge.common.extensions.IMenuTypeExtension.create(BestMechCargoMenu::new));
     public static void initialize() {}
@@ -22,6 +25,9 @@ public final class BestMechs {
         bus.addListener(BestMechs::attributes);
         bus.addListener(BestMechNetworking::register);
     }
-    private static void attributes(EntityAttributeCreationEvent event) { event.put(TYPE.get(), BestMechEntity.attributes().build()); }
+    private static void attributes(EntityAttributeCreationEvent event) {
+        event.put(TYPE.get(), BestMechEntity.attributes().build());
+        event.put(HEAVY_TYPE.get(), BestMechEntity.attributes().add(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH,300).add(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED,.14).build());
+    }
     private BestMechs() {}
 }

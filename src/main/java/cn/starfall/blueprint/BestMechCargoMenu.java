@@ -24,13 +24,13 @@ public final class BestMechCargoMenu extends AbstractContainerMenu {
         this(id, inventory, mech, mech.cargoSlots());
     }
     private static int checkedSize(int size) {
-        if(size != 9 && size != 18) throw new IllegalArgumentException("Invalid mech cargo size: " + size);
+        if(size != 9 && size != 18 && size != 27) throw new IllegalArgumentException("Invalid mech cargo size: " + size);
         return size;
     }
     private BestMechCargoMenu(int id, Inventory inventory, BestMechEntity mech, int size) {
         super(BestMechs.CARGO_MENU.get(), id);
         this.mech = mech; this.cargoSlots = checkedSize(size);
-        SimpleContainer cargo = mech == null ? new SimpleContainer(18) : mech.cargo();
+        SimpleContainer cargo = mech == null ? new SimpleContainer(size) : mech.cargo();
         for(int i = 0; i < size; i++) {
             final int index = i;
             addSlot(new Slot(cargo, i, 8 + i % 9 * 18, 29 + i / 9 * 18) {

@@ -137,7 +137,7 @@ public final class BestMechBodyGameTests {
         boolean drops = h.getLevel().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS);
         h.getLevel().getGameRules().getRule(GameRules.RULE_DOENTITYDROPS).set(true, h.getLevel().getServer());
         try {
-            h.assertTrue(m.bodyKey().isEmpty() && m.capacity() == 20_000_000 && m.cargoSlots() == 9 && m.cargo().getContainerSize() == 18, "Missing legacy body is standard with fixed eighteen storage cells");
+            h.assertTrue(m.bodyKey().isEmpty() && m.capacity() == 20_000_000 && m.cargoSlots() == 9 && m.cargo().getContainerSize() == 27, "Missing legacy body is standard with nine active cells in the shared storage container");
             var t = m.stateTag(); t.putString(BestMechBodies.STATE, "unknown_body"); m.loadState(t);
             h.assertTrue(m.bodyKey().isEmpty() && BestMechBodies.read(new CompoundTag()).isEmpty(), "Unknown and absent body keys are standard empty");
             service(p, m); p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CHEST)); var chest = p.getMainHandItem().copy();

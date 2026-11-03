@@ -175,6 +175,26 @@ public final class ProgressionScreen extends AbstractContainerScreen<Progression
                     available >= cost.count() ? GOOD : BAD);
             y += 20;
         }
+        y += 4;
+        fitted(g, text("rewards_heading"), x, y, 190, INK);
+        y += 12;
+        fitted(g, text("rewards_once"), x, y, 190, MUTED);
+        y += 12;
+        if (node.reward().experiencePoints() > 0) {
+            fitted(g, text("experience_reward", node.reward().experiencePoints()), x, y, 190, GOOD);
+            y += 12;
+        }
+        for (var reward : node.reward().items()) {
+            ItemStack item = CatalogueContent.stack(reward.key(), 1);
+            g.renderItem(item, x, y);
+            fitted(g, item.getHoverName(), x + 19, y, 169, INK);
+            fitted(g, text("item_reward", reward.count()), x + 19, y + 9, 169, GOOD);
+            y += 20;
+        }
+        if (node.reward().experiencePoints() == 0 && node.reward().items().isEmpty()) {
+            g.drawString(font, text("none"), x, y, MUTED, false);
+            y += 12;
+        }
         detailHeight = y - (topPos + 51 - detailScroll);
         g.disableScissor();
         detailScroll = Math.clamp(detailScroll, 0, Math.max(0, detailHeight - 74));

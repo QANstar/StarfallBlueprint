@@ -120,18 +120,22 @@ public final class BestEngineeringGameTests {
                     "Drill research cannot precede basic engineering");
             unchanged(h, first, before, "Wrong-order research consumes no materials");
             inputs(first, new String[]{"steel", "board"}, new int[]{6, 3});
+            var expected = ProgressionGameTests.expectedXp(h, first, 0, 5);
             h.assertTrue(BestEngineering.perform(first, 0) && BestEngineering.researchLevel(first) == 1,
                     "Basic engineering can be learned with the exact transaction");
-            h.assertTrue(count(first, "steel") == 4 && count(first, "board") == 2,
-                    "Basic research consumes exactly two steel and one board");
+            ProgressionGameTests.sameXp(h, first, expected, "Basic research grants exactly five points");
+            h.assertTrue(count(first, "steel") == 4 && count(first, "board") == 2 && count(first, "iron") == 4,
+                    "Basic research consumes exactly two steel and one board and grants four iron");
             before = snapshot(first);
             h.assertTrue(!BestEngineering.perform(first, 0), "Already learned basic research is rejected");
             unchanged(h, first, before, "Repeated basic research is free of side effects");
             inputs(first, new String[]{"load", "conductor"}, new int[]{3, 3});
+            expected = ProgressionGameTests.expectedXp(h, first, 1, 10);
             h.assertTrue(BestEngineering.perform(first, 1) && BestEngineering.researchLevel(first) == 2,
                     "Drill research follows the personal basic unlock");
-            h.assertTrue(count(first, "load") == 2 && count(first, "conductor") == 2,
-                    "Drill research consumes exactly one load crystal and one conductor");
+            ProgressionGameTests.sameXp(h, first, expected, "Drill research pays one level then grants exactly ten points");
+            h.assertTrue(count(first, "load") == 2 && count(first, "conductor") == 2 && count(first, "steel") == 2,
+                    "Drill research consumes exactly one load crystal and one conductor and grants two steel");
             before = snapshot(first);
             h.assertTrue(!BestEngineering.perform(first, 1), "Already learned drill research is rejected");
             unchanged(h, first, before, "Repeated drill research never consumes another crystal");

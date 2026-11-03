@@ -69,11 +69,13 @@ public final class BestDiagnosticsGameTests {
             input(p, 1, "load", 2); input(p, 2, "conductor", 4); input(p, 3, "board", 2);
             h.assertTrue(!BestEngineering.perform(p, 13) && count(p, "load") == 2, "Diagnostics cannot skip field servicing or consume its learning materials");
             p.getPersistentData().putInt("BestEngineeringResearch", 3);
+            var expected = ProgressionGameTests.expectedXp(h, p, 2, 20);
             h.assertTrue(BestEngineering.perform(p, 13) && BestEngineering.hasDiagnostics(p)
                     && !BestEngineering.hasLightMobility(p) && BestEngineering.researchLevel(p) == 3,
                     "Diagnostics branches independently after level three without requiring light mobility or a fourth level");
-            h.assertTrue(count(p, "load") == 1 && count(p, "conductor") == 2 && count(p, "board") == 1 && p.experienceLevel == 0,
-                    "Learning consumes exactly one load material, two conductor, one board and two XP levels");
+            h.assertTrue(count(p, "load") == 1 && count(p, "conductor") == 2 && count(p, "board") == 1 && count(p, "best_diagnostic_tool") == 1,
+                    "Learning consumes exactly one load material, two conductor and one board and grants one diagnostic tool");
+            ProgressionGameTests.sameXp(h, p, expected, "Diagnostics pays two levels then awards exactly twenty points");
             h.assertTrue(!BestEngineering.perform(p, 13) && count(p, "conductor") == 2,
                     "Repeated learning never charges again");
             h.assertTrue(!BestEngineering.hasDiagnostics(other), "Knowledge is personal even with shared tools");

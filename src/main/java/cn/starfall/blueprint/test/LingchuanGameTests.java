@@ -44,10 +44,16 @@ public final class LingchuanGameTests {
         var p=player(h);var be=station(h,"lc_research_station");p.experienceLevel=2;
         input(p,2,"common",8);
         h.assertTrue(!Lingchuan.research(p,be,1,false)&&be.getPower()==2_000_000&&p.experienceLevel==2&&p.getInventory().getItem(2).getCount()==8,"Prerequisite rejection preserves power, XP and materials");
-        h.assertTrue(Lingchuan.research(p,be,0,false)&&be.getPower()==2_000_000&&p.experienceLevel==1&&p.getInventory().getItem(2).getCount()==4,"The legacy energy flag uses the unified four-crystal plus one-level payment without power");
-        h.assertTrue(!Lingchuan.research(p,be,0,false)&&be.getPower()==2_000_000&&p.experienceLevel==1&&p.getInventory().getItem(2).getCount()==4,"Repeated research preserves materials, XP and power");
-        input(p,0,"laminar_alloy",2);
-        h.assertTrue(Lingchuan.research(p,be,1,true)&&be.getPower()==2_000_000&&p.experienceLevel==0&&p.getInventory().getItem(0).isEmpty()&&p.getInventory().getItem(2).isEmpty(),"Both legacy flags consume the exact unified materials plus XP and no power");
+        var expected=ProgressionGameTests.expectedXp(h,p,1,10);
+        h.assertTrue(Lingchuan.research(p,be,0,false)&&be.getPower()==2_000_000&&p.getInventory().getItem(2).getCount()==4
+                &&CatalogueContent.matches("laminar_alloy",p.getInventory().getItem(0))&&p.getInventory().getItem(0).getCount()==1,"The legacy energy flag pays four crystals and grants one alloy without power");
+        ProgressionGameTests.sameXp(h,p,expected,"Metallurgy pays one level then grants exactly ten points");
+        h.assertTrue(!Lingchuan.research(p,be,0,false)&&be.getPower()==2_000_000&&p.getInventory().getItem(2).getCount()==4,"Repeated research preserves materials and power");
+        ProgressionGameTests.sameXp(h,p,expected,"Repeated research preserves all XP fields");
+        input(p,0,"laminar_alloy",3); // One prior reward plus two newly supplied alloy.
+        expected=ProgressionGameTests.expectedXp(h,p,1,20);
+        h.assertTrue(Lingchuan.research(p,be,1,true)&&be.getPower()==2_000_000&&p.getInventory().getItem(0).getCount()==3&&p.getInventory().getItem(2).isEmpty(),"Both legacy flags pay two alloy and four crystals, then grant two alloy without power");
+        ProgressionGameTests.sameXp(h,p,expected,"Black Dog basics pays one level then grants exactly twenty points");
         h.assertTrue(!Lingchuan.knows(player(h),0),"Research is personal");h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)

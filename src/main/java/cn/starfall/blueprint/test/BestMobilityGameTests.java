@@ -70,9 +70,12 @@ public final class BestMobilityGameTests {
             h.assertTrue(!BestEngineering.perform(p, 8) && p.getInventory().getItem(1).getCount() == 4,
                     "Light mobility cannot skip field servicing or consume learning materials on failure");
             p.getPersistentData().putInt("BestEngineeringResearch", 3);
+            var expected = ProgressionGameTests.expectedXp(h, p, 2, 15);
             h.assertTrue(BestEngineering.perform(p, 8) && BestEngineering.hasLightMobility(p)
-                    && BestEngineering.researchLevel(p) == 3 && p.getInventory().getItem(1).getCount() == 2 && p.experienceLevel == 0,
-                    "Learning consumes exactly two load material and two XP levels, retaining the original three-level research model");
+                    && BestEngineering.researchLevel(p) == 3 && p.getInventory().getItem(1).getCount() == 2
+                    && p.getInventory().items.stream().filter(s -> CatalogueContent.matches("steel_fix", s)).mapToInt(ItemStack::getCount).sum() == 2,
+                    "Learning consumes exactly two load material and grants two repair materials, retaining the original three-level research model");
+            ProgressionGameTests.sameXp(h, p, expected, "Mobility pays two levels then awards exactly fifteen points");
             h.assertTrue(!BestEngineering.perform(p, 8) && p.getInventory().getItem(1).getCount() == 2,
                     "Duplicate learning never charges again");
             h.assertTrue(!BestEngineering.hasLightMobility(other), "Sharing a world does not share personal knowledge");

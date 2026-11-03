@@ -39,7 +39,9 @@ public final class BestServicingGameTests {
             input(p,1,"load",2);input(p,2,"conductor",1);input(p,3,"board",1);
             h.assertTrue(!BestEngineering.perform(p,5)&&count(p,CatalogueContent.item("load"))==2,"Field servicing cannot skip drill research or consume its materials");
             p.getPersistentData().putInt("BestEngineeringResearch",2);
-            h.assertTrue(BestEngineering.perform(p,5)&&BestEngineering.researchLevel(p)==3&&p.experienceLevel==0,"The third research level consumes its materials and exactly two XP levels");
+            var expected=ProgressionGameTests.expectedXp(h,p,2,20);
+            h.assertTrue(BestEngineering.perform(p,5)&&BestEngineering.researchLevel(p)==3&&count(p,CatalogueContent.item("best_service_kit"))==1,"The third research level pays its materials and grants one service kit");
+            ProgressionGameTests.sameXp(h,p,expected,"Servicing pays two levels then grants exactly twenty XP points");
             input(p,1,"load",2);input(p,2,"conductor",1);input(p,3,"board",1);
             h.assertTrue(!BestEngineering.perform(p,5)&&count(p,CatalogueContent.item("board"))==1,"Repeated field research never charges again");
             for(int i=0;i<36;i++)p.getInventory().setItem(i,new ItemStack(Items.COBBLESTONE,64));

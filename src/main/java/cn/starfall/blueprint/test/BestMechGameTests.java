@@ -189,9 +189,12 @@ public final class BestMechGameTests {
             p.getPersistentData().putInt("BestEngineeringResearch", 2); var before = inventory(p);
             h.assertTrue(!BestEngineering.perform(p, 17) && unchanged(p, before), "Research three is independently required");
             p.getPersistentData().putInt("BestEngineeringResearch", 3);
+            var expected = ProgressionGameTests.expectedXp(h, p, 5, 50);
             h.assertTrue(BestEngineering.perform(p, 17) && BestEngineering.hasMechOperation(p) && !BestEngineering.hasMechOperation(other)
-                    && count(p, "load") == 4 && count(p, "conductor") == 4 && count(p, "sensor") == 2 && count(p, "board") == 2 && p.experienceLevel == 0,
-                    "Mech operation is personal and consumes exactly four load, four conductor, two sensor, two board and five XP levels");
+                    && count(p, "load") == 4 && count(p, "conductor") == 4 && count(p, "sensor") == 2 && count(p, "board") == 2
+                    && count(p, "steel") == 8 && count(p, "steel_fix") == 4,
+                    "Mech operation is personal and pays exactly four load, four conductor, two sensor and two board, granting only steel and repair materials");
+            ProgressionGameTests.sameXp(h, p, expected, "Mech operation pays five levels then grants exactly fifty points");
             before = inventory(p); h.assertTrue(!BestEngineering.perform(p, 17) && unchanged(p, before), "Repeated learning cannot consume materials");
             BestEngineering.clonePlayer(new PlayerEvent.Clone(other, p, true));
             h.assertTrue(BestMechEntity.qualified(other) && BestEngineering.researchLevel(other) == 3, "Death clone retains all four independent personal prerequisites");

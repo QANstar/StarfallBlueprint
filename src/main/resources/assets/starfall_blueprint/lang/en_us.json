@@ -781,5 +781,10 @@
   "growth.starfall_blueprint.materials": "Not enough materials: submit sufficient clean, usable materials",
   "growth.starfall_blueprint.ready": "Ready to learn · costs %s experience levels",
   "growth.starfall_blueprint.unavailable": "Cannot learn in the current player state",
-  "growth.starfall_blueprint.learned": "Learned: %s"
+  "growth.starfall_blueprint.learned": "Learned: %s",
+  "growth.starfall_blueprint.rewards_heading": "First-unlock rewards",
+  "growth.starfall_blueprint.rewards_once": "Granted on first learning only; no retroactive claims",
+  "growth.starfall_blueprint.experience_reward": "Reward: %s experience points",
+  "growth.starfall_blueprint.item_reward": "Reward: x%s",
+  "growth.starfall_blueprint.reward_space": "Not enough room for rewards. Make space in your main inventory before learning."
 }

@@ -781,5 +781,10 @@
   "growth.starfall_blueprint.materials": "材料不足：请提交足量清洁、可用的材料",
   "growth.starfall_blueprint.ready": "可以学习 · 消耗 %s 级经验",
   "growth.starfall_blueprint.unavailable": "当前状态无法学习",
-  "growth.starfall_blueprint.learned": "已掌握：%s"
+  "growth.starfall_blueprint.learned": "已掌握：%s",
+  "growth.starfall_blueprint.rewards_heading": "首次解锁奖励",
+  "growth.starfall_blueprint.rewards_once": "仅首次成功学习发放，已学节点不补发",
+  "growth.starfall_blueprint.experience_reward": "奖励 %s 经验点",
+  "growth.starfall_blueprint.item_reward": "奖励 ×%s",
+  "growth.starfall_blueprint.reward_space": "奖励所需背包空间不足，请整理主背包后再学习"
 }

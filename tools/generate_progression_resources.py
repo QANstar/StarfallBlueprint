@@ -35,6 +35,11 @@ MESSAGES = {
     'ready': ('可以学习 · 消耗 %s 级经验', 'Ready to learn · costs %s experience levels'),
     'unavailable': ('当前状态无法学习', 'Cannot learn in the current player state'),
     'learned': ('已掌握：%s', 'Learned: %s'),
+    'rewards_heading': ('首次解锁奖励', 'First-unlock rewards'),
+    'rewards_once': ('仅首次成功学习发放，已学节点不补发', 'Granted on first learning only; no retroactive claims'),
+    'experience_reward': ('奖励 %s 经验点', 'Reward: %s experience points'),
+    'item_reward': ('奖励 ×%s', 'Reward: x%s'),
+    'reward_space': ('奖励所需背包空间不足，请整理主背包后再学习', 'Not enough room for rewards. Make space in your main inventory before learning.'),
 }
 
 

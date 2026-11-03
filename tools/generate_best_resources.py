@@ -405,6 +405,8 @@ def main():
         names[f'entity.{MOD}.best_engineering_mech'] = best.BEST_NAMES['best_mech'][index]
         names[f'entity.{MOD}.best_heavy_engineering_mech'] = best.BEST_NAMES['best_heavy_mech'][index]
         write(path, names)
+    from generate_progression_resources import main as generate_progression
+    generate_progression()
     (ROOT / 'docs/BEST_ENGINEERING.md').write_text(best.BEST_DOC, encoding='utf-8', newline='\n')
     print(f'Generated {len(best.BEST_NAMES)} Best textures/models/names, public bench resources and engineering/field service/light mobility/diagnostics documentation.')
 

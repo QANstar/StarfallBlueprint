@@ -8,12 +8,12 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-/** Inventory workstations and a full-window, independently navigable research canvas. */
+/** Inventory workstations; research opens the shared inventory growth panel. */
 public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu> {
     private int page;
     private String shownKind="";
     private boolean shownComponents;
-    private BlackDogResearchCanvas canvas;
+
     public LingchuanScreen(LingchuanMenu menu,Inventory inventory,Component title){
         super(menu,inventory,title);imageWidth=360;imageHeight=240;inventoryLabelX=98;inventoryLabelY=148;titleLabelX=8;titleLabelY=8;
     }
@@ -22,11 +22,13 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
         var b=Button.builder(label,button->send(action)).bounds(leftPos+x,topPos+y,width,18).tooltip(Tooltip.create(tooltip)).build();addRenderableWidget(b);return b;
     }
     @Override protected void init(){
-        boolean research=menu.kind().equals("lc_research_station");imageWidth=research?width-16:360;imageHeight=research?height-16:240;
+        imageWidth=360;imageHeight=240;
         super.init();shownKind=menu.kind();shownComponents=menu.componentView();
         switch(shownKind){
             case "lc_research_station"->{
-                if(canvas==null)canvas=new BlackDogResearchCanvas(menu,this::send);canvas.bounds(leftPos,topPos,imageWidth,imageHeight);
+                addRenderableWidget(Button.builder(ProgressionInventoryTab.text("open"), button -> ProgressionInventoryTab.open())
+                        .bounds(leftPos+70,topPos+66,220,20)
+                        .tooltip(Tooltip.create(ProgressionInventoryTab.text("station_hint"))).build());
             }
             case "lc_parts_fabricator"->{
                 for(int cell=0;cell<8;cell++){
@@ -58,7 +60,6 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
         }
     }
     @Override protected void renderBg(GuiGraphics g,float partial,int mouseX,int mouseY){
-        if(menu.kind().equals("lc_research_station")&&canvas!=null){canvas.render(g,mouseX,mouseY);return;}
         int x=leftPos,y=topPos;g.fill(x,y,x+imageWidth,y+imageHeight,0xff0e1016);g.fill(x+2,y+2,x+imageWidth-2,y+imageHeight-2,0xff252733);
         g.fill(x+2,y+2,x+imageWidth-2,y+20,0xff722934);
         if(menu.kind().equals("lc_armor_assembler")&&menu.componentView())for(int i=0;i<12;i++){
@@ -70,12 +71,16 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
     }
     private static void line(GuiGraphics g,int x1,int y1,int x2,int y2,int color){g.fill(Math.min(x1,x2),Math.min(y1,y2),Math.max(x1,x2)+1,Math.max(y1,y2)+1,color);}
     @Override protected void renderLabels(GuiGraphics g,int mouseX,int mouseY){
-        if(menu.kind().equals("lc_research_station"))return;
+        if(menu.kind().equals("lc_research_station")){
+            g.drawString(font,title,8,8,0xfff4dce0,false);
+            int y=32;for(var line:font.split(ProgressionInventoryTab.text("station_hint"),328)){g.drawString(font,line,16,y,0xffd4bbc1,false);y+=10;}
+            g.drawString(font,playerInventoryTitle,inventoryLabelX,inventoryLabelY,0xffd8bcc3,false);
+            return;
+        }
         g.drawString(font,title,8,8,0xfff4dce0,false);
         if(menu.kind().equals("lc_parts_fabricator"))g.drawString(font,menu.power()+" XH",220,8,0xffd4bbc1,false);
         else g.drawString(font,Component.translatable("lc.station_power",menu.power()),8,24,0xffd4bbc1,false);
-        if(menu.kind().equals("lc_research_station"))g.drawString(font,Component.translatable(menu.materials()?"lc.payment_materials":"lc.payment_energy"),8,131,0xffe6a4ab,false);
-        else if(menu.kind().equals("lc_armor_assembler")){
+        if(menu.kind().equals("lc_armor_assembler")){
             if(menu.componentView()){
                 g.drawString(font,Component.translatable("lc.component_inputs"),8,65,0xffe0cbd0,false);g.drawString(font,Component.translatable("lc.component_installed"),190,58,0xffe0cbd0,false);
             }else {g.drawString(font,Component.translatable("lc.assembler_instruction"),12,62,0xffe0cbd0,false);g.drawString(font,Component.translatable("lc.budget_hint"),12,80,0xffe0cbd0,false);}
@@ -94,13 +99,7 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
     }
     private int installedAt(double mouseX,double mouseY){if(!menu.kind().equals("lc_armor_assembler")||!menu.componentView())return -1;for(int i=0;i<12;i++){int x=leftPos+190+i%4*38,y=topPos+68+i/4*19;if(mouseX>=x&&mouseX<x+32&&mouseY>=y&&mouseY<y+17)return i;}return -1;}
     @Override public boolean mouseClicked(double x,double y,int button){
-        if(canvas!=null&&menu.kind().equals("lc_research_station"))return canvas.click(x,y,button);
         int component=installedAt(x,y);if(button==0&&component>=0&&BlackDogArmor.has(menu.watch(),Lingchuan.ABILITIES.get(component))){send(200+component);return true;}
         return super.mouseClicked(x,y,button);
     }
-    @Override public boolean mouseDragged(double x,double y,int button,double dx,double dy){return canvas!=null&&menu.kind().equals("lc_research_station")?canvas.drag(dx,dy):super.mouseDragged(x,y,button,dx,dy);}
-    @Override public boolean mouseReleased(double x,double y,int button){return canvas!=null&&menu.kind().equals("lc_research_station")?canvas.release():super.mouseReleased(x,y,button);}
-    @Override public boolean mouseScrolled(double x,double y,double horizontal,double vertical){return canvas!=null&&menu.kind().equals("lc_research_station")?canvas.scroll(x,y,vertical):super.mouseScrolled(x,y,horizontal,vertical);}
-    @Override public boolean keyPressed(int key,int scan,int modifiers){if(key==82&&canvas!=null&&menu.kind().equals("lc_research_station")){canvas.focus(0);return true;}return super.keyPressed(key,scan,modifiers);}
-    public BlackDogResearchCanvas researchCanvas(){return canvas;}
 }

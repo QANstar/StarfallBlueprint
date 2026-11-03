@@ -41,6 +41,7 @@ public final class BestEngineeringGameTests {
     private static FakePlayer player(GameTestHelper h) {
         FakePlayer player = FakePlayerFactory.get(h.getLevel(), new GameProfile(UUID.randomUUID(), "BestEngineering"));
         player.setGameMode(GameType.SURVIVAL);
+        player.experienceLevel = 10; // Research fixtures pay the unified learning costs.
         player.getInventory().clearContent();
         player.getInventory().selected = 0;
         player.setShiftKeyDown(false);

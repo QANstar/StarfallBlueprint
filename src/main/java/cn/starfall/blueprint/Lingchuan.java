@@ -104,14 +104,7 @@ public final class Lingchuan {
         AggregateMachines.syncActive(be,be.status==1);
     }
     public static boolean research(Player player,IndustryBlockEntity be,int node,boolean materials){
-        if(!be.kind().equals("lc_research_station")||node<0||node>=RESEARCH.size()||knows(player,node)||!prerequisites(knowledge(player),node))return fail(player,"lc.research_locked");
-        var r=RESEARCH.get(node);
-        if(materials){if(!consume(player,Map.of("laminar_alloy",r.alloy(),"common",r.crystal()),false))return fail(player,"lc.materials_missing");}
-        else if(be.getPower()<r.power())return fail(player,"lc.power_missing");
-        if(materials)consume(player,Map.of("laminar_alloy",r.alloy(),"common",r.crystal()),true);
-        else be.setPower(be.getPower()-r.power());
-        player.getPersistentData().putInt("LingchuanResearch",knowledge(player)|(1<<node));
-        player.displayClientMessage(Component.translatable("lc.researched",r.name()),true);return true;
+        return Progression.learn(player,Progression.lingchuanId(node));
     }
     /** Reservation checks precede all input mutation, even for creative operators. */
     public static boolean consume(Player player,Map<String,Integer> inputs,boolean commit){

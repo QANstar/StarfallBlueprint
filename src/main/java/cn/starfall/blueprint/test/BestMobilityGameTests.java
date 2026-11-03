@@ -64,14 +64,15 @@ public final class BestMobilityGameTests {
     @GameTest(template = "empty")
     public static void mobilityLearningIsIndependentPersonalAndCloned(GameTestHelper h) {
         var p = player(h, 2, false); var other = player(h, 3, false);
+        p.experienceLevel = 2;
         try {
             input(p, 1, "load", 4); input(p, 2, "conductor", 2); input(p, 3, "board", 2);
             h.assertTrue(!BestEngineering.perform(p, 8) && p.getInventory().getItem(1).getCount() == 4,
                     "Light mobility cannot skip field servicing or consume learning materials on failure");
             p.getPersistentData().putInt("BestEngineeringResearch", 3);
             h.assertTrue(BestEngineering.perform(p, 8) && BestEngineering.hasLightMobility(p)
-                    && BestEngineering.researchLevel(p) == 3 && p.getInventory().getItem(1).getCount() == 2,
-                    "Learning consumes exactly two load material and retains the original three-level research model");
+                    && BestEngineering.researchLevel(p) == 3 && p.getInventory().getItem(1).getCount() == 2 && p.experienceLevel == 0,
+                    "Learning consumes exactly two load material and two XP levels, retaining the original three-level research model");
             h.assertTrue(!BestEngineering.perform(p, 8) && p.getInventory().getItem(1).getCount() == 2,
                     "Duplicate learning never charges again");
             h.assertTrue(!BestEngineering.hasLightMobility(other), "Sharing a world does not share personal knowledge");

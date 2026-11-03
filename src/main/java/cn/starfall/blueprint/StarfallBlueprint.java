@@ -117,7 +117,8 @@ public final class StarfallBlueprint {
 
     public StarfallBlueprint(IEventBus bus) {
         CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();Blueprints.initialize();AggregateMachines.initialize();BestEngineering.initialize();Lingchuan.initialize();
-        BestMechs.initialize(); BestMechs.register(bus);
+        BestMechs.initialize(); BestMechs.register(bus); Progression.initialize();
+        bus.addListener(ProgressionNetworking::register);
         CatalogueFluids.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus); RECIPE_TYPES.register(bus);
         bus.addListener(this::capabilities);

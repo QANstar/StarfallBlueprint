@@ -134,6 +134,8 @@ public final class BestEngineering {
     /** Server-authoritative validation and atomic commit of the same plan used by previews. */
     public static boolean perform(Player player,int action){
         if(player.level().isClientSide||action<0||action>27)return false;
+        String progression=Progression.bestId(action);
+        if(progression!=null)return Progression.learn(player,progression);
         Inventory inventory=player.getInventory();
         Plan transaction=plan(inventory,action,Knowledge.of(player));
         if(!transaction.preview().executable()){

@@ -41,17 +41,18 @@ public final class LingchuanGameTests {
     private static ItemStack watch(FakePlayer p,List<ItemStack> parts,String... abilities){var s=BlackDogArmor.build(parts,Arrays.stream(abilities).map(a->CatalogueContent.stack("blackdog_component_"+a,1)).toList());BlackDogArmor.setCharge(s,BlackDogArmor.capacity(s));p.getInventory().setItem(1,s);return s;}
     @GameTest(template="empty",timeoutTicks=100)
     public static void researchIsPersonalAtomicAndPaysExactlyOneRoute(GameTestHelper h){
-        var p=player(h);var be=station(h,"lc_research_station");
-        h.assertTrue(!Lingchuan.research(p,be,1,false)&&be.getPower()==2_000_000,"Prerequisite rejection must not consume electricity");
-        h.assertTrue(Lingchuan.research(p,be,0,false)&&be.getPower()==1_990_000,"Energy route unlocks exactly one node");
-        h.assertTrue(!Lingchuan.research(p,be,0,false)&&be.getPower()==1_990_000,"Repeated research is free of side effects");
-        input(p,0,"laminar_alloy",2);input(p,2,"common",4);
-        h.assertTrue(Lingchuan.research(p,be,1,true)&&be.getPower()==1_990_000&&p.getInventory().getItem(0).isEmpty()&&p.getInventory().getItem(2).isEmpty(),"Material route consumes exact supplies and no power");
+        var p=player(h);var be=station(h,"lc_research_station");p.experienceLevel=2;
+        input(p,2,"common",8);
+        h.assertTrue(!Lingchuan.research(p,be,1,false)&&be.getPower()==2_000_000&&p.experienceLevel==2&&p.getInventory().getItem(2).getCount()==8,"Prerequisite rejection preserves power, XP and materials");
+        h.assertTrue(Lingchuan.research(p,be,0,false)&&be.getPower()==2_000_000&&p.experienceLevel==1&&p.getInventory().getItem(2).getCount()==4,"The legacy energy flag uses the unified four-crystal plus one-level payment without power");
+        h.assertTrue(!Lingchuan.research(p,be,0,false)&&be.getPower()==2_000_000&&p.experienceLevel==1&&p.getInventory().getItem(2).getCount()==4,"Repeated research preserves materials, XP and power");
+        input(p,0,"laminar_alloy",2);
+        h.assertTrue(Lingchuan.research(p,be,1,true)&&be.getPower()==2_000_000&&p.experienceLevel==0&&p.getInventory().getItem(0).isEmpty()&&p.getInventory().getItem(2).isEmpty(),"Both legacy flags consume the exact unified materials plus XP and no power");
         h.assertTrue(!Lingchuan.knows(player(h),0),"Research is personal");h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)
     public static void materialResearchHasNoBootstrapCycle(GameTestHelper h){
-        var p=player(h);var be=station(h,"lc_research_station");be.setPower(0);input(p,0,"common",4);
+        var p=player(h);p.experienceLevel=1;var be=station(h,"lc_research_station");be.setPower(0);input(p,0,"common",4);
         h.assertTrue(Lingchuan.research(p,be,0,true)&&Lingchuan.knows(p,0),"Metallurgy can start with public crystal only, without laminar products");
         h.assertTrue(!Lingchuan.research(p,be,3,true),"Micro reactors cannot skip compressed cores");h.succeed();
     }

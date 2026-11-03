@@ -64,6 +64,7 @@ public final class BestDiagnosticsGameTests {
     @GameTest(template = "empty")
     public static void diagnosticsLearningAndToolAssemblyArePersonalAndAtomic(GameTestHelper h) {
         var p = player(h, 2, false); var other = player(h, 3, false);
+        p.experienceLevel = 2;
         try {
             input(p, 1, "load", 2); input(p, 2, "conductor", 4); input(p, 3, "board", 2);
             h.assertTrue(!BestEngineering.perform(p, 13) && count(p, "load") == 2, "Diagnostics cannot skip field servicing or consume its learning materials");
@@ -71,8 +72,8 @@ public final class BestDiagnosticsGameTests {
             h.assertTrue(BestEngineering.perform(p, 13) && BestEngineering.hasDiagnostics(p)
                     && !BestEngineering.hasLightMobility(p) && BestEngineering.researchLevel(p) == 3,
                     "Diagnostics branches independently after level three without requiring light mobility or a fourth level");
-            h.assertTrue(count(p, "load") == 1 && count(p, "conductor") == 2 && count(p, "board") == 1,
-                    "Learning consumes exactly one load material, two conductor and one board");
+            h.assertTrue(count(p, "load") == 1 && count(p, "conductor") == 2 && count(p, "board") == 1 && p.experienceLevel == 0,
+                    "Learning consumes exactly one load material, two conductor, one board and two XP levels");
             h.assertTrue(!BestEngineering.perform(p, 13) && count(p, "conductor") == 2,
                     "Repeated learning never charges again");
             h.assertTrue(!BestEngineering.hasDiagnostics(other), "Knowledge is personal even with shared tools");

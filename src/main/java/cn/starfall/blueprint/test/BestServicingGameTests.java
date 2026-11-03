@@ -34,11 +34,12 @@ public final class BestServicingGameTests {
     @GameTest(template="empty")
     public static void fieldResearchAndManualAssemblyArePersonalAndAtomic(GameTestHelper h){
         var p=player(h,1);
+        p.experienceLevel=2;
         try{
             input(p,1,"load",2);input(p,2,"conductor",1);input(p,3,"board",1);
             h.assertTrue(!BestEngineering.perform(p,5)&&count(p,CatalogueContent.item("load"))==2,"Field servicing cannot skip drill research or consume its materials");
             p.getPersistentData().putInt("BestEngineeringResearch",2);
-            h.assertTrue(BestEngineering.perform(p,5)&&BestEngineering.researchLevel(p)==3,"The third research level unlocks through its actual material transaction");
+            h.assertTrue(BestEngineering.perform(p,5)&&BestEngineering.researchLevel(p)==3&&p.experienceLevel==0,"The third research level consumes its materials and exactly two XP levels");
             input(p,1,"load",2);input(p,2,"conductor",1);input(p,3,"board",1);
             h.assertTrue(!BestEngineering.perform(p,5)&&count(p,CatalogueContent.item("board"))==1,"Repeated field research never charges again");
             for(int i=0;i<36;i++)p.getInventory().setItem(i,new ItemStack(Items.COBBLESTONE,64));

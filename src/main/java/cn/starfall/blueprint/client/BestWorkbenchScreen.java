@@ -64,11 +64,13 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
                     .bounds(leftPos + 8 + i * 41, topPos + 44, 38, 16).build());
             tab.active = page != i;
         }
+        addRenderableWidget(Button.builder(ProgressionInventoryTab.text("open"), button -> ProgressionInventoryTab.open())
+                .bounds(leftPos + 8, topPos + 22, 284, 18).build());
         int[] actions = switch(page) {
-            case 0 -> new int[]{0, 1, 2, 3, 5, 6, 4, 7};
-            case 1 -> new int[]{8, 9, 10, 11, 12};
-            case 2 -> new int[]{13, 14, 15, 16};
-            case 3 -> new int[]{17, 18, 19, 20, 23, 26};
+            case 0 -> new int[]{2, 3, 6, 4, 7};
+            case 1 -> new int[]{9, 10, 11, 12};
+            case 2 -> new int[]{14, 15, 16};
+            case 3 -> new int[]{18, 19, 20, 23, 26};
             case 4 -> new int[]{21, 22, 27};
             case 5 -> new int[]{24};
             default -> new int[]{25};
@@ -118,10 +120,6 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
 
     @Override protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         fitted(graphics, title, titleLabelX, titleLabelY, 280, 0xffedf4eb);
-        fitted(graphics, text("knowledge_research", text("research_" + menu.researchLevel())), 10, 22, 138, 0xff344f43);
-        fitted(graphics, text("knowledge_light", text(menu.hasLightMobility() ? "learned" : "unlearned")), 154, 22, 136, 0xff344f43);
-        fitted(graphics, text("knowledge_diagnostics", text(menu.hasDiagnostics() ? "learned" : "unlearned")), 10, 33, 138, 0xff344f43);
-        fitted(graphics, text("knowledge_mech", text(menu.hasMechOperation() ? "learned" : "unlearned")), 154, 33, 136, 0xff344f43);
         if (page >= 3) {
             BestEngineering.Preview preview = menu.preview(materialAction());
             fitted(graphics, text("materials_for", text("material_action_" + materialAction()), preview.reason()), 10, 117, 280, preview.executable() ? 0xff27653f : 0xff88402f);

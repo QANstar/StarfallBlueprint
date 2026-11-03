@@ -178,6 +178,7 @@ public final class BestMechGameTests {
     @GameTest(template = "empty")
     public static void mechKnowledgeRequiresAllPersonalBranchesAndClones(GameTestHelper h) {
         var p = player(h, false); var other = player(h, false);
+        p.experienceLevel = 5;
         try {
             inputs(p, Map.of("load", 8, "conductor", 8, "sensor", 4, "board", 4));
             for(String missing : List.of("BestDiagnostics", "BestLightMobility")) {
@@ -189,8 +190,8 @@ public final class BestMechGameTests {
             h.assertTrue(!BestEngineering.perform(p, 17) && unchanged(p, before), "Research three is independently required");
             p.getPersistentData().putInt("BestEngineeringResearch", 3);
             h.assertTrue(BestEngineering.perform(p, 17) && BestEngineering.hasMechOperation(p) && !BestEngineering.hasMechOperation(other)
-                    && count(p, "load") == 4 && count(p, "conductor") == 4 && count(p, "sensor") == 2 && count(p, "board") == 2,
-                    "Mech operation is personal and consumes exactly four load, four conductor, two sensor and two board");
+                    && count(p, "load") == 4 && count(p, "conductor") == 4 && count(p, "sensor") == 2 && count(p, "board") == 2 && p.experienceLevel == 0,
+                    "Mech operation is personal and consumes exactly four load, four conductor, two sensor, two board and five XP levels");
             before = inventory(p); h.assertTrue(!BestEngineering.perform(p, 17) && unchanged(p, before), "Repeated learning cannot consume materials");
             BestEngineering.clonePlayer(new PlayerEvent.Clone(other, p, true));
             h.assertTrue(BestMechEntity.qualified(other) && BestEngineering.researchLevel(other) == 3, "Death clone retains all four independent personal prerequisites");

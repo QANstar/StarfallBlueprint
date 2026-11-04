@@ -14,6 +14,29 @@ from best_expansion import BEST_NAMES, ASSEMBLY, ASSEMBLY_KNOWLEDGE, POWERED_EQU
 from generate_best_resources import BEST_UI_MESSAGES
 
 
+# Only the explicitly migrated SG-E1/SG-E2 names and parameters may differ from old snapshots.
+# Every exception must equal the current canonical generator value; other translations remain exact.
+WATER_GOD_TRANSLATION_MIGRATIONS = {'entity.starfall_blueprint.best_engineering_mech', 'hud.starfall_blueprint.mech.title', 'tooltip.starfall_blueprint.best_heavy_mech', 'message.starfall_blueprint.best_action_26', 'ui.starfall_blueprint.best_hint_5', 'ui.starfall_blueprint.best_material_action_26', 'mech.starfall_blueprint.platform.standard', 'tooltip.starfall_blueprint.best_mech_radiator', 'item.starfall_blueprint.best_mech', 'ui.starfall_blueprint.best_action_27', 'ui.starfall_blueprint.best_action_26', 'ui.starfall_blueprint.best_material_action_27', 'tooltip.starfall_blueprint.best_mech_generator_core', 'message.starfall_blueprint.best_mech_heavy_drill_arm_assembled', 'tooltip.starfall_blueprint.best_mech_cruise_wheels', 'mech.starfall_blueprint.platform.heavy', 'message.starfall_blueprint.best_heavy_mech_assembled', 'item.starfall_blueprint.best_heavy_mech', 'ui.starfall_blueprint.best_hint_3', 'message.starfall_blueprint.best_action_27', 'item.starfall_blueprint.best_mech_heavy_drill_arm', 'entity.starfall_blueprint.best_heavy_engineering_mech', 'message.starfall_blueprint.best_heavy_mech_cost', 'mech.starfall_blueprint.arm.heavy_only', 'message.starfall_blueprint.best_mech_assembled', 'tooltip.starfall_blueprint.best_mech_drive'}
+
+def preserved_translation(key, old, names, lang):
+    if names.get(key) == old:
+        return True
+    if key not in WATER_GOD_TRANSLATION_MIGRATIONS:
+        return False
+    index = 0 if lang == 'zh_cn' else 1
+    from generate_best_resources import MECH_MESSAGES
+    expected = {}
+    for entry, pair in MECH_MESSAGES.items():
+        prefix, suffix = entry.split('.', 1)
+        expected[f'{prefix}.starfall_blueprint.{suffix}'] = pair[index]
+    for item_key, pair in BEST_NAMES.items():
+        prefix = 'block' if item_key == 'best_workbench' else 'item'
+        expected[f'{prefix}.starfall_blueprint.{item_key}'] = pair[index]
+    expected['entity.starfall_blueprint.best_engineering_mech'] = BEST_NAMES['best_mech'][index]
+    expected['entity.starfall_blueprint.best_heavy_engineering_mech'] = BEST_NAMES['best_heavy_mech'][index]
+    return key in expected and names.get(key) == expected[key]
+
+
 def snapshot():
     paths = [ATLAS / 'production-data.json', ATLAS / 'index.html', ATLAS.parents[1] / '星落蓝图说明手册.html']
     paths += list((ROOT / 'src/main/resources').rglob('*'))
@@ -253,7 +276,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     assert '冷却到600仍保持热锁提示，须降至400恢复' in text
     assert 'G键输入、骑乘手感与多人实机仍须另行验收' in text
 # Engineering arms share existing knowledge and work checks; no new recipes or power storage.
-assert len(LEARNING) == 6
+assert len(LEARNING) == 7
 assert ASSEMBLY['best_mech_drill_arm'] == [('steel',8), ('conductor',4), ('head',2), ('board',1), ('steel_fix',4)]
 assert ASSEMBLY['best_mech_excavator_arm'] == [('steel',8), ('load',4), ('conductor',2), ('steel_fix',4), ('sheath',2)]
 slot = mech['engineering_arm_slot']
@@ -296,7 +319,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     text = doc.read_text(encoding='utf-8')
     assert 'EngineeringArm' in text and 'MEC-06部分实现' in text and '12,000 XH' in text
 # Body/cargo is one incremental MEC-04 step; manual-only and independent of both old slots.
-assert len(BEST_NAMES) == 16 and len(LEARNING) == 6
+assert len(BEST_NAMES) == 16 and len(LEARNING) == 7
 body = items['best_mech_reinforced_body']
 assert ASSEMBLY['best_mech_reinforced_body'] == [('steel',24), ('load',12), ('conductor',8), ('steel_fix',16), ('sheath',8)]
 assert ASSEMBLY_KNOWLEDGE['best_mech_reinforced_body'] == ASSEMBLY_KNOWLEDGE['best_mech']
@@ -391,7 +414,7 @@ assert generation['persistence'] == ['entity_nbt','packed_item','deploy','dead_p
 assert set(mech['packed_state']['preserves']) >= {'Core','CoreFuelTicks','CoreWorkTicks'}
 assert (mech['energy_storage']['entity_receive_per_tick'],mech['energy_storage']['packed_base_transfer_per_tick']) == (512,5000)
 assert items['best_workbench']['tabs'] == ['workshop','mobility','service','mech','arms','core','locomotion']
-assert len(LEARNING) == 6
+assert len(LEARNING) == 7
 with Image.open(ART/'textures/item/best_mech_generator_core.png') as image:
     assert image.size == (32,32) and image.mode == 'RGBA'
     assert 0 < sum(image.getchannel('A').histogram()[1:]) < 1024
@@ -418,7 +441,7 @@ for filename,digest in saved['files'].items():
     assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
 for lang,entries in saved['lang'].items():
     names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
-    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert all(preserved_translation(k, v, names, lang) for k,v in entries.items()),lang
     assert set(saved['existing_keys'][lang]) <= names.keys(),lang
 print(f'PASS: solid-fuel core boundaries; preserved {len(saved["files"])} both-repo remote/Best art hashes and {sum(map(len,saved["lang"].values()))} remote bilingual values; all prior keys retained.')
 
@@ -430,7 +453,7 @@ for filename,digest in saved['files'].items():
     assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
 for lang,entries in saved['lang'].items():
     names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
-    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert all(preserved_translation(k, v, names, lang) for k,v in entries.items()),lang
     assert set(saved['existing_keys'][lang]) <= names.keys(),lang
 print(f'PASS: reinforced body/cargo boundaries; preserved {len(saved["files"])} both-repo resource/arm hashes and {sum(map(len,saved["lang"].values()))} remote bilingual values; all existing translation keys retained.')
 
@@ -442,7 +465,7 @@ if boundary.is_file():
         assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest, filename
     for lang, entries in saved['lang'].items():
         names = json.loads((ART / 'lang' / f'{lang}.json').read_text(encoding='utf-8'))
-        assert all(names.get(k) == v for k,v in entries.items()), lang
+        assert all(preserved_translation(k, v, names, lang) for k,v in entries.items()), lang
     print(f'PASS: preserved {len(saved["files"])} Lingchuan resource hashes and {sum(map(len,saved["lang"].values()))} bilingual keys.')
 print(f'PASS: Best manual-only assembly, historical servicing/mobility/diagnostics boundaries, independent Mech Operation, packed state and server-authoritative ride/drill metadata; synced original art/models/bilingual names; {len(items)} items / {len(recipes)} recipes / {len(canonical["catalogue"])} catalogue entries.')
 
@@ -453,7 +476,7 @@ assert ASSEMBLY_KNOWLEDGE['best_mech_cruise_wheels'] == ASSEMBLY_KNOWLEDGE['best
 assert (wheels['real_item'],wheels['item_type'],wheels['max_stack_size'],wheels['max_durability']) == (True,'ordinary',1,0)
 assert wheels['attribute_modifiers'] == [] and wheels['manual_assembly']['output_count'] == 1
 assert not any(k in wheels for k in ('energy_storage','thermal','durability_system','equipment_slot','operation'))
-assert len(LEARNING) == 6 and len(BEST_NAMES) == 16
+assert len(LEARNING) == 7 and len(BEST_NAMES) == 16
 slot = mech['legs_slot']
 assert (slot['storage_key'],slot['max_installed'],slot['independent_of']) == ('Legs',1,['Body','EngineeringArm','UtilityModule','Core'])
 assert all(slot[k] == '' for k in ('default','missing_legacy_value','unknown_value','walking_value'))
@@ -503,7 +526,7 @@ for filename,digest in saved['files'].items():
     assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
 for lang,entries in saved['lang'].items():
     names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
-    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert all(preserved_translation(k, v, names, lang) for k,v in entries.items()),lang
     assert set(saved['existing_keys'][lang]) <= names.keys(),lang
 report=dict(date='2026-11-02',status='PASS',chain='build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources',
     chain_runs=1,items=len(items),recipes=len(recipes),catalogue=len(canonical['catalogue']),best_items=len(BEST_NAMES),
@@ -516,9 +539,9 @@ print(f'PASS: cruise wheels; {len(items)} items / {len(recipes)} recipes / {len(
 
 # First heavy MEC-09 platform: distinct manual-only item/entity and unchanged shared services.
 heavy = items['best_heavy_mech']
-assert ASSEMBLY['best_heavy_mech'] == [('steel',96),('load',48),('conductor',24),('board',12),('steel_fix',48),('head',4),('sensor',6),('sheath',24)]
-assert ASSEMBLY_KNOWLEDGE['best_heavy_mech'] == ASSEMBLY_KNOWLEDGE['best_mech']
-assert len(LEARNING) == 6 and len(BEST_NAMES) == 16
+assert ASSEMBLY['best_heavy_mech'] == [('steel',64),('load',32),('conductor',16),('board',8),('steel_fix',32),('head',2),('sensor',4),('sheath',16)]
+assert ASSEMBLY_KNOWLEDGE['best_heavy_mech'] == ASSEMBLY_KNOWLEDGE['best_mech'] + ['advanced_engineering']
+assert len(LEARNING) == 7 and len(BEST_NAMES) == 16
 assert (heavy['id'],heavy['item_type'],heavy['max_stack_size']) == ('best_heavy_mech','packed_entity',1)
 assert heavy['entity_id'] == 'starfall_blueprint:best_heavy_engineering_mech'
 assert heavy['entity_dimensions'] == dict(width=2.6,height=4.4,rider_seat_height=3.1)
@@ -526,9 +549,9 @@ assert heavy['factory_defaults'] == dict(energy=0,arm='drill',cargo=[],core='',f
 assert heavy['max_health'] == 300 and heavy['energy_storage']['capacity'] == 60000000
 assert (heavy['energy_storage']['entity_receive_per_tick'],heavy['energy_storage']['packed_base_transfer_per_tick']) == (512,5000)
 assert heavy['energy_storage']['same_tick_transfer_budget'] and heavy['energy_storage']['source_caps_apply']
-assert heavy['thermal'] == mech['thermal'] and heavy['max_wear'] == 2400
-assert heavy['body_profiles']['heavy'] == dict(capacity=60000000,max_health=300,cargo_slots=27,movement_speed=0.14,drive_speed=0.18,movement_energy=1600,drive_movement_energy=2400,movement_heat=10,drive_movement_heat=14)
-assert heavy['cruise_wheels']['profiles']['heavy'] == dict(base_speed=0.175,drive_speed=0.225,base_energy=1200,drive_energy=1800,base_heat=9,drive_heat=13)
+assert heavy['thermal'] == dict(overheat=1000,resume=400,cooling_per_tick=4) and heavy['max_wear'] == 2400
+assert heavy['body_profiles']['heavy'] == dict(capacity=60000000,max_health=300,cargo_slots=27,movement_speed=0.26,drive_speed=0.34,movement_energy=1600,drive_movement_energy=2400,movement_heat=10,drive_movement_heat=14)
+assert heavy['cruise_wheels']['profiles']['heavy'] == dict(base_speed=0.325,drive_speed=0.425,base_energy=1200,drive_energy=1800,base_heat=9,drive_heat=13)
 assert (heavy['cruise_wheels']['speed_multiplier'],heavy['cruise_wheels']['movement_energy_numerator'],heavy['cruise_wheels']['movement_energy_denominator'],heavy['cruise_wheels']['movement_heat_reduction']) == (1.25,3,4,1)
 assert (heavy['cruise_wheels']['walking_step_height'],heavy['cruise_wheels']['wheels_step_height']) == (1.0,0.6)
 assert all(heavy['deployment'].values())
@@ -544,10 +567,10 @@ assert heavy['cargo']['slots'] == 27 and heavy['cargo']['actual_inventory']
 assert heavy['cargo']['open'] == mech['cargo']['open'] and not heavy['cargo']['packed_mech_nesting']
 assert heavy['cargo']['rejected_packed_items'] == ['best_mech','best_heavy_mech']
 assert heavy['cargo']['death']['contents_before_dead_packed_item']
-assert heavy['solid_fuel_generation']['cannot_sustain_walking_alone']
-assert (heavy['solid_fuel_generation']['energy_per_operating_tick'],heavy['solid_fuel_generation']['heat_per_operating_tick'],heavy['solid_fuel_generation']['wear_per_operating_ticks']) == (1000,2,1000)
+assert not heavy['solid_fuel_generation']['cannot_sustain_walking_alone']
+assert (heavy['solid_fuel_generation']['energy_per_operating_tick'],heavy['solid_fuel_generation']['heat_per_operating_tick'],heavy['solid_fuel_generation']['wear_per_operating_ticks']) == (2000,2,1000)
 assert heavy['solid_fuel_generation']['fuel_rule'] == mech['solid_fuel_generation']['fuel_rule']
-assert heavy['solid_fuel_generation']['energy_per_operating_tick'] < heavy['cruise_wheels']['profiles']['heavy']['base_energy']
+assert heavy['solid_fuel_generation']['energy_per_operating_tick'] > heavy['cruise_wheels']['profiles']['heavy']['base_energy']
 assert heavy['packed_state']['item'] == heavy['packed_state']['death_item'] == 'best_heavy_mech'
 assert set(heavy['packed_state']['preserves']) >= set(mech['packed_state']['preserves'])
 assert heavy['packed_state']['destroyed_health_cannot_deploy'] and not any(heavy['weapons'].values())
@@ -555,7 +578,7 @@ assert items['best_workbench']['mech_page_actions'] == [17,18,19,20,23,26]
 assert len(items['best_workbench']['tabs']) == 7
 for key,field in [('best_mech_radiator','utility_module'),('best_mech_drive','utility_module'),('best_mech_drill_arm','engineering_arm'),('best_mech_excavator_arm','engineering_arm'),('best_mech_generator_core','generator_core'),('best_mech_cruise_wheels','locomotion_module')]:
     assert items[key][field]['compatible_platforms'] == ['best_mech','best_heavy_mech']
-for key,speed,energy,heat,cooling in [('best_mech_radiator',0.14,1600,10,4),('best_mech_drive',0.18,2400,14,2)]:
+for key,speed,energy,heat,cooling in [('best_mech_radiator',0.26,1600,10,6),('best_mech_drive',0.34,2400,14,4)]:
     assert items[key]['utility_module']['body_profiles']['heavy'] == dict(movement_speed=speed,energy_per_actual_ground_movement_tick=energy,heat_per_actual_ground_movement_tick=heat,passive_cooling_per_tick=cooling)
 for path,size in [(ART/'textures/item/best_heavy_mech.png',(32,32)),(ART/'textures/entity/best_heavy_engineering_mech.png',(128,128))]:
     with Image.open(path) as image:
@@ -575,7 +598,7 @@ for filename,digest in saved['files'].items():
     assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
 for lang,entries in saved['lang'].items():
     names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
-    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert all(preserved_translation(k, v, names, lang) for k,v in entries.items()),lang
     assert set(saved['existing_keys'][lang]) <= names.keys(),lang
 report=dict(date='2026-11-02',status='PASS',chain='build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources',chain_runs=1,
     items=len(items),recipes=len(recipes),catalogue=len(canonical['catalogue']),best_items=len(BEST_NAMES),preserved_files=len(saved['files']),
@@ -636,11 +659,34 @@ for filename,digest in saved['files'].items():
     assert hashlib.sha256(Path(filename).read_bytes()).hexdigest() == digest,filename
 for lang,entries in saved['lang'].items():
     names=json.loads((ART/'lang'/f'{lang}.json').read_text(encoding='utf-8'))
-    assert all(names.get(k) == v for k,v in entries.items()),lang
+    assert all(preserved_translation(k, v, names, lang) for k,v in entries.items()),lang
     assert set(saved['existing_keys'][lang]) <= names.keys(),lang
 report=dict(date='2026-11-02',status='PASS',chain='build_atlas→sync_catalogue→generate_catalogue_resources→verify_best_resources',chain_runs=1,
     items=len(items),recipes=len(recipes),catalogue=len(canonical['catalogue']),best_items=len(BEST_NAMES),preserved_files=len(saved['files']),
     exact_prior_translation_values=sum(map(len,saved['lang'].values())),existing_translation_keys={lang:len(keys) for lang,keys in saved['existing_keys'].items()},
     coverage=['action27 exact manual materials and existing knowledge','heavy-only known arm and light removal-only metadata','center-first bounded 3x3 plane and per-block independent checks','successful-block costs and first-success shared40 cooldown metadata','unchanged old20 arms and service state','original 32RGBA art and bilingual keys','all prior heavy/wheels/Best/remote resource hashes and exact translation values','dated MEC-06 tool increment, no full weapons claim'],runtime_tested=False,ui_tested=False,build_run=False)
-(ROOT/'docs/verification/2026-11-02-heavy-drill-resources.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+# Historical heavy-drill report remains unchanged; current checks follow below.
 print(f'PASS: heavy drill resources; {len(items)} items / {len(recipes)} recipes / {len(canonical["catalogue"])} catalogue / {len(BEST_NAMES)} Best; {len(saved["files"])} protected files and {sum(map(len,saved["lang"].values()))} exact old translations retained. No UI/build/runtime claims.')
+
+
+# Water God actual engineering upgrade contract (static metadata only).
+upgrade = heavy['upgrade']
+assert upgrade['action'] == 26 and upgrade['node_id'] == 'best:advanced_engineering'
+assert upgrade['storage_key'] == LEARNING['advanced_engineering']['storage_key'] == 'BestAdvancedEngineering'
+assert LEARNING['advanced_engineering']['requires'] == ['mech_operation']
+assert LEARNING['advanced_engineering']['experience_levels'] == 8
+assert LEARNING['advanced_engineering']['inputs'] == [dict(item='load',qty=8),dict(item='conductor',qty=4),dict(item='sensor',qty=2),dict(item='board',qty=4)]
+assert LEARNING['advanced_engineering']['first_unlock_rewards']['items'] == [dict(item='steel_fix',qty=8)]
+assert LEARNING['advanced_engineering']['first_unlock_rewards']['experience_points'] == 80
+assert heavy['manual_assembly']['operation'] == 'upgrade' and heavy['manual_assembly']['source_required'] == ['isolated','alive']
+assert not heavy['manual_assembly']['separate_factory_assembly']
+assert all(upgrade[k] for k in ('consume_and_replace_main_hand','preserve_all_item_components','preserve_all_custom_data','preserve_absolute_health','failure_changes_nothing'))
+assert upgrade['source_missing_health'] == dict(standard=100,reinforced=160)
+assert upgrade['legacy_target_missing_health'] == 300
+assert not any(upgrade[k] for k in ('heals','refills_energy','clears_heat','clears_wear','existing_advanced_requires_new_node_to_drive'))
+assert upgrade['reinforced_body']['returns'] == dict(item='best_mech_reinforced_body',qty=1)
+assert upgrade['reinforced_body']['require_empty_main_inventory_slot'] and upgrade['reinforced_body']['inventory_slots'] == 36
+assert heavy['solid_fuel_generation']['requires'][-1] == 'capacity_room_at_least_2000'
+assert heavy['solid_fuel_generation']['pause_on'][1] == 'capacity_room_below_2000'
+assert (len(items),len(recipes),len(canonical['catalogue']),len(BEST_NAMES)) == (316,245,182,16)
+print('PASS: Water God upgrade metadata, seven Best progression nodes, SG-E1/SG-E2 names and unchanged registry counts. No build/UI/runtime claims.')

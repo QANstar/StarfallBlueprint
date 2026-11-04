@@ -16,6 +16,7 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
     private boolean syncedLightMobility;
     private boolean syncedDiagnostics;
     private boolean syncedMechOperation;
+    private boolean syncedAdvancedEngineering;
 
     public BestWorkbenchMenu(int id, Inventory inventory) {
         this(id, inventory, ContainerLevelAccess.NULL);
@@ -59,16 +60,24 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
             }
             @Override public void set(int value) { syncedMechOperation = value != 0; }
         });
+        addDataSlot(new DataSlot() {
+            @Override public int get() {
+                return (inventory.player.level().isClientSide
+                        ? syncedAdvancedEngineering : BestEngineering.hasAdvancedEngineering(inventory.player)) ? 1 : 0;
+            }
+            @Override public void set(int value) { syncedAdvancedEngineering = value != 0; }
+        });
     }
 
     public int researchLevel() { return syncedResearchLevel; }
     public boolean hasLightMobility() { return syncedLightMobility; }
     public boolean hasDiagnostics() { return syncedDiagnostics; }
     public boolean hasMechOperation() { return syncedMechOperation; }
+    public boolean hasAdvancedEngineering() { return syncedAdvancedEngineering; }
     public BestEngineering.Preview preview(int action) {
         BestEngineering.Knowledge knowledge = inventory.player != null && !inventory.player.level().isClientSide
                 ? BestEngineering.Knowledge.of(inventory.player)
-                : new BestEngineering.Knowledge(researchLevel(), hasLightMobility(), hasDiagnostics(), hasMechOperation());
+                : new BestEngineering.Knowledge(researchLevel(), hasLightMobility(), hasDiagnostics(), hasMechOperation(), hasAdvancedEngineering());
         return BestEngineering.preview(inventory, action, knowledge);
     }
 

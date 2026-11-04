@@ -38,7 +38,7 @@ public final class BestHeavyMechGameTests {
         };
         p.setGameMode(GameType.SURVIVAL); p.getInventory().clearContent(); p.getInventory().selected = 0;
         p.getPersistentData().putInt("BestEngineeringResearch", 3);
-        for(String key : List.of("BestDiagnostics", "BestLightMobility", "BestMechOperation")) p.getPersistentData().putBoolean(key, true);
+        for(String key : List.of("BestDiagnostics", "BestLightMobility", "BestMechOperation", "BestAdvancedEngineering")) p.getPersistentData().putBoolean(key, true);
         return p;
     }
     private static void clear(ServerPlayer p) {
@@ -73,10 +73,11 @@ public final class BestHeavyMechGameTests {
     }
 
     @GameTest(template = "empty")
-    public static void manufactureHeavyIsAtomicAndFactoryAndLightBodiesKeepTheirLimits(GameTestHelper h) {
+    public static void upgradeHeavyIsAtomicAndFactoryAndLightBodiesKeepTheirLimits(GameTestHelper h) {
         var p = player(h); var m = mech(h); var light = BestMechs.TYPE.get().create(h.getLevel());
         try {
-            var costs = Map.of("steel", 96, "load", 48, "conductor", 24, "board", 12, "steel_fix", 48, "head", 4, "sensor", 6, "sheath", 24);
+            var costs = Map.of("steel", 64, "load", 32, "conductor", 16, "board", 8, "steel_fix", 32, "head", 2, "sensor", 4, "sheath", 16);
+            var source = CatalogueContent.stack("best_mech", 1); var sourceState = new CompoundTag(); sourceState.putBoolean("Isolated", true); BestMechItem.setState(source, sourceState); p.setItemInHand(InteractionHand.MAIN_HAND, source);
             int slot = 1;
             for(var cost : costs.entrySet()) {
                 int remaining = cost.getValue() * 2;
@@ -84,21 +85,21 @@ public final class BestHeavyMechGameTests {
             }
             var inv = inventory(p); var knowledge = p.getPersistentData().copy();
             h.assertTrue(BestEngineering.preview(p, 26).executable() && unchanged(p, inv) && knowledge.equals(p.getPersistentData()), "Heavy manufacture preview changes neither materials nor knowledge");
-            for(String prerequisite : List.of("BestMechOperation", "BestDiagnostics", "BestLightMobility")) {
+            for(String prerequisite : List.of("BestMechOperation", "BestDiagnostics", "BestLightMobility", "BestAdvancedEngineering")) {
                 p.getPersistentData().putBoolean(prerequisite, false);
                 h.assertTrue(!BestEngineering.perform(p, 26) && unchanged(p, inv), "Existing personal knowledge required: " + prerequisite);
                 p.getPersistentData().putBoolean(prerequisite, true);
             }
             p.getPersistentData().putInt("BestEngineeringResearch", 2);
             h.assertTrue(!BestEngineering.perform(p, 26) && unchanged(p, inv), "Research three required"); p.getPersistentData().putInt("BestEngineeringResearch", 3);
-            // Remove every steel stack: the 96-steel recipe must count multiple legal stacks.
+            // Remove every steel stack: the 64-steel recipe must count multiple legal stacks.
             var steel = new HashMap<Integer, ItemStack>();
             for(int i = 1; i < 36; i++) if(p.getInventory().getItem(i).is(CatalogueContent.item("steel"))) { steel.put(i, p.getInventory().getItem(i).copy()); p.getInventory().setItem(i, ItemStack.EMPTY); }
             var missing = inventory(p); h.assertTrue(!BestEngineering.perform(p, 26) && unchanged(p, missing), "Missing steel spends nothing");
             steel.forEach((i, stack) -> p.getInventory().setItem(i, stack));
             for(int i = 0; i < 36; i++) if(p.getInventory().getItem(i).isEmpty()) p.getInventory().setItem(i, new ItemStack(Items.COBBLESTONE, 64));
             inv = inventory(p); h.assertTrue(BestEngineering.preview(p, 26).executable() && unchanged(p, inv),
-                    "Full inventory preview accounts for a steel slot freed by consuming96 across legal stacks without mutating inventory");
+                    "Full inventory preview accounts for a steel slot freed by consuming64 across legal stacks without mutating inventory");
             h.assertTrue(BestEngineering.perform(p, 26), "Heavy manufacture atomically uses a material slot freed by consumption");
             var packed = p.getInventory().items.stream().filter(s -> s.is(CatalogueContent.item("best_heavy_mech"))).findFirst().orElseThrow();
             h.assertTrue(packed.is(CatalogueContent.item("best_heavy_mech")) && packed.getCount() == 1 && packed.getMaxStackSize() == 1
@@ -106,7 +107,7 @@ public final class BestHeavyMechGameTests {
                     "Manufacture produces the independent packed heavy platform");
             for(var cost : costs.entrySet()) h.assertTrue(p.getInventory().items.stream().filter(s -> s.is(CatalogueContent.item(cost.getKey())))
                     .mapToInt(ItemStack::getCount).sum() == cost.getValue(), "Exact multi-stack material cost: " + cost.getKey());
-            h.assertTrue(knowledge.equals(p.getPersistentData()), "Manufacture introduces no knowledge flag");
+            h.assertTrue(knowledge.equals(p.getPersistentData()), "Upgrade introduces no knowledge flag");
             h.assertTrue(m.heavy() && m.getType() == BestMechs.HEAVY_TYPE.get() && m.getHealth() == 300 && m.getMaxHealth() == 300 && m.energy() == 0
                     && m.capacity() == 60_000_000 && m.cargoSlots() == 27 && m.cargo().getContainerSize() == 27 && m.cargo().isEmpty()
                     && m.moduleKey().isEmpty() && m.bodyKey().isEmpty() && m.coreKey().isEmpty() && m.legsKey().isEmpty()
@@ -151,10 +152,10 @@ public final class BestHeavyMechGameTests {
             clear(p); service(p, m); m.cargo().clearContent(); m.cargo().setItem(26, new ItemStack(Items.COAL, 7));
             var t = m.stateTag(); t.putString(BestMechCores.STATE, BestMechCores.GENERATOR); t.putBoolean("Isolated", false); m.loadState(t); m.tick();
             int fuel = new ItemStack(Items.COAL).getBurnTime(RecipeType.SMELTING);
-            h.assertTrue(m.energy() == 1000 && m.coreFuelTicks() == fuel - 1 && m.cargo().getItem(26).getCount() == 6, "Generator buys one paid fuel interval from active heavy index26");
-            m.tick(); h.assertTrue(m.energy() == 2000 && m.coreFuelTicks() == fuel - 2 && m.cargo().getItem(26).getCount() == 6, "Paid fuel advances once without buying another item");
+            h.assertTrue(m.energy() == 2000 && m.coreFuelTicks() == fuel - 1 && m.cargo().getItem(26).getCount() == 6, "Generator buys one paid fuel interval from active heavy index26");
+            m.tick(); h.assertTrue(m.energy() == 4000 && m.coreFuelTicks() == fuel - 2 && m.cargo().getItem(26).getCount() == 6, "Paid fuel advances once without buying another item");
             set(m, "CoreWorkTicks", 999); m.tick();
-            h.assertTrue(m.energy() == 3000 && m.coreFuelTicks() == fuel - 3 && m.wear() == 1 && m.stateTag().getInt("CoreWorkTicks") == 0
+            h.assertTrue(m.energy() == 6000 && m.coreFuelTicks() == fuel - 3 && m.wear() == 1 && m.stateTag().getInt("CoreWorkTicks") == 0
                     && m.stateTag().getInt("WorkTicks") == 0, "Heavy generator retains independent1000-tick wear accounting");
             service(p, m); t = m.stateTag(); t.putString(BestMechArms.STATE, BestMechArms.EXCAVATOR); t.putString(BestMechModules.STATE, BestMechModules.RADIATOR);
             t.putString(BestMechLegs.STATE, BestMechLegs.CRUISE); t.putInt("Energy", 45_123_456); t.putInt("Heat", 678); t.putInt("Wear", 321);
@@ -208,12 +209,12 @@ public final class BestHeavyMechGameTests {
                 m.moveTo(start.x, start.y, start.z, 0, 0); m.setDeltaMovement(Vec3.ZERO); m.setOnGround(true); p.setShiftKeyDown(false);
                 h.assertTrue(p.startRiding(m), "Actual operator mounts heavy configuration"); m.positionRider(p); double seat = p.getY() - m.getY();
                 p.setPlayerInput(0, 1, false, false); m.tick(); m.positionRider(p);
-                int cost = module.isEmpty() ? 1600 : 2400, heat = module.isEmpty() ? 10 : 14; double speed = module.isEmpty() ? .14 : .18;
+                int cost = module.isEmpty() ? 1600 : 2400, heat = module.isEmpty() ? 10 : 14; double speed = module.isEmpty() ? .26 : .34;
                 if(!legs.isEmpty()) { cost = cost * 3 / 4; heat--; speed *= 1.25; }
                 double distance = m.getZ() - start.z; if(baseline == 0) baseline = distance;
-                h.assertTrue(distance > 0 && Math.abs(distance / baseline - speed / .14) < .001 && Math.abs(m.movementSpeed() - speed) < 1e-6
+                h.assertTrue(distance > 0 && Math.abs(distance / baseline - speed / .26) < .001 && Math.abs(m.movementSpeed() - speed) < 1e-6
                         && m.energy() == 100000 - cost && m.heat() == heat && m.wear() == 1 && m.stateTag().getInt("WorkTicks") == 0
-                        && m.getHealth() == 242.25f && m.coolingRate() == BestMechModules.coolingRate(module), "Actual heavy travel applies exact speed, energy, heat, wear and unchanged cooling");
+                        && m.getHealth() == 242.25f && m.coolingRate() == BestMechModules.coolingRate(module) + 2, "Actual heavy travel applies exact speed, energy, heat, wear and advanced cooling");
                 var anchor = m.getType().getDimensions().attachments().get(EntityAttachment.PASSENGER, 0, 0);
                 h.assertTrue(Math.abs(anchor.y - 3.1) < 1e-5 && Math.abs(p.getY() - m.getY() - seat) < 1e-5,
                         "Native heavy passenger attachment is3.1 and actual riding preserves the seat offset");
@@ -252,8 +253,8 @@ public final class BestHeavyMechGameTests {
             h.assertTrue(p.startRiding(m), "Operator mounts for heavy thermal boundary"); p.setPlayerInput(0, 1, true, false); m.tick();
             h.assertTrue(m.energy() == 8400 && m.heat() == 1000 && m.thermalLocked() && m.getDeltaMovement().horizontalDistanceSqr() == 0
                     && m.getY() <= start.y + 1e-5, "Heavy heat latches at1000 and riding jump input gives no flight"); p.stopRiding();
-            set(m, "Heat", 403); m.tick(); h.assertTrue(m.thermalLocked() && m.heat() == 401, "Thermal latch holds above400");
-            m.tick(); h.assertTrue(!m.thermalLocked() && m.heat() == 399, "Cooling recovers through400 boundary");
+            set(m, "Heat", 405); m.tick(); h.assertTrue(m.thermalLocked() && m.heat() == 401, "Thermal latch holds above400");
+            m.tick(); h.assertTrue(!m.thermalLocked() && m.heat() == 397, "Cooling recovers through400 boundary");
             t = m.stateTag(); t.putInt("Energy", 59_999_000); t.putInt("Wear", BestMechEntity.MAX_WEAR); t.putLong("ChargeTick", Long.MIN_VALUE); t.putInt("ChargeUsed", 0); m.loadState(t);
             var port = m.energyPort(); var before = m.stateTag();
             h.assertTrue(!m.ready(0) && port.getMaxEnergyStored() == 60_000_000 && port.receiveEnergy(1000, true) == 512 && before.equals(m.stateTag()), "Worn heavy simulation sees dynamic cap and leaves all counters unchanged");

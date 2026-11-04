@@ -248,6 +248,38 @@ for action, labels in enumerate([
  ('制造重型钻切工程臂', 'Assemble heavy drilling arm'),
 ]):
     BEST_UI_MESSAGES[f'action_{action}'] = labels
+# SG-E1 -> SG-E2 upgrade; registry IDs and existing progression translations stay intact.
+MECH_MESSAGES.update({
+ 'message.best_action_26': ('晋升沧澜工程机甲', 'Upgrade to Canglan Engineering Mech'),
+ 'message.best_heavy_mech_cost': ('需本人进阶工程；主手隔离存活的涓流收纳机甲；钢64、承相32、导相16、板8、固定件32、磨头2、感相4、护套16；保留全部状态，强化机体返还须主背包空格', 'Requires personal Advanced Engineering and an isolated living packed Juanliu in main hand; 64 steel, 32 load inserts, 16 conductive plates, 8 boards, 32 fasteners, 2 drill heads, 4 sensors, 16 sheaths. Preserves all state; returning a reinforced body needs an empty main-inventory slot.'),
+ 'message.best_heavy_mech_assembled': ('涓流已晋升为沧澜；原生命、电热磨损、部件、货物与已付燃料全部保留', 'Juanliu upgraded to Canglan; original health, energy, heat, wear, components, cargo and paid fuel preserved.'),
+ 'message.best_mech_assembled': ('已装配SG-E1 涓流工程机甲；储能为空', 'SG-E1 Juanliu Engineering Mech assembled; energy starts empty.'),
+ 'hud.mech.title': ('水神计划工程机甲', 'Water God Engineering Mech'),
+ 'tooltip.best_heavy_mech': ('SG-E2进阶工程：300生命、60M XH、27货格；宽2.6高4.4座高3.1。基础／驱动0.26／0.34、1600／2400 XH、热10／14；自然／散热冷却4／6。由主手隔离存活的涓流晋升，完整保留状态；兼容既有模组、臂、核心与轮组，拒绝轻型强化机体。', 'SG-E2 advanced engineering: 300 health, 60M XH, 27 cargo slots; width 2.6, height 4.4, seat 3.1. Base/drive speed 0.26/0.34, 1600/2400 XH and 10/14 heat; passive/radiator cooling 4/6. Upgrade an isolated living packed Juanliu in main hand with all state preserved. Existing modules, arms, core and wheels fit; light reinforced body rejected.'),
+ 'tooltip.best_mech_generator_core': ('独立Core槽；货舱无余物熔炉固燃，涓流1000／沧澜2000 XH每刻、热2、燃料1刻；每1000发电刻磨损1。余量不足对应输出、隔离、热锁或磨尽暂停并保留已付燃料，无需骑手', 'Separate Core slot; remainder-free furnace fuel from cargo. Juanliu 1000 / Canglan 2000 XH per tick, 2 heat and 1 fuel tick; 1 wear per 1000 generator ticks. Pauses with paid fuel retained when capacity room is below output, isolated, heat locked or worn out; no rider needed.'),
+ 'tooltip.best_mech_radiator': ('自然冷却：涓流4／沧澜6每刻（基础2／4）；涓流标准速度0.22、强化机体0.18，沧澜0.26；移动费用不变', 'Passive cooling: Juanliu 4 / Canglan 6 per tick (base 2/4). Juanliu standard speed 0.22, reinforced body 0.18; Canglan 0.26. Movement costs unchanged.'),
+ 'tooltip.best_mech_drive': ('涓流标准／强化机体速度0.28／0.23，沧澜0.34；移动600／900／2400 XH、热6／8／14每刻，自然冷却2／2／4', 'Juanliu standard/reinforced speed 0.28/0.23; Canglan 0.34. Movement 600/900/2400 XH and 6/8/14 heat per tick; passive cooling 2/2/4.'),
+ 'tooltip.best_mech_cruise_wheels': ('速度×1.25、移动电耗×3/4、热−1；涓流标准0.275／0.35、强化0.225／0.2875，沧澜0.325／0.425；跨步1.0→0.6，半格通一格阻，无跳跃飞行拾取', 'Speed x1.25, movement energy x3/4, heat -1. Juanliu standard 0.275/0.35, reinforced 0.225/0.2875; Canglan 0.325/0.425. Step 1.0 to 0.6: half-block passes, full block blocked; no jump, flight or pickup.'),
+ 'mech.platform.heavy': ('SG-E2 沧澜工程平台', 'SG-E2 Canglan engineering platform'),
+ 'mech.platform.standard': ('SG-E1 涓流工程平台', 'SG-E1 Juanliu engineering platform'),
+ 'message.best_action_27': ('制造沧澜九格钻掘臂', 'Assemble Canglan Nine-block Drilling Arm'),
+ 'message.best_mech_heavy_drill_arm_assembled': ('已制造沧澜九格钻掘臂', 'Canglan Nine-block Drilling Arm assembled.'),
+ 'mech.arm.heavy_only': ('沧澜九格钻掘臂仅适用于沧澜平台；涓流已存此臂可拆回，不能作业', 'Canglan Nine-block Drilling Arm requires Canglan; a legacy arm on Juanliu remains removable but cannot work.'),
+})
+BEST_UI_MESSAGES.update({
+ 'action_26': ('晋升沧澜工程机甲', 'Upgrade to Canglan Engineering Mech'),
+ 'material_action_26': ('涓流晋升沧澜', 'Juanliu to Canglan upgrade'),
+ 'action_27': ('制造沧澜九格钻掘臂', 'Assemble Canglan Nine-block Drilling Arm'),
+ 'material_action_27': ('沧澜九格钻掘臂', 'Canglan Nine-block Drilling Arm'),
+ 'knowledge_advanced': ('进阶工程：%s', 'Advanced engineering: %s'),
+ 'requires_advanced': ('前置未满足：先在背包成长学习进阶工程', 'Learn Advanced Engineering in inventory progression first'),
+ 'upgrade_target': ('目标不符：主手须持涓流收纳机甲', 'Hold a packed Juanliu mech in your main hand'),
+ 'upgrade_isolation': ('晋升前须隔离主手涓流机甲', 'Isolate the main-hand Juanliu mech before upgrading'),
+ 'upgrade_alive': ('损毁机甲不能晋升', 'A destroyed mech cannot be upgraded'),
+ 'upgrade_space': ('主背包须预留空格返还强化机体', 'Reserve an empty main-inventory slot for the returned reinforced body'),
+ 'hint_5': ('货舱固燃；涓流1000／沧澜2000 XH每刻；诊断＋副手熔炉拆回，须无已付燃料', 'Cargo fuel: Juanliu 1000 / Canglan 2000 XH/t. Remove with diagnostic + offhand furnace; requires zero paid fuel.'),
+ 'hint_3': ('初代装配／进阶晋升分开计费；晋升须主手隔离存活的涓流，完整保留原状态', 'Initial assembly and advanced upgrade have separate costs; upgrade an isolated living Juanliu in main hand and preserve all state.'),
+})
 MECH_MESSAGES.update({f'ui.best_{key}': value for key, value in BEST_UI_MESSAGES.items()})
 
 

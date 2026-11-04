@@ -148,6 +148,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
             if (hovered(entry.button(), mouseX, mouseY)) {
                 var preview = menu.preview(entry.action());
                 Component tooltip = text("action_" + entry.action()).copy().append("\n").append(preview.reason());
+                if (entry.action() == 26) tooltip = tooltip.copy().append("\n").append(BestEngineering.actionCostComponent(26));
                 for (var material : preview.materials())
                     tooltip = tooltip.copy().append("\n").append(text("cost_entry", material.item().getHoverName(), material.available(), material.required()));
                 if (preview.materials().isEmpty()) tooltip = tooltip.copy().append("\n").append(text("no_materials"));

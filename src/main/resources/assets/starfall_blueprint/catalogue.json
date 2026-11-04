@@ -9986,13 +9986,13 @@
     },
     "best_mech_heavy_drill_arm": {
       "id": "best_mech_heavy_drill_arm",
-      "name": "重型钻切工程臂",
+      "name": "沧澜九格钻掘臂",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
-      "english": "Heavy Drilling Arm",
+      "english": "Canglan Nine-block Drilling Arm",
       "registry_id": "starfall_blueprint:best_mech_heavy_drill_arm",
       "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
       "manual_assembly": {
@@ -10106,9 +10106,9 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
-        "summary": "重型机甲按命中面进行3×3平面钻切",
+        "summary": "沧澜九格钻掘臂按命中面进行3×3平面钻切",
         "benefit": "仅重型EngineeringArm槽普通实物，stack1无耐久电量；钻石镐级，中心先成功，最多9块；每成功方块48000XH、热35、磨损1，整次首次成功40刻共享冷却，普通掉落。",
         "operation": "工程臂页第三按钮动作27钢24承相12导相8磨头8控制板4钢固定件12护套8人工产1，沿用本人三级轻载诊断驾驶无新知识。隔离空载存活停稳落地非流体时潜行主手装重型空槽；诊断主手＋原版铁镐副手拆回，铁镐不耗不损、36格主背包须空格。轻型读取已知重臂保留供拆回，不能工作或免费转换。实际骑手G沿用action0；每块独立保护BreakEvent、min(5,玩家方块交互距离)、加载边界、无方块实体流体、可破坏及正确工具，中心失败无批次费用冷却，邻块失败跳过；能量热锁磨尽停批。装拆NBT收纳部署死亡保留40刻冷却与全部状态；旧臂仍20刻。",
         "targets": []
@@ -10117,13 +10117,13 @@
     },
     "best_heavy_mech": {
       "id": "best_heavy_mech",
-      "name": "重型工程机甲",
+      "name": "SG-E2 沧澜工程机甲",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
-      "english": "Heavy Engineering Mech",
+      "english": "SG-E2 Canglan Engineering Mech",
       "registry_id": "starfall_blueprint:best_heavy_mech",
       "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
       "manual_assembly": {
@@ -10134,43 +10134,55 @@
           "field_servicing",
           "light_mobility",
           "diagnostics",
-          "mech_operation"
+          "mech_operation",
+          "advanced_engineering"
         ],
         "inputs": [
           {
             "item": "steel",
-            "qty": 96
+            "qty": 64
           },
           {
             "item": "load",
-            "qty": 48
+            "qty": 32
           },
           {
             "item": "conductor",
-            "qty": 24
+            "qty": 16
           },
           {
             "item": "board",
-            "qty": 12
+            "qty": 8
           },
           {
             "item": "steel_fix",
-            "qty": 48
+            "qty": 32
           },
           {
             "item": "head",
-            "qty": 4
+            "qty": 2
           },
           {
             "item": "sensor",
-            "qty": 6
+            "qty": 4
           },
           {
             "item": "sheath",
-            "qty": 24
+            "qty": 16
           }
         ],
-        "output_count": 1
+        "output_count": 1,
+        "operation": "upgrade",
+        "action": 26,
+        "source_item": "best_mech",
+        "source_hand": "main_hand",
+        "consumes_source": 1,
+        "source_required": [
+          "isolated",
+          "alive"
+        ],
+        "separate_factory_assembly": false,
+        "failure_changes_nothing": true
       },
       "max_stack_size": 1,
       "item_type": "packed_entity",
@@ -10233,7 +10245,7 @@
       "thermal": {
         "overheat": 1000,
         "resume": 400,
-        "cooling_per_tick": 2
+        "cooling_per_tick": 4
       },
       "max_wear": 2400,
       "driver_knowledge": {
@@ -10307,14 +10319,14 @@
         "controls": "vanilla_ground_wasd",
         "flight": false,
         "jump": false,
-        "movement_speed": 0.14,
+        "movement_speed": 0.26,
         "charges_only_actual_ground_movement": true,
         "energy_per_commanded_movement_tick": 1600,
         "heat_per_commanded_movement_tick": 10,
         "wear_per_work_ticks": 100,
         "unmanned_consumption": false,
         "idle_consumption": false,
-        "drive_speed": 0.18,
+        "drive_speed": 0.34,
         "drive_energy_per_tick": 2400,
         "drive_heat_per_tick": 14
       },
@@ -10547,8 +10559,8 @@
           "capacity": 60000000,
           "max_health": 300,
           "cargo_slots": 27,
-          "movement_speed": 0.14,
-          "drive_speed": 0.18,
+          "movement_speed": 0.26,
+          "drive_speed": 0.34,
           "movement_energy": 1600,
           "drive_movement_energy": 2400,
           "movement_heat": 10,
@@ -10691,7 +10703,7 @@
           "fuel_containers_with_crafting_remainder"
         ],
         "consume_one_only_when_runnable_and_fuel_zero": true,
-        "energy_per_operating_tick": 1000,
+        "energy_per_operating_tick": 2000,
         "heat_per_operating_tick": 2,
         "fuel_ticks_per_operating_tick": 1,
         "wear_per_operating_ticks": 1000,
@@ -10703,11 +10715,11 @@
           "connected",
           "not_thermal_locked",
           "not_worn_out",
-          "capacity_room_at_least_1000"
+          "capacity_room_at_least_2000"
         ],
         "pause_on": [
           "isolated",
-          "capacity_room_below_1000",
+          "capacity_room_below_2000",
           "thermal_lock",
           "worn_out",
           "dead"
@@ -10728,7 +10740,7 @@
         ],
         "random_explosion": false,
         "automatic_pickup": false,
-        "cannot_sustain_walking_alone": true
+        "cannot_sustain_walking_alone": false
       },
       "legs_slot": {
         "storage_key": "Legs",
@@ -10829,8 +10841,8 @@
         "automatic_pickup": false,
         "profiles": {
           "heavy": {
-            "base_speed": 0.175,
-            "drive_speed": 0.225,
+            "base_speed": 0.325,
+            "drive_speed": 0.425,
             "base_energy": 1200,
             "drive_energy": 1800,
             "base_heat": 9,
@@ -10838,6 +10850,20 @@
           }
         }
       },
+      "catalogue": true,
+      "category": "装备与武器",
+      "subcategory": "贝斯特工程装备",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "purpose": {
+        "summary": "由SG-E1 涓流全面晋升的SG-E2 沧澜工程机甲",
+        "benefit": "水神计划进阶工程平台，保留旧best_heavy_mech物品和实体ID；宽2.6高4.4座高3.1，300生命上限、60MXH容量、27货格。晋升不治疗、不补电、不清热、不清磨损，不产生额外机甲。",
+        "operation": "背包成长进阶工程best:advanced_engineering仅约束动作26，前置机甲驾驶，承相8导相4感相2控制板4及8级经验，首次奖钢固定件8和80经验点。工位主手持隔离存活的涓流收纳物，动作26另付钢64承相32导相16控制板8钢固定件32磨头2感相4护套16，消耗源并在主手替换。保留全部物品组件与自定义NBT、绝对生命、电热磨损、Cargo、UtilityModule、EngineeringArm、Core、Legs、燃料及工作计数、名字和其它状态。源缺Health标准100／强化160，旧沧澜仍300。强化Body移除返1套件，须预留36格主背包空格，失败整笔不变；沧澜拒装该轻型Body。基础／驱动速度0.26／0.34，轮组0.325／0.425；移动1600／2400XH热10／14，轮组能耗×3/4且热减1。自然散热4／散热模块6；核心每刻2000XH、热2、耗1燃料刻，每1000发电刻磨损1且须余量2000。外部实体512／收纳5000XH每刻不变。既有沧澜驾驶及九格臂知识规则保持；武装与融合全能仍为未来设计。",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABoElEQVR4nOVXPUsDQRCdW+ZfmNIujU3QQiSlYJfOD/AgpBLsrrSytLMVIQG1tBNsDsJhoaSx8R/E3n9wMsLIure3N3O58wQf5Gtnd+btzJu9DcB/RySduNYf5Frn72+LSv8oDb4zHGrjQwaQV5FAafDj+FBNQEICNc7G8UQ893p69fVJ5EMkUJv6g/uLyuB3o0RMFDXBGU83z6UOt4+2CmOhLJhQ8N7pHqwK9kH+fJ1koGPg4+LV29+z6a0qzQph5gUNzJxgoZbTCMwHOxbFQWkNU/gQdQCD5ks0hCHj8vIB2gaGjNl8Xhjj1qxrUxEgvJz3gLF5tmzE9qfa0HRNAKsmhNJX1yYikHmEFBqX2HznC5YtsEXEO5LccAh05vvW+4C+Z7y9E9dR00D78mCDiLUR3C2DobSGHjxNYnewEdnf6YVuyokh7Z5OriS1l8tUzUjSdWekRANgBSZQNurcgOsC6Y3KMI4n31cwykjbJPgeEvHA/kmSc/p9oiyrpetQi8h2wLUPgUiWEZCI2V1voGMY+8dvio/x4yiu+/drlfWfuqu5IfYB4VkAAAAASUVORK5CYII=",
       "platform": "heavy",
       "independent_packed_item": "best_heavy_mech",
       "factory_defaults": {
@@ -10862,27 +10888,63 @@
         "enabled": false,
         "heavy_weapon_arm": false
       },
-      "catalogue": true,
-      "category": "装备与武器",
-      "subcategory": "贝斯特工程装备",
-      "recipes": [],
-      "uses": [],
-      "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
-      "purpose": {
-        "summary": "驾驶首台重型工程平台并以共享工程臂作业",
-        "benefit": "独立不可堆叠收纳实体，宽2.6高4.4座高3.1；300生命、60MXH空电、27货格，默认钻切臂且无起始燃料；强化轻型机体套件明确不兼容。",
-        "operation": "原机甲页动作26，需本人研究三级／轻载／诊断／驾驶；钢96承相48导相24板12固定件48磨头4感相6护套24。基础／驱动速度0.14／0.18、移动1600／2400XH热10／14；轮组×1.25速度、×3/4能耗、热−1、跨步1降0.6。散热／驱动、钻切／挖掘、固燃核心和轮组沿用共享整备守卫与状态保留。实体512／收纳5000XH每刻共享预算受源限流；核心1000XH每刻无法持续供给步行。实际占地完整承托、非流体、边界及碰撞校验，窄路受阻；27格货舱禁止收纳机甲嵌套，死亡先散落货物再给空货舱死机收纳物。MEC-09首个平台，专业模块及大型武装平台未完成。",
-        "targets": []
-      },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABoElEQVR4nOVXPUsDQRCdW+ZfmNIujU3QQiSlYJfOD/AgpBLsrrSytLMVIQG1tBNsDsJhoaSx8R/E3n9wMsLIure3N3O58wQf5Gtnd+btzJu9DcB/RySduNYf5Frn72+LSv8oDb4zHGrjQwaQV5FAafDj+FBNQEICNc7G8UQ893p69fVJ5EMkUJv6g/uLyuB3o0RMFDXBGU83z6UOt4+2CmOhLJhQ8N7pHqwK9kH+fJ1koGPg4+LV29+z6a0qzQph5gUNzJxgoZbTCMwHOxbFQWkNU/gQdQCD5ks0hCHj8vIB2gaGjNl8Xhjj1qxrUxEgvJz3gLF5tmzE9qfa0HRNAKsmhNJX1yYikHmEFBqX2HznC5YtsEXEO5LccAh05vvW+4C+Z7y9E9dR00D78mCDiLUR3C2DobSGHjxNYnewEdnf6YVuyokh7Z5OriS1l8tUzUjSdWekRANgBSZQNurcgOsC6Y3KMI4n31cwykjbJPgeEvHA/kmSc/p9oiyrpetQi8h2wLUPgUiWEZCI2V1voGMY+8dvio/x4yiu+/drlfWfuqu5IfYB4VkAAAAASUVORK5CYII="
+      "upgrade": {
+        "action": 26,
+        "source": "best_mech",
+        "target": "best_heavy_mech",
+        "node_id": "best:advanced_engineering",
+        "storage_key": "BestAdvancedEngineering",
+        "consume_and_replace_main_hand": true,
+        "preserve_all_item_components": true,
+        "preserve_all_custom_data": true,
+        "preserve_absolute_health": true,
+        "source_missing_health": {
+          "standard": 100,
+          "reinforced": 160
+        },
+        "legacy_target_missing_health": 300,
+        "preserves": [
+          "Cargo",
+          "UtilityModule",
+          "EngineeringArm",
+          "Core",
+          "Legs",
+          "Energy",
+          "Heat",
+          "Wear",
+          "Health",
+          "CoreFuelTicks",
+          "CoreWorkTicks",
+          "WorkTicks",
+          "DrillCooldown",
+          "ThermalLock",
+          "charge_budget",
+          "custom_name",
+          "all_other_state"
+        ],
+        "reinforced_body": {
+          "remove_from_target": true,
+          "returns": {
+            "item": "best_mech_reinforced_body",
+            "qty": 1
+          },
+          "require_empty_main_inventory_slot": true,
+          "inventory_slots": 36
+        },
+        "heals": false,
+        "refills_energy": false,
+        "clears_heat": false,
+        "clears_wear": false,
+        "failure_changes_nothing": true,
+        "existing_advanced_requires_new_node_to_drive": false
+      }
     },
     "best_mech_cruise_wheels": {
       "id": "best_mech_cruise_wheels",
       "name": "巡航轮组",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Cruise Wheels",
@@ -10943,7 +11005,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "提高工程机甲平地巡航与运输效率",
         "benefit": "独立Legs槽普通实物，stack1无耐久电量；速度×1.25、实际移动能耗×3/4、移动热−1，基础跨步高度1.0降0.6，半格通行整格受阻，无跳跃飞行自动拾取。",
@@ -10957,7 +11019,7 @@
       "name": "固燃发电核心",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Solid-fuel generator core",
@@ -11014,7 +11076,11 @@
         "compatible_platforms": [
           "best_mech",
           "best_heavy_mech"
-        ]
+        ],
+        "output_by_platform": {
+          "best_mech": 1000,
+          "best_heavy_mech": 2000
+        }
       },
       "catalogue": true,
       "category": "装备与武器",
@@ -11022,11 +11088,11 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "从货舱固体燃料为工程机甲内部发电",
-        "benefit": "独立Core槽普通实物，stack1无耐久电量；每运行刻1000XH、热2，每1000发电刻磨损1；无骑手也运行，原机体容量与512／5000外部接收限流不变。",
-        "operation": "第六核心页动作24钢16承相8导相8控制板4护套8钢固定件8人工产1，需本人三级轻载诊断驾驶，无新知识／公共配方。隔离空载存活停稳落地非流体时潜行主手装空槽，不能热换；诊断主手＋熔炉副手潜行拆回，不耗熔炉，36格主背包须空格且CoreFuelTicks为0，失败不改状态不切隔离。仅货舱有效9／18格、原版熔炉burnTime>0且无余物燃料；煤木炭木材可用，熔岩桶和容器余物拒绝。仅可运行且燃料刻0时取1件，隔离／余量<1000／热锁／磨尽／死亡暂停，不取燃料不扣已付刻。冷却→发电→移动；Core、CoreFuelTicks、独立CoreWorkTicks随NBT收纳部署死亡收纳物保留。",
+        "benefit": "独立Core槽普通实物，stack1无耐久电量；涓流每刻1000XH、沧澜每刻2000XH，均热2、消耗1燃料刻，每1000发电刻磨损1；无骑手也运行。外部实体512／收纳5000XH每刻限流不变。",
+        "operation": "第六核心页动作24钢16承相8导相8控制板4护套8钢固定件8人工产1，需本人三级轻载诊断驾驶，无新知识／公共配方。隔离空载存活停稳落地非流体时潜行主手装空槽，不能热换；诊断主手＋熔炉副手潜行拆回，不耗熔炉，36格主背包须空格且CoreFuelTicks为0，失败不改状态不切隔离。仅货舱有效9／18／27格、原版熔炉burnTime>0且无余物燃料；煤木炭木材可用，熔岩桶和容器余物拒绝。仅可运行且燃料刻0时取1件，隔离／余量低于本机输出（涓流1000／沧澜2000）／热锁／磨尽／死亡暂停，不取燃料不扣已付刻。冷却→发电→移动；Core、CoreFuelTicks、独立CoreWorkTicks随NBT收纳部署死亡收纳物保留。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABPUlEQVR4nGNgGOmAEZ+ktLbpf2ziT6+exquPFMDEMMCAkZACUCjMXTCbYeGCpQyHDhzA63tyQoyJYYABEzUNg/kUFGJ2Dg4oYnRxADmAkdT4JBfgCgkWfJpAQUkNkJyQilOOBZ9GUMqnNWBiGGDAQkhBfEI0UQbBygl0AMsNZDuAUBzC0opMnjdDVJ43dgVYHEZRFJxslmGgFmChlkFPJm0FR4FcUDBc7NG6tdSJAlyhYF77BM7HGgUxFtSPgpNUDH4QYCHXx+hidImCk3h8T7coAAFppxwGakUJCzmanu6bAmeDomDuAjpEgTla/KP7ntwoYCHGcly14hWwHANFgIWQAlJqRKrXBfFEVkSE1GNzGAww0rolRKhlxIJNESzYQAkLlLopAchmYAsJJnyaKbWcGDNYSI2zUcBAZQAAoW6MCpcu1ZoAAAAASUVORK5CYII="
@@ -11036,13 +11102,62 @@
       "name": "贝斯特工务装配台",
       "unit": "件",
       "icon": "machine",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Best Engineering Workbench",
       "registry_id": "starfall_blueprint:best_workbench",
       "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
       "personal_learning": {
+        "advanced_engineering": {
+          "name": "进阶工程",
+          "english": "Advanced Engineering",
+          "requires": [
+            "mech_operation"
+          ],
+          "independent": true,
+          "minimum_research_level": 3,
+          "storage_key": "BestAdvancedEngineering",
+          "storage_type": "boolean",
+          "persistence": "player_saved_data_and_death_clone",
+          "inputs": [
+            {
+              "item": "load",
+              "qty": 8
+            },
+            {
+              "item": "conductor",
+              "qty": 4
+            },
+            {
+              "item": "sensor",
+              "qty": 2
+            },
+            {
+              "item": "board",
+              "qty": 4
+            }
+          ],
+          "node_id": "best:advanced_engineering",
+          "experience_levels": 8,
+          "entry": "inventory_progression_tab",
+          "payment": "items_and_experience_levels",
+          "old_knowledge_preserved": true,
+          "duplicate_payment": false,
+          "first_unlock_rewards": {
+            "items": [
+              {
+                "item": "steel_fix",
+                "qty": 8
+              }
+            ],
+            "experience_points": 80,
+            "once": true,
+            "retroactive": false,
+            "require_inventory_room_after_costs": true,
+            "atomic_with_costs_and_knowledge": true
+          }
+        },
         "mech_operation": {
           "name": "机甲驾驶",
           "english": "Mech Operation",
@@ -11073,7 +11188,30 @@
               "item": "board",
               "qty": 2
             }
-          ]
+          ],
+          "node_id": "best:mech_operation",
+          "experience_levels": 5,
+          "entry": "inventory_progression_tab",
+          "payment": "items_and_experience_levels",
+          "old_knowledge_preserved": true,
+          "duplicate_payment": false,
+          "first_unlock_rewards": {
+            "items": [
+              {
+                "item": "steel",
+                "qty": 8
+              },
+              {
+                "item": "steel_fix",
+                "qty": 4
+              }
+            ],
+            "experience_points": 50,
+            "once": true,
+            "retroactive": false,
+            "require_inventory_room_after_costs": true,
+            "atomic_with_costs_and_knowledge": true
+          }
         },
         "basic_engineering": {
           "name": "基础工务",
@@ -11086,7 +11224,26 @@
               "item": "board",
               "qty": 1
             }
-          ]
+          ],
+          "node_id": "best:basic",
+          "experience_levels": 0,
+          "entry": "inventory_progression_tab",
+          "payment": "items_and_experience_levels",
+          "old_knowledge_preserved": true,
+          "duplicate_payment": false,
+          "first_unlock_rewards": {
+            "items": [
+              {
+                "item": "iron",
+                "qty": 4
+              }
+            ],
+            "experience_points": 5,
+            "once": true,
+            "retroactive": false,
+            "require_inventory_room_after_costs": true,
+            "atomic_with_costs_and_knowledge": true
+          }
         },
         "engineering_cutting": {
           "name": "工程钻切",
@@ -11102,7 +11259,26 @@
               "item": "conductor",
               "qty": 1
             }
-          ]
+          ],
+          "node_id": "best:drilling",
+          "experience_levels": 1,
+          "entry": "inventory_progression_tab",
+          "payment": "items_and_experience_levels",
+          "old_knowledge_preserved": true,
+          "duplicate_payment": false,
+          "first_unlock_rewards": {
+            "items": [
+              {
+                "item": "steel",
+                "qty": 2
+              }
+            ],
+            "experience_points": 10,
+            "once": true,
+            "retroactive": false,
+            "require_inventory_room_after_costs": true,
+            "atomic_with_costs_and_knowledge": true
+          }
         },
         "field_servicing": {
           "name": "野外整备",
@@ -11122,7 +11298,26 @@
               "item": "board",
               "qty": 1
             }
-          ]
+          ],
+          "node_id": "best:servicing",
+          "experience_levels": 2,
+          "entry": "inventory_progression_tab",
+          "payment": "items_and_experience_levels",
+          "old_knowledge_preserved": true,
+          "duplicate_payment": false,
+          "first_unlock_rewards": {
+            "items": [
+              {
+                "item": "best_service_kit",
+                "qty": 1
+              }
+            ],
+            "experience_points": 20,
+            "once": true,
+            "retroactive": false,
+            "require_inventory_room_after_costs": true,
+            "atomic_with_costs_and_knowledge": true
+          }
         },
         "light_mobility": {
           "name": "轻载通行",
@@ -11148,7 +11343,26 @@
               "item": "board",
               "qty": 1
             }
-          ]
+          ],
+          "node_id": "best:mobility",
+          "experience_levels": 2,
+          "entry": "inventory_progression_tab",
+          "payment": "items_and_experience_levels",
+          "old_knowledge_preserved": true,
+          "duplicate_payment": false,
+          "first_unlock_rewards": {
+            "items": [
+              {
+                "item": "steel_fix",
+                "qty": 2
+              }
+            ],
+            "experience_points": 15,
+            "once": true,
+            "retroactive": false,
+            "require_inventory_room_after_costs": true,
+            "atomic_with_costs_and_knowledge": true
+          }
         },
         "diagnostics": {
           "name": "工务诊断",
@@ -11174,7 +11388,26 @@
               "item": "board",
               "qty": 1
             }
-          ]
+          ],
+          "node_id": "best:diagnostics",
+          "experience_levels": 2,
+          "entry": "inventory_progression_tab",
+          "payment": "items_and_experience_levels",
+          "old_knowledge_preserved": true,
+          "duplicate_payment": false,
+          "first_unlock_rewards": {
+            "items": [
+              {
+                "item": "best_diagnostic_tool",
+                "qty": 1
+              }
+            ],
+            "experience_points": 20,
+            "once": true,
+            "retroactive": false,
+            "require_inventory_room_after_costs": true,
+            "atomic_with_costs_and_knowledge": true
+          }
         }
       },
       "diagnostics_actions": {
@@ -11245,22 +11478,24 @@
       "primary_recipe": "BEST-M01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "学习贝斯特工程知识与人工装配工务装备",
-        "benefit": "个人三级及独立轻载通行／工务诊断／驾驶学习、制造、维修、水桶冷却、骨架模块管理与电池隔离集中在七标签专用菜单；第五页工程臂动作21／22、第六页核心动作24、第七页行走动作25各自展示材料。机甲页动作23人工制造强化机体并显示材料表；第六核心页动作24人工制造固燃发电核心。",
-        "operation": "公共工作台合成台体；骨架、钻切器、整备包与跨步组件逐人校验学习，人工装配；主手骨架可安装、切档、拆回模块；持主手设备，每水桶降热400返空桶，热0拒绝，需对应使用知识。",
+        "summary": "人工装配、维修与整备贝斯特工务装备，执行涓流晋升沧澜",
+        "benefit": "知识统一在玩家背包成长学习，共23节点（贝斯特7、岭川16）；工位七标签只负责制造、维修、模块管理和晋升，不新增工位学习。",
+        "operation": "第五工程臂页含动作21／22／27，第六核心页24，第七行走页25；机甲页动作26消耗主手隔离存活涓流并替换沧澜，需本人进阶工程。其余逐人知识、材料及整备守卫沿用；晋升保留源全部状态，强化Body返件须事先主背包空格，失败整笔不变。",
         "targets": []
       },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/klEQVR4nGNgGAUDDBjxSUprm/5H5j+9ehqvemSw4/SF/x6mBgTVMxFScLJZBoxJASDLkWl8gIUkk4m0GASI8T0IMA2k5SBAMATMa5/QxGIYYERPdHMXzGagJUhOSEVJzCzoChYuWMpAT8BEV9sGowNY0AUOHThAVwcwklMCossTqw5bScqCy2V2Dg54QyRqXTcKf1lQKVnmMDEMMGAaaAewkKsRV5DTxQFPSaiWKXbAXEjRTLBaxQUIlawsxJbf5ABi6hUWUgwktmFCqAYdVLmAacQ7gIWUECAlbqnqgLk0bCWxkNqEIgWAakNYZUSyAw5RqV1A7/bFKGAgFQAAswlcDML6AtsAAAAASUVORK5CYII="
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/klEQVR4nGNgGAUDDBjxSUprm/5H5j+9ehqvemSw4/SF/x6mBgTVMxFScLJZBoxJASDLkWl8gIUkk4m0GASI8T0IMA2k5SBAMATMa5/QxGIYYERPdHMXzGagJUhOSEVJzCzoChYuWMpAT8BEV9sGowNY0AUOHThAVwcwklMCossTqw5bScqCy2V2Dg54QyRqXTcKf1lQKVnmMDEMMGAaaAewkKsRV5DTxQFPSaiWKXbAXEjRTLBaxQUIlawsxJbf5ABi6hUWUgwktmFCqAYdVLmAacQ7gIWUECAlbqnqgLk0bCWxkNqEIgWAakNYZUSyAw5RqV1A7/bFKGAgFQAAswlcDML6AtsAAAAASUVORK5CYII=",
+      "personal_learning_entry": "inventory_progression_tab",
+      "local_learning_ui": false
     },
     "best_mech": {
       "id": "best_mech",
-      "name": "工程机甲原型",
+      "name": "SG-E1 涓流工程机甲",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
-      "english": "Engineering Mech Prototype",
+      "english": "SG-E1 Juanliu Engineering Mech",
       "registry_id": "starfall_blueprint:best_mech",
       "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
       "manual_assembly": {
@@ -11999,9 +12234,9 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
-        "summary": "驾驶工业双足机甲并以可拆工程臂单点作业",
+        "summary": "驾驶SG-E1 涓流工程机甲，以共享工程臂作业并晋升沧澜",
         "benefit": "本人三级与独立轻载、诊断、机甲驾驶后人工装配；20MXH空电出厂，无公共配方，收纳保存生命、电热和磨损。标准100生命／9货格；独立Body强化为30MXH／160生命／18货格，未知或缺失Body按标准。独立Legs轮组提升巡航运输效率，空／缺失／未知维持步行。",
         "operation": "WASD基础速度0.22，仅实际地面移动400XH／刻、热4、每100工作刻磨损1。单个互斥UtilityModule槽：散热模组自然冷4／刻；强化驱动速度0.28、实际移动600XH／刻热6、冷2。模组随NBT收纳部署死亡掉落保留；隔离空载停稳落地非流体时潜行主手模组安装，诊断器主手＋钢固定件副手潜行拆回且不耗固定件，需主背包空间；无固定件潜行诊断仍切换隔离。独立EngineeringArm槽最多1件：新机／旧缺字段默认钻臂，明确空与未知值保持空；随收纳部署死亡掉落保留。G服务端选臂：钻切32000XH热120；挖掘仅铁铲标签12000XH热45，均磨损1冷却20刻且仅成功计费；无臂仍驾驶。潜行主手臂装空槽，诊断主手＋原版铁镐副手拆回，铁镐不耗不损且36格主背包须空格，隔离空载存活停稳落地非流体；失败不切隔离。空手骑乘／Shift下车；隔离空载静止落地、空手潜行收纳且须背包空格。隔离空载钢修／水冷；接通空载s01补512XH／刻。收纳物主手、副手诊断器对空气右键接通，再潜行对基地储能方块按住右键补能≤5000XH／刻。强化机体基础／驱动速度0.18／0.23，移动600／900XH、热6／8；不改变臂作业与磨损、热阈值及冷却。潜行主手普通箱子打开真实9／18格货舱，需本人驾驶全知识、距离≤8、机甲隔离空载存活停稳落地非流体，箱子不耗；禁止收纳机甲嵌套，无自动拾取。收纳保存部署保留货物；死亡遵实体掉落规则单独掉货并清空死亡收纳物货舱，防困货与复制。轮组标准基础／驱动速度0.275／0.35、移动300／450XH热3／5；强化基础／驱动0.225／0.2875、450／675XH热5／7；跨步1.0降0.6保留外部修饰，冷却作业磨损不变。完整装拆与保留状态见巡航轮组条目。",
         "targets": []
@@ -12013,7 +12248,7 @@
       "name": "强化机体",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Reinforced Mech Body",
@@ -12078,7 +12313,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "扩展工程机甲容量、结构上限与真实货舱",
         "benefit": "独立Body槽普通实物，stack1无耐久；强化30MXH、160生命、18格，基础／驱动速度0.18／0.23，移动600／900XH与热6／8；磨损2400、热1000／400、冷2／散热4及工程臂不变。",
@@ -12092,7 +12327,7 @@
       "name": "钻切工程臂",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Drilling arm",
@@ -12167,7 +12402,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "为工程机甲提供可拆铁级单点钻切",
         "benefit": "独立EngineeringArm槽，最多1件，与UtilityModule无关；普通实物，不可堆叠、无耐久电量；成功作业32000XH、热120、磨损1、20刻冷却。",
@@ -12181,7 +12416,7 @@
       "name": "挖掘工程臂",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Excavator arm",
@@ -12256,7 +12491,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "为工程机甲提供铁铲级单点挖掘",
         "benefit": "独立工程臂槽普通实物，无耐久电量；仅minecraft:mineable/shovel与IRON_SHOVEL铁级，成功12000XH、热45、磨损1、20刻冷却，普通掉落，无范围作业。",
@@ -12270,7 +12505,7 @@
       "name": "散热模组",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Mech Radiator Module",
@@ -12338,10 +12573,10 @@
             "passive_cooling_per_tick": 4
           },
           "heavy": {
-            "movement_speed": 0.14,
+            "movement_speed": 0.26,
             "energy_per_actual_ground_movement_tick": 1600,
             "heat_per_actual_ground_movement_tick": 10,
-            "passive_cooling_per_tick": 4
+            "passive_cooling_per_tick": 6
           }
         },
         "compatible_platforms": [
@@ -12355,10 +12590,10 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "提高工程机甲自然散热",
-        "benefit": "真实不可堆叠普通物品，无电量或耐久；单个互斥UtilityModule通用槽，自然散热4／刻，速度0.22、实际移动400XH／刻和热4不变。",
+        "benefit": "真实不可堆叠普通物品，无电量或耐久，单个互斥UtilityModule槽。涓流自然散热4／刻，沧澜6／刻；保持各机体基础移动参数。",
         "operation": "本人三级与轻载、诊断、机甲驾驶；动作19钢6、导相4、护套4、钢固定件4人工制造。主手模组潜行右键隔离、空载、存活、停稳落地且非流体的机甲安装；先拆后换。主手诊断器＋副手钢固定件潜行右键拆回，不耗固定件；主背包无空间整笔拒绝，保留全部机体状态。",
         "targets": []
       },
@@ -12369,7 +12604,7 @@
       "name": "强化驱动模组",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Reinforced Mech Drive Module",
@@ -12441,10 +12676,10 @@
             "passive_cooling_per_tick": 2
           },
           "heavy": {
-            "movement_speed": 0.18,
+            "movement_speed": 0.34,
             "energy_per_actual_ground_movement_tick": 2400,
             "heat_per_actual_ground_movement_tick": 14,
-            "passive_cooling_per_tick": 2
+            "passive_cooling_per_tick": 4
           }
         },
         "compatible_platforms": [
@@ -12458,10 +12693,10 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "提高工程机甲地面移动速度",
-        "benefit": "真实不可堆叠普通物品，无电量或耐久；互斥通用槽，速度0.28，实际地面移动600XH／刻、热6，自然散热2；不增加容量、生命或磨损上限。",
+        "benefit": "真实不可堆叠普通物品，无电量或耐久，互斥UtilityModule槽。涓流标准／强化驱动速度0.28／0.23，散热2；沧澜驱动速度0.34、移动2400XH／刻热14、散热4。容量、生命及磨损上限不变，轮组另按×1.25速度。",
         "operation": "本人三级与轻载、诊断、机甲驾驶；动作20钢8、承相4、导相4、控制板2、钢固定件4人工制造，无公共配方。安装须隔离空载、存活、停稳落地且非流体，潜行主手模组右键实际机甲；主手诊断器＋副手钢固定件潜行拆回，固定件不耗且需主背包空间，失败状态不变。",
         "targets": []
       },
@@ -12472,7 +12707,7 @@
       "name": "轻型助力骨架",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Lightweight Assist Frame",
@@ -12686,7 +12921,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "腿部穿戴的轻型工程助力骨架",
         "benefit": "原疾跑＋15%，16XH／刻、热6；可装跨步组件，跨步＋0.4与疾跑互斥，24XH／刻、热4（净2），地面站定也计费；无护甲，缓存200000XH。",
@@ -12700,7 +12935,7 @@
       "name": "工程钻切器",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Engineering Drill-Cutter",
@@ -12825,7 +13060,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "用于工程钻切的手持动力工具",
         "benefit": "铁级单点采掘，有效速度12；非零硬度方块耗256XH、发热120、耐久1，缓存200000XH。",
@@ -12839,7 +13074,7 @@
       "name": "便携整备包",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Field Service Kit",
@@ -12904,7 +13139,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "野外维修副手的贝斯特骨架或钻切器",
         "benefit": "不可堆叠，原版耐久32，用尽消失；无电量或热量缓存。",
@@ -12918,7 +13153,7 @@
       "name": "跨步组件",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Stride Assist Module",
@@ -12962,7 +13197,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "为现有轻型助力骨架提供跨步档",
         "benefit": "不可堆叠的普通模块，无耐久、电量、热量或属性；工位人工装配，无公共配方。",
@@ -12976,7 +13211,7 @@
       "name": "工务诊断器",
       "unit": "件",
       "icon": "tool",
-      "note": "贝斯特轻型工程与野外整备；专用菜单人工装配与个人学习校验，各物品运行参数见元数据与指南。",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
       "external": false,
       "mass": null,
       "english": "Field Diagnostic Tool",
@@ -13057,7 +13292,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在贝斯特工务装配台专用菜单学习并人工装配；无普通工作台或机器配方。",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
       "purpose": {
         "summary": "只读检查副手贝斯特骨架或钻切器",
         "benefit": "可重复使用的普通工具，stack 1，无耐久、电量、热量或属性；本人三级及独立工务诊断，工位人工装配，无公共配方。",

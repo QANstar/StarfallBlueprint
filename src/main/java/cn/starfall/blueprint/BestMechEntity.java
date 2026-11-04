@@ -107,7 +107,7 @@ public final class BestMechEntity extends PathfinderMob {
     }
     /** Internal generation follows cooling and latch recovery, before vanilla movement. */
     private void tickCore() {
-        if(level().isClientSide || !BestMechCores.GENERATOR.equals(coreKey()) || !ready(0) || capacity() - energy() < 1000) return;
+        if(level().isClientSide || !BestMechCores.GENERATOR.equals(coreKey()) || !ready(0) || capacity() - energy() < coreOutput()) return;
         if(coreFuelTicks() == 0) {
             for(int slot = 0; slot < cargoSlots(); slot++) {
                 ItemStack fuel = cargo.getItem(slot);
@@ -119,7 +119,7 @@ public final class BestMechEntity extends PathfinderMob {
             }
         }
         if(coreFuelTicks() == 0) return;
-        entityData.set(ENERGY, energy() + 1000);
+        entityData.set(ENERGY, energy() + coreOutput());
         entityData.set(CORE_FUEL_TICKS, coreFuelTicks() - 1);
         int wear = ++coreWorkTicks >= 1000 ? 1 : 0;
         if(wear != 0) coreWorkTicks = 0;
@@ -127,6 +127,7 @@ public final class BestMechEntity extends PathfinderMob {
     }
     // Platform identity belongs to the registered entity type, never to mutable packed state.
     public boolean heavy() { return getType() == BestMechs.HEAVY_TYPE.get(); }
+    public int coreOutput() { return heavy() ? 2000 : 1000; }
     public int capacity() { return heavy() ? 60_000_000 : BestMechBodies.capacity(bodyKey()); }
     public int cargoSlots() { return heavy() ? 27 : BestMechBodies.cargoSlots(bodyKey()); }
     public SimpleContainer cargo() { return cargo; }
@@ -134,7 +135,7 @@ public final class BestMechEntity extends PathfinderMob {
     private void syncBody(String key) {
         entityData.set(BODY, heavy() ? "" : BestMechBodies.sanitize(key));
         getAttribute(Attributes.MAX_HEALTH).setBaseValue(heavy() ? 300 : BestMechBodies.maxHealth(bodyKey()));
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(heavy() ? .14 : bodyKey().isEmpty() ? .22 : .18);
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(heavy() ? .26 : bodyKey().isEmpty() ? .22 : .18);
     }
     public boolean installBody(Player player, InteractionHand hand) {
         if(heavy()) return false;
@@ -170,7 +171,7 @@ public final class BestMechEntity extends PathfinderMob {
         player.getInventory().setChanged(); return true;
     }
     public float movementSpeed() {
-        float base = heavy() ? (BestMechModules.DRIVE.equals(moduleKey()) ? .18f : .14f) : bodyKey().isEmpty() ? BestMechModules.speed(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? .23f : .18f;
+        float base = heavy() ? (BestMechModules.DRIVE.equals(moduleKey()) ? .34f : .26f) : bodyKey().isEmpty() ? BestMechModules.speed(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? .23f : .18f;
         return legsKey().isEmpty() ? base : base * 1.25f;
     }
     public int movementCost() {
@@ -181,7 +182,7 @@ public final class BestMechEntity extends PathfinderMob {
         int base = heavy() ? (BestMechModules.DRIVE.equals(moduleKey()) ? 14 : 10) : bodyKey().isEmpty() ? BestMechModules.movementHeat(moduleKey()) : BestMechModules.DRIVE.equals(moduleKey()) ? 8 : 6;
         return legsKey().isEmpty() ? base : base - 1;
     }
-    public int coolingRate() { return BestMechModules.coolingRate(moduleKey()); }
+    public int coolingRate() { return BestMechModules.coolingRate(moduleKey()) + (heavy() ? 2 : 0); }
     private boolean canServiceModule(Player player) {
         return !level().isClientSide && qualified(player) && isAlive() && isolated() && getPassengers().isEmpty()
                 && onGround() && getDeltaMovement().horizontalDistanceSqr() <= 0.001

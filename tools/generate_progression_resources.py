@@ -5,6 +5,8 @@ import json
 ROOT = Path(__file__).resolve().parents[1]
 MESSAGES = {
     'title': ('成长与科技', 'Growth & technology'),
+    'advanced_engineering_title': ('进阶工程', 'Advanced Engineering'),
+    'advanced_engineering_description': ('掌握水神计划进阶工程，在装配台将隔离、存活的涓流收纳机甲晋升为沧澜；继承能源、损伤、货物与配装。', 'Master advanced Water God engineering. Upgrade an isolated living packed Juanliu to Canglan at the workbench, retaining energy, damage, cargo and equipment.'),
     'lingchuan_description': ('岭川个人研究 · T%s', 'Lingchuan personal research · T%s'),
     'tab': ('成长', 'Growth'),
     'tab_hint': ('查看全部成长与科技，消耗材料与经验等级学习。', 'Browse all growth and technology. Learn using materials and experience levels.'),

@@ -100,6 +100,17 @@ public final class Progression {
         register(new Node(BEST.get(action),"best",BestEngineering.actionLabelComponent(action),
                 BestEngineering.actionCostComponent(action),parents,costs,xp,()->CatalogueContent.stack(icon,1),learned,grant,reward));
     }
+    public static final String ADVANCED_ENGINEERING = "best:advanced_engineering";
+    static {
+        register(new Node(ADVANCED_ENGINEERING,"best",
+                Component.translatable("growth.starfall_blueprint.advanced_engineering_title"),
+                Component.translatable("growth.starfall_blueprint.advanced_engineering_description"),
+                List.of("best:mech_operation"),
+                List.of(new Cost("load",8),new Cost("conductor",4),new Cost("sensor",2),new Cost("board",4)),
+                8,()->CatalogueContent.stack("best_heavy_mech",1),BestEngineering::hasAdvancedEngineering,
+                p->p.getPersistentData().putBoolean("BestAdvancedEngineering",true),
+                new Reward(List.of(new Cost("steel_fix",8)),80)));
+    }
     public static void initialize() {}
     public static synchronized void register(Node node) {
         if(BY_ID.containsKey(node.id()))throw new IllegalArgumentException("Duplicate progression node: "+node.id());

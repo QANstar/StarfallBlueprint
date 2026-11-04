@@ -27,7 +27,7 @@ public final class BestMechs {
     }
     private static void attributes(EntityAttributeCreationEvent event) {
         event.put(TYPE.get(), BestMechEntity.attributes().build());
-        event.put(HEAVY_TYPE.get(), BestMechEntity.attributes().add(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH,300).add(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED,.14).build());
+        event.put(HEAVY_TYPE.get(), BestMechEntity.attributes().add(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH,300).add(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED,.26).build());
     }
     private BestMechs() {}
 }

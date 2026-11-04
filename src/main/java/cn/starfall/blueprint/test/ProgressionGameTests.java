@@ -22,7 +22,7 @@ public final class ProgressionGameTests {
         FakePlayer p=FakePlayerFactory.get(h.getLevel(),new GameProfile(UUID.randomUUID(),"ProgressionTest"));
         p.setGameMode(GameType.SURVIVAL);p.getInventory().clearContent();p.experienceLevel=100;p.totalExperience=0;p.experienceProgress=0;
         p.getPersistentData().remove("BestEngineeringResearch");p.getPersistentData().remove("BestLightMobility");
-        p.getPersistentData().remove("BestDiagnostics");p.getPersistentData().remove("BestMechOperation");
+        p.getPersistentData().remove("BestDiagnostics");p.getPersistentData().remove("BestMechOperation");p.getPersistentData().remove("BestAdvancedEngineering");
         p.getPersistentData().remove("LingchuanResearch");return p;
     }
     private static int index(String id) {
@@ -99,10 +99,11 @@ public final class ProgressionGameTests {
         p.getPersistentData().putInt("BestEngineeringResearch",3);
         p.getPersistentData().putBoolean("BestLightMobility",true);p.getPersistentData().putBoolean("BestDiagnostics",true);
         p.getPersistentData().putBoolean("BestMechOperation",true);p.getPersistentData().putInt("LingchuanResearch",65535);
-        for(var node:Progression.NODES) {
+        for(var node:Progression.NODES.subList(0,22)) {
             h.assertTrue(Progression.isLearned(p,node.id()),"Old saves read through every original unlock: "+node.id());
             h.assertTrue(!Progression.learn(p,node.id()),"Old knowledge never recharges: "+node.id());
         }
+        h.assertTrue(!Progression.isLearned(p,"best:advanced_engineering"),"Original22 unlock flags do not grant the new advanced node");
         unchanged(h,p,before,expected.experienceLevel,"Reading and retrying migrated knowledge changes no inventory or XP");
         FakePlayer creative=player(h);creative.setGameMode(GameType.CREATIVE);creative.experienceLevel=0;
         h.assertTrue(!Progression.learn(creative,Progression.lingchuanId(0))&&!Lingchuan.knows(creative,0),
@@ -113,7 +114,7 @@ public final class ProgressionGameTests {
     @GameTest(template="empty")
     public static void bothTreesKeepOrderPersonalKnowledgeAndRegisteredClonePersistence(GameTestHelper h) {
         FakePlayer p=player(h),other=player(h),replacement=player(h);
-        h.assertTrue(Progression.NODES.size()==22,"The shared catalog contains six Best and sixteen Lingchuan nodes");
+        h.assertTrue(Progression.NODES.size()==23,"The shared catalog contains seven Best and sixteen Lingchuan nodes");
         inputs(p,Progression.bestId(17));var before=snapshot(p);
         h.assertTrue(!Progression.learn(p,Progression.bestId(17)),"Mech operation cannot precede its three engineering prerequisites");
         unchanged(h,p,before,100,"Out-of-order mech learning is atomic");
@@ -140,6 +141,7 @@ public final class ProgressionGameTests {
         for(int i=3;i<Lingchuan.RESEARCH.size();i++)if(!Lingchuan.knows(p,i))
             h.assertTrue(learn(p,Progression.lingchuanId(i)),"Remaining Lingchuan branch can learn in dependency order: "+i);
         h.assertTrue(Lingchuan.knowledge(p)==65535,"Every Lingchuan branch uses the unified engine");
+        h.assertTrue(learn(p,"best:advanced_engineering"),"Advanced engineering learns after mech operation before clone");
         NeoForge.EVENT_BUS.post(new PlayerEvent.Clone(replacement,p,true));
         for(var node:Progression.NODES) {
             h.assertTrue(Progression.isLearned(replacement,node.id()),"Existing registered clone listeners retain "+node.id());
@@ -189,6 +191,7 @@ public final class ProgressionGameTests {
         p.getPersistentData().putBoolean("BestLightMobility",true);
         p.getPersistentData().putBoolean("BestDiagnostics",true);
         p.getPersistentData().putBoolean("BestMechOperation",true);
+        p.getPersistentData().putBoolean("BestAdvancedEngineering",true);
         p.getPersistentData().putInt("LingchuanResearch",65535);
     }
     private static Progression.Reward reward(int xp,Progression.Cost... items) {
@@ -197,9 +200,9 @@ public final class ProgressionGameTests {
 
     @GameTest(template="empty")
     public static void allNodeRewardsPayExactItemsAndPointsOnceAcrossLegacyAndCloneRoutes(GameTestHelper h) {
-        int[] points={5,10,20,15,20,50,10,20,35,60,10,10,10,10,35,20,20,35,20,20,35,35};
+        int[] points={5,10,20,15,20,50,10,20,35,60,10,10,10,10,35,20,20,35,20,20,35,35,80};
         int[] actions={0,1,5,8,13,17};
-        h.assertTrue(Progression.NODES.size()==points.length,"Every one of the 22 nodes has an explicit reward policy");
+        h.assertTrue(Progression.NODES.size()==points.length,"Every one of the 23 nodes has an explicit reward policy");
         var mutable=new ArrayList<Progression.Cost>();mutable.add(new Progression.Cost("iron",1));
         var immutable=new Progression.Reward(mutable,0);mutable.clear();
         h.assertTrue(immutable.items().size()==1&&Progression.Reward.NONE.items().isEmpty()
@@ -224,6 +227,7 @@ public final class ProgressionGameTests {
                 case 7 -> reward(points[n],new Progression.Cost("laminar_alloy",2));
                 case 8,14 -> reward(points[n],new Progression.Cost("conductor",2));
                 case 9 -> reward(points[n],new Progression.Cost("sheath",4));
+                case 22 -> reward(points[n],new Progression.Cost("steel_fix",8));
                 default -> reward(points[n]);
             };
             h.assertTrue(node.reward().equals(policy),"Exact item and point policy: "+node.id());
@@ -235,25 +239,26 @@ public final class ProgressionGameTests {
                 case 3 -> p.getPersistentData().putBoolean("BestLightMobility",false);
                 case 4 -> p.getPersistentData().putBoolean("BestDiagnostics",false);
                 case 5 -> p.getPersistentData().putBoolean("BestMechOperation",false);
+                case 22 -> p.getPersistentData().putBoolean("BestAdvancedEngineering",false);
                 default -> p.getPersistentData().putInt("LingchuanResearch",65535^(1<<(n-6)));
             }
             inputs(p,node.id());var before=snapshot(p);var unchangedXp=expectedXp(h,p,0,0);
             for(int simulation=0;simulation<2;simulation++)h.assertTrue(Progression.preview(p.getInventory(),node.id(),Progression.learned(p),p.experienceLevel).executable(),"Reward preview is executable: "+node.id());
             unchanged(h,p,before,unchangedXp.experienceLevel,"Successful simulation is read only");sameXp(h,p,unchangedXp,"Simulation preserves every XP field");
             var expected=expectedXp(h,p,node.experienceLevels(),points[n]);
-            boolean learned=n<6?BestEngineering.perform(p,actions[n]):Lingchuan.research(p,null,n-6,n%2==0);
+            boolean learned=n==22?Progression.learn(p,node.id()):n<6?BestEngineering.perform(p,actions[n]):Lingchuan.research(p,null,n-6,n%2==0);
             h.assertTrue(learned&&Progression.isLearned(p,node.id()),"Legacy route commits knowledge: "+node.id());
             rewardOnly(h,p,policy,"Exact paid reward with all exact costs consumed: "+node.id());
             sameXp(h,p,expected,"Reward points match giveExperiencePoints including level crossings: "+node.id());
             before=snapshot(p);
-            h.assertTrue(!Progression.learn(p,node.id())&&!(n<6?BestEngineering.perform(p,actions[n]):Lingchuan.research(p,null,n-6,n%2!=0)),"Both direct and legacy repeats reject: "+node.id());
+            h.assertTrue(!Progression.learn(p,node.id())&&!(n==22?Progression.learn(p,node.id()):n<6?BestEngineering.perform(p,actions[n]):Lingchuan.research(p,null,n-6,n%2!=0)),"Both direct and legacy repeats reject: "+node.id());
             unchanged(h,p,before,expected.experienceLevel,"Repeat preserves reward items");sameXp(h,p,expected,"Repeat awards no XP");
         }
         FakePlayer old=player(h),replacement=player(h);allKnowledge(old);
         var oldXp=expectedXp(h,old,0,0);var oldItems=snapshot(old);
         for(int n=0;n<points.length;n++) {
             h.assertTrue(!Progression.learn(old,Progression.NODES.get(n).id()),"Old learned flags have no retroactive claim");
-            h.assertTrue(!(n<6?BestEngineering.perform(old,actions[n]):Lingchuan.research(old,null,n-6,true)),"Old flags reject the legacy claim route too");
+            h.assertTrue(!(n==22?Progression.learn(old,Progression.NODES.get(n).id()):n<6?BestEngineering.perform(old,actions[n]):Lingchuan.research(old,null,n-6,true)),"Old flags reject the legacy claim route too");
         }
         unchanged(h,old,oldItems,oldXp.experienceLevel,"Old knowledge grants no items");sameXp(h,old,oldXp,"Old knowledge grants no XP");
         var cloneXp=expectedXp(h,replacement,0,0);var cloneItems=snapshot(replacement);

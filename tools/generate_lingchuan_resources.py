@@ -347,3 +347,8 @@ for tag in ('mineable/pickaxe','needs_iron_tool'):
     value=json.loads(path.read_text()) if path.exists() else {'replace':False,'values':[]}
     value['values']=list(dict.fromkeys(value['values']+[f'starfall_blueprint:{key}' for key in STATIONS]));write(path,value)
 print(f'Generated {len(names)} Lingchuan definitions, five eight-part machines, armour UV sheets and two languages')
+# Retired workstation remains registered for existing saves; personal research lives in Growth.
+(DATA/'recipe/lc_research_station.json').unlink(missing_ok=True)
+# Apply the current hardware silhouettes and open workstations after the original resource baseline.
+import runpy
+runpy.run_path(str(ROOT/'tools/generate_blackdog_workshop.py'), run_name='__main__')

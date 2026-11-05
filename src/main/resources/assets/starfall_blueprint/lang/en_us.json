@@ -830,5 +830,20 @@
   "ui.starfall_blueprint.best_upgrade_alive": "A destroyed mech cannot be upgraded",
   "ui.starfall_blueprint.best_upgrade_space": "Reserve an empty main-inventory slot for the returned reinforced body",
   "growth.starfall_blueprint.advanced_engineering_title": "Advanced Engineering",
-  "growth.starfall_blueprint.advanced_engineering_description": "Master advanced Water God engineering. Upgrade an isolated living packed Juanliu to Canglan at the workbench, retaining energy, damage, cargo and equipment."
+  "growth.starfall_blueprint.advanced_engineering_description": "Master advanced Water God engineering. Upgrade an isolated living packed Juanliu to Canglan at the workbench, retaining energy, damage, cargo and equipment.",
+  "lc.workshop.search": "Search chassis or components…",
+  "lc.workshop.category.0": "All",
+  "lc.workshop.category.1": "Chassis / Core",
+  "lc.workshop.category.2": "Systems",
+  "lc.workshop.manufacture": "Manufacture",
+  "lc.workshop.select_product": "Select a product for its recipe",
+  "lc.workshop.drag_hint": "Drag a system onto its chassis · Right-click to detach",
+  "lc.workshop.load": "Core load  %s / %s",
+  "lc.workshop.staging": "Staging / Returns",
+  "lc.workshop.rotation_hint": "Drag model to rotate",
+  "lc.workshop.insert_watch": "Insert a watch to display armour",
+  "lc.workshop.charging": "Core charging",
+  "lc.workshop.component_hint": "Available: %s · Drag to connect",
+  "lc.workshop.assemble": "Assemble",
+  "lc.workshop.refit": "Refit"
 }

@@ -5,21 +5,28 @@
     "vent": "starfall_blueprint:block/lc_vent",
     "screen": "starfall_blueprint:block/lc_screen",
     "core": "starfall_blueprint:block/lc_core",
+    "light": "starfall_blueprint:block/workshop_fabricator_light",
     "particle": "starfall_blueprint:block/lc_casing"
   },
   "elements": [
     {
       "from": [
+        1,
         0,
-        0,
-        12
+        11
       ],
       "to": [
-        4,
-        16,
-        16
+        3,
+        15,
+        14
       ],
       "faces": {
+        "up": {
+          "texture": "#casing"
+        },
+        "down": {
+          "texture": "#casing"
+        },
         "north": {
           "texture": "#casing"
         },
@@ -31,12 +38,38 @@
         },
         "west": {
           "texture": "#casing"
-        },
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        0,
+        10.5
+      ],
+      "to": [
+        3,
+        12,
+        11
+      ],
+      "faces": {
         "up": {
-          "texture": "#casing"
+          "texture": "#light"
         },
         "down": {
-          "texture": "#casing"
+          "texture": "#light"
+        },
+        "north": {
+          "texture": "#light"
+        },
+        "south": {
+          "texture": "#light"
+        },
+        "east": {
+          "texture": "#light"
+        },
+        "west": {
+          "texture": "#light"
         }
       }
     },
@@ -44,7 +77,7 @@
       "from": [
         0,
         13,
-        0
+        10
       ],
       "to": [
         16,
@@ -52,38 +85,108 @@
         16
       ],
       "faces": {
-        "north": {
-          "texture": "#panel"
-        },
-        "south": {
-          "texture": "#panel"
-        },
-        "east": {
-          "texture": "#panel"
-        },
-        "west": {
-          "texture": "#panel"
-        },
         "up": {
-          "texture": "#panel"
+          "texture": "#casing"
         },
         "down": {
-          "texture": "#panel"
+          "texture": "#casing"
+        },
+        "north": {
+          "texture": "#casing"
+        },
+        "south": {
+          "texture": "#casing"
+        },
+        "east": {
+          "texture": "#casing"
+        },
+        "west": {
+          "texture": "#casing"
         }
       }
     },
     {
       "from": [
-        6,
-        0,
-        6
+        3,
+        13,
+        9.5
       ],
       "to": [
-        10,
-        11,
+        16,
+        14,
         10
       ],
       "faces": {
+        "up": {
+          "texture": "#light"
+        },
+        "down": {
+          "texture": "#light"
+        },
+        "north": {
+          "texture": "#light"
+        },
+        "south": {
+          "texture": "#light"
+        },
+        "east": {
+          "texture": "#light"
+        },
+        "west": {
+          "texture": "#light"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        7
+      ],
+      "to": [
+        16,
+        6,
+        11
+      ],
+      "faces": {
+        "up": {
+          "texture": "#casing"
+        },
+        "down": {
+          "texture": "#casing"
+        },
+        "north": {
+          "texture": "#casing"
+        },
+        "south": {
+          "texture": "#casing"
+        },
+        "east": {
+          "texture": "#casing"
+        },
+        "west": {
+          "texture": "#casing"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        0,
+        2
+      ],
+      "to": [
+        16,
+        7,
+        8
+      ],
+      "faces": {
+        "up": {
+          "texture": "#core"
+        },
+        "down": {
+          "texture": "#core"
+        },
         "north": {
           "texture": "#core"
         },
@@ -94,12 +197,6 @@
           "texture": "#core"
         },
         "west": {
-          "texture": "#core"
-        },
-        "up": {
-          "texture": "#core"
-        },
-        "down": {
           "texture": "#core"
         }
       }

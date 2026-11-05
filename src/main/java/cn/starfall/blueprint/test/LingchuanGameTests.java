@@ -227,6 +227,30 @@ public final class LingchuanGameTests {
         var snapshot=watch.copy();h.assertTrue(BlackDogArmor.valid(watch)&&ItemStack.matches(snapshot,watch),"Repeated validation cannot migrate or duplicate components again");h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)
+    public static void workstationDragConnectIsAtomicAndPreservesWatch(GameTestHelper h){
+        var p=player(h);p.getPersistentData().putInt("LingchuanResearch",65535);var be=station(h,"lc_armor_assembler");
+        var watch=watch(p,parts(3));p.getInventory().setItem(1,ItemStack.EMPTY);be.setItem(8,watch);input(p,2,"blackdog_component_flight",1);
+        BlackDogArmor.setCharge(watch,24680);var identity=CatalogueEquipment.getData(watch).getUUID("SuitId");
+        be.setPower(4999);h.assertTrue(!BlackDogWorkstations.connect(p,be,4)&&p.getInventory().getItem(2).getCount()==1&&!BlackDogArmor.has(watch,"flight"),"Insufficient power leaves the owned component and suit untouched");
+        be.setPower(20000);h.assertTrue(BlackDogWorkstations.connect(p,be,4)&&p.getInventory().getItem(2).isEmpty()&&be.getPower()==15000&&BlackDogArmor.has(watch,"flight"),"Drag connects exactly one owned component and pays 5000 XH");
+        h.assertTrue(BlackDogArmor.charge(watch)==24680&&CatalogueEquipment.getData(watch).getUUID("SuitId").equals(identity),"Wiring preserves charge and identity");
+        input(p,2,"blackdog_component_flight",1);h.assertTrue(!BlackDogWorkstations.connect(p,be,4)&&p.getInventory().getItem(2).getCount()==1&&be.getPower()==15000,"Duplicate drag does not consume or charge");
+        h.assertTrue(Lingchuan.removeComponent(p,be,4)&&be.getItem(10).is(CatalogueContent.item("blackdog_component_flight"))&&be.getPower()==14000,"Detaching returns one component");
+        h.assertTrue(BlackDogWorkstations.connect(p,be,4)&&be.getItem(10).isEmpty()&&p.getInventory().getItem(2).getCount()==1,"Reconnect prefers the staging item over personal inventory");
+        p.containerMenu.setCarried(CatalogueContent.stack("blackdog_component_shield",1));h.assertTrue(BlackDogWorkstations.connect(p,be,5)&&p.containerMenu.getCarried().isEmpty()&&BlackDogArmor.has(watch,"shield"),"A real cursor-held component can connect without duplicating the cursor item");
+        h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=100)
+    public static void newSuitWiringChecksChassisAndSynchronizesPartialDisplay(GameTestHelper h){
+        var p=player(h);p.getPersistentData().putInt("LingchuanResearch",65535);var be=station(h,"lc_armor_assembler");input(p,2,"blackdog_component_flight",1);
+        be.setItem(6,CatalogueContent.stack("blackdog_back_basic",1));h.assertTrue(!BlackDogWorkstations.connect(p,be,4)&&p.getInventory().getItem(2).getCount()==1,"Tier I back cannot take flight");
+        be.setItem(6,CatalogueContent.stack("blackdog_back_reinforced",1));h.assertTrue(BlackDogWorkstations.connect(p,be,4)&&p.getInventory().getItem(2).isEmpty()&&be.getPower()==2000000,"New suit stages its real component without assembly fees");
+        var display=BlackDogWorkstations.preview(be);h.assertTrue(display.getIntArray("ChassisTiers")[6]==2&&Integer.bitCount(display.getInt("Abilities"))==1&&display.getInt("Load")==4,"Partial model contains only the placed back and flight");
+        var tag=be.getUpdateTag(h.getLevel().registryAccess());h.assertTrue(tag.getCompound("BlackDogDisplay").equals(display)&&!tag.contains("IndustryInventory"),"Client snapshot carries display state without exposing unrelated machine inventory");
+        h.assertTrue(BlackDogWorkstations.disconnect(p,be,4)&&be.getItem(10).isEmpty()&&p.getInventory().contains(CatalogueContent.stack("blackdog_component_flight",1))&&be.getPower()==2000000,"Uncommitted wiring returns the owned staging item without a fee");
+        h.assertTrue(!BlackDogWorkstations.connect(p,be,12),"Out-of-range component IDs are rejected");h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=100)
     public static void personalKnowledgeSurvivesDeathAndOrphanProjectionIsRemoved(GameTestHelper h){
         var p=player(h);p.getPersistentData().putInt("LingchuanResearch",65535);var watch=watch(p,parts(1));BlackDogArmor.toggle(p,watch);var clone=player(h);
         BlackDogArmor.clonePlayer(new PlayerEvent.Clone(clone,p,true));h.assertTrue(Lingchuan.knowledge(clone)==65535,"Death cloning retains personal knowledge");

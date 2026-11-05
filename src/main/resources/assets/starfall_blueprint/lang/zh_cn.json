@@ -830,5 +830,20 @@
   "ui.starfall_blueprint.best_upgrade_alive": "损毁机甲不能晋升",
   "ui.starfall_blueprint.best_upgrade_space": "主背包须预留空格返还强化机体",
   "growth.starfall_blueprint.advanced_engineering_title": "进阶工程",
-  "growth.starfall_blueprint.advanced_engineering_description": "掌握水神计划进阶工程，在装配台将隔离、存活的涓流收纳机甲晋升为沧澜；继承能源、损伤、货物与配装。"
+  "growth.starfall_blueprint.advanced_engineering_description": "掌握水神计划进阶工程，在装配台将隔离、存活的涓流收纳机甲晋升为沧澜；继承能源、损伤、货物与配装。",
+  "lc.workshop.search": "搜索部件或组件…",
+  "lc.workshop.category.0": "全部",
+  "lc.workshop.category.1": "基底 / 核心",
+  "lc.workshop.category.2": "功能 / 终端",
+  "lc.workshop.manufacture": "制造所选",
+  "lc.workshop.select_product": "选择左侧条目查看配方",
+  "lc.workshop.drag_hint": "拖动外围配件到对应部位连接 · 右键已装配件拆回",
+  "lc.workshop.load": "核心负载  %s / %s",
+  "lc.workshop.staging": "配件暂存 / 拆回",
+  "lc.workshop.rotation_hint": "拖动模型可旋转",
+  "lc.workshop.insert_watch": "放入腕表以展示战甲",
+  "lc.workshop.charging": "核心充能",
+  "lc.workshop.component_hint": "可用 %s · 拖至部位连接",
+  "lc.workshop.assemble": "组装",
+  "lc.workshop.refit": "换装"
 }

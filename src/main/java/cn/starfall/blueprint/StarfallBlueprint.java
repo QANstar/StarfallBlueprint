@@ -113,7 +113,7 @@ public final class StarfallBlueprint {
         .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint.lingchuan"))
         .icon(()->new ItemStack(CatalogueContent.item("blackdog_watch"))).displayItems((p,o)->{
             o.accept(BlackDogArmor.ARMED_WATCH.get());
-            CatalogueContent.ITEMS.forEach((k,v)->{if(Lingchuan.isContent(k)&&!k.startsWith("blackdog_armor_")&&!Lingchuan.legacy(k))o.accept(v.get());});
+            CatalogueContent.ITEMS.forEach((k,v)->{if(Lingchuan.isContent(k)&&!k.equals("lc_research_station")&&!k.startsWith("blackdog_armor_")&&!Lingchuan.legacy(k))o.accept(v.get());});
         }).build());
 
     public StarfallBlueprint(IEventBus bus) {

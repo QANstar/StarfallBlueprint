@@ -5,21 +5,28 @@
     "vent": "starfall_blueprint:block/lc_vent",
     "screen": "starfall_blueprint:block/lc_screen",
     "core": "starfall_blueprint:block/lc_core",
+    "light": "starfall_blueprint:block/workshop_assembler_light",
     "particle": "starfall_blueprint:block/lc_casing"
   },
   "elements": [
     {
       "from": [
+        3,
         0,
-        0,
-        0
+        14
       ],
       "to": [
+        7,
         4,
-        16,
-        4
+        16
       ],
       "faces": {
+        "up": {
+          "texture": "#casing"
+        },
+        "down": {
+          "texture": "#casing"
+        },
         "north": {
           "texture": "#casing"
         },
@@ -30,45 +37,39 @@
           "texture": "#casing"
         },
         "west": {
-          "texture": "#casing"
-        },
-        "up": {
-          "texture": "#casing"
-        },
-        "down": {
           "texture": "#casing"
         }
       }
     },
     {
       "from": [
-        0,
-        13,
-        0
+        4,
+        2,
+        11
       ],
       "to": [
-        16,
-        16,
+        6,
+        4,
         16
       ],
       "faces": {
-        "north": {
-          "texture": "#panel"
-        },
-        "south": {
-          "texture": "#panel"
-        },
-        "east": {
-          "texture": "#panel"
-        },
-        "west": {
-          "texture": "#panel"
-        },
         "up": {
-          "texture": "#panel"
+          "texture": "#light"
         },
         "down": {
-          "texture": "#panel"
+          "texture": "#light"
+        },
+        "north": {
+          "texture": "#light"
+        },
+        "south": {
+          "texture": "#light"
+        },
+        "east": {
+          "texture": "#light"
+        },
+        "west": {
+          "texture": "#light"
         }
       }
     }

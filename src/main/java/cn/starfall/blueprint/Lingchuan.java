@@ -92,6 +92,7 @@ public final class Lingchuan {
         return kind.equals("lc_armor_charger")&&slot==8&&stack.getItem() instanceof BlackDogArmor.Watch&&!BlackDogArmor.deployed(stack);
     }
     public static void tickStation(IndustryBlockEntity be){
+        if(be.getLevel()!=null&&be.getLevel().getGameTime()%10==0){var display=BlackDogWorkstations.preview(be);if(!display.equals(be.blackDogDisplay)){be.blackDogDisplay=display;be.getLevel().sendBlockUpdated(be.getBlockPos(),be.getBlockState(),be.getBlockState(),2);}}
         if(be.redstoneStopped()||!AggregateMachines.ready(be)){be.status=8;return;}
         be.status=0;
         if(be.kind().equals("lc_armor_charger")){

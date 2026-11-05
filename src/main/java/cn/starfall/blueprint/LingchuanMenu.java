@@ -23,26 +23,26 @@ public final class LingchuanMenu extends AbstractContainerMenu {
             public void set(int i,int value){if(i==4)materials=value!=0;if(i==5)components=value!=0;}
             public int getCount(){return 6;}
         };
-        for(int i=0;i<8;i++){final int part=i;addSlot(new Slot(inventory,i,8+i*22,130){
+        for(int i=0;i<8;i++){final int part=i;addSlot(new Slot(inventory,i,BlackDogWorkstations.PART_X[i],BlackDogWorkstations.PART_Y[i]){
             @Override public boolean mayPlace(ItemStack stack){return isActive()&&Lingchuan.accepts(kind(),part,stack);}
             @Override public int getMaxStackSize(){return 1;}
-            @Override public boolean isActive(){return kind().equals("lc_armor_assembler")&&!componentView();}
+            @Override public boolean isActive(){return kind().equals("lc_armor_assembler");}
         });}
-        addSlot(new Slot(inventory,8,278,130){
+        addSlot(new Slot(inventory,8,380,222){
             @Override public boolean mayPlace(ItemStack stack){return Lingchuan.accepts(kind(),8,stack);}
             @Override public int getMaxStackSize(){return 1;}
             @Override public boolean isActive(){return kind().equals("lc_armor_assembler")||kind().equals("lc_armor_charger");}
         });
-        addSlot(new Slot(inventory,9,330,130){@Override public boolean mayPlace(ItemStack stack){return false;}
+        addSlot(new Slot(inventory,9,422,222){@Override public boolean mayPlace(ItemStack stack){return false;}
             @Override public boolean isActive(){return !kind().equals("lc_research_station")&&!kind().equals("lc_armor_charger");}
         });
-        for(int i=0;i<12;i++){final int slot=10+i;addSlot(new Slot(inventory,slot,8+i%6*26,80+i/6*24){
-            @Override public boolean isActive(){return kind().equals("lc_armor_assembler")&&componentView();}
+        for(int i=0;i<12;i++){final int slot=10+i;addSlot(new Slot(inventory,slot,12+i%6*20,220+i/6*20){
+            @Override public boolean isActive(){return kind().equals("lc_armor_assembler");}
             @Override public boolean mayPlace(ItemStack stack){return isActive()&&Lingchuan.accepts(kind(),slot,stack);}
             @Override public int getMaxStackSize(){return 1;}
         });}
-        for(int row=0;row<3;row++)for(int col=0;col<9;col++)addSlot(playerSlot(playerInventory,9+row*9+col,98+col*18,158+row*18));
-        for(int col=0;col<9;col++)addSlot(playerSlot(playerInventory,col,98+col*18,216));
+        for(int row=0;row<3;row++)for(int col=0;col<9;col++)addSlot(playerSlot(playerInventory,9+row*9+col,150+col*18,212+row*18));
+        for(int col=0;col<9;col++)addSlot(playerSlot(playerInventory,col,150+col*18,270));
         addDataSlots(data);
     }
     private Slot playerSlot(Inventory inventory,int slot,int x,int y){return new Slot(inventory,slot,x,y){@Override public boolean isActive(){return !kind().equals("lc_research_station");}};}
@@ -52,17 +52,20 @@ public final class LingchuanMenu extends AbstractContainerMenu {
     public boolean materials(){return data.get(4)!=0;}
     public boolean componentView(){return data.get(5)!=0;}
     public ItemStack watch(){return inventory.getItem(8);}
+    public net.minecraft.nbt.CompoundTag preview(){return BlackDogWorkstations.preview(inventory);}
     public boolean researched(int node){return (knowledge()&(1<<node))!=0;}
     @Override public boolean stillValid(Player player){return station==null||Container.stillValidBlockEntity(station,player);}
     @Override public boolean clickMenuButton(Player player,int action){
+        if(Boolean.getBoolean("starfall.blackdogWorkshopCheck"))org.slf4j.LoggerFactory.getLogger(getClass()).info("WORKSHOP QA server action={} valid={} ready={} station={}",action,stillValid(player),station!=null&&AggregateMachines.ready(station),station==null?"null":station.kind());
         if(player.level().isClientSide||station==null||!stillValid(player)||station.redstoneStopped()||!AggregateMachines.ready(station))return false;
         boolean result;
         if(action==90&&kind().equals("lc_research_station")){data.set(4,materials()?0:1);result=true;}
         else if(action==91&&kind().equals("lc_armor_assembler")){data.set(5,componentView()?0:1);result=true;}
+        else if(action>=300&&action<312)result=BlackDogWorkstations.connect(player,station,action-300);
         else if(action>=0&&action<16)result=Lingchuan.research(player,station,action,materials());
         else if(action>=100&&action<100+Lingchuan.MODULES.size())result=Lingchuan.manufacture(player,station,action-100);
         else if(action==180&&kind().equals("lc_parts_fabricator"))result=Lingchuan.makeFireControl(player,station);
-        else if(action>=200&&action<212)result=Lingchuan.removeComponent(player,station,action-200);
+        else if(action>=200&&action<212)result=BlackDogWorkstations.disconnect(player,station,action-200);
         else if(action==40||action==41)result=Lingchuan.forge(player,station,action-40);
         else if(action==50)result=Lingchuan.assemble(player,station);
         else if(action==51)result=Lingchuan.refit(player,station);

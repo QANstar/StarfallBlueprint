@@ -19,6 +19,10 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 public class IndustryBlockEntity extends BlockEntity implements WorldlyContainer,MenuProvider {
+    public CompoundTag blackDogDisplay=new CompoundTag();
+    @Override public CompoundTag getUpdateTag(HolderLookup.Provider provider){var tag=new CompoundTag();if(Lingchuan.isStation(kind()))tag.put("BlackDogDisplay",BlackDogWorkstations.preview(this));return tag;}
+    @Override public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket(){return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);}
+    @Override public void handleUpdateTag(CompoundTag tag,HolderLookup.Provider provider){if(tag.contains("BlackDogDisplay"))blackDogDisplay=tag.getCompound("BlackDogDisplay");}
     public static final int CRAFTING_SAMPLE=19;
     /** Sample is an owned item, outside all 54 consumable input slots. Empty keeps the last preset. */
     public void selectCraftingSample(){

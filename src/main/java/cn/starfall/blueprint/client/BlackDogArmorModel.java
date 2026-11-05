@@ -100,5 +100,14 @@ public final class BlackDogArmorModel extends HumanoidModel<LivingEntity> {
         }
     }
     public void preview(CompoundTag data){young=false;riding=false;crouching=false;attackTime=0;prepare(EquipmentSlot.CHEST,data);head.visible=true;body.visible=true;belt.visible=true;leftLeg.visible=rightLeg.visible=true;for(var leg:new ModelPart[]{leftLeg,rightLeg}){leg.skipDraw=false;leg.getAllParts().forEach(p->p.visible=true);}head.yRot=-.12f;rightArm.zRot=.08f;leftArm.zRot=-.08f;}
+    public void workstation(CompoundTag data){
+        preview(data);int[] tiers=data.getIntArray("ChassisTiers");if(tiers.length!=8){setAllVisible(false);return;}
+        head.visible=tiers[0]>0;torso.visible=tiers[1]>0||tiers[2]>0;torso.skipDraw=tiers[1]==0;belt.visible=tiers[3]>0;
+        for(var part:torso.getAllParts().toList())if(part!=torso)part.visible=tiers[1]>0;
+        torso.getChild("core_housing").visible=torso.getChild("reactor").visible=tiers[2]>0;
+        leftArm.visible=rightArm.visible=tiers[5]>0||tiers[7]>0;
+        for(var arm:new ModelPart[]{leftArm,rightArm}){arm.skipDraw=tiers[5]==0;arm.getChild("pauldron").visible=arm.getChild("shoulder_stripe").visible=tiers[7]>0;arm.getChild("gauntlet").visible=arm.getChild("forearm_light").visible=arm.getChild("forearm_seam").visible=tiers[5]>0;}
+        for(var leg:new ModelPart[]{leftLeg,rightLeg}){leg.visible=tiers[3]>0||tiers[4]>0;leg.skipDraw=tiers[3]==0;for(String name:new String[]{"thigh","knee","shin","shin_stripe"})leg.getChild(name).visible=tiers[3]>0;leg.getChild("boot").visible=leg.getChild("sole").visible=tiers[4]>0;}
+    }
     private static boolean ability(int mask,String key){return (mask&(1<<Lingchuan.ABILITIES.indexOf(key)))!=0;}
 }

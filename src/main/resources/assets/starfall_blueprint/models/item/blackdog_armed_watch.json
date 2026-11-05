@@ -1,3 +1,6 @@
 {
-  "parent": "starfall_blueprint:item/blackdog_watch"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "starfall_blueprint:item/blackdog_armed_watch"
+  }
 }

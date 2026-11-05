@@ -9,6 +9,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 @EventBusSubscriber(modid = StarfallBlueprint.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
     @SubscribeEvent public static void blackDogRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event){
+        event.registerBlockEntityRenderer(cn.starfall.blueprint.CatalogueContent.ENTITY.get(),BlackDogStationRenderer::new);
         event.registerEntityRenderer(cn.starfall.blueprint.BlackDogWeapons.DRONE.get(),c->new BlackDogHardwareRenderer<>(c,false));
         event.registerEntityRenderer(cn.starfall.blueprint.BlackDogWeapons.MISSILE.get(),c->new BlackDogHardwareRenderer<>(c,true));
         event.registerEntityRenderer(cn.starfall.blueprint.BlackDogWeapons.BEAM.get(),BlackDogBeamRenderer::new);

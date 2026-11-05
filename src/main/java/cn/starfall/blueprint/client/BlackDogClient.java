@@ -29,15 +29,15 @@ public final class BlackDogClient {
     }
     @SubscribeEvent public static void shield(RenderLevelStageEvent event){
         if(event.getStage()!=RenderLevelStageEvent.Stage.AFTER_ENTITIES)return;var mc=Minecraft.getInstance();if(mc.level==null)return;
-        var pose=event.getPoseStack();var camera=event.getCamera().getPosition();var buffers=mc.renderBuffers().bufferSource();var buffer=buffers.getBuffer(net.minecraft.client.renderer.RenderType.lightning());float partial=event.getPartialTick().getGameTimeDeltaPartialTick(false);
+        var pose=event.getPoseStack();var camera=event.getCamera().getPosition();var buffers=mc.renderBuffers().bufferSource();var buffer=buffers.getBuffer(BlackDogShieldEffects.RENDER_TYPE);float partial=event.getPartialTick().getGameTimeDeltaPartialTick(false);
         for(var player:mc.level.players()){
             var chest=player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST);if(!(chest.getItem() instanceof BlackDogArmor.Projection)||!CatalogueEquipment.getData(chest).getBoolean("ShieldActive")||player.distanceToSqr(camera)>1600)continue;
-            // A brief, sparse waist ripple replaces the continuous spherical cage.
+            // Persistent gentle arcs show the third-person shield; local first-person stays clear at rest.
             if(player==mc.player&&mc.options.getCameraType().isFirstPerson())continue;
             pose.pushPose();Vec3 point=player.getPosition(partial).subtract(camera).add(0,1,0);pose.translate(point.x,point.y,point.z);
-            double phase=(player.tickCount%100+partial);if(phase<18){float fade=(float)Math.sin(phase/18*Math.PI)*.045f;for(int i=0;i<3;i++)BlackDogBeamRenderer.arc(buffer,pose,new Vec3(0,-.16+phase*.012,0),.58+phase*.003,i*Math.PI*2/3+phase*.02,.55,0xd75671,fade);}pose.popPose();
+            BlackDogShieldEffects.idle(buffer,pose,player.tickCount+partial);pose.popPose();
         }
-        buffers.endBatch(net.minecraft.client.renderer.RenderType.lightning());
+        buffers.endBatch(BlackDogShieldEffects.RENDER_TYPE);
     }
     private static final KeyMapping NEXT=new KeyMapping("key.starfall_blueprint.blackdog_next",KeyConflictContext.IN_GAME,InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_R,"key.categories.starfall_blueprint");
     private static final KeyMapping PREVIOUS=new KeyMapping("key.starfall_blueprint.blackdog_previous",KeyConflictContext.IN_GAME,InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_V,"key.categories.starfall_blueprint");
@@ -57,7 +57,7 @@ public final class BlackDogClient {
     record FlightKeys(boolean jump,boolean cruise){}
     static FlightKeys reviewKeys;
     public static void keys(RegisterKeyMappingsEvent e){e.register(NEXT);e.register(PREVIOUS);for(var key:DIRECT)e.register(key);}
-    public static void layers(RegisterGuiLayersEvent e){e.registerAboveAll(StarfallBlueprint.id("blackdog_fire_control"),(g,t)->hud(g));}
+    public static void layers(RegisterGuiLayersEvent e){e.registerAboveAll(StarfallBlueprint.id("blackdog_fire_control"),(g,t)->{hud(g);BlackDogShieldEffects.firstPerson(g,t.getGameTimeDeltaPartialTick(false));});}
     private static void select(int action){var mc=Minecraft.getInstance();if(mc.player!=null&&mc.screen==null&&BlackDogArmor.holdingTerminal(mc.player))PacketDistributor.sendToServer(new BlackDogNetworking.Control(action));}
     @SubscribeEvent public static void tick(ClientTickEvent.Post event){
         var mc=Minecraft.getInstance();

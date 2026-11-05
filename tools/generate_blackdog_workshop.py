@@ -9,8 +9,8 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'src/main/resources/assets/starfall_blueprint'
 PARTS = ['head', 'chest', 'core', 'legs', 'feet', 'hands', 'back', 'shoulders']
-COLORS = ['#b8c9dd', '#73d9df', '#f5c879']
-DARK, METAL, EDGE, LIGHT = '#131d2b', '#35465b', '#60758c', '#c4d1dc'
+COLORS = ['#b73950', '#ec4864', '#ff7185']
+DARK, METAL, EDGE, LIGHT = '#111117', '#292832', '#5e505d', '#b7a5b0'
 
 def write(path, data):
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
@@ -59,7 +59,8 @@ def sprite(key, part, tier=1):
         d.line((13,7,18,7),fill=LIGHT,width=2)
     else:
         colors={'night':'#9eebc0','breathing':'#6bcde5','sprint':'#a5e898','jump':'#b4db79','flight':'#79d8d2','shield':'#7db7f0','heavy':'#c1cbd6','cloak':'#c29aee','laser':'#ff7d99','missile':'#ffae6e','cannon':'#65daf4','turret':'#f4cf7b'}
-        accent=colors.get(part,'#e47d9a')
+        # Hardware silhouettes distinguish function; every component shares the suit's black/red finish.
+        accent='#ed526c'
         if part=='night':
             rect((3,10,28,24),DARK)
             for x in (5,18):d.ellipse((x,11,x+9,21),fill=METAL,outline=accent,width=2);d.ellipse((x+3,14,x+6,18),fill=accent)
@@ -98,10 +99,12 @@ def sprite(key, part, tier=1):
             for x in (7,22):rect((x,16,x+3,27));d.rectangle((x+1,24,x+2,29),fill=accent)
         elif part in ('watch','armed_watch'):
             rect((11,0,20,31),DARK);poly([(7,7),(24,7),(27,11),(25,24),(6,24),(4,11)])
-            rect((8,10,23,22),DARK);d.line([(10,17),(14,13),(17,19),(22,12)],fill='#f4cb79' if part=='armed_watch' else '#ef718e',width=2)
+            rect((8,10,23,22),DARK);d.line([(10,17),(14,13),(17,19),(22,12)],fill='#ff7085' if part=='armed_watch' else '#d83b56',width=2)
         elif part=='fire_control':
-            poly([(7,3),(25,3),(28,26),(5,29),(3,7)],DARK);rect((8,6,23,21));d.rectangle((10,8,21,19),fill='#25384a')
-            for y in (10,14,18):d.line((12,y,20,y),fill=COLORS[(y//4)%3]);d.rectangle((12,24,21,25),fill='#ec7d9d')
+            poly([(3,6),(24,6),(29,10),(27,15),(17,17),(14,29),(7,28),(9,17),(3,15)],DARK)
+            rect((4,8,25,13));d.line((6,8,24,8),fill=accent,width=2);d.rectangle((26,9,29,12),fill=LIGHT)
+            poly([(12,17),(17,17),(16,23),(13,24)],DARK);d.line((9,22,12,22),fill=accent,width=2)
+            for x in (7,12,17):d.rectangle((x,3,x+2,5),fill=METAL)
     # Every chassis tier has a distinct colour edge and readable number of pips.
     if part in PARTS:
         for n in range(tier):d.rectangle((2+n*4,29,4+n*4,31),fill=accent)
@@ -117,6 +120,26 @@ for ability in ['night','breathing','sprint','jump','flight','shield','heavy','c
 for part in ['watch','armed_watch','fire_control']:sprite('blackdog_'+part,part)
 for part in ['head','chest','legs','feet']:sprite('blackdog_armor_'+part,part,3)
 write(ASSETS/'models/item/blackdog_armed_watch.json',{'parent':'minecraft:item/generated','textures':{'layer0':'starfall_blueprint:item/blackdog_armed_watch'}})
+
+# A compact physical fire-control grip, not a tablet: trigger, knuckle guard, paired sensor rails and red status seam.
+control=[]
+def control_box(a,b,texture):control.append({'from':a,'to':b,'faces':{f:{'texture':'#'+texture} for f in ['up','down','north','south','east','west']}})
+for a,b,t in [([5,7,4],[11,11,13],'body'),([5.5,2,10],[9.5,7,13],'grip'),([4,8,-1],[12,10,7],'body'),([5,8.4,-2],[7,9.6,3],'trim'),([9,8.4,-2],[11,9.6,3],'trim'),([5.5,9,-2.2],[6.5,9.3,-2],'red'),([9.5,9,-2.2],[10.5,9.3,-2],'red'),([4.8,10.2,3],[11.2,11,11],'trim'),([4.7,9.4,4],[5,10,11],'red'),([11,9.4,4],[11.3,10,11],'red'),([8,5.5,6.5],[9,7,7.5],'red'),([7,3.5,6],[10,4.3,11],'trim'),([9.3,4.2,6],[10,7,6.8],'trim'),([5.3,12,7],[10.7,12.7,9],'trim'),([6,11,8],[7,12.4,9],'body'),([9,11,8],[10,12.4,9],'body'),([6.5,4,13],[8.5,5,13.25],'red')]:control_box(a,b,t)
+textures={t:f'starfall_blueprint:item/blackdog_control_{t}' for t in ['body','trim','grip','red']}
+for kind,color in [('body','#202027'),('trim','#4b414c'),('grip','#121217'),('red','#d93a57')]:
+    im=Image.new('RGBA',(16,16),color);d=ImageDraw.Draw(im)
+    if kind!='red':
+        d.line((0,0,15,0),fill='#75616d');d.line((0,1,0,15),fill='#40333e')
+        for y in range(4,16,4):d.line((2,y,13,y),fill='#392d38' if kind=='grip' else '#28232c')
+    else:d.line((0,7,15,7),fill='#ff8a9b',width=2)
+    im.save(ASSETS/f'textures/item/blackdog_control_{kind}.png')
+write(ASSETS/'models/item/blackdog_fire_control_held.json',{'textures':textures,'elements':control,'display':{
+    'firstperson_righthand':{'rotation':[0,-90,-8],'translation':[-.4,3,-.4],'scale':[.52,.52,.52]},
+    'firstperson_lefthand':{'rotation':[0,90,8],'translation':[-.4,3,-.4],'scale':[.52,.52,.52]},
+    'thirdperson_righthand':{'rotation':[0,0,0],'translation':[0,-1,1],'scale':[.65,.65,.65]},
+    'thirdperson_lefthand':{'rotation':[0,0,0],'translation':[0,-1,1],'scale':[.65,.65,.65]},
+    'ground':{'translation':[0,3,0],'scale':[.5,.5,.5]},'fixed':{'rotation':[0,90,0],'scale':[.7,.7,.7]}}})
+write(ASSETS/'models/item/blackdog_fire_control.json',{'loader':'neoforge:separate_transforms','base':{'parent':'starfall_blueprint:item/blackdog_fire_control_held'},'perspectives':{'gui':{'parent':'minecraft:item/generated','textures':{'layer0':'starfall_blueprint:item/blackdog_fire_control'}}}})
 
 def machine(key,style):
     shapes=[]
@@ -160,6 +183,7 @@ for lang,strings in {
     'zh_cn':{'search':'搜索部件或组件…','category.0':'全部','category.1':'基底 / 核心','category.2':'功能 / 终端','manufacture':'制造所选','select_product':'选择左侧条目查看配方','drag_hint':'拖动外围配件到对应部位连接 · 右键已装配件拆回','load':'核心负载  %s / %s','staging':'配件暂存 / 拆回','rotation_hint':'拖动模型可旋转','insert_watch':'放入腕表以展示战甲','charging':'核心充能','component_hint':'可用 %s · 拖至部位连接'},
     'en_us':{'search':'Search chassis or components…','category.0':'All','category.1':'Chassis / Core','category.2':'Systems','manufacture':'Manufacture','select_product':'Select a product for its recipe','drag_hint':'Drag a system onto its chassis · Right-click to detach','load':'Core load  %s / %s','staging':'Staging / Returns','rotation_hint':'Drag model to rotate','insert_watch':'Insert a watch to display armour','charging':'Core charging','component_hint':'Available: %s · Drag to connect'}
 }.items():
-    strings.update({'assemble':'组装' if lang=='zh_cn' else 'Assemble','refit':'换装' if lang=='zh_cn' else 'Refit'})
+    strings.update({'assemble':'组装' if lang=='zh_cn' else 'Assemble','refit':'换装' if lang=='zh_cn' else 'Refit','drag_hint':'拿起背包配件，放到对应部位连接 · 右键已装配件拆回' if lang=='zh_cn' else 'Place an owned system on its chassis · Right-click installed systems to detach'})
     target=ASSETS/f'lang/{lang}.json';data=json.loads(target.read_text(encoding='utf-8'));data.update({'lc.workshop.'+k:v for k,v in strings.items()});write(target,data)
+    data['item.starfall_blueprint.blackdog_fire_control']='黑狗 · 战术火控握柄' if lang=='zh_cn' else 'Black Dog Tactical Fire Grip';write(target,data)
 print('Generated 43 hardware sprites, three complete workstation models and workshop labels.')

@@ -24,15 +24,18 @@ import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 /** Optical cloak conceals the deployed solid armour as well as the player model. */
 @EventBusSubscriber(modid=StarfallBlueprint.ID,value=Dist.CLIENT)
 public final class BlackDogClient {
+    @SubscribeEvent public static void opening(net.neoforged.neoforge.client.event.ScreenEvent.Opening event){
+        var player=Minecraft.getInstance().player;if(player!=null&&event.getNewScreen() instanceof net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen)BlackDogArmor.lockSlots(player.inventoryMenu);
+    }
     @SubscribeEvent public static void shield(RenderLevelStageEvent event){
         if(event.getStage()!=RenderLevelStageEvent.Stage.AFTER_ENTITIES)return;var mc=Minecraft.getInstance();if(mc.level==null)return;
         var pose=event.getPoseStack();var camera=event.getCamera().getPosition();var buffers=mc.renderBuffers().bufferSource();var buffer=buffers.getBuffer(net.minecraft.client.renderer.RenderType.lightning());float partial=event.getPartialTick().getGameTimeDeltaPartialTick(false);
         for(var player:mc.level.players()){
             var chest=player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST);if(!(chest.getItem() instanceof BlackDogArmor.Projection)||!CatalogueEquipment.getData(chest).getBoolean("ShieldActive")||player.distanceToSqr(camera)>1600)continue;
-            // A faint exterior shell keeps first-person visibility clear; impacts have a separate bright pulse.
+            // A brief, sparse waist ripple replaces the continuous spherical cage.
             if(player==mc.player&&mc.options.getCameraType().isFirstPerson())continue;
             pose.pushPose();Vec3 point=player.getPosition(partial).subtract(camera).add(0,1,0);pose.translate(point.x,point.y,point.z);
-            BlackDogBeamRenderer.sphere(buffer,pose,Vec3.ZERO,1.15+Math.sin((player.tickCount+partial)*.06)*.025,0xeb587b,.12f);pose.popPose();
+            double phase=(player.tickCount%100+partial);if(phase<18){float fade=(float)Math.sin(phase/18*Math.PI)*.045f;for(int i=0;i<3;i++)BlackDogBeamRenderer.arc(buffer,pose,new Vec3(0,-.16+phase*.012,0),.58+phase*.003,i*Math.PI*2/3+phase*.02,.55,0xd75671,fade);}pose.popPose();
         }
         buffers.endBatch(net.minecraft.client.renderer.RenderType.lightning());
     }

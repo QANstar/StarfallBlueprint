@@ -121,6 +121,26 @@ public final class LingchuanGameTests {
         h.assertTrue(!Lingchuan.refit(p,be)&&power==be.getPower(),"Empty repeat swap creates no parts or charges");h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)
+    public static void lockedProxySlotsPreserveCreativeInventoryMapping(GameTestHelper h){
+        var p=player(h);var watch=watch(p,parts(3));h.assertTrue(BlackDogArmor.toggle(p,watch),"Suit deploys for proxy inventory regression");
+        p.getInventory().setItem(5,new ItemStack(Items.APPLE,7));var target=p.inventoryMenu.slots.get(5);
+        // CreativeModeInventoryScreen.SlotWrapper has menu index 5 but delegates to inventory index 39.
+        var proxy=new net.minecraft.world.inventory.Slot(p.getInventory(),5,10,10){
+            @Override public ItemStack getItem(){return target.getItem();}
+            @Override public boolean hasItem(){return target.hasItem();}
+            @Override public void set(ItemStack stack){target.set(stack);}
+        };
+        var view=new net.minecraft.world.inventory.AbstractContainerMenu(null,77){
+            {addSlot(proxy);}
+            @Override public boolean stillValid(net.minecraft.world.entity.player.Player player){return true;}
+            @Override public ItemStack quickMoveStack(net.minecraft.world.entity.player.Player player,int index){return ItemStack.EMPTY;}
+        };
+        BlackDogArmor.lockSlots(view);var locked=view.slots.get(0);
+        h.assertTrue(locked.getItem()==target.getItem()&&locked.getItem().is(CatalogueContent.item("blackdog_armor_head")),"Lock wrapper reads the actual armour target rather than hotbar apples");
+        h.assertTrue(!locked.mayPickup(p)&&!locked.mayPlace(new ItemStack(Items.DIRT)),"Projected armour remains non-extractable and refuses unrelated insertion");
+        BlackDogArmor.recall(p,watch);h.assertTrue(locked.getItem().isEmpty()&&p.getInventory().getItem(5).is(Items.APPLE)&&p.getInventory().getItem(5).getCount()==7,"Recall clears the proxy while preserving unrelated real inventory items");h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=100)
     public static void deploymentLocksIndividualSlotsAndRecallsWithFullInventory(GameTestHelper h){
         var p=player(h);var watch=watch(p,parts(1));p.setItemSlot(EquipmentSlot.HEAD,new ItemStack(Items.LEATHER_HELMET));
         h.assertTrue(!BlackDogArmor.toggle(p,watch)&&!BlackDogArmor.deployed(watch),"Occupied armour slots prevent deployment without losing existing equipment");p.setItemSlot(EquipmentSlot.HEAD,ItemStack.EMPTY);
@@ -236,6 +256,7 @@ public final class LingchuanGameTests {
         h.assertTrue(BlackDogArmor.charge(watch)==24680&&CatalogueEquipment.getData(watch).getUUID("SuitId").equals(identity),"Wiring preserves charge and identity");
         input(p,2,"blackdog_component_flight",1);h.assertTrue(!BlackDogWorkstations.connect(p,be,4)&&p.getInventory().getItem(2).getCount()==1&&be.getPower()==15000,"Duplicate drag does not consume or charge");
         h.assertTrue(Lingchuan.removeComponent(p,be,4)&&be.getItem(10).is(CatalogueContent.item("blackdog_component_flight"))&&be.getPower()==14000,"Detaching returns one component");
+        h.assertTrue((BlackDogWorkstations.preview(be).getInt("Abilities")&(1<<4))==0&&BlackDogWorkstations.preview(be).getInt("Load")==8,"Returned staging components cannot reappear as installed models or inflate the watch's load display");
         h.assertTrue(BlackDogWorkstations.connect(p,be,4)&&be.getItem(10).isEmpty()&&p.getInventory().getItem(2).getCount()==1,"Reconnect prefers the staging item over personal inventory");
         p.containerMenu.setCarried(CatalogueContent.stack("blackdog_component_shield",1));h.assertTrue(BlackDogWorkstations.connect(p,be,5)&&p.containerMenu.getCarried().isEmpty()&&BlackDogArmor.has(watch,"shield"),"A real cursor-held component can connect without duplicating the cursor item");
         h.succeed();

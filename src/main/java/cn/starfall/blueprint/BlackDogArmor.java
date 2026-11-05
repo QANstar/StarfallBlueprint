@@ -206,11 +206,19 @@ public final class BlackDogArmor {
     private static boolean locked(ItemStack stack){return stack.getItem() instanceof Projection||deployed(stack);}
     /** Wrap existing slots without changing their underlying inventory or slot IDs. */
     public static void lockSlots(AbstractContainerMenu menu){
+        // The creative screen casts its slots to its own SlotWrapper when clicking.
+        // Lock its inventoryMenu targets instead; keep the concrete proxy objects intact.
+        if(menu.getClass().getName().equals("net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen$ItemPickerMenu"))return;
         for(int i=0;i<menu.slots.size();i++){var original=menu.slots.get(i);if(original instanceof LockedSlot||!(original.container instanceof net.minecraft.world.entity.player.Inventory)||!locked(original.getItem()))continue;var slot=new LockedSlot(original);slot.index=original.index;menu.slots.set(i,slot);}
     }
     private static final class LockedSlot extends Slot {
         final Slot original;
         LockedSlot(Slot original){super(original.container,original.getContainerSlot(),original.x,original.y);this.original=original;}
+        // Creative inventory slots proxy another slot: their constructor index is a menu ID,
+        // not necessarily the backing inventory index. Preserve that proxy's accessors.
+        @Override public ItemStack getItem(){return original.getItem();}
+        @Override public boolean hasItem(){return original.hasItem();}
+        @Override public void setChanged(){original.setChanged();}
         @Override public boolean mayPickup(Player player){return !locked(getItem())&&original.mayPickup(player);}
         @Override public boolean mayPlace(ItemStack stack){return !locked(getItem())&&!locked(stack)&&original.mayPlace(stack);}
         @Override public int getMaxStackSize(){return original.getMaxStackSize();}
@@ -322,7 +330,7 @@ public final class BlackDogArmor {
         var watch=active(player);if(watch.isEmpty()||!complete(player,watch))return;
         if(event.getAmount()<=0)return;markCombat(player,watch);
         float absorb=Math.min(event.getAmount()*(enabled(watch,"shield")?0.8f:0.2f),charge(watch)/500f);
-        if(absorb>0&&spend(watch,(int)Math.ceil(absorb*500))){event.setAmount(Math.max(0,event.getAmount()-absorb));if(enabled(watch,"shield"))BlackDogWeapons.shieldImpact(player);ensurePower(player,watch);}
+        if(absorb>0&&spend(watch,(int)Math.ceil(absorb*500))){event.setAmount(Math.max(0,event.getAmount()-absorb));if(enabled(watch,"shield"))BlackDogWeapons.shieldImpact(player,event.getSource().getSourcePosition());ensurePower(player,watch);}
     }
     public static void drops(LivingDropsEvent event){
         if(event.getEntity() instanceof Player){event.getDrops().removeIf(e->e.getItem().getItem() instanceof Projection);

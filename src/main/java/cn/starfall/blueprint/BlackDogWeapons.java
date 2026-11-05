@@ -25,7 +25,10 @@ public final class BlackDogWeapons {
         var beam=BEAM.get().create(level);if(beam==null)return;beam.setPos(from);beam.configure(to.subtract(from),style);level.addFreshEntity(beam);
     }
     public static void sound(Player player,SoundEvent sound,float volume,float pitch){player.level().playSound(null,player.blockPosition(),sound,SoundSource.PLAYERS,volume,pitch);}
-    public static void shieldImpact(Player player){beam((ServerLevel)player.level(),player.position().add(0,1,0),player.position().add(0,1,0),3);sound(player,SoundEvents.SHIELD_BLOCK,.8f,1.4f);}
+    public static void shieldImpact(Player player,Vec3 source){
+        Vec3 center=player.position().add(0,.95,0),normal=source==null?player.getLookAngle():source.subtract(center).normalize();if(normal.lengthSqr()<.001)normal=player.getLookAngle();
+        Vec3 contact=center.add(normal.scale(.78));beam((ServerLevel)player.level(),contact,contact.add(normal),3);sound(player,SoundEvents.SHIELD_BLOCK,.3f,1.6f);
+    }
     public static void tickDrones(Player player,ItemStack watch){
         if(!(player.level() instanceof ServerLevel level))return;
         boolean active=BlackDogArmor.enabled(watch,"turret")&&BlackDogArmor.charge(watch)>0;

@@ -18,6 +18,11 @@ public final class ClientSetup {
     @SubscribeEvent public static void armorLayers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions event){event.registerLayerDefinition(BlackDogArmorModel.LAYER,BlackDogArmorModel::layer);}
     @SubscribeEvent public static void armor(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event){
         event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions(){
+            @Override public net.minecraft.client.model.HumanoidModel.ArmPose getArmPose(net.minecraft.world.entity.LivingEntity entity,net.minecraft.world.InteractionHand hand,net.minecraft.world.item.ItemStack stack){
+                return entity instanceof net.minecraft.world.entity.player.Player player&&!cn.starfall.blueprint.BlackDogArmor.active(player).isEmpty()&&!player.isFallFlying()?net.minecraft.client.model.HumanoidModel.ArmPose.CROSSBOW_HOLD:net.minecraft.client.model.HumanoidModel.ArmPose.ITEM;
+            }
+        },cn.starfall.blueprint.CatalogueContent.item("blackdog_fire_control"));
+        event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions(){
             private BlackDogArmorModel model;
             @Override @SuppressWarnings({"rawtypes","unchecked"}) public net.minecraft.client.model.HumanoidModel<?> getHumanoidArmorModel(net.minecraft.world.entity.LivingEntity entity,net.minecraft.world.item.ItemStack stack,net.minecraft.world.entity.EquipmentSlot slot,net.minecraft.client.model.HumanoidModel<?> original){
                 if(model==null)model=new BlackDogArmorModel(net.minecraft.client.Minecraft.getInstance().getEntityModels().bakeLayer(BlackDogArmorModel.LAYER));

@@ -4,7 +4,8 @@ param(
     [string]$QuickPlayWorld = '',
     [switch]$LingchuanVisualCheck,
     [switch]$BlackDogPlaytest,
-    [switch]$BlackDogWorkshopCheck
+    [switch]$BlackDogWorkshopCheck,
+    [switch]$BlackDogPolishCheck
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -36,6 +37,9 @@ try {
     }
     if ($BlackDogWorkshopCheck) {
         $arguments = @('-Dstarfall.blackdogWorkshopCheck=true') + $arguments + @('--width', '1440', '--height', '900')
+    }
+    if ($BlackDogPolishCheck) {
+        $arguments = @('-Dstarfall.blackdogPolishCheck=true') + $arguments + @('--width', '1440', '--height', '900')
     }
     $process = Start-Process -FilePath $JavaExecutable -ArgumentList $arguments -WorkingDirectory $gameDirectoryPath -WindowStyle Hidden `
         -RedirectStandardOutput (Join-Path $gameDirectoryPath 'prepared-client.log') `

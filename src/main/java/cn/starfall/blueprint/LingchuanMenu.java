@@ -53,6 +53,7 @@ public final class LingchuanMenu extends AbstractContainerMenu {
     public boolean componentView(){return data.get(5)!=0;}
     public ItemStack watch(){return inventory.getItem(8);}
     public net.minecraft.nbt.CompoundTag preview(){return BlackDogWorkstations.preview(inventory);}
+    public int connectedAbilities(){return watch().getItem() instanceof BlackDogArmor.Watch?CatalogueEquipment.getData(watch()).getInt("Abilities"):preview().getInt("Abilities");}
     public boolean researched(int node){return (knowledge()&(1<<node))!=0;}
     @Override public boolean stillValid(Player player){return station==null||Container.stillValidBlockEntity(station,player);}
     @Override public boolean clickMenuButton(Player player,int action){

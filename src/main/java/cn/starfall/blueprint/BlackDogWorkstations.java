@@ -15,9 +15,10 @@ public final class BlackDogWorkstations {
     public static CompoundTag preview(Container inventory){
         ItemStack watch=inventory.getItem(8);if(!(watch.getItem() instanceof BlackDogArmor.Watch))watch=inventory.getItem(9);
         CompoundTag data=watch.getItem() instanceof BlackDogArmor.Watch?CatalogueEquipment.getData(watch).copy():new CompoundTag();
+        boolean stored=watch.getItem() instanceof BlackDogArmor.Watch;
         int[] tiers=data.getIntArray("ChassisTiers");if(tiers.length!=8)tiers=new int[8];
-        for(int i=0;i<8;i++){var base=Lingchuan.module(inventory.getItem(i));if(base!=null&&base.ability().isEmpty()&&base.slot()==i)tiers[i]=base.tier();}
-        int mask=data.getInt("Abilities");for(int i=10;i<22;i++){var component=Lingchuan.module(inventory.getItem(i));if(component!=null&&!component.ability().isEmpty())mask|=1<<Lingchuan.ABILITIES.indexOf(component.ability());}
+        if(!stored)for(int i=0;i<8;i++){var base=Lingchuan.module(inventory.getItem(i));if(base!=null&&base.ability().isEmpty()&&base.slot()==i)tiers[i]=base.tier();}
+        int mask=data.getInt("Abilities");if(!stored)for(int i=10;i<22;i++){var component=Lingchuan.module(inventory.getItem(i));if(component!=null&&!component.ability().isEmpty()&&tiers[component.slot()]>=component.tier())mask|=1<<Lingchuan.ABILITIES.indexOf(component.ability());}
         int load=0;for(int tier:tiers)if(tier>0)load++;
         for(int i=0;i<12;i++)if((mask&(1<<i))!=0)load+=Lingchuan.MODULES.get(24+i).load();
         // Keep packets compact; no serialized inventory, identity or unrelated watch state.

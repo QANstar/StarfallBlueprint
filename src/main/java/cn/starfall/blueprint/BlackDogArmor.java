@@ -16,7 +16,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -28,6 +27,9 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 /** The watch owns all eight real modules. Worn armour is a non-extractable projection. */
 public final class BlackDogArmor {
+    public static final net.neoforged.neoforge.registries.DeferredItem<Item> ARMED_WATCH=
+        StarfallBlueprint.ITEMS.registerItem("blackdog_armed_watch",ArmedWatch::new);
+    public static void initialize(){}
     private static final EquipmentSlot[] SLOTS={EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET};
     private static final String[] PROJECTIONS={"head","chest","legs","feet"};
     private static final ResourceLocation DEFENSE=StarfallBlueprint.id("blackdog_defense"),SPRINT=StarfallBlueprint.id("blackdog_sprint"),JUMP=StarfallBlueprint.id("blackdog_jump");
@@ -62,6 +64,73 @@ public final class BlackDogArmor {
         data.putInt("Abilities",abilities);CatalogueEquipment.setData(watch,data);
     }
     private static final List<String> ABILITIES=Lingchuan.ABILITIES;
+    public static final List<String> SYSTEMS=List.of("laser","missile","cannon","turret","shield","cloak");
+    public static boolean enabled(ItemStack watch,String ability){
+        var data=CatalogueEquipment.getData(watch);
+        boolean defaultOn=!ability.equals("turret")&&!ability.equals("cloak");
+        return has(watch,ability)&&(data.contains("Enabled_"+ability)?data.getBoolean("Enabled_"+ability):defaultOn);
+    }
+    public static String selectedSystem(ItemStack watch){
+        int index=Math.floorMod(CatalogueEquipment.getData(watch).getInt("SelectedSystem"),SYSTEMS.size());
+        if(has(watch,SYSTEMS.get(index)))return SYSTEMS.get(index);
+        return SYSTEMS.stream().filter(a->has(watch,a)).findFirst().orElse("");
+    }
+    public static boolean holdingTerminal(Player player){return player.getMainHandItem().getItem() instanceof FireControl||player.getOffhandItem().getItem() instanceof FireControl;}
+    public static boolean selectSystem(Player player,int selection){
+        var watch=active(player);
+        if(!player.isAlive()||player.isSpectator()||!holdingTerminal(player)||watch.isEmpty()||!complete(player,watch))return false;
+        int current=SYSTEMS.indexOf(selectedSystem(watch)),next=selection;
+        if(selection==-1||selection==-2){
+            next=current;
+            for(int i=0;i<SYSTEMS.size();i++){next=Math.floorMod(next+(selection==-1?1:-1),SYSTEMS.size());if(has(watch,SYSTEMS.get(next)))break;}
+        }
+        if(next<0||next>=SYSTEMS.size()||!has(watch,SYSTEMS.get(next)))return false;
+        var data=CatalogueEquipment.getData(watch);data.putInt("SelectedSystem",next);CatalogueEquipment.setData(watch,data);return true;
+    }
+    public static boolean cruise(Player player){return player.getPersistentData().getBoolean("BlackDogCruise");}
+    public static void flightRequest(Player player,boolean flying,boolean cruise){
+        flightRequest(player,flying,cruise,true);
+    }
+    public static void flightRequest(Player player,boolean flying,boolean cruise,boolean takeoff){
+        var watch=active(player);
+        if(!flying){stopFlight(player,watch,player.onGround());return;}
+        if(!watch.isEmpty()&&!ensurePower(player,watch))return;
+        boolean accepted=player.isAlive()&&!player.isSpectator()&&!player.isPassenger()&&!watch.isEmpty()&&complete(player,watch)&&has(watch,"flight")&&charge(watch)>=100;
+        if(player.getPersistentData().getBoolean("BlackDogGroundLock")&&!takeoff)return;
+        if(accepted){
+            if(takeoff){player.getPersistentData().putBoolean("BlackDogGroundLock",false);player.getPersistentData().putBoolean("BlackDogAirborne",false);player.getPersistentData().putLong("BlackDogTakeoffUntil",player.level().getGameTime()+8);}
+            cruise=cruise&&charge(watch)>=350;
+            boolean hover=flying&&!cruise,changed=player.getAbilities().flying!=hover;player.getAbilities().flying=hover;
+            if(takeoff&&player.onGround())player.setDeltaMovement(player.getDeltaMovement().add(0,.42,0));
+            if(changed){player.onUpdateAbilities();if(flying)BlackDogWeapons.sound(player,net.minecraft.sounds.SoundEvents.FIREWORK_ROCKET_LAUNCH,.7f,.6f);}
+            var data=CatalogueEquipment.getData(watch);if(data.getBoolean("Hovering")!=flying){data.putBoolean("Hovering",flying);CatalogueEquipment.setData(watch,data);}
+        }
+        player.getPersistentData().putBoolean("BlackDogCruise",accepted&&flying&&cruise);
+        player.getPersistentData().putLong("BlackDogFlightInput",player.level().getGameTime());
+    }
+    /** A landed suit cannot be restarted by an in-flight heartbeat arriving late. */
+    public static void stopFlight(Player player,ItemStack watch,boolean groundLock){
+        boolean owned=player.getPersistentData().getBoolean("BlackDogFlight")||cruise(player)||CatalogueEquipment.getData(watch).getBoolean("Hovering");
+        boolean moving=player.getAbilities().flying||player.isFallFlying()||CatalogueEquipment.getData(watch).getBoolean("Hovering")||cruise(player);
+        if(owned&&moving){player.getAbilities().flying=false;player.stopFallFlying();player.setPose(Pose.STANDING);player.fallDistance=0;if(!player.level().isClientSide)player.onUpdateAbilities();}
+        player.getPersistentData().putBoolean("BlackDogCruise",false);player.getPersistentData().putBoolean("BlackDogCruisePose",false);player.getPersistentData().putBoolean("BlackDogAirborne",false);player.getPersistentData().putBoolean("BlackDogGroundLock",groundLock);
+        if(!watch.isEmpty()){var data=CatalogueEquipment.getData(watch);if(data.getBoolean("Hovering")){data.putBoolean("Hovering",false);CatalogueEquipment.setData(watch,data);}}
+    }
+    /** Below the reserve, recall once; passive charging must not redeploy the armour automatically. */
+    public static boolean ensurePower(Player player,ItemStack watch){
+        if(!deployed(watch)||charge(watch)>=100)return true;
+        var data=CatalogueEquipment.getData(watch);for(var system:List.of("turret","shield","cloak"))data.putBoolean("Enabled_"+system,false);data.putLong("ShutdownAt",player.level().getGameTime()+1);CatalogueEquipment.setData(watch,data);
+        recall(player,watch);return false;
+    }
+    public static void markCombat(Player player,ItemStack watch){
+        var data=CatalogueEquipment.getData(watch);data.putLong("CombatUntil",player.level().getGameTime()+100);CatalogueEquipment.setData(watch,data);
+    }
+    public static boolean canRegenerate(Player player,ItemStack watch){
+        return player.level().getGameTime()>=CatalogueEquipment.getData(watch).getLong("CombatUntil")&&(!deployed(watch)||!enabled(watch,"turret"))&&!(deployed(watch)&&(player.getAbilities().flying||cruise(player)));
+    }
+    public static void regenerate(Player player,ItemStack watch){
+        if(valid(watch)&&canRegenerate(player,watch))setCharge(watch,charge(watch)+switch(tier(watch)){case 1->80;case 2->240;default->800;});
+    }
     public static boolean compatible(List<ItemStack> modules){
         return compatible(modules,List.of());
     }
@@ -115,20 +184,23 @@ public final class BlackDogArmor {
         if(player.level().isClientSide)return false;
         if(deployed(watch)){recall(player,watch);return true;}
         if(!valid(watch))return Lingchuan.fail(player,"lc.watch_empty");
+        if(charge(watch)<100)return Lingchuan.fail(player,"lc.power_missing");
         if(!active(player).isEmpty())return Lingchuan.fail(player,"lc.already_deployed");
         for(var slot:SLOTS)if(!player.getItemBySlot(slot).isEmpty())return Lingchuan.fail(player,"lc.armor_slots_full");
-        var data=CatalogueEquipment.getData(watch);data.putBoolean("Deployed",true);data.putUUID("Wearer",player.getUUID());CatalogueEquipment.setData(watch,data);
+        var data=CatalogueEquipment.getData(watch);data.putBoolean("Deployed",true);data.remove("ShutdownAt");data.putUUID("Wearer",player.getUUID());CatalogueEquipment.setData(watch,data);
         for(int i=0;i<4;i++){
             var projection=CatalogueContent.stack("blackdog_armor_"+PROJECTIONS[i],1);var d=new CompoundTag();d.putUUID("SuitId",data.getUUID("SuitId"));d.putUUID("Wearer",player.getUUID());
             d.putIntArray("ChassisTiers",data.getIntArray("ChassisTiers"));d.putInt("Abilities",data.getInt("Abilities"));d.putInt("CoreTier",tier(watch));d.putInt("VisualVersion",2);CatalogueEquipment.setData(projection,d);player.setItemSlot(SLOTS[i],projection);
         }
         lockSlots(player.inventoryMenu);player.inventoryMenu.broadcastChanges();
-        player.displayClientMessage(Component.translatable("lc.deployed"),true);return true;
+        return true;
     }
     public static void recall(Player player,ItemStack watch){
+        stopFlight(player,watch,player.onGround());
+        BlackDogWeapons.clearDrones(player);
         for(var slot:SLOTS)if(linked(player.getItemBySlot(slot),watch))player.setItemSlot(slot,ItemStack.EMPTY);
-        var data=CatalogueEquipment.getData(watch);data.putBoolean("Deployed",false);data.remove("Wearer");CatalogueEquipment.setData(watch,data);
-        clearEffects(player);player.inventoryMenu.broadcastChanges();player.displayClientMessage(Component.translatable("lc.recalled"),true);
+        var data=CatalogueEquipment.getData(watch);data.putBoolean("Deployed",false);data.putBoolean("Hovering",false);data.remove("Wearer");CatalogueEquipment.setData(watch,data);
+        clearEffects(player);player.inventoryMenu.broadcastChanges();
     }
     public static boolean complete(Player player,ItemStack watch){for(var slot:SLOTS)if(!linked(player.getItemBySlot(slot),watch))return false;return true;}
     private static boolean locked(ItemStack stack){return stack.getItem() instanceof Projection||deployed(stack);}
@@ -156,12 +228,16 @@ public final class BlackDogArmor {
         instance.removeModifier(id);if(amount!=0)instance.addTransientModifier(new AttributeModifier(id,amount,operation));
     }
     private static void clearEffects(Player player){
+        player.getPersistentData().putBoolean("BlackDogCruise",false);
+        if(player.getPersistentData().getBoolean("BlackDogCruisePose")){player.stopFallFlying();player.setPose(Pose.STANDING);player.getPersistentData().putBoolean("BlackDogCruisePose",false);}
         attribute(player,Attributes.ARMOR,DEFENSE,0,AttributeModifier.Operation.ADD_VALUE);
         attribute(player,Attributes.MOVEMENT_SPEED,SPRINT,0,AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         attribute(player,Attributes.JUMP_STRENGTH,JUMP,0,AttributeModifier.Operation.ADD_VALUE);
         for(String ability:List.of("night","breathing","cloak"))clearEffect(player,ability);
         if(player.getPersistentData().getBoolean("BlackDogFlight")){
-            if(!player.isCreative()&&!player.isSpectator()){player.getAbilities().mayfly=false;player.getAbilities().flying=false;player.onUpdateAbilities();}
+            player.getAbilities().flying=false;
+            if(!player.isCreative()&&!player.isSpectator())player.getAbilities().mayfly=false;
+            player.onUpdateAbilities();
             player.getPersistentData().putBoolean("BlackDogFlight",false);
         }
     }
@@ -179,6 +255,13 @@ public final class BlackDogArmor {
         if(!data.hasUUID("Wearer")||!data.getUUID("Wearer").equals(player.getUUID())||!complete(player,watch)||!valid(watch)){
             recall(player,watch);return;
         }
+        if(!ensurePower(player,watch))return;
+        if(data.getBoolean("Hovering")){
+            if(!player.onGround())player.getPersistentData().putBoolean("BlackDogAirborne",true);
+            else if(player.getPersistentData().getBoolean("BlackDogAirborne")||player.level().getGameTime()>player.getPersistentData().getLong("BlackDogTakeoffUntil")){
+                stopFlight(player,watch,true);data=CatalogueEquipment.getData(watch);
+            }
+        }
         boolean powered=charge(watch)>0;
         for(var slot:SLOTS){var projection=player.getItemBySlot(slot);var visual=CatalogueEquipment.getData(projection);if(visual.getInt("VisualVersion")<2){var configuration=CatalogueEquipment.getData(watch);visual.putIntArray("ChassisTiers",configuration.getIntArray("ChassisTiers"));visual.putInt("Abilities",configuration.getInt("Abilities"));visual.putInt("CoreTier",tier(watch));visual.putInt("VisualVersion",2);CatalogueEquipment.setData(projection,visual);}}
         attribute(player,Attributes.ARMOR,DEFENSE,CatalogueEquipment.getData(watch).getInt("Armor")+(powered&&has(watch,"heavy")?6:0),AttributeModifier.Operation.ADD_VALUE);
@@ -191,39 +274,55 @@ public final class BlackDogArmor {
             if(!player.isCreative()&&!player.isSpectator()){player.getAbilities().mayfly=false;player.getAbilities().flying=false;player.onUpdateAbilities();}
             player.getPersistentData().putBoolean("BlackDogFlight",false);
         }
-        if(player.getAbilities().flying&&flight){if(spend(watch,100))player.fallDistance=0;}
+        boolean cruise=flight&&charge(watch)>=350&&data.getBoolean("Hovering")&&cruise(player)&&!player.isPassenger()&&!player.isInWater()&&player.level().getGameTime()-player.getPersistentData().getLong("BlackDogFlightInput")<=12;
+        if(!cruise)player.getPersistentData().putBoolean("BlackDogCruise",false);
+        if(cruise){player.startFallFlying();player.setPose(Pose.FALL_FLYING);player.getPersistentData().putBoolean("BlackDogCruisePose",true);}
+        else if(player.getPersistentData().getBoolean("BlackDogCruisePose")){player.stopFallFlying();player.setPose(Pose.STANDING);player.getPersistentData().putBoolean("BlackDogCruisePose",false);if(flight&&data.getBoolean("Hovering")){player.getAbilities().flying=true;player.onUpdateAbilities();}}
+        if((player.getAbilities().flying||cruise)&&flight){if(!spend(watch,cruise?350:100)){recall(player,watch);return;}player.fallDistance=0;}
+        if(!ensurePower(player,watch))return;
+        BlackDogWeapons.tickDrones(player,watch);
+        syncVisuals(player,watch,cruise);
         if(player.tickCount%20==0){
-            int upkeep=(has(watch,"sprint")&&player.isSprinting()?300:0)+(has(watch,"jump")?150:0);
+            int upkeep=(has(watch,"sprint")&&player.isSprinting()&&!player.getAbilities().flying?300:0)+(has(watch,"jump")&&!player.onGround()&&!player.getAbilities().flying?150:0);
             if(upkeep>0)spend(watch,upkeep);
             effect(player,watch,"night",MobEffects.NIGHT_VISION,80);
             effect(player,watch,"breathing",MobEffects.WATER_BREATHING,120);
             effect(player,watch,"cloak",MobEffects.INVISIBILITY,800);
-            if(has(watch,"turret")&&charge(watch)>=600&&player.level() instanceof ServerLevel level){
+            if(enabled(watch,"turret")&&charge(watch)>=600&&player.level() instanceof ServerLevel level){
                 var target=level.getEntitiesOfClass(Monster.class,player.getBoundingBox().inflate(12),e->e.isAlive()&&player.hasLineOfSight(e)&&!player.isAlliedTo(e)).stream().min(Comparator.comparingDouble(player::distanceToSqr));
-                if(target.isPresent()&&spend(watch,600)){var t=target.get();beam(level,player.getEyePosition().add(0,0.5,0),t.getEyePosition());t.hurt(player.damageSources().playerAttack(player),4);}
-                level.sendParticles(ParticleTypes.END_ROD,player.getX()+Math.cos(player.tickCount*0.1),player.getY()+1.9,player.getZ()+Math.sin(player.tickCount*0.1),2,0.03,0.03,0.03,0);
+                if(target.isPresent()&&spend(watch,600)){var t=target.get();markCombat(player,watch);BlackDogWeapons.droneShot(player,t);t.hurt(player.damageSources().playerAttack(player),6);}
             }
-            player.displayClientMessage(Component.translatable("lc.hud",charge(watch),capacity(watch),tier(watch)),true);
+        }
+        ensurePower(player,watch);
+    }
+    private static void syncVisuals(Player player,ItemStack watch,boolean cruise){
+        for(var slot:SLOTS){
+            var projection=player.getItemBySlot(slot);var d=CatalogueEquipment.getData(projection);
+            boolean shield=enabled(watch,"shield")&&charge(watch)>0,turret=enabled(watch,"turret")&&charge(watch)>0;
+            if(d.getBoolean("ShieldActive")!=shield||d.getBoolean("TurretActive")!=turret||d.getBoolean("Cruise")!=cruise){
+                d.putBoolean("ShieldActive",shield);d.putBoolean("TurretActive",turret);d.putBoolean("Cruise",cruise);CatalogueEquipment.setData(projection,d);
+            }
         }
     }
     private static void effect(Player player,ItemStack watch,String ability,net.minecraft.core.Holder<MobEffect> effect,int power){
-        if(has(watch,ability)&&spend(watch,power)){
+        if(enabled(watch,ability)&&spend(watch,power)){
             var current=player.getEffect(effect);
-            if(current==null||current.getDuration()<220){player.addEffect(new MobEffectInstance(effect,220,0,false,false,true));player.getPersistentData().putBoolean("BlackDogEffect_"+ability,true);}
+            if(current==null||!current.isInfiniteDuration()&&current.getAmplifier()==0&&current.getDuration()<500){player.addEffect(new MobEffectInstance(effect,600,0,false,false,true));player.getPersistentData().putBoolean("BlackDogEffect_"+ability,true);}
         }else clearEffect(player,ability);
     }
     private static void clearEffect(Player player,String ability){
         if(!player.getPersistentData().getBoolean("BlackDogEffect_"+ability))return;
         var effect=switch(ability){case "night"->MobEffects.NIGHT_VISION;case "breathing"->MobEffects.WATER_BREATHING;default->MobEffects.INVISIBILITY;};
         var current=player.getEffect(effect);
-        if(current!=null&&current.getAmplifier()==0&&current.getDuration()<=220)player.removeEffect(effect);
+        if(current!=null&&!current.isInfiniteDuration()&&current.getAmplifier()==0&&current.getDuration()<=600)player.removeEffect(effect);
         player.getPersistentData().putBoolean("BlackDogEffect_"+ability,false);
     }
     public static void incomingDamage(LivingIncomingDamageEvent event){
         if(!(event.getEntity() instanceof Player player)||player.level().isClientSide||event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY))return;
         var watch=active(player);if(watch.isEmpty()||!complete(player,watch))return;
-        float absorb=Math.min(event.getAmount()*(has(watch,"shield")?0.8f:0.2f),charge(watch)/500f);
-        if(absorb>0&&spend(watch,(int)Math.ceil(absorb*500)))event.setAmount(Math.max(0,event.getAmount()-absorb));
+        if(event.getAmount()<=0)return;markCombat(player,watch);
+        float absorb=Math.min(event.getAmount()*(enabled(watch,"shield")?0.8f:0.2f),charge(watch)/500f);
+        if(absorb>0&&spend(watch,(int)Math.ceil(absorb*500))){event.setAmount(Math.max(0,event.getAmount()-absorb));if(enabled(watch,"shield"))BlackDogWeapons.shieldImpact(player);ensurePower(player,watch);}
     }
     public static void drops(LivingDropsEvent event){
         if(event.getEntity() instanceof Player){event.getDrops().removeIf(e->e.getItem().getItem() instanceof Projection);
@@ -245,6 +344,8 @@ public final class BlackDogArmor {
         Projection(Type type,Properties p){super(ArmorMaterials.NETHERITE,type,p.stacksTo(1).attributes(ItemAttributeModifiers.EMPTY));}
         @Override public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack){return ItemAttributeModifiers.EMPTY;}
         @Override public boolean isValidRepairItem(ItemStack stack,ItemStack ingredient){return false;}
+        @Override public boolean canElytraFly(ItemStack stack,LivingEntity entity){return CatalogueEquipment.getData(stack).getBoolean("Cruise");}
+        @Override public boolean elytraFlightTick(ItemStack stack,LivingEntity entity,int flightTicks){return canElytraFly(stack,entity);}
         @Override public boolean onDroppedByPlayer(ItemStack stack,Player player){return false;}
         @Override public InteractionResultHolder<ItemStack> use(Level level,Player player,InteractionHand hand){return InteractionResultHolder.fail(player.getItemInHand(hand));}
         @Override public ResourceLocation getArmorTexture(ItemStack stack,Entity entity,EquipmentSlot slot,ArmorMaterial.Layer layer,boolean inner){return StarfallBlueprint.id("textures/models/armor/blackdog_exosuit.png");}
@@ -252,14 +353,14 @@ public final class BlackDogArmor {
             if(!level.isClientSide&&entity instanceof Player p&&Arrays.stream(SLOTS).noneMatch(s->p.getItemBySlot(s)==stack))stack.setCount(0);
         }
     }
-    public static final class Watch extends Item {
+    public static class Watch extends Item {
         public Watch(Properties p){super(p.stacksTo(1).fireResistant());}
         @Override public boolean onDroppedByPlayer(ItemStack stack,Player player){return !deployed(stack);}
         @Override public InteractionResultHolder<ItemStack> use(Level level,Player player,InteractionHand hand){
             var stack=player.getItemInHand(hand);if(!level.isClientSide)toggle(player,stack);return InteractionResultHolder.sidedSuccess(stack,level.isClientSide);
         }
         @Override public void inventoryTick(ItemStack stack,Level level,Entity entity,int slot,boolean selected){
-            if(!level.isClientSide&&entity instanceof Player player&&player.tickCount%20==0&&valid(stack))setCharge(stack,charge(stack)+switch(tier(stack)){case 1->80;case 2->240;default->800;});
+            if(!level.isClientSide&&entity instanceof Player player&&player.tickCount%20==0)regenerate(player,stack);
         }
         @Override public boolean isBarVisible(ItemStack stack){return tier(stack)>0;}
         @Override public int getBarWidth(ItemStack stack){return capacity(stack)==0?0:charge(stack)*13/capacity(stack);}
@@ -273,49 +374,63 @@ public final class BlackDogArmor {
             for(var a:ABILITIES)if(has(stack,a))lines.add(Component.translatable("lc.ability."+a));
         }
     }
+    /** Creative preset is materialized on the server, including its own unique suit identity. */
+    public static final class ArmedWatch extends Watch {
+        public ArmedWatch(Properties p){super(p);}
+        public void prepare(ItemStack stack){
+            if(CatalogueEquipment.getData(stack).getInt("Format")>=2)return;
+            var bases=new ArrayList<ItemStack>();
+            for(int i=0;i<8;i++)bases.add(CatalogueContent.stack(Lingchuan.baseKey(i,3),1));
+            var functions=ABILITIES.stream().map(a->CatalogueContent.stack("blackdog_component_"+a,1)).toList();
+            var configured=build(bases,functions);
+            CatalogueEquipment.setData(stack,CatalogueEquipment.getData(configured));
+            setCharge(stack,capacity(stack));
+        }
+        @Override public InteractionResultHolder<ItemStack> use(Level level,Player player,InteractionHand hand){
+            var stack=player.getItemInHand(hand);
+            if(!level.isClientSide){
+                prepare(stack);
+                if(toggle(player,stack)&&deployed(stack)){
+                    var data=CatalogueEquipment.getData(stack);
+                    if(!data.getBoolean("FireControlIssued")){
+                        var terminal=CatalogueContent.stack("blackdog_fire_control",1);
+                        if(!player.getInventory().contains(terminal)&&!player.getInventory().add(terminal))player.drop(terminal,false);
+                        data.putBoolean("FireControlIssued",true);CatalogueEquipment.setData(stack,data);
+                    }
+                }
+            }
+            return InteractionResultHolder.sidedSuccess(stack,level.isClientSide);
+        }
+        @Override public void inventoryTick(ItemStack stack,Level level,Entity entity,int slot,boolean selected){
+            if(!level.isClientSide)prepare(stack);
+            super.inventoryTick(stack,level,entity,slot,selected);
+        }
+        @Override public void appendHoverText(ItemStack stack,TooltipContext context,List<Component> lines,TooltipFlag flag){
+            lines.add(Component.translatable("lc.armed_watch_hint"));
+            lines.add(Component.translatable("lc.armed_watch_control"));
+            if(tier(stack)>0)super.appendHoverText(stack,context,lines,flag);
+        }
+    }
     public static final class FireControl extends Item {
         public FireControl(Properties p){super(p.stacksTo(1).component(DataComponents.TOOL,Tiers.NETHERITE.createToolProperties(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE)));}
         @Override public InteractionResultHolder<ItemStack> use(Level level,Player player,InteractionHand hand){
             ItemStack terminal=player.getItemInHand(hand);if(level.isClientSide)return InteractionResultHolder.success(terminal);
             var watch=active(player);if(watch.isEmpty()||!complete(player,watch)){Lingchuan.fail(player,"lc.require_deployed");return InteractionResultHolder.fail(terminal);}
-            List<String> weapons=List.of("laser","missile","cannon").stream().filter(a->has(watch,a)).toList();
-            if(weapons.isEmpty()){Lingchuan.fail(player,"lc.weapon_missing");return InteractionResultHolder.fail(terminal);}
-            var data=CatalogueEquipment.getData(terminal);int mode=Math.floorMod(data.getInt("Mode"),weapons.size());
-            if(player.isShiftKeyDown()){mode=(mode+1)%weapons.size();data.putInt("Mode",mode);CatalogueEquipment.setData(terminal,data);player.displayClientMessage(Component.translatable("lc.ability."+weapons.get(mode)),true);return InteractionResultHolder.success(terminal);}
-            String weapon=weapons.get(mode);int cost=weapon.equals("laser")?1200:weapon.equals("missile")?5000:8000;
+            String weapon=selectedSystem(watch);
+            if(weapon.isEmpty()){Lingchuan.fail(player,"lc.weapon_missing");return InteractionResultHolder.fail(terminal);}
+            if(player.isShiftKeyDown()){selectSystem(player,-1);return InteractionResultHolder.success(terminal);}
+            if(player.getCooldowns().isOnCooldown(this))return InteractionResultHolder.fail(terminal);
+            if(List.of("turret","shield","cloak").contains(weapon)){
+                var data=CatalogueEquipment.getData(watch);boolean on=!enabled(watch,weapon);data.putBoolean("Enabled_"+weapon,on);CatalogueEquipment.setData(watch,data);
+                player.getCooldowns().addCooldown(this,4);
+                return InteractionResultHolder.success(terminal);
+            }
+            int cost=weapon.equals("laser")?1200:weapon.equals("missile")?5000:8000;
             if(player.getCooldowns().isOnCooldown(this)||!spend(watch,cost)){Lingchuan.fail(player,"lc.power_missing");return InteractionResultHolder.fail(terminal);}
             player.getCooldowns().addCooldown(this,weapon.equals("laser")?10:40);
-            fire(player,watch,weapon);return InteractionResultHolder.success(terminal);
+            markCombat(player,watch);BlackDogWeapons.fire(player,watch,weapon);ensurePower(player,watch);return InteractionResultHolder.success(terminal);
         }
         @Override public void appendHoverText(ItemStack stack,TooltipContext context,List<Component> lines,TooltipFlag flag){lines.add(Component.translatable("lc.fire_control_hint"));}
-    }
-    private static void fire(Player player,ItemStack watch,String weapon){
-        var level=(ServerLevel)player.level();Vec3 from=player.getEyePosition(),direction=player.getLookAngle(),to=from.add(direction.scale(weapon.equals("cannon")?12:32));
-        if(weapon.equals("missile")){
-            var rocket=new LargeFireball(level,player,direction,1);rocket.setPos(from.add(direction.scale(1.2)));level.addFreshEntity(rocket);return;
-        }
-        var hit=level.clip(new ClipContext(from,to,ClipContext.Block.COLLIDER,ClipContext.Fluid.NONE,player));
-        Vec3 end=weapon.equals("cannon")?to:hit.getLocation();
-        if(weapon.equals("cannon")&&player instanceof ServerPlayer serverPlayer){
-            var checked=new HashSet<BlockPos>();int broken=0;
-            for(int step=1;step<=12&&broken<24;step++){
-                BlockPos pos=BlockPos.containing(from.add(direction.scale(step)));
-                if(!checked.add(pos)||!level.hasChunkAt(pos))continue;var state=level.getBlockState(pos);
-                if(state.isAir())continue;
-                if(!level.mayInteract(player,pos)||state.getDestroySpeed(level,pos)<0||state.getDestroySpeed(level,pos)>50||level.getBlockEntity(pos)!=null){end=from.add(direction.scale(step-0.75));break;}
-                if(!spend(watch,1000)){end=from.add(direction.scale(step-0.75));break;}
-                if(!serverPlayer.gameMode.destroyBlock(pos)){end=from.add(direction.scale(step-0.75));break;}broken++;
-            }
-        }
-        beam(level,from,end);
-        var box=new AABB(from,end).inflate(1);
-        for(var target:level.getEntitiesOfClass(LivingEntity.class,box,e->e!=player&&e.isAlive()&&!player.isAlliedTo(e))){
-            if(target instanceof Player other&&!player.canHarmPlayer(other))continue;
-            if(target.getBoundingBox().inflate(0.3).clip(from,end).isPresent())target.hurt(player.damageSources().playerAttack(player),weapon.equals("cannon")?16:8);
-        }
-    }
-    private static void beam(ServerLevel level,Vec3 from,Vec3 to){
-        int steps=Math.min(96,(int)(from.distanceTo(to)*3));for(int i=0;i<=steps;i++){var p=from.lerp(to,i/(double)Math.max(1,steps));level.sendParticles(ParticleTypes.ELECTRIC_SPARK,p.x,p.y,p.z,1,0,0,0,0);}
     }
     private BlackDogArmor(){}
 }

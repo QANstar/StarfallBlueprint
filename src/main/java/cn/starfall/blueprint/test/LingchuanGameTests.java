@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
@@ -39,6 +38,27 @@ public final class LingchuanGameTests {
     }
     private static ItemStack watch(FakePlayer p,List<ItemStack> parts){var s=BlackDogArmor.build(parts);BlackDogArmor.setCharge(s,BlackDogArmor.capacity(s));p.getInventory().setItem(1,s);return s;}
     private static ItemStack watch(FakePlayer p,List<ItemStack> parts,String... abilities){var s=BlackDogArmor.build(parts,Arrays.stream(abilities).map(a->CatalogueContent.stack("blackdog_component_"+a,1)).toList());BlackDogArmor.setCharge(s,BlackDogArmor.capacity(s));p.getInventory().setItem(1,s);return s;}
+    @GameTest(template="empty",timeoutTicks=100)
+    public static void creativeArmedWatchDeploysAndPreservesItsConfiguration(GameTestHelper h){
+        var p=player(h);p.setGameMode(GameType.CREATIVE);
+        var stack=new ItemStack(BlackDogArmor.ARMED_WATCH.get());
+        p.setItemInHand(InteractionHand.MAIN_HAND,stack);
+        stack.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);
+        h.assertTrue(BlackDogArmor.valid(stack)&&BlackDogArmor.deployed(stack)&&BlackDogArmor.complete(p,stack),"Fresh creative watch deploys without research or assembly");
+        h.assertTrue(BlackDogArmor.charge(stack)==1_000_000&&BlackDogArmor.components(stack).size()==12,"Preset starts full with every component");
+        for(int i=0;i<8;i++)h.assertTrue(Lingchuan.module(BlackDogArmor.modules(stack).get(i)).tier()==3,"Every chassis and core is tier III");
+        h.assertTrue(p.getInventory().contains(CatalogueContent.stack("blackdog_fire_control",1)),"First deployment supplies the weapon controller");
+        var identity=CatalogueEquipment.getData(stack).getUUID("SuitId");
+        BlackDogArmor.setCharge(stack,12345);
+        stack.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);
+        stack.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);
+        h.assertTrue(BlackDogArmor.charge(stack)==12345&&CatalogueEquipment.getData(stack).getUUID("SuitId").equals(identity),"Recall and redeploy preserve energy and suit identity");
+        int terminals=0;for(var item:p.getInventory().items)if(item.is(CatalogueContent.item("blackdog_fire_control")))terminals+=item.getCount();
+        h.assertTrue(terminals==1,"Repeated deployment does not duplicate the controller");
+        var other=new ItemStack(BlackDogArmor.ARMED_WATCH.get());((BlackDogArmor.ArmedWatch)other.getItem()).prepare(other);
+        h.assertTrue(!CatalogueEquipment.getData(other).getUUID("SuitId").equals(identity),"Separate creative copies receive independent suit identities");
+        h.succeed();
+    }
     @GameTest(template="empty",timeoutTicks=100)
     public static void researchIsPersonalAtomicAndPaysExactlyOneRoute(GameTestHelper h){
         var p=player(h);var be=station(h,"lc_research_station");p.experienceLevel=2;
@@ -125,7 +145,7 @@ public final class LingchuanGameTests {
         var event=new net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent(p,new net.neoforged.neoforge.common.damagesource.DamageContainer(p.damageSources().generic(),10));
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event);
         h.assertTrue(BlackDogArmor.charge(watch)==0&&event.getAmount()==8,"An undercharged shield cannot erase more damage than its energy budget");
-        BlackDogArmor.tickPlayer(p);h.assertTrue(p.getAttributeValue(Attributes.ARMOR)>=14,"Passive armour remains after depletion");h.succeed();
+        BlackDogArmor.tickPlayer(p);h.assertTrue(!BlackDogArmor.deployed(watch)&&p.getAttributeValue(Attributes.ARMOR)==0&&p.getItemBySlot(EquipmentSlot.CHEST).isEmpty(),"Depletion recalls the armour and clears its model and defense");h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)
     public static void everyLargeMachinePartExposesSharedPowerAndSingleDrop(GameTestHelper h){
@@ -144,7 +164,7 @@ public final class LingchuanGameTests {
         h.assertTrue(terminal.getItem() instanceof BlackDogArmor.FireControl,"Fire control must be the real weapon item, not a passive module");
         terminal.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);
         h.assertTrue(BlackDogArmor.charge(watch)==395000&&p.getCooldowns().isOnCooldown(terminal.getItem()),"Firing deducts exactly one missile charge and starts cooldown");
-        h.assertTrue(!h.getLevel().getEntitiesOfClass(LargeFireball.class,p.getBoundingBox().inflate(5)).isEmpty(),"Missile launch creates an actual server projectile");
+        h.assertTrue(!h.getLevel().getEntitiesOfClass(BlackDogMissile.class,p.getBoundingBox().inflate(5)).isEmpty(),"Missile launch creates the dedicated server projectile");
         terminal.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);h.assertTrue(BlackDogArmor.charge(watch)==395000,"Cooldown prevents duplicate firing and duplicate energy charges");h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)

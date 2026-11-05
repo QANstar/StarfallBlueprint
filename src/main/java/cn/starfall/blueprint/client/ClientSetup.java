@@ -8,6 +8,12 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 @EventBusSubscriber(modid = StarfallBlueprint.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
+    @SubscribeEvent public static void blackDogRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event){
+        event.registerEntityRenderer(cn.starfall.blueprint.BlackDogWeapons.DRONE.get(),c->new BlackDogHardwareRenderer<>(c,false));
+        event.registerEntityRenderer(cn.starfall.blueprint.BlackDogWeapons.MISSILE.get(),c->new BlackDogHardwareRenderer<>(c,true));
+        event.registerEntityRenderer(cn.starfall.blueprint.BlackDogWeapons.BEAM.get(),BlackDogBeamRenderer::new);
+    }
+    @SubscribeEvent public static void blackDogLayers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions event){event.registerLayerDefinition(BlackDogHardwareRenderer.DRONE_LAYER,BlackDogHardwareRenderer::droneLayer);event.registerLayerDefinition(BlackDogHardwareRenderer.MISSILE_LAYER,BlackDogHardwareRenderer::missileLayer);}
     @SubscribeEvent public static void armorLayers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions event){event.registerLayerDefinition(BlackDogArmorModel.LAYER,BlackDogArmorModel::layer);}
     @SubscribeEvent public static void armor(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event){
         event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions(){
@@ -20,8 +26,8 @@ public final class ClientSetup {
     }
     @SubscribeEvent public static void mechRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) { event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.TYPE.get(), BestMechRenderer::new); event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.HEAVY_TYPE.get(), BestMechRenderer::new); }
     @SubscribeEvent public static void mechLayers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions event) { event.registerLayerDefinition(BestMechModel.LAYER, BestMechModel::createLayer); }
-    @SubscribeEvent public static void mechKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) { BestMechClient.keys(event); }
-    @SubscribeEvent public static void mechHud(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) { BestMechClient.layers(event); }
+    @SubscribeEvent public static void mechKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) { BestMechClient.keys(event); BlackDogClient.keys(event); }
+    @SubscribeEvent public static void mechHud(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) { BestMechClient.layers(event); BlackDogClient.layers(event); }
     @SubscribeEvent public static void fluids(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event){
         cn.starfall.blueprint.CatalogueFluids.ENTRIES.forEach((key,entry)->event.registerFluidType(new net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions(){
             public net.minecraft.resources.ResourceLocation getStillTexture(){return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_still");}
@@ -38,5 +44,5 @@ public final class ClientSetup {
         net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(((net.minecraft.world.item.BlockItem)cn.starfall.blueprint.CatalogueContent.item("boroglass")).getBlock(),net.minecraft.client.renderer.RenderType.translucent());
         net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(cn.starfall.blueprint.RopeSystem.ROPE.get(),net.minecraft.client.renderer.RenderType.cutout());
     });}
-    @SubscribeEvent public static void screens(RegisterMenuScreensEvent event) { event.register(cn.starfall.blueprint.Progression.MENU.get(),ProgressionScreen::new); event.register(cn.starfall.blueprint.Blueprints.MENU.get(),BlueprintScreen::new);event.register(StarfallBlueprint.PREPARATION_MENU.get(), PreparationScreen::new); event.register(StarfallBlueprint.ALLOY_MENU.get(), AlloyFurnaceScreen::new); event.register(cn.starfall.blueprint.CatalogueContent.MENU.get(), IndustryScreen::new); event.register(cn.starfall.blueprint.CatalogueEquipment.BAG_MENU.get(), MiningBagScreen::new); event.register(cn.starfall.blueprint.BestEngineering.MENU.get(), BestWorkbenchScreen::new); event.register(cn.starfall.blueprint.BestMechs.CARGO_MENU.get(), BestMechCargoScreen::new); event.register(cn.starfall.blueprint.Lingchuan.MENU.get(),LingchuanScreen::new); }
+    @SubscribeEvent public static void screens(RegisterMenuScreensEvent event) { event.register(cn.starfall.blueprint.Progression.MENU.get(),ProgressionTreeScreen::new); event.register(cn.starfall.blueprint.Blueprints.MENU.get(),BlueprintScreen::new);event.register(StarfallBlueprint.PREPARATION_MENU.get(), PreparationScreen::new); event.register(StarfallBlueprint.ALLOY_MENU.get(), AlloyFurnaceScreen::new); event.register(cn.starfall.blueprint.CatalogueContent.MENU.get(), IndustryScreen::new); event.register(cn.starfall.blueprint.CatalogueEquipment.BAG_MENU.get(), MiningBagScreen::new); event.register(cn.starfall.blueprint.BestEngineering.MENU.get(), BestWorkbenchScreen::new); event.register(cn.starfall.blueprint.BestMechs.CARGO_MENU.get(), BestMechCargoScreen::new); event.register(cn.starfall.blueprint.Lingchuan.MENU.get(),LingchuanScreen::new); }
 }

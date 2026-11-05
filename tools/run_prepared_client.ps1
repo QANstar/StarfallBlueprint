@@ -1,7 +1,9 @@
 param(
     [string]$JavaExecutable = 'java',
     [string]$GameDirectory = '',
-    [switch]$LingchuanVisualCheck
+    [string]$QuickPlayWorld = '',
+    [switch]$LingchuanVisualCheck,
+    [switch]$BlackDogPlaytest
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -22,8 +24,14 @@ $previousModClasses = $env:MOD_CLASSES
 $env:MOD_CLASSES = "starfall_blueprint%%$modClasses$([IO.Path]::PathSeparator)starfall_blueprint%%$modResources"
 try {
     $arguments = @('-Xmx4G', '-cp', ('"' + $clientClasspath + '"'), ('"@' + $vmArgs + '"'), ('"@' + $programArgs + '"'))
+    if ($QuickPlayWorld) {
+        $arguments += @('--quickPlaySingleplayer', ('"' + $QuickPlayWorld + '"'))
+    }
     if ($LingchuanVisualCheck) {
         $arguments = @('-Dstarfall.lingchuanVisualCheck=true') + $arguments + @('--width', '1280', '--height', '800')
+    }
+    if ($BlackDogPlaytest) {
+        $arguments = @('-Dstarfall.blackdogPlaytest=true') + $arguments + @('--width', '1440', '--height', '900')
     }
     $process = Start-Process -FilePath $JavaExecutable -ArgumentList $arguments -WorkingDirectory $gameDirectoryPath -WindowStyle Hidden `
         -RedirectStandardOutput (Join-Path $gameDirectoryPath 'prepared-client.log') `

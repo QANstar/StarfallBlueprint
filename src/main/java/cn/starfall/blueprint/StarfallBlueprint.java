@@ -112,10 +112,14 @@ public final class StarfallBlueprint {
     public static final DeferredHolder<CreativeModeTab,CreativeModeTab> LINGCHUAN_TAB=TABS.register("lingchuan",()->CreativeModeTab.builder()
         .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint.lingchuan"))
         .icon(()->new ItemStack(CatalogueContent.item("blackdog_watch"))).displayItems((p,o)->{
+            o.accept(BlackDogArmor.ARMED_WATCH.get());
             CatalogueContent.ITEMS.forEach((k,v)->{if(Lingchuan.isContent(k)&&!k.startsWith("blackdog_armor_")&&!Lingchuan.legacy(k))o.accept(v.get());});
         }).build());
 
     public StarfallBlueprint(IEventBus bus) {
+        BlackDogArmor.initialize();
+        BlackDogWeapons.register(bus);
+        bus.addListener(BlackDogNetworking::register);
         CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();Blueprints.initialize();AggregateMachines.initialize();BestEngineering.initialize();Lingchuan.initialize();
         BestMechs.initialize(); BestMechs.register(bus); Progression.initialize();
         bus.addListener(ProgressionNetworking::register);

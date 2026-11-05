@@ -85,7 +85,7 @@ public final class Progression {
             if(r.crystal()>0)costs.add(new Cost("common",r.crystal()));
             register(new Node(lingchuanId(i),"lingchuan",r.name(),Component.translatable("lc.research_description."+r.key()),
                     List.copyOf(parents),costs,switch(r.tier()){case 0->1;case 1->3;case 2->5;default->8;},
-                    ()->CatalogueContent.stack("laminar_alloy",1),p->Lingchuan.knows(p,index),
+                    ()->CatalogueContent.stack(index==0?"laminar_alloy":index==1?Lingchuan.baseKey(0,1):index<4?Lingchuan.baseKey(2,index):"blackdog_component_"+Lingchuan.ABILITIES.get(index-4),1),p->Lingchuan.knows(p,index),
                     p->p.getPersistentData().putInt("LingchuanResearch",Lingchuan.knowledge(p)|(1<<index)),
                      switch(i) {
                          case 0 -> new Reward(List.of(new Cost("laminar_alloy",1)),10);

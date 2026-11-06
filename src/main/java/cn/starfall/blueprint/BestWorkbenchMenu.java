@@ -86,7 +86,7 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
     }
 
     @Override public boolean clickMenuButton(Player player, int action) {
-        if (player.level().isClientSide || action < 0 || action > 27 || !stillValid(player)) return false;
+        if (player.level().isClientSide || action < 0 || action > 28 || !stillValid(player)) return false;
         boolean performed = BestEngineering.perform(player, action);
         broadcastChanges();
         return performed;

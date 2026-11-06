@@ -42,13 +42,13 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     }
     public int selectedMechAction() { return selectedMechAction; }
     public void selectArmAction(int action) {
-        if ((action < 21 || action > 22) && action != 27) throw new IllegalArgumentException("arm action must be 21..22 or 27");
+        if ((action < 21 || action > 22) && action != 27 && action != 28) throw new IllegalArgumentException("arm action must be 21..22, 27 or 28");
         selectedArmAction = action;
     }
     private int materialAction() { return page == 6 ? 25 : page == 5 ? 24 : page == 4 ? selectedArmAction : selectedMechAction; }
     private void selectMaterialAction(int action) {
         if (action == 24 || action == 25) return;
-        if (action == 21 || action == 22 || action == 27) selectArmAction(action);
+        if (action == 21 || action == 22 || action == 27 || action == 28) selectArmAction(action);
         else selectMechAction(action);
     }
     private static Component text(String key, Object... args) {
@@ -71,7 +71,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
             case 1 -> new int[]{9, 10, 11, 12};
             case 2 -> new int[]{14, 15, 16};
             case 3 -> new int[]{18, 19, 20, 23, 26};
-            case 4 -> new int[]{21, 22, 27};
+            case 4 -> new int[]{21, 22, 27, 28};
             case 5 -> new int[]{24};
             default -> new int[]{25};
         };

@@ -162,8 +162,8 @@ public final class BestHeavyDrillGameTests {
                 h.assertTrue(m.work(p) && events.equals(positions) && positions.stream().allMatch(pos -> h.getLevel().getBlockState(pos).isAir()), "Center first then deterministic3x3 plane " + axis);
                 h.assertTrue(m.energy() == 568000 && m.heat() == 315 && m.wear() == 9 && m.stateTag().getInt("DrillCooldown") == 40 && p.getMainHandItem() == held && ItemStack.matches(held, heldCopy), "Only nine successful blocks charge48000/35/1 and exact hand restored");
                 h.assertTrue(h.getLevel().getBlockState(outside).is(Blocks.OBSIDIAN) && h.getLevel().getBlockState(behind).is(Blocks.OBSIDIAN), "No outside plane or vein work");
-                var loot = h.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(center).inflate(3));
-                h.assertTrue(loot.stream().filter(e -> e.getItem().is(Items.OBSIDIAN)).mapToInt(e -> e.getItem().getCount()).sum() == 9, "Diamond-tier ordinary drops"); loot.forEach(Entity::discard);
+                h.assertTrue(m.cargo().countItem(Items.OBSIDIAN) == 9, "Diamond-tier ordinary drops enter cargo");
+                m.cargo().clearContent();
                 h.getLevel().setBlockAndUpdate(outside, Blocks.AIR.defaultBlockState()); h.getLevel().setBlockAndUpdate(behind, Blocks.AIR.defaultBlockState());
             }
             var positions = plane(center, Direction.Axis.Z); fill(h, positions); reset(m, 1_000_000, 0, 0); aim(p, m, center, Direction.Axis.Z);

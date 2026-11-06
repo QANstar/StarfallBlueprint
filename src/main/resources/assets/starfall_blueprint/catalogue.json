@@ -10374,7 +10374,8 @@
         "allowed_items": [
           "best_mech_drill_arm",
           "best_mech_excavator_arm",
-          "best_mech_heavy_drill_arm"
+          "best_mech_heavy_drill_arm",
+          "best_mech_heavy_excavator_arm"
         ],
         "factory_default": "drill",
         "missing_legacy_value": "drill",
@@ -10435,10 +10436,12 @@
         "known_items": [
           "best_mech_drill_arm",
           "best_mech_excavator_arm",
-          "best_mech_heavy_drill_arm"
+          "best_mech_heavy_drill_arm",
+          "best_mech_heavy_excavator_arm"
         ],
         "heavy_only_items": [
-          "best_mech_heavy_drill_arm"
+          "best_mech_heavy_drill_arm",
+          "best_mech_heavy_excavator_arm"
         ],
         "light_loaded_heavy_arm": {
           "retain_identity": true,
@@ -10503,6 +10506,95 @@
           "mineable_tag": "minecraft:mineable/pickaxe",
           "energy": 48000,
           "heat": 35,
+          "wear": 1,
+          "cost_basis": "per_successful_block",
+          "cooldown_ticks": 40,
+          "cooldown_basis": "per_action_first_success",
+          "shared_cooldown": true,
+          "single_block": false,
+          "ordinary_drops": true,
+          "success_only_costs": true,
+          "targeting": {
+            "shape": "3x3_plane_perpendicular_to_hit_face",
+            "max_blocks": 9,
+            "center_first": true,
+            "center_success_required": true,
+            "invalid_center_aborts_batch": true,
+            "invalid_center_spends_nothing": true,
+            "invalid_center_sets_cooldown": false,
+            "neighbor_failures": "skip_independently",
+            "recheck_each_block": true,
+            "block_checks": [
+              "protection",
+              "BreakEvent",
+              "actual_player_reach",
+              "loaded_chunk",
+              "world_border",
+              "no_block_entity",
+              "nonfluid",
+              "breakable",
+              "correct_tool"
+            ],
+            "reach": "min(5, player_block_interaction_range)",
+            "all_nine_guaranteed": false,
+            "vein_mining": false
+          },
+          "stops_on": [
+            "insufficient_energy",
+            "thermal_lock",
+            "worn_out"
+          ],
+          "changes_movement": false,
+          "changes_utility_module": false
+        },
+        "drop_collection": {
+          "source": "actual_successful_engineering_block_drops",
+          "event": "BlockDropsEvent",
+          "after_all_listeners_and_spawn": true,
+          "require_uncanceled_event": true,
+          "require_live_spawned_item_entity": true,
+          "match": [
+            "server_level",
+            "breaker",
+            "block_position",
+            "tool_identity"
+          ],
+          "active_cargo_only": true,
+          "slots_by_profile": {
+            "standard": 9,
+            "reinforced": 18,
+            "heavy": 27
+          },
+          "insertion_order": [
+            "merge_same_item_and_components",
+            "empty_active_slots"
+          ],
+          "respect_stack_limits": true,
+          "overflow": "remain_on_ground",
+          "ambient_pickup": false,
+          "packed_mech_nesting": false,
+          "experience": "unchanged_vanilla",
+          "drop_gamerules": "unchanged",
+          "protection_checks": "unchanged",
+          "costs": "actual_success_only"
+        },
+        "heavy_area_excavation": {
+          "slot": "engineering_arm",
+          "storage_key": "EngineeringArm",
+          "max_installed": 1,
+          "variant": "heavy_excavator",
+          "target": "best_heavy_mech",
+          "compatible_platforms": [
+            "best_heavy_mech"
+          ],
+          "manual_action": 28,
+          "networking_action": 0,
+          "key": "G",
+          "harvest_tier": "iron",
+          "tool": "minecraft:iron_shovel",
+          "mineable_tag": "minecraft:mineable/shovel",
+          "energy": 18000,
+          "heat": 18,
           "wear": 1,
           "cost_basis": "per_successful_block",
           "cooldown_ticks": 40,
@@ -10614,7 +10706,38 @@
         "rejected_packed_items": [
           "best_mech",
           "best_heavy_mech"
-        ]
+        ],
+        "engineering_work_drops": {
+          "source": "actual_successful_engineering_block_drops",
+          "event": "BlockDropsEvent",
+          "after_all_listeners_and_spawn": true,
+          "require_uncanceled_event": true,
+          "require_live_spawned_item_entity": true,
+          "match": [
+            "server_level",
+            "breaker",
+            "block_position",
+            "tool_identity"
+          ],
+          "active_cargo_only": true,
+          "slots_by_profile": {
+            "standard": 9,
+            "reinforced": 18,
+            "heavy": 27
+          },
+          "insertion_order": [
+            "merge_same_item_and_components",
+            "empty_active_slots"
+          ],
+          "respect_stack_limits": true,
+          "overflow": "remain_on_ground",
+          "ambient_pickup": false,
+          "packed_mech_nesting": false,
+          "experience": "unchanged_vanilla",
+          "drop_gamerules": "unchanged",
+          "protection_checks": "unchanged",
+          "costs": "actual_success_only"
+        }
       },
       "max_health": 300,
       "core_slot": {
@@ -11428,7 +11551,8 @@
         "generator_core": 24,
         "cruise_wheels": 25,
         "heavy_mech": 26,
-        "heavy_drill_arm": 27
+        "heavy_drill_arm": 27,
+        "heavy_excavator_arm": 28
       },
       "tabs": [
         "workshop",
@@ -11466,7 +11590,8 @@
       "arms_page_actions": [
         21,
         22,
-        27
+        27,
+        28
       ],
       "catalogue": true,
       "category": "机器与设施",
@@ -11480,7 +11605,7 @@
       "purpose": {
         "summary": "人工装配、维修与整备贝斯特工务装备，执行涓流晋升沧澜",
         "benefit": "知识统一在玩家背包成长学习，共23节点（贝斯特7、岭川16）；工位七标签只负责制造、维修、模块管理和晋升，不新增工位学习。",
-        "operation": "第五工程臂页含动作21／22／27，第六核心页24，第七行走页25；机甲页动作26消耗主手隔离存活涓流并替换沧澜，需本人进阶工程。其余逐人知识、材料及整备守卫沿用；晋升保留源全部状态，强化Body返件须事先主背包空格，失败整笔不变。",
+        "operation": "第五工程臂页含动作21／22／27／28，第六核心页24，第七行走页25；机甲页动作26消耗主手隔离存活涓流并替换沧澜，需本人进阶工程。其余逐人知识、材料及整备守卫沿用；晋升保留源全部状态，强化Body返件须事先主背包空格，失败整笔不变。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/klEQVR4nGNgGAUDDBjxSUprm/5H5j+9ehqvemSw4/SF/x6mBgTVMxFScLJZBoxJASDLkWl8gIUkk4m0GASI8T0IMA2k5SBAMATMa5/QxGIYYERPdHMXzGagJUhOSEVJzCzoChYuWMpAT8BEV9sGowNY0AUOHThAVwcwklMCossTqw5bScqCy2V2Dg54QyRqXTcKf1lQKVnmMDEMMGAaaAewkKsRV5DTxQFPSaiWKXbAXEjRTLBaxQUIlawsxJbf5ABi6hUWUgwktmFCqAYdVLmAacQ7gIWUECAlbqnqgLk0bCWxkNqEIgWAakNYZUSyAw5RqV1A7/bFKGAgFQAAswlcDML6AtsAAAAASUVORK5CYII=",
@@ -11785,10 +11910,12 @@
         "known_items": [
           "best_mech_drill_arm",
           "best_mech_excavator_arm",
-          "best_mech_heavy_drill_arm"
+          "best_mech_heavy_drill_arm",
+          "best_mech_heavy_excavator_arm"
         ],
         "heavy_only_items": [
-          "best_mech_heavy_drill_arm"
+          "best_mech_heavy_drill_arm",
+          "best_mech_heavy_excavator_arm"
         ],
         "light_loaded_heavy_arm": {
           "retain_identity": true,
@@ -11835,7 +11962,96 @@
           "packed_item",
           "deploy",
           "death_drop"
-        ]
+        ],
+        "drop_collection": {
+          "source": "actual_successful_engineering_block_drops",
+          "event": "BlockDropsEvent",
+          "after_all_listeners_and_spawn": true,
+          "require_uncanceled_event": true,
+          "require_live_spawned_item_entity": true,
+          "match": [
+            "server_level",
+            "breaker",
+            "block_position",
+            "tool_identity"
+          ],
+          "active_cargo_only": true,
+          "slots_by_profile": {
+            "standard": 9,
+            "reinforced": 18,
+            "heavy": 27
+          },
+          "insertion_order": [
+            "merge_same_item_and_components",
+            "empty_active_slots"
+          ],
+          "respect_stack_limits": true,
+          "overflow": "remain_on_ground",
+          "ambient_pickup": false,
+          "packed_mech_nesting": false,
+          "experience": "unchanged_vanilla",
+          "drop_gamerules": "unchanged",
+          "protection_checks": "unchanged",
+          "costs": "actual_success_only"
+        },
+        "heavy_area_excavation": {
+          "slot": "engineering_arm",
+          "storage_key": "EngineeringArm",
+          "max_installed": 1,
+          "variant": "heavy_excavator",
+          "target": "best_heavy_mech",
+          "compatible_platforms": [
+            "best_heavy_mech"
+          ],
+          "manual_action": 28,
+          "networking_action": 0,
+          "key": "G",
+          "harvest_tier": "iron",
+          "tool": "minecraft:iron_shovel",
+          "mineable_tag": "minecraft:mineable/shovel",
+          "energy": 18000,
+          "heat": 18,
+          "wear": 1,
+          "cost_basis": "per_successful_block",
+          "cooldown_ticks": 40,
+          "cooldown_basis": "per_action_first_success",
+          "shared_cooldown": true,
+          "single_block": false,
+          "ordinary_drops": true,
+          "success_only_costs": true,
+          "targeting": {
+            "shape": "3x3_plane_perpendicular_to_hit_face",
+            "max_blocks": 9,
+            "center_first": true,
+            "center_success_required": true,
+            "invalid_center_aborts_batch": true,
+            "invalid_center_spends_nothing": true,
+            "invalid_center_sets_cooldown": false,
+            "neighbor_failures": "skip_independently",
+            "recheck_each_block": true,
+            "block_checks": [
+              "protection",
+              "BreakEvent",
+              "actual_player_reach",
+              "loaded_chunk",
+              "world_border",
+              "no_block_entity",
+              "nonfluid",
+              "breakable",
+              "correct_tool"
+            ],
+            "reach": "min(5, player_block_interaction_range)",
+            "all_nine_guaranteed": false,
+            "vein_mining": false
+          },
+          "stops_on": [
+            "insufficient_energy",
+            "thermal_lock",
+            "worn_out"
+          ],
+          "changes_movement": false,
+          "changes_utility_module": false
+        }
       },
       "body_slot": {
         "storage_key": "Body",
@@ -11985,7 +12201,42 @@
           "clear_dead_packed_item": true,
           "respects_entity_drops_rule": true
         },
-        "downgrade_discards_excess": false
+        "downgrade_discards_excess": false,
+        "engineering_work_drops": {
+          "source": "actual_successful_engineering_block_drops",
+          "event": "BlockDropsEvent",
+          "after_all_listeners_and_spawn": true,
+          "require_uncanceled_event": true,
+          "require_live_spawned_item_entity": true,
+          "match": [
+            "server_level",
+            "breaker",
+            "block_position",
+            "tool_identity"
+          ],
+          "active_cargo_only": true,
+          "slots_by_profile": {
+            "standard": 9,
+            "reinforced": 18,
+            "heavy": 27
+          },
+          "insertion_order": [
+            "merge_same_item_and_components",
+            "empty_active_slots"
+          ],
+          "respect_stack_limits": true,
+          "overflow": "remain_on_ground",
+          "ambient_pickup": false,
+          "packed_mech_nesting": false,
+          "experience": "unchanged_vanilla",
+          "drop_gamerules": "unchanged",
+          "protection_checks": "unchanged",
+          "costs": "actual_success_only"
+        },
+        "rejected_packed_items": [
+          "best_mech",
+          "best_heavy_mech"
+        ]
       },
       "max_health": 100,
       "core_slot": {
@@ -13300,6 +13551,133 @@
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABnElEQVR4nMVXPU7DMBR2LN+C7gywIrYqV2hHGKiEOEJGBsTYIyCkMtAxXMHKhpgZmAkX4AJBz+JJjmvH7zlO80lRnWfH3+fPzz8VYmYUoYqTs4sOyz+fH8F2YyGHKp93T1lIYDD4uHUKC2296lVe3rciJ2Awt5s7UX1pw7M9LYuoA8eAcgOL9ZtRBnaBYiyndE7JHUX5GARw8+Fl9yoaITrsBwcTFdDWqw5dQPJlWZoOObjZXJtfW8Q/em5KLNikIMJNSi7Ovx+MCBA/NIXKfkERSI6jt0dERWUci7umfEEQ4nMgNI8ufPmCy8+FDHViT4kPV/VWpADWP+4BgOAq4KIn6DdM7sZkKtl+XR24ADF4qOQAlgMh21FQChSnsUvic4ELOeprS8hsAvYjyAGsKUi5HzRaDx5KitoR9yyYxIFG6947btNunR3PKgDw/rg4uDEBuT09sGVTRUgxMxT3g9x3RcVpHLIV4vZJOWkONE4ijoUcqoT1m5twtANLhr0UFJRG7p2OKiK2C5IFxAT5hFHIkwVQhE35hzYr/gBSuquZ7++eugAAAABJRU5ErkJggg=="
+    },
+    "best_mech_heavy_excavator_arm": {
+      "id": "best_mech_heavy_excavator_arm",
+      "name": "沧澜区域挖掘臂",
+      "unit": "件",
+      "icon": "tool",
+      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "external": false,
+      "mass": null,
+      "english": "Canglan Area Excavator Arm",
+      "registry_id": "starfall_blueprint:best_mech_heavy_excavator_arm",
+      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
+      "manual_assembly": {
+        "station": "best_workbench",
+        "personal_learning": true,
+        "automatic": false,
+        "requires": [
+          "field_servicing",
+          "light_mobility",
+          "diagnostics",
+          "mech_operation"
+        ],
+        "inputs": [
+          {
+            "item": "steel",
+            "qty": 16
+          },
+          {
+            "item": "load",
+            "qty": 8
+          },
+          {
+            "item": "conductor",
+            "qty": 4
+          },
+          {
+            "item": "steel_fix",
+            "qty": 8
+          },
+          {
+            "item": "sheath",
+            "qty": 4
+          },
+          {
+            "item": "head",
+            "qty": 2
+          }
+        ],
+        "output_count": 1
+      },
+      "real_item": true,
+      "item_type": "ordinary",
+      "max_stack_size": 1,
+      "max_durability": 0,
+      "attribute_modifiers": [],
+      "engineering_arm": {
+        "slot": "engineering_arm",
+        "storage_key": "EngineeringArm",
+        "max_installed": 1,
+        "variant": "heavy_excavator",
+        "target": "best_heavy_mech",
+        "compatible_platforms": [
+          "best_heavy_mech"
+        ],
+        "manual_action": 28,
+        "networking_action": 0,
+        "key": "G",
+        "harvest_tier": "iron",
+        "tool": "minecraft:iron_shovel",
+        "mineable_tag": "minecraft:mineable/shovel",
+        "energy": 18000,
+        "heat": 18,
+        "wear": 1,
+        "cost_basis": "per_successful_block",
+        "cooldown_ticks": 40,
+        "cooldown_basis": "per_action_first_success",
+        "shared_cooldown": true,
+        "single_block": false,
+        "ordinary_drops": true,
+        "success_only_costs": true,
+        "targeting": {
+          "shape": "3x3_plane_perpendicular_to_hit_face",
+          "max_blocks": 9,
+          "center_first": true,
+          "center_success_required": true,
+          "invalid_center_aborts_batch": true,
+          "invalid_center_spends_nothing": true,
+          "invalid_center_sets_cooldown": false,
+          "neighbor_failures": "skip_independently",
+          "recheck_each_block": true,
+          "block_checks": [
+            "protection",
+            "BreakEvent",
+            "actual_player_reach",
+            "loaded_chunk",
+            "world_border",
+            "no_block_entity",
+            "nonfluid",
+            "breakable",
+            "correct_tool"
+          ],
+          "reach": "min(5, player_block_interaction_range)",
+          "all_nine_guaranteed": false,
+          "vein_mining": false
+        },
+        "stops_on": [
+          "insufficient_energy",
+          "thermal_lock",
+          "worn_out"
+        ],
+        "changes_movement": false,
+        "changes_utility_module": false
+      },
+      "catalogue": true,
+      "category": "装备与武器",
+      "subcategory": "贝斯特工程装备",
+      "recipes": [],
+      "uses": [],
+      "primary_recipe": "",
+      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "purpose": {
+        "summary": "沧澜区域挖掘臂按命中面进行3×3铲类平面挖掘",
+        "benefit": "仅沧澜；真实铁铲，仅铲类方块。每成功块18000 XH、热18、磨损1，中心先成功，40刻共享冷却。",
+        "operation": "\n\n## 沧澜区域挖掘臂：现行操作（2026-11-06）\n\n沧澜区域挖掘臂（Canglan Area Excavator Arm，best_mech_heavy_excavator_arm）为普通不可堆叠实物，无独立耐久、电量或属性。工务装配台工程臂页第四按钮动作28产1件：普通钢16、承相结构嵌材8、导相铜复材板4、钢制固定件8、陶瓷护套4、钻石磨头2；磨头不可堆叠，按真实物品逐格计数并消耗。沿用本人三级野外整备、轻载通行、工务诊断及机甲驾驶，不新增知识或成长节点。\n\n仅SG-E2沧澜可安装与作业。安装空工程臂槽、先拆后换及诊断器主手＋原版铁镐副手拆回沿用已有整备守卫；涓流加载此已知臂保持真实身份且可拆回，禁止安装与作业。G以真实原版铁铲，仅对MINEABLE_WITH_SHOVEL方块按命中面垂直3×3平面挖掘，最多9块、中心先成功。每个成功方块18000 XH、热18、磨损1；首次成功起整次40刻共享冷却。中心拒绝则整批停止且不计费、不设冷却；邻块各自校验实际触及距离、权限与BreakEvent、已加载区块、世界边界、无方块实体、非流体及正确工具，失败独立跳过。电量不足、热锁或磨尽立即停止，允许预算内部分成功。\n\n真实成功方块掉落沿用现行优先货舱规则：只插入当前有效9／18／27格，按原组件合并，余量原地落地；不扫描吸取地面物品。新物品有原创32×32 RGBA透明图标，模型沿用既有纹理。现行计数317项物品、245条配方、183项图鉴、17项Best；本批次不宣称完成构建、测试或UI验收。\n",
+        "targets": []
+      },
+      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABrElEQVR4nMVXK08DQRCevcy/oDgcGkuaIHHIIrikqcVVI5DnsISkCJB1SJJLHcGCQ8LvKJmGLcMyO/s8+Ey3s4/5dp57BjzY2T9Yu7KP12cDlWE0pTeL6+142s5gCELoCg7H483vqu/BN+ebr0KAQ7p1baBvgt/2zwmMzo/VTe9XD9UINPDPwJQb1go8lcBKUfJ0OYL54973WoB1aSoabZLqgg3G7uhtK/9Bou+L6kETs4grd/8TQalqxsKEFlgruCRca+RawsQSsJCIcBKEFCImlYBE4mX34lcFjSWBkAG6sSVByt2STU1s2s6iMsTEKJSsQDhrT7394otE0BINZEJTTqA5IhHKkAYGhCVIJHxETMxBqXkuucuXphijKKU1k2t8kEo3xirTDuaQ4oI/7VygFOmSspLXkQ1IyQqobSrFZNnB/ck8vxBNlh0MDQwtCN0gFeRm7oZGqnS3i7uNz2oqJ5dKsYU1DteiPGQFJAENSMA/SvjTzCqQmo4k933cSCmOdmBJSIeTS1LkGkn3zYB8sRWWPLE0SOUYYzfWkEu9QGxGrgV8lsmVc3wC+v37jnbLrtMAAAAASUVORK5CYII="
     }
   },
   "recipes": [
@@ -27728,6 +28106,7 @@
     "silk_touch",
     "auto_smelt",
     "best_mech_heavy_drill_arm",
+    "best_mech_heavy_excavator_arm",
     "best_heavy_mech",
     "best_mech_cruise_wheels",
     "best_mech_generator_core",

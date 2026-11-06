@@ -185,7 +185,7 @@ public final class BestMechArmGameTests {
             h.getLevel().setBlockAndUpdate(target, Blocks.STONE.defaultBlockState());
             h.assertTrue(m.drill(p) && m.energy() == 68000 && m.heat() == 120 && m.wear() == 1
                     && h.getLevel().getBlockState(target).isAir(), "Legacy drill delegates work at unchanged 32000/120/1");
-            h.assertTrue(h.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(target).inflate(1)).stream().anyMatch(e -> e.getItem().is(Items.COBBLESTONE)), "Drill produces ordinary iron-pick drops");
+            h.assertTrue(m.cargo().countItem(Items.COBBLESTONE) == 1, "Drill stores ordinary iron-pick drops in cargo");
             p.stopRiding(); p.setShiftKeyDown(true); m.setIsolated(true); m.setOnGround(true); m.setDeltaMovement(Vec3.ZERO);
             p.setItemInHand(InteractionHand.MAIN_HAND, CatalogueContent.stack("best_diagnostic_tool", 1)); p.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(Items.IRON_PICKAXE));
             h.assertTrue(m.interact(p, InteractionHand.MAIN_HAND).consumesAction() && m.armKey().isEmpty(), "Explicit gesture removes the drill");
@@ -208,7 +208,7 @@ public final class BestMechArmGameTests {
             h.assertTrue(m.work(p) && m.energy() == 0 && m.heat() == 45 && m.wear() == 2 && m.stateTag().getInt("DrillCooldown") == 20
                     && h.getLevel().getBlockState(target).isAir() && h.getLevel().getBlockState(neighbor).is(Blocks.DIRT)
                     && p.getMainHandItem() == held && ItemStack.matches(held, beforeHeld), "Excavator breaks one looked-at block for 12000/45/1 and restores the exact held item");
-            h.assertTrue(h.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(target).inflate(1)).stream().anyMatch(e -> e.getItem().is(Items.DIRT)), "Excavator produces ordinary shovel drops");
+            h.assertTrue(m.cargo().countItem(Items.DIRT) == 1, "Excavator stores ordinary shovel drops in cargo");
             set(m, "Energy", 32000); set(m, "DrillCooldown", 0); var empty = m.stateTag(); empty.putString(BestMechArms.STATE, ""); m.loadState(empty);
             h.getLevel().setBlockAndUpdate(target, Blocks.DIRT.defaultBlockState()); before = m.stateTag();
             h.assertTrue(!m.work(p) && !m.drill(p) && m.stateTag().equals(before), "An explicit empty slot has no freehand or drill fallback");

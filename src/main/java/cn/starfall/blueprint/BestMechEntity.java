@@ -154,14 +154,14 @@ public final class BestMechEntity extends PathfinderMob {
         player.getInventory().setItem(slot, CatalogueContent.stack(BestMechBodies.REINFORCED, 1));
         player.getInventory().setChanged(); return true;
     }
-    public boolean armCompatible() { return heavy() || !BestMechArms.HEAVY_DRILL.equals(armKey()); }
+    public boolean armCompatible() { return heavy() || !BestMechArms.areaWork(armKey()); }
     public int workCost() { return BestMechArms.workCost(armKey()); }
     public int workHeat() { return BestMechArms.workHeat(armKey()); }
     public int workCooldown() { return BestMechArms.cooldown(armKey()); }
     public boolean installArm(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand); String key = BestMechArms.key(held);
         if(hand != InteractionHand.MAIN_HAND || !player.isShiftKeyDown() || !canServiceModule(player)
-                || !armKey().isEmpty() || key.isEmpty() || (!heavy() && BestMechArms.HEAVY_DRILL.equals(key))) return false;
+                || !armKey().isEmpty() || key.isEmpty() || (!heavy() && BestMechArms.areaWork(key))) return false;
         entityData.set(ENGINEERING_ARM, key); held.shrink(1); player.getInventory().setChanged(); return true;
     }
     public boolean removeArm(Player player) {
@@ -373,16 +373,16 @@ public final class BestMechEntity extends PathfinderMob {
         BlockHitResult hit = level().clip(new ClipContext(from, from.add(player.getLookAngle().scale(reach)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
         if(hit.getType() != HitResult.Type.BLOCK) return false;
         BlockPos center = hit.getBlockPos();
-        boolean heavyDrill = BestMechArms.HEAVY_DRILL.equals(armKey());
-        if(!breakWorkBlock(server, center, from, reach, heavyDrill)) return false;
+        boolean areaWork = BestMechArms.areaWork(armKey());
+        if(!breakWorkBlock(server, center, from, reach, areaWork)) return false;
         // Cooldown belongs to the action. Candidate breaks deliberately do not re-enter work().
         drillCooldown = workCooldown();
-        if(heavyDrill) {
+        if(areaWork) {
             var axis = hit.getDirection().getAxis();
             // Rows ascend in the second plane coordinate; columns ascend in the first.
             for(int row = -1; row <= 1; row++) for(int column = -1; column <= 1; column++) {
                 if(row == 0 && column == 0) continue;
-                if(!ready(48000)) return true;
+                if(!ready(workCost())) return true;
                 BlockPos candidate = switch(axis) {
                     case X -> center.offset(0, column, row);
                     case Y -> center.offset(column, 0, row);
@@ -393,24 +393,26 @@ public final class BestMechEntity extends PathfinderMob {
         }
         return true;
     }
-    private boolean breakWorkBlock(ServerPlayer player, BlockPos pos, Vec3 eye, double reach, boolean heavyDrill) {
+    private boolean breakWorkBlock(ServerPlayer player, BlockPos pos, Vec3 eye, double reach, boolean areaWork) {
         if(!level().hasChunkAt(pos) || !level().getWorldBorder().isWithinBounds(pos) || !level().mayInteract(player, pos)) return false;
-        if(heavyDrill) {
+        if(areaWork) {
             double x = net.minecraft.util.Mth.clamp(eye.x, pos.getX(), pos.getX() + 1.0);
             double y = net.minecraft.util.Mth.clamp(eye.y, pos.getY(), pos.getY() + 1.0);
             double z = net.minecraft.util.Mth.clamp(eye.z, pos.getZ(), pos.getZ() + 1.0);
             if(eye.distanceToSqr(x, y, z) > reach * reach) return false;
         }
-        var state = level().getBlockState(pos); boolean excavator = BestMechArms.EXCAVATOR.equals(armKey());
-        ItemStack tool = new ItemStack(heavyDrill ? Items.DIAMOND_PICKAXE : excavator ? Items.IRON_SHOVEL : Items.IRON_PICKAXE);
+        var state = level().getBlockState(pos); boolean excavator = BestMechArms.EXCAVATOR.equals(armKey()) || BestMechArms.HEAVY_EXCAVATOR.equals(armKey());
+        ItemStack tool = new ItemStack(BestMechArms.HEAVY_DRILL.equals(armKey()) ? Items.DIAMOND_PICKAXE : excavator ? Items.IRON_SHOVEL : Items.IRON_PICKAXE);
         if((excavator && !state.is(net.minecraft.tags.BlockTags.MINEABLE_WITH_SHOVEL))
                 || state.isAir() || state.hasBlockEntity() || !level().getFluidState(pos).isEmpty() || state.getDestroySpeed(level(), pos) < 0
                 || (state.requiresCorrectToolForDrops() && !tool.isCorrectToolForDrops(state))) return false;
         ItemStack held = player.getMainHandItem(); boolean success;
         player.setItemInHand(InteractionHand.MAIN_HAND, tool);
+        BestMechLoot.Scope loot = BestMechLoot.begin(player, pos, tool);
         try { success = player.gameMode.destroyBlock(pos); }
-        finally { player.setItemInHand(InteractionHand.MAIN_HAND, held); }
+        finally { loot.close(); player.setItemInHand(InteractionHand.MAIN_HAND, held); }
         if(!success || level().getBlockState(pos).equals(state)) return false;
+        loot.collect(this);
         spend(workCost(), workHeat(), 1); return true;
     }
     public Component status() {

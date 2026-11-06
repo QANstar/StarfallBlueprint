@@ -34,7 +34,7 @@ public final class CatalogueEquipment {
                 lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_module_install"));
             }
         };
-        if(key.equals("best_mech_drill_arm")||key.equals("best_mech_excavator_arm")||key.equals("best_mech_heavy_drill_arm"))return new Item(p.stacksTo(1)){
+        if(key.equals("best_mech_drill_arm")||key.equals("best_mech_excavator_arm")||key.equals("best_mech_heavy_drill_arm")||key.equals("best_mech_heavy_excavator_arm"))return new Item(p.stacksTo(1)){
             @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
                 lines.add(Component.translatable("tooltip.starfall_blueprint."+key));
                 lines.add(Component.translatable("tooltip.starfall_blueprint.best_mech_arm_install"));

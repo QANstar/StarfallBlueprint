@@ -845,5 +845,13 @@
   "lc.workshop.charging": "核心充能",
   "lc.workshop.component_hint": "可用 %s · 拖至部位连接",
   "lc.workshop.assemble": "组装",
-  "lc.workshop.refit": "换装"
+  "lc.workshop.refit": "换装",
+  "item.starfall_blueprint.best_mech_heavy_excavator_arm": "沧澜区域挖掘臂",
+  "message.starfall_blueprint.best_action_28": "制造沧澜区域挖掘臂",
+  "message.starfall_blueprint.best_mech_heavy_excavator_arm_cost": "需本人三级、轻载、诊断与驾驶；普通钢16、承相8、导相4、钢制固定件8、陶瓷护套4、钻石磨头2（不可堆叠）",
+  "message.starfall_blueprint.best_mech_heavy_excavator_arm_assembled": "已制造沧澜区域挖掘臂",
+  "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm": "仅沧澜；真实铁铲对铲类方块按命中面3×3中心先挖掘；每成功块18000 XH、热18、磨损1，40刻共享冷却；逐块权限与触及校验，预算不足即停；掉落优先有效货舱，余量落地",
+  "ui.starfall_blueprint.best_action_28": "制造沧澜区域挖掘臂",
+  "ui.starfall_blueprint.best_material_action_28": "沧澜区域挖掘臂",
+  "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm_install": "潜行主手装入重型机甲空工程臂槽；须本人完整知识、隔离空载存活停稳落地非流体。诊断器主手＋原版铁镐副手潜行拆回，铁镐保留且36格主背包须空格；轻型旧存档已装重臂仅可拆回，不能作业或免费转换"
 }

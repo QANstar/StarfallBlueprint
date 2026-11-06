@@ -381,8 +381,8 @@ public final class BestMechGameTests {
             h.getLevel().setBlockAndUpdate(target, Blocks.STONE.defaultBlockState()); var beforeHeld = held.copy();
             h.assertTrue(m.drill(p) && h.getLevel().getBlockState(target).isAir() && m.energy() == 968000 && m.heat() == 120 && m.wear() == 1
                     && p.getMainHandItem() == held && ItemStack.matches(beforeHeld, held), "A real iron-tier vanilla break spends 32000/120/1 and restores the exact held object");
-            h.assertTrue(h.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(target).inflate(1)).stream().anyMatch(e -> e.getItem().is(Items.COBBLESTONE)),
-                    "Vanilla survival destruction produces ordinary iron-pickaxe cobblestone drops");
+            h.assertTrue(m.cargo().countItem(Items.COBBLESTONE) == 1,
+                    "Vanilla survival destruction stores ordinary iron-pickaxe cobblestone drops in cargo");
             h.getLevel().setBlockAndUpdate(target, Blocks.STONE.defaultBlockState()); int energy = m.energy();
             h.assertTrue(!m.drill(p) && m.energy() == energy && h.getLevel().getBlockState(target).is(Blocks.STONE), "Packet spam during the 20-tick cooldown cannot duplicate another action");
             for(var block : List.of(Blocks.CHEST, Blocks.BEDROCK, Blocks.OBSIDIAN)) {

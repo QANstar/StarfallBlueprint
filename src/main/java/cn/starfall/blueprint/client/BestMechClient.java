@@ -117,8 +117,8 @@ public final class BestMechClient {
         Component request = sample.requestTicks() > 0
                 ? label("request", DRILL.getTranslatedKeyMessage(), sample.requestTicks())
                 : sample.armKey().isEmpty() ? label("no_arm")
-                : BestMechArms.HEAVY_DRILL.equals(sample.armKey()) && !sample.heavy() ? label("incompatible_arm")
-                : label(BestMechArms.HEAVY_DRILL.equals(sample.armKey()) ? "heavy_standby" : "standby", DRILL.getTranslatedKeyMessage(), compactEnergy(sample.workCost()));
+                : BestMechArms.areaWork(sample.armKey()) && !sample.heavy() ? label("incompatible_arm")
+                : label(BestMechArms.areaWork(sample.armKey()) ? "heavy_standby" : "standby", DRILL.getTranslatedKeyMessage(), compactEnergy(sample.workCost()));
         drawFit(graphics, request, x + 9, y + 116, 230, sample.requestTicks() > 0 ? WARNING : TEXT);
         drawFit(graphics, label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
                 x + 9, y + 129, 230, MUTED);
@@ -135,7 +135,7 @@ public final class BestMechClient {
         if(!sample.qualified()) return new PanelStatus("unqualified", ISOLATED);
         if(sample.energy() < sample.movementCost()) return new PanelStatus("no_power", DANGER);
         if(sample.armKey().isEmpty()) return new PanelStatus("no_arm", WARNING);
-        if(BestMechArms.HEAVY_DRILL.equals(sample.armKey()) && !sample.heavy()) return new PanelStatus("incompatible_arm", WARNING);
+        if(BestMechArms.areaWork(sample.armKey()) && !sample.heavy()) return new PanelStatus("incompatible_arm", WARNING);
         if(sample.energy() < sample.workCost()) return new PanelStatus("work_power", WARNING);
         if(sample.heat() >= 800) return new PanelStatus("hot", WARNING);
         if(sample.energy() < sample.capacity() / 10) return new PanelStatus("low_power", WARNING);

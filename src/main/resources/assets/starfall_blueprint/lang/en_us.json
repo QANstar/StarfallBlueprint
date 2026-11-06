@@ -845,5 +845,13 @@
   "lc.workshop.charging": "Core charging",
   "lc.workshop.component_hint": "Available: %s · Drag to connect",
   "lc.workshop.assemble": "Assemble",
-  "lc.workshop.refit": "Refit"
+  "lc.workshop.refit": "Refit",
+  "item.starfall_blueprint.best_mech_heavy_excavator_arm": "Canglan Area Excavator Arm",
+  "message.starfall_blueprint.best_action_28": "Assemble Canglan Area Excavator Arm",
+  "message.starfall_blueprint.best_mech_heavy_excavator_arm_cost": "Requires your level 3, Mobility, Diagnostics and Mech Operation; 16 steel, 8 load inserts, 4 conductive plates, 8 steel fasteners, 4 ceramic sheaths, 2 nonstackable drill heads.",
+  "message.starfall_blueprint.best_mech_heavy_excavator_arm_assembled": "Canglan Area Excavator Arm assembled.",
+  "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm": "Canglan only. Real iron shovel, shovel-mineable blocks; face-aligned 3x3, center first. Each success: 18,000 XH, 18 heat, 1 wear; shared 40-tick cooldown. Individual permission/reach checks; stops on budget limits. Loot fills active cargo, overflow drops.",
+  "ui.starfall_blueprint.best_action_28": "Assemble Canglan Area Excavator Arm",
+  "ui.starfall_blueprint.best_material_action_28": "Canglan Area Excavator Arm",
+  "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm_install": "Sneak-use in main hand on an empty heavy-mech arm slot; all personal knowledge, isolated, unoccupied, alive and stationary on dry ground required. Remove with diagnostic main hand + vanilla iron pickaxe offhand (retained); needs an empty main-inventory slot. A heavy arm loaded on a light mech can only be removed, without work or free conversion."
 }

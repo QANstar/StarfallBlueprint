@@ -209,7 +209,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     text = doc.read_text(encoding='utf-8')
     assert '5/5通过' in text and 'BestDiagnostics' in text and 'BestBatteryIsolated' in text
     assert '本节不宣称本轮服务端或客户端通过' in text
-assert (len(items), len(recipes), len(canonical['catalogue'])) == (316, 245, 182)
+assert (len(items), len(recipes), len(canonical['catalogue'])) == (317, 245, 183)
 armor = ART / 'textures/models/armor/best_frame_layer_2.png'
 assert armor.read_bytes() == (ATLAS / 'item-art/best_frame_layer_2.png').read_bytes()
 with Image.open(armor) as image:
@@ -248,7 +248,7 @@ assert drill['harvest_tier']=='iron' and drill['ordinary_drops']
 assert drill['deny']==['block_entities','unbreakable','protected_blocks']
 assert mech['field_service']['repair'] == dict(material='steel',count=1,wear_restored=200,health_restored=5)
 assert mech['field_service']['cooling'] == dict(material='water_bucket',count=1,heat_reduction=400,returns='bucket')
-assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20,drill_arm=21,excavator_arm=22,reinforced_body=23,generator_core=24,cruise_wheels=25,heavy_mech=26,heavy_drill_arm=27)
+assert items['best_workbench']['mech_actions'] == dict(learn=17,assemble=18,radiator=19,drive=20,drill_arm=21,excavator_arm=22,reinforced_body=23,generator_core=24,cruise_wheels=25,heavy_mech=26,heavy_drill_arm=27,heavy_excavator_arm=28)
 for path, size in [(ART / 'textures/item/best_mech.png',(32,32)),(ART / 'textures/entity/best_engineering_mech.png',(128,128))]:
     with Image.open(path) as image:
         assert image.size == size and image.mode == 'RGBA'
@@ -319,7 +319,7 @@ for doc in (ROOT / 'docs/BEST_ENGINEERING.md', ATLAS.parent / '18_贝斯特轻�
     text = doc.read_text(encoding='utf-8')
     assert 'EngineeringArm' in text and 'MEC-06部分实现' in text and '12,000 XH' in text
 # Body/cargo is one incremental MEC-04 step; manual-only and independent of both old slots.
-assert len(BEST_NAMES) == 16 and len(LEARNING) == 7
+assert len(BEST_NAMES) == 17 and len(LEARNING) == 7
 body = items['best_mech_reinforced_body']
 assert ASSEMBLY['best_mech_reinforced_body'] == [('steel',24), ('load',12), ('conductor',8), ('steel_fix',16), ('sheath',8)]
 assert ASSEMBLY_KNOWLEDGE['best_mech_reinforced_body'] == ASSEMBLY_KNOWLEDGE['best_mech']
@@ -476,7 +476,7 @@ assert ASSEMBLY_KNOWLEDGE['best_mech_cruise_wheels'] == ASSEMBLY_KNOWLEDGE['best
 assert (wheels['real_item'],wheels['item_type'],wheels['max_stack_size'],wheels['max_durability']) == (True,'ordinary',1,0)
 assert wheels['attribute_modifiers'] == [] and wheels['manual_assembly']['output_count'] == 1
 assert not any(k in wheels for k in ('energy_storage','thermal','durability_system','equipment_slot','operation'))
-assert len(LEARNING) == 7 and len(BEST_NAMES) == 16
+assert len(LEARNING) == 7 and len(BEST_NAMES) == 17
 slot = mech['legs_slot']
 assert (slot['storage_key'],slot['max_installed'],slot['independent_of']) == ('Legs',1,['Body','EngineeringArm','UtilityModule','Core'])
 assert all(slot[k] == '' for k in ('default','missing_legacy_value','unknown_value','walking_value'))
@@ -541,7 +541,7 @@ print(f'PASS: cruise wheels; {len(items)} items / {len(recipes)} recipes / {len(
 heavy = items['best_heavy_mech']
 assert ASSEMBLY['best_heavy_mech'] == [('steel',64),('load',32),('conductor',16),('board',8),('steel_fix',32),('head',2),('sensor',4),('sheath',16)]
 assert ASSEMBLY_KNOWLEDGE['best_heavy_mech'] == ASSEMBLY_KNOWLEDGE['best_mech'] + ['advanced_engineering']
-assert len(LEARNING) == 7 and len(BEST_NAMES) == 16
+assert len(LEARNING) == 7 and len(BEST_NAMES) == 17
 assert (heavy['id'],heavy['item_type'],heavy['max_stack_size']) == ('best_heavy_mech','packed_entity',1)
 assert heavy['entity_id'] == 'starfall_blueprint:best_heavy_engineering_mech'
 assert heavy['entity_dimensions'] == dict(width=2.6,height=4.4,rider_seat_height=3.1)
@@ -634,12 +634,12 @@ assert target['block_checks'] == ['protection','BreakEvent','actual_player_reach
 assert key not in mech['engineering_arm_slot']['allowed_items'] and key in heavy['engineering_arm_slot']['allowed_items']
 for platform in (mech, heavy):
     slot = platform['engineering_arm_slot']
-    assert key in slot['known_items'] and slot['heavy_only_items'] == [key]
+    assert key in slot['known_items'] and slot['heavy_only_items'] == [key, 'best_mech_heavy_excavator_arm']
     assert slot['light_loaded_heavy_arm'] == dict(retain_identity=True,removable=True,allows_install=False,allows_work=False,free_conversion=False)
     assert slot['install']['platform_compatibility_required']
     assert platform['engineering_work']['shared_cooldown_max_ticks'] == 40
     assert platform['engineering_work']['cooldown_persistence'] == ['arm_swap','entity_nbt','packed_item','deploy','death_drop']
-assert items['best_workbench']['arms_page_actions'] == [21,22,27]
+assert items['best_workbench']['arms_page_actions'] == [21,22,27,28]
 new_art = (ART/'textures/item'/f'{key}.png').read_bytes()
 assert new_art == (ATLAS/'item-art'/f'{key}.png').read_bytes()
 assert all(new_art != (ART/'textures/item'/f'{old}.png').read_bytes() for old in BEST_NAMES if old != key)
@@ -688,5 +688,18 @@ assert upgrade['reinforced_body']['returns'] == dict(item='best_mech_reinforced_
 assert upgrade['reinforced_body']['require_empty_main_inventory_slot'] and upgrade['reinforced_body']['inventory_slots'] == 36
 assert heavy['solid_fuel_generation']['requires'][-1] == 'capacity_room_at_least_2000'
 assert heavy['solid_fuel_generation']['pause_on'][1] == 'capacity_room_below_2000'
-assert (len(items),len(recipes),len(canonical['catalogue']),len(BEST_NAMES)) == (316,245,182,16)
+assert (len(items),len(recipes),len(canonical['catalogue']),len(BEST_NAMES)) == (317,245,183,17)
 print('PASS: Water God upgrade metadata, seven Best progression nodes, SG-E1/SG-E2 names and unchanged registry counts. No build/UI/runtime claims.')
+
+
+# Canglan area excavation increment (resource assertions only).
+area = items['best_mech_heavy_excavator_arm']
+assert ASSEMBLY['best_mech_heavy_excavator_arm'] == [('steel',16),('load',8),('conductor',4),('steel_fix',8),('sheath',4),('head',2)]
+assert (area['item_type'],area['max_stack_size'],area['max_durability']) == ('ordinary',1,0)
+area_spec = area['engineering_arm']
+assert (area_spec['manual_action'],area_spec['energy'],area_spec['heat'],area_spec['wear'],area_spec['cooldown_ticks']) == (28,18000,18,1,40)
+assert area_spec['tool'] == 'minecraft:iron_shovel' and area_spec['mineable_tag'] == 'minecraft:mineable/shovel'
+assert area_spec['compatible_platforms'] == ['best_heavy_mech']
+assert area_spec['targeting'] == items['best_mech_heavy_drill_arm']['engineering_arm']['targeting']
+assert area_spec['success_only_costs'] and area_spec['shared_cooldown']
+assert area['manual_assembly']['requires'] == ASSEMBLY_KNOWLEDGE['best_mech']

@@ -18,7 +18,7 @@ import net.minecraft.util.Mth;
 /** Original industrial walker: open cockpit, braced chassis and interchangeable right tool arm. */
 public final class BestMechModel extends EntityModel<BestMechEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID, "best_engineering_mech"), "main");
-    private final ModelPart root, leftLeg, rightLeg, leftArm, rightArm, drillHead, bucketHead, heavyDrillHead, reinforcement, generator, wheels, heavyFrame;
+    private final ModelPart root, leftLeg, rightLeg, leftArm, rightArm, drillHead, bucketHead, heavyDrillHead, heavyBucketHead, reinforcement, generator, wheels, heavyFrame;
     private final ModelPart[] wheelRollers = new ModelPart[4];
 
     public BestMechModel(ModelPart root) {
@@ -30,7 +30,7 @@ public final class BestMechModel extends EntityModel<BestMechEntity> {
         for (int i = 0; i < wheelRollers.length; i++) wheelRollers[i] = wheels.getChild("roller_" + i);
         leftLeg = root.getChild("left_leg"); rightLeg = root.getChild("right_leg");
         leftArm = root.getChild("left_arm"); rightArm = root.getChild("right_arm");
-        drillHead = rightArm.getChild("drill_head"); bucketHead = rightArm.getChild("bucket_head"); heavyDrillHead = rightArm.getChild("heavy_drill_head");
+        drillHead = rightArm.getChild("drill_head"); bucketHead = rightArm.getChild("bucket_head"); heavyDrillHead = rightArm.getChild("heavy_drill_head"); heavyBucketHead = rightArm.getChild("heavy_bucket_head");
     }
 
     public static LayerDefinition createLayer() {
@@ -116,6 +116,15 @@ public final class BestMechModel extends EntityModel<BestMechEntity> {
                     .texOffs(116,104).addBox(x-.75f,15,-22,1.5f,3,3);
         }
         toolArm.addOrReplaceChild("heavy_drill_head", heavyDrill, PartPose.ZERO);
+        var heavyBucket = CubeListBuilder.create()
+                .texOffs(64,84).addBox(-4,11,-5,8,9,7)
+                .texOffs(28,72).addBox(-8,15,-8,16,9,2)
+                .texOffs(28,72).addBox(-8,22,-20,16,2,12)
+                .texOffs(0,48).addBox(-8,15,-20,2,7,12)
+                .texOffs(0,48).addBox(6,15,-20,2,7,12);
+        for(int tooth=0;tooth<6;tooth++)
+            heavyBucket.texOffs(108,40).addBox(-8+tooth*2.8f,22,-23,2,2,3);
+        toolArm.addOrReplaceChild("heavy_bucket_head", heavyBucket, PartPose.ZERO);
         return LayerDefinition.create(mesh,128,128);
     }
 
@@ -126,6 +135,7 @@ public final class BestMechModel extends EntityModel<BestMechEntity> {
         drillHead.visible = BestMechArms.DRILL.equals(entity.armKey());
         bucketHead.visible = BestMechArms.EXCAVATOR.equals(entity.armKey());
         heavyDrillHead.visible = BestMechArms.HEAVY_DRILL.equals(entity.armKey());
+        heavyBucketHead.visible = BestMechArms.HEAVY_EXCAVATOR.equals(entity.armKey());
         boolean cruising = cn.starfall.blueprint.BestMechLegs.CRUISE.equals(entity.legsKey());
         wheels.visible = cruising;
         leftLeg.visible = !cruising; rightLeg.visible = !cruising;

@@ -10983,7 +10983,7 @@
       "purpose": {
         "summary": "由SG-E1 涓流全面晋升的SG-E2 沧澜工程机甲",
         "benefit": "水神计划进阶工程平台，保留旧best_heavy_mech物品和实体ID；宽2.6高4.4座高3.1，300生命上限、60MXH容量、27货格。晋升不治疗、不补电、不清热、不清磨损，不产生额外机甲。",
-        "operation": "背包成长进阶工程best:advanced_engineering仅约束动作26，前置机甲驾驶，承相8导相4感相2控制板4及8级经验，首次奖钢固定件8和80经验点。工位主手持隔离存活的涓流收纳物，动作26另付钢64承相32导相16控制板8钢固定件32磨头2感相4护套16，消耗源并在主手替换。保留全部物品组件与自定义NBT、绝对生命、电热磨损、Cargo、UtilityModule、EngineeringArm、Core、Legs、燃料及工作计数、名字和其它状态。源缺Health标准100／强化160，旧沧澜仍300。强化Body移除返1套件，须预留36格主背包空格，失败整笔不变；沧澜拒装该轻型Body。基础／驱动速度0.26／0.34，轮组0.325／0.425；移动1600／2400XH热10／14，轮组能耗×3/4且热减1。自然散热4／散热模块6；核心每刻2000XH、热2、耗1燃料刻，每1000发电刻磨损1且须余量2000。外部实体512／收纳5000XH每刻不变。既有沧澜驾驶及九格臂知识规则保持；武装与融合全能仍为未来设计。",
+        "operation": "背包成长进阶工程best:advanced_engineering仅约束动作26，前置机甲驾驶，承相8导相4感相2控制板4及8级经验，首次奖钢固定件8和80经验点。工位主手持隔离存活的涓流收纳物，动作26另付钢64承相32导相16控制板8钢固定件32磨头2感相4护套16，消耗源并在主手替换。保留全部物品组件与自定义NBT、绝对生命、电热磨损、Cargo、UtilityModule、EngineeringArm、Core、Legs、燃料及工作计数、名字和其它状态。源缺Health标准100／强化160，旧沧澜仍300。强化Body移除返1套件；先在36格主背包的库存副本扣材料，再尝试插入返还件，扣材料腾出的格子可用，放不下则整笔不变；沧澜拒装该轻型Body。基础／驱动速度0.26／0.34，轮组0.325／0.425；移动1600／2400XH热10／14，轮组能耗×3/4且热减1。自然散热4／散热模块6；核心每刻2000XH、热2、耗1燃料刻，每1000发电刻磨损1且须余量2000。外部实体512／收纳5000XH每刻不变。既有沧澜驾驶及九格臂知识规则保持；武装与融合全能仍为未来设计。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABoElEQVR4nOVXPUsDQRCdW+ZfmNIujU3QQiSlYJfOD/AgpBLsrrSytLMVIQG1tBNsDsJhoaSx8R/E3n9wMsLIure3N3O58wQf5Gtnd+btzJu9DcB/RySduNYf5Frn72+LSv8oDb4zHGrjQwaQV5FAafDj+FBNQEICNc7G8UQ893p69fVJ5EMkUJv6g/uLyuB3o0RMFDXBGU83z6UOt4+2CmOhLJhQ8N7pHqwK9kH+fJ1koGPg4+LV29+z6a0qzQph5gUNzJxgoZbTCMwHOxbFQWkNU/gQdQCD5ks0hCHj8vIB2gaGjNl8Xhjj1qxrUxEgvJz3gLF5tmzE9qfa0HRNAKsmhNJX1yYikHmEFBqX2HznC5YtsEXEO5LccAh05vvW+4C+Z7y9E9dR00D78mCDiLUR3C2DobSGHjxNYnewEdnf6YVuyokh7Z5OriS1l8tUzUjSdWekRANgBSZQNurcgOsC6Y3KMI4n31cwykjbJPgeEvHA/kmSc/p9oiyrpetQi8h2wLUPgUiWEZCI2V1voGMY+8dvio/x4yiu+/drlfWfuqu5IfYB4VkAAAAASUVORK5CYII=",
@@ -11605,7 +11605,7 @@
       "purpose": {
         "summary": "人工装配、维修与整备贝斯特工务装备，执行涓流晋升沧澜",
         "benefit": "知识统一在玩家背包成长学习，共23节点（贝斯特7、岭川16）；工位七标签只负责制造、维修、模块管理和晋升，不新增工位学习。",
-        "operation": "第五工程臂页含动作21／22／27／28，第六核心页24，第七行走页25；机甲页动作26消耗主手隔离存活涓流并替换沧澜，需本人进阶工程。其余逐人知识、材料及整备守卫沿用；晋升保留源全部状态，强化Body返件须事先主背包空格，失败整笔不变。",
+        "operation": "第五工程臂页含动作21／22／27／28，第六核心页24，第七行走页25；机甲页动作26消耗主手隔离存活涓流并替换沧澜，需本人进阶工程。动作29一键整备附近唯一合格涓流或沧澜：按需消耗最多1普通钢降低磨损200并恢复生命5，最多1水桶降低热400并返空桶，两项可独立完成，不充电。其余逐人知识、材料及整备守卫沿用；晋升保留源全部状态，强化Body返件先在主背包库存副本扣材料再尝试插入，腾出的格子可用，放不下则整笔不变。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/klEQVR4nGNgGAUDDBjxSUprm/5H5j+9ehqvemSw4/SF/x6mBgTVMxFScLJZBoxJASDLkWl8gIUkk4m0GASI8T0IMA2k5SBAMATMa5/QxGIYYERPdHMXzGagJUhOSEVJzCzoChYuWMpAT8BEV9sGowNY0AUOHThAVwcwklMCossTqw5bScqCy2V2Dg54QyRqXTcKf1lQKVnmMDEMMGAaaAewkKsRV5DTxQFPSaiWKXbAXEjRTLBaxQUIlawsxJbf5ABi6hUWUgwktmFCqAYdVLmAacQ7gIWUECAlbqnqgLk0bCWxkNqEIgWAakNYZUSyAw5RqV1A7/bFKGAgFQAAswlcDML6AtsAAAAASUVORK5CYII=",

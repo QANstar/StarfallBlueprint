@@ -2,6 +2,7 @@ package cn.starfall.blueprint.client;
 
 import cn.starfall.blueprint.BestMechCargoMenu;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,9 +11,16 @@ import net.minecraft.world.entity.player.Inventory;
 public final class BestMechCargoScreen extends AbstractContainerScreen<BestMechCargoMenu> {
     public BestMechCargoScreen(BestMechCargoMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        imageWidth = 176; imageHeight = menu.inventoryTop() + 82;
+        imageWidth = 176; imageHeight = menu.inventoryTop() + 106;
         titleLabelX = 8; titleLabelY = 7;
         inventoryLabelX = 8; inventoryLabelY = menu.inventoryTop() - 12;
+    }
+    @Override protected void init() {
+        super.init();
+        addRenderableWidget(Button.builder(Component.translatableWithFallback("ui.starfall_blueprint.mech_cargo_transfer", "To Inventory"), button -> {
+            if(minecraft != null && minecraft.gameMode != null)
+                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, BestMechCargoMenu.TRANSFER_TO_INVENTORY);
+        }).bounds(leftPos + 8, topPos + menu.inventoryTop() + 80, 100, 20).build());
     }
     @Override protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;

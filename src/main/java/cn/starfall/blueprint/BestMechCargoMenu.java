@@ -14,7 +14,9 @@ import net.minecraft.world.item.ItemStack;
 
 /** Live entity storage, never a copied inventory that could outlive packing or a body change. */
 public final class BestMechCargoMenu extends AbstractContainerMenu {
+    public static final int TRANSFER_TO_INVENTORY = 0;
     private final BestMechEntity mech;
+    private final Player owner;
     private final int cargoSlots;
 
     public BestMechCargoMenu(int id, Inventory inventory, RegistryFriendlyByteBuf buffer) {
@@ -29,7 +31,7 @@ public final class BestMechCargoMenu extends AbstractContainerMenu {
     }
     private BestMechCargoMenu(int id, Inventory inventory, BestMechEntity mech, int size) {
         super(BestMechs.CARGO_MENU.get(), id);
-        this.mech = mech; this.cargoSlots = checkedSize(size);
+        this.mech = mech; this.owner = inventory.player; this.cargoSlots = checkedSize(size);
         SimpleContainer cargo = mech == null ? new SimpleContainer(size) : mech.cargo();
         for(int i = 0; i < size; i++) {
             final int index = i;
@@ -55,6 +57,12 @@ public final class BestMechCargoMenu extends AbstractContainerMenu {
     @Override public boolean stillValid(Player player) {
         return player.level().isClientSide || mech != null && !mech.isRemoved()
                 && mech.cargoSlots() == cargoSlots && mech.canAccessCargo(player);
+    }
+    @Override public boolean clickMenuButton(Player player, int action) {
+        if(action != TRANSFER_TO_INVENTORY || !(player instanceof ServerPlayer) || player instanceof net.neoforged.neoforge.common.util.FakePlayer
+                || player.level().isClientSide || player != owner || player.containerMenu != this || !stillValid(player)) return false;
+        for(int slot = 0; slot < cargoSlots; slot++) quickMoveStack(player, slot);
+        return true;
     }
     @Override public void clicked(int index, int button, ClickType type, Player player) {
         if(stillValid(player)) super.clicked(index, button, type, player);

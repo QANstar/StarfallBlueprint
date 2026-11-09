@@ -86,7 +86,13 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
     }
 
     @Override public boolean clickMenuButton(Player player, int action) {
-        if (player.level().isClientSide || action < 0 || action > 28 || !stillValid(player)) return false;
+        if (player.level().isClientSide || action < 0 || action > 29 || !stillValid(player)) return false;
+        if (action == 29) {
+            if (!(player instanceof net.minecraft.server.level.ServerPlayer server) || player.containerMenu != this) return false;
+            boolean serviced = access.evaluate((level, pos) -> BestMechEntity.serviceAtWorkbench(server, pos), false);
+            broadcastChanges();
+            return serviced;
+        }
         boolean performed = BestEngineering.perform(player, action);
         broadcastChanges();
         return performed;

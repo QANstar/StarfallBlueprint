@@ -27,12 +27,14 @@ import java.util.Locale;
 public final class BestMechClient {
     private static final KeyMapping DRILL = new KeyMapping("key.starfall_blueprint.mech_drill",KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_G,"key.categories.starfall_blueprint");
+    private static final KeyMapping SUPPORT = new KeyMapping("key.starfall_blueprint.mech_support",KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H,"key.categories.starfall_blueprint");
     // This rate-limits requests, not successful server work. No unsynchronized entity fields are read.
     private static int requestTicks;
     private static BestMechEntity lastVehicle;
 
     private BestMechClient() {}
-    public static void keys(RegisterKeyMappingsEvent event) { event.register(DRILL); }
+    public static void keys(RegisterKeyMappingsEvent event) { event.register(DRILL); event.register(SUPPORT); }
     public static void layers(RegisterGuiLayersEvent event) {
         event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID,"mech_status"),(graphics,delta)->render(graphics));
     }
@@ -47,6 +49,10 @@ public final class BestMechClient {
                 requestTicks=20;
             }
         }
+        while (SUPPORT.consumeClick()) {
+            if (mech != null && mech.heavy() && mc.screen == null && !mc.isPaused())
+                PacketDistributor.sendToServer(new BestMechNetworking.Action(1));
+        }
     }
 
     static final int PANEL_WIDTH = 248, PANEL_HEIGHT = 140;
@@ -58,7 +64,13 @@ public final class BestMechClient {
     /** Immutable synchronized inputs. requestTicks is only the local request throttle, never drill cooldown. */
     static record Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                            boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
-                           int requestTicks, int movementCost, String armKey, int workCost, int capacity, boolean heavy) {
+                           int requestTicks, int movementCost, String armKey, int workCost, int capacity, boolean heavy, boolean supportDeployed) {
+        Snapshot(float health, float maxHealth, int energy, int heat, int wear,
+                 boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
+                 int requestTicks, int movementCost, String armKey, int workCost, int capacity, boolean heavy) {
+            this(health, maxHealth, energy, heat, wear, alive, isolated, thermalLocked, qualified,
+                    requestTicks, movementCost, armKey, workCost, capacity, heavy, false);
+        }
         Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                  boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
                  int requestTicks, int movementCost, String armKey, int workCost, int capacity) {
@@ -87,7 +99,7 @@ public final class BestMechClient {
         Minecraft mc=Minecraft.getInstance();
         if(mc.options.hideGui || mc.player==null || !(mc.player.getVehicle() instanceof BestMechEntity mech))return;
         Snapshot sample = new Snapshot(mech.getHealth(), mech.getMaxHealth(), mech.energy(), mech.heat(), mech.wear(),
-                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.armKey(), mech.workCost(), mech.capacity(), mech.heavy());
+                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.armKey(), mech.workCost(), mech.capacity(), mech.heavy(), mech.supportDeployed());
         renderPanel(graphics, 8, 8, sample);
     }
 
@@ -120,7 +132,8 @@ public final class BestMechClient {
                 : BestMechArms.areaWork(sample.armKey()) && !sample.heavy() ? label("incompatible_arm")
                 : label(BestMechArms.areaWork(sample.armKey()) ? "heavy_standby" : "standby", DRILL.getTranslatedKeyMessage(), compactEnergy(sample.workCost()));
         drawFit(graphics, request, x + 9, y + 116, 230, sample.requestTicks() > 0 ? WARNING : TEXT);
-        drawFit(graphics, label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
+        drawFit(graphics, sample.heavy() ? label(sample.supportDeployed() ? "support_deployed" : "support_retracted", SUPPORT.getTranslatedKeyMessage())
+                        : label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
                 x + 9, y + 129, 230, MUTED);
     }
 

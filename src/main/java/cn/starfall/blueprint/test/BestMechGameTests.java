@@ -409,6 +409,110 @@ public final class BestMechGameTests {
     }
 
     @GameTest(template = "empty")
+    public static void workbenchServiceTransactionsAndProtection(GameTestHelper h) throws Exception {
+        floor(h); var p = player(h, true); var m = mech(h, 50000);
+        BlockPos local = new BlockPos(3, 1, 3), pos = h.absolutePos(local);
+        h.setBlock(local, BestEngineering.WORKBENCH.get());
+        p.moveTo(pos.getX() + .5, pos.getY(), pos.getZ() + 1.5, 0, 0);
+        var tag = m.stateTag(); tag.putInt("Wear", 500); tag.putInt("Heat", 700); tag.putBoolean("Isolated", true); tag.putFloat("Health", 50); m.loadState(tag); m.setOnGround(true);
+        var menu = new BestWorkbenchMenu(1, p.getInventory(), net.minecraft.world.inventory.ContainerLevelAccess.create(h.getLevel(), pos));
+        p.containerMenu = menu;
+        var field = net.minecraft.server.players.PlayerList.class.getDeclaredField("playersByUUID"); field.setAccessible(true);
+        @SuppressWarnings("unchecked") var online = (Map<UUID, ServerPlayer>) field.get(h.getLevel().getServer().getPlayerList());
+        Consumer<PlayerInteractEvent.EntityInteract> protection = event -> { if(event.getEntity() == p && event.getTarget() == m) event.setCanceled(true); };
+        online.put(p.getUUID(), p);
+        try {
+            p.getInventory().setItem(1, CatalogueContent.stack("steel", 2)); p.getInventory().setItem(2, new ItemStack(Items.WATER_BUCKET));
+            var before = inventory(p); var state = m.stateTag();
+            NeoForge.EVENT_BUS.addListener(protection);
+            try { h.assertTrue(!menu.clickMenuButton(p, 29) && unchanged(p, before) && m.stateTag().equals(state), "Cancelled entity protection preserves inventory and mech"); }
+            finally { NeoForge.EVENT_BUS.unregister(protection); }
+            h.assertTrue(menu.clickMenuButton(p, 29) && m.isolated() && m.wear() == 300 && m.heat() == 300 && m.getHealth() == 55
+                    && count(p, "steel") == 1 && p.getInventory().countItem(Items.BUCKET) == 1
+                    && p.getInventory().countItem(Items.WATER_BUCKET) == 0, "One click performs both paid operations and returns the bucket");
+            m.loadState(tag); m.setOnGround(true); p.getInventory().clearContent(); p.getInventory().setItem(1, CatalogueContent.stack("steel", 1));
+            h.assertTrue(menu.clickMenuButton(p, 29) && m.wear() == 300 && m.heat() == 700 && count(p, "steel") == 0,
+                    "Missing water still permits the paid repair");
+            m.loadState(tag); m.setOnGround(true); p.getInventory().clearContent(); p.getInventory().setItem(1, new ItemStack(Items.WATER_BUCKET));
+            h.assertTrue(menu.clickMenuButton(p, 29) && m.wear() == 500 && m.heat() == 300
+                    && p.getInventory().countItem(Items.BUCKET) == 1 && p.getInventory().countItem(Items.WATER_BUCKET) == 0,
+                    "Missing steel still permits the paid cooling");
+            m.loadState(tag); m.setOnGround(true);
+            for(int i = 0; i < 36; i++) p.getInventory().setItem(i, new ItemStack(Items.DIRT, 64));
+            p.getInventory().setItem(1, CatalogueContent.stack("steel", 2)); p.getInventory().setItem(2, new ItemStack(Items.WATER_BUCKET, 2));
+            h.assertTrue(menu.clickMenuButton(p, 29) && m.wear() == 300 && m.heat() == 700
+                    && p.getInventory().getItem(1).getCount() == 1 && p.getInventory().getItem(2).getCount() == 2,
+                    "A full inventory prevents unreturnable bucket cooling but allows repair");
+            m.loadState(tag); m.setOnGround(true); p.getInventory().clearContent(); before = inventory(p); state = m.stateTag();
+            h.assertTrue(!menu.clickMenuButton(p, 29) && unchanged(p, before) && m.stateTag().equals(state), "Missing both materials never changes state");
+            var other = mech(h, 1000);
+            try { h.assertTrue(!menu.clickMenuButton(p, 29) && unchanged(p, before) && m.stateTag().equals(state), "Multiple nearby targets are never selected implicitly"); }
+            finally { other.discard(); }
+            var connected = tag.copy(); connected.putBoolean("Isolated", false);
+            connected.putString(BestMechCores.STATE, BestMechCores.GENERATOR); connected.putInt("CoreFuelTicks", 80);
+            m.loadState(connected); m.setOnGround(true); m.setDeltaMovement(.02, 0, 0);
+            p.getInventory().clearContent(); p.getInventory().setItem(1, CatalogueContent.stack("steel", 1));
+            p.getInventory().setItem(2, new ItemStack(Items.WATER_BUCKET));
+            int energy = m.energy(), fuel = m.coreFuelTicks(); Vec3 velocity = m.getDeltaMovement();
+            Consumer<PlayerInteractEvent.EntityInteract> moveDuringEvent = event -> {
+                if(event.getEntity() == p && event.getTarget() == m) m.setDeltaMovement(.2, 0, 0);
+            };
+            before = inventory(p); state = m.stateTag(); NeoForge.EVENT_BUS.addListener(moveDuringEvent);
+            try {
+                h.assertTrue(!menu.clickMenuButton(p, 29) && unchanged(p, before) && m.stateTag().equals(state)
+                        && m.getDeltaMovement().x == .2 && !m.isolated(), "Event changes are rechecked and never overwritten");
+            } finally { NeoForge.EVENT_BUS.unregister(moveDuringEvent); }
+            m.setDeltaMovement(velocity);
+            boolean[] nested = {false};
+            Consumer<PlayerInteractEvent.EntityInteract> recursive = event -> {
+                if(event.getEntity() == p && event.getTarget() == m) nested[0] = menu.clickMenuButton(p, 29);
+            };
+            NeoForge.EVENT_BUS.addListener(recursive);
+            try {
+                h.assertTrue(menu.clickMenuButton(p, 29) && !nested[0], "Connected service succeeds once while recursive requests are rejected");
+            } finally { NeoForge.EVENT_BUS.unregister(recursive); }
+            h.assertTrue(!m.isolated() && m.wear() == 300 && m.heat() == 300 && m.getHealth() == 55
+                    && m.energy() == energy && m.coreFuelTicks() == fuel && m.getDeltaMovement().equals(velocity),
+                    "Connected service preserves isolation, energy, fuel and stationary velocity");
+            h.assertTrue(p.getInventory().countItem(Items.BUCKET) == 1 && count(p, "steel") == 0,
+                    "Recursive requests do not spend or return items twice");
+            m.loadState(connected); m.setOnGround(true); m.setDeltaMovement(.02, 0, 0);
+            p.getInventory().clearContent(); before = inventory(p); state = m.stateTag(); velocity = m.getDeltaMovement();
+            h.assertTrue(!menu.clickMenuButton(p, 29) && unchanged(p, before) && m.stateTag().equals(state)
+                    && m.getDeltaMovement().equals(velocity) && !m.isolated(), "Connected failure leaves state and velocity untouched");
+            var commitField = BestMechEntity.class.getDeclaredField("workbenchServiceCommit"); commitField.setAccessible(true);
+            commitField.setBoolean(m, true);
+            try {
+                h.assertTrue(!m.ready(0) && !m.energyPort().canReceive() && m.energyPort().receiveEnergy(512, true) == 0
+                        && m.energyPort().receiveEnergy(512, false) == 0 && m.energy() == energy && m.coreFuelTicks() == fuel,
+                        "The temporary commit lock blocks work and both simulated and actual charging");
+            } finally { commitField.setBoolean(m, false); }
+            h.assertTrue(m.ready(0) && m.energyPort().receiveEnergy(512, true) > 0, "Clearing the lock restores connected work and charging");
+        } finally { online.remove(p.getUUID(), p); p.containerMenu = p.inventoryMenu; clear(p); m.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void workbenchServiceRejectsDisconnectedAndStaleMenus(GameTestHelper h) {
+        floor(h); var p = player(h, true); var m = mech(h, 50000);
+        BlockPos local = new BlockPos(3, 1, 3), pos = h.absolutePos(local);
+        h.setBlock(local, BestEngineering.WORKBENCH.get());
+        p.moveTo(pos.getX() + .5, pos.getY(), pos.getZ() + 1.5, 0, 0);
+        var tag = m.stateTag(); tag.putInt("Wear", 500); tag.putInt("Heat", 700); tag.putBoolean("Isolated", true); tag.putFloat("Health", 50); m.loadState(tag);
+        p.getInventory().setItem(1, CatalogueContent.stack("steel", 2)); p.getInventory().setItem(2, new ItemStack(Items.WATER_BUCKET));
+        var menu = new BestWorkbenchMenu(1, p.getInventory(), net.minecraft.world.inventory.ContainerLevelAccess.create(h.getLevel(), pos));
+        var before = inventory(p); var state = m.stateTag(); p.containerMenu = menu;
+        try {
+            h.assertTrue(!menu.clickMenuButton(p, 29) && unchanged(p, before) && m.stateTag().equals(state),
+                    "A disconnected test player cannot authorize service or spend inventory");
+            h.setBlock(local, Blocks.AIR);
+            h.assertTrue(!menu.clickMenuButton(p, 29) && unchanged(p, before) && m.stateTag().equals(state),
+                    "A removed workbench cannot authorize a stale menu request");
+        } finally { p.containerMenu = p.inventoryMenu; clear(p); m.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
     public static void thermalHysteresisWornRedeploymentRepairAndDeathCannotHealOrDuplicate(GameTestHelper h) {
         floor(h); var p = player(h, true); var m = mech(h, 50000);
         boolean drops = h.getLevel().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS);

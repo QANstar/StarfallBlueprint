@@ -57,9 +57,24 @@ MECH_MESSAGES = {
  'hud.mech.wait': ('[%1$s] 请求等待 %2$s 刻（服务端校验）', '[%1$s] Request wait: %2$s ticks (server checked)'),
  'hud.mech.controls': ('WASD驾驶 · Shift下车 · 无跳跃', 'WASD drive / Shift dismount / no jump'),
  'key.mech_drill': ('工程臂作业', 'Engineering arm action'),
+ 'key.mech_support': ('切换驻车支撑', 'Toggle parking supports'),
  'key.categories': ('星落蓝图', 'Starfall Blueprint'),
 }
 
+
+MECH_MESSAGES.update({
+ 'ui.best_action_29': ('一键整备', 'Service mech'),
+ 'ui.best_service_detail': ('整备附近唯一机甲：按需消耗钢和水桶，需隔离、空载并停稳。', 'Service the only nearby mech using steel and water as needed. Isolate, unload and park first.'),
+ 'message.mech_service_no_target': ('附近没有机甲', 'No mech nearby.'),
+ 'message.mech_service_multiple': ('附近有多台机甲，请只保留一台', 'Multiple mechs nearby; leave only one.'),
+ 'message.mech_service_unsafe': ('机甲或装配台不满足整备条件', 'Mech or workbench is not safe to service.'),
+ 'message.mech_service_nothing': ('无需整备、缺少材料或没有空桶空间', 'No service needed, missing materials, or no room for a bucket.'),
+ 'message.mech_service_both': ('维修和冷却完成', 'Repair and cooling complete.'),
+ 'message.mech_service_repair_partial': ('维修完成；冷却缺水桶或空桶空间', 'Repaired; cooling needs water or bucket space.'),
+ 'message.mech_service_repair': ('维修完成', 'Repair complete.'),
+ 'message.mech_service_cool_partial': ('冷却完成；维修缺少普通钢', 'Cooled; repair needs ordinary steel.'),
+ 'message.mech_service_cool': ('冷却完成', 'Cooling complete.'),
+})
 
 MECH_MESSAGES.update({
  'hud.mech.panel.title': ('工程机甲', 'ENGINEERING MECH'),
@@ -81,6 +96,8 @@ MECH_MESSAGES.update({
  'hud.mech.panel.request': ('[%1$s] 作业请求等待 %2$s 刻', '[%1$s] Work request wait: %2$s ticks'),
  'hud.mech.panel.standby': ('[%1$s] 工程臂作业 · %2$s XH', '[%1$s] Arm action · %2$s XH'),
  'hud.mech.panel.controls': ('%1$s 移动 · %2$s 下车', '%1$s move · %2$s dismount'),
+ 'hud.mech.panel.support_deployed': ('[%s] 支撑已展开', '[%s] Supports deployed'),
+ 'hud.mech.panel.support_retracted': ('[%s] 支撑已收起', '[%s] Supports retracted'),
 })
 
 
@@ -116,6 +133,7 @@ MECH_MESSAGES.update({
  'mech.body.failed': ('机体整备失败：须本人驾驶全知识、隔离空载存活停稳落地非流体；安装仅标准机体，拆回须主背包空格且电量≤20M、生命≤100、货格9..17为空；状态不变', 'Body change rejected: all mech knowledge and an isolated, unoccupied, living, stationary mech on dry ground required. Install only on a standard body; removal needs an empty main-inventory slot, energy ≤20M, health ≤100 and empty cargo slots 9..17. State preserved.'),
  'menu.best_mech_cargo': ('机甲货舱', 'Mech cargo'),
  'ui.mech_cargo_hint': ('隔离整备 · 禁止存入收纳机甲', 'Isolated service · No packed mechs'),
+ 'ui.mech_cargo_transfer': ('转入背包', 'To Inventory'),
  'hud.mech.panel.body': ('机体：%s', 'Body: %s'),
 })
 

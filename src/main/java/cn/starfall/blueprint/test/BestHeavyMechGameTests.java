@@ -15,6 +15,8 @@ import net.minecraft.server.network.*;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
@@ -70,6 +72,146 @@ public final class BestHeavyMechGameTests {
     private static BestMechEntity deployed(GameTestHelper h) {
         var area = new AABB(Vec3.atLowerCornerOf(h.absolutePos(BlockPos.ZERO)), Vec3.atLowerCornerOf(h.absolutePos(new BlockPos(12, 10, 12))));
         return h.getLevel().getEntitiesOfClass(BestMechEntity.class, area, e -> !e.isRemoved()).stream().findFirst().orElseThrow();
+    }
+
+    @GameTest(template = "empty")
+    public static void mechLogoutPreservesPositionAndLoginEffect(GameTestHelper h) {
+        for(boolean heavy : List.of(false, true)) {
+            var p = player(h); var m = (heavy ? BestMechs.HEAVY_TYPE : BestMechs.TYPE).get().create(h.getLevel());
+            var pos = h.absolutePos(new BlockPos(5, 3, 5));
+            m.moveTo(pos.getX(), pos.getY(), pos.getZ(), 0, 0); h.getLevel().addFreshEntity(m);
+            try {
+                h.assertTrue(p.startRiding(m), "Single-seat driver boards");
+                p.moveTo(pos.getX() + .25, pos.getY() + 2.125, pos.getZ() + .75, 37, 19);
+                var original = p.position(); var pose = p.getPose();
+                BestMechs.playerLogout(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent(p));
+                h.assertTrue(!p.isPassenger() && p.position().equals(original) && p.getYRot() == 37 && p.getXRot() == 19
+                        && p.getPose() == pose && !m.isRemoved() && m.getPassengers().isEmpty(),
+                        "Logout dismounts at exact original position without removing the mech");
+                var saved = new CompoundTag(); p.saveWithoutId(saved);
+                h.assertTrue(saved.getCompound("NeoForgeData").getBoolean("BestMechLogoutSlowFall") && !saved.contains("RootVehicle"),
+                        "Player save retains the one-shot marker and no vehicle");
+                BestMechs.playerLogin(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent(p));
+                var effect = p.getEffect(MobEffects.SLOW_FALLING);
+                h.assertTrue(effect != null && effect.getDuration() == 200 && effect.getAmplifier() == 0
+                        && !p.getPersistentData().contains("BestMechLogoutSlowFall"), "Login grants and consumes the one-shot effect");
+                p.removeEffect(MobEffects.SLOW_FALLING);
+                BestMechs.playerLogin(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent(p));
+                h.assertTrue(!p.hasEffect(MobEffects.SLOW_FALLING), "Marker cannot be reused");
+            } finally { clear(p); m.discard(); }
+        }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void cancelledLogoutAndExistingSlowFallRemainUnchanged(GameTestHelper h) {
+        var p = player(h); var m = mech(h);
+        java.util.function.Consumer<net.neoforged.neoforge.event.entity.EntityMountEvent> cancel = event -> {
+            if(event.getEntityMounting() == p && event.getEntityBeingMounted() == m && event.isDismounting()) event.setCanceled(true);
+        };
+        try {
+            h.assertTrue(p.startRiding(m), "Driver boards before cancellation");
+            var position = p.position(); net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(cancel);
+            try {
+                BestMechs.playerLogout(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent(p));
+                h.assertTrue(p.getVehicle() == m && p.position().equals(position) && !m.isRemoved()
+                        && !p.getPersistentData().contains("BestMechLogoutSlowFall"), "Cancelled dismount is not reported as a success");
+            } finally { net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(cancel); }
+            p.stopRiding();
+            for(int[] value : new int[][] {{600, 0}, {40, 2}, {-1, 0}, {40, 0}}) {
+                p.removeEffect(MobEffects.SLOW_FALLING);
+                p.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, value[0], value[1], true, false, false));
+                var prior = p.getEffect(MobEffects.SLOW_FALLING);
+                p.getPersistentData().putBoolean("BestMechLogoutSlowFall", true);
+                BestMechs.playerLogin(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent(p));
+                h.assertTrue(p.getEffect(MobEffects.SLOW_FALLING) == prior && prior.getDuration() == value[0]
+                        && prior.getAmplifier() == value[1] && prior.isAmbient() && !prior.isVisible() && !prior.showIcon()
+                        && !p.getPersistentData().contains("BestMechLogoutSlowFall"), "Existing effects and display flags are untouched");
+            }
+            p.removeEffect(MobEffects.SLOW_FALLING);
+            java.util.function.Consumer<net.neoforged.neoforge.event.entity.living.MobEffectEvent.Applicable> deny = event -> {
+                if(event.getEntity() == p && event.getEffectInstance().getEffect().equals(MobEffects.SLOW_FALLING))
+                    event.setResult(net.neoforged.neoforge.event.entity.living.MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
+            };
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(deny);
+            try {
+                p.getPersistentData().putBoolean("BestMechLogoutSlowFall", true);
+                BestMechs.playerLogin(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent(p));
+                h.assertTrue(!p.hasEffect(MobEffects.SLOW_FALLING) && !p.getPersistentData().contains("BestMechLogoutSlowFall"),
+                        "Rejected effect is not treated as applied or retried indefinitely");
+            } finally { net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(deny); }
+        } finally { clear(p); m.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void supportRequiresActualQualifiedDriverAndStopsDrivingButAllowsWork(GameTestHelper h) {
+        var p = player(h); var outsider = player(h); var m = mech(h); var light = BestMechs.TYPE.get().create(h.getLevel());
+        try {
+            var t = m.stateTag(); t.putInt("Energy", 1_000_000); t.putInt("Heat", 100); m.loadState(t);
+            m.setOnGround(true); m.setDeltaMovement(Vec3.ZERO);
+            h.assertTrue(!m.toggleSupport(p) && !m.supportDeployed(), "A qualified non-rider cannot deploy support");
+            h.assertTrue(p.startRiding(m), "Qualified driver mounts heavy mech");
+            h.assertTrue(!m.toggleSupport(outsider), "Another player cannot request support");
+            p.getPersistentData().putBoolean("BestMechOperation", false);
+            h.assertTrue(!m.toggleSupport(p), "Current rider must retain operation knowledge");
+            p.getPersistentData().putBoolean("BestMechOperation", true);
+            m.setHealth(0); h.assertTrue(!m.toggleSupport(p), "Destroyed mech cannot deploy support"); m.setHealth(m.getMaxHealth());
+            m.setOnGround(false); h.assertTrue(!m.toggleSupport(p), "Airborne support deployment is rejected");
+            m.setOnGround(true); m.setDeltaMovement(.04, 0, 0);
+            h.assertTrue(!m.toggleSupport(p), "Moving support deployment is rejected");
+            m.setDeltaMovement(0, .11, 0); h.assertTrue(!m.toggleSupport(p), "Excess vertical speed is rejected");
+            m.setDeltaMovement(Vec3.ZERO);
+            h.assertTrue(m.toggleSupport(p) && m.supportDeployed() && m.coolingRate() == 6, "Stationary qualified driver deploys support and gains exactly two cooling");
+            var start = m.position(); int energy = m.energy(); p.setPlayerInput(1, 1, false, false); m.tick();
+            h.assertTrue(Math.abs(m.getX() - start.x) < 1e-6 && Math.abs(m.getZ() - start.z) < 1e-6
+                    && m.energy() == energy && m.heat() == 94 && m.getDeltaMovement().horizontalDistanceSqr() == 0,
+                    "Real rider input cannot move or spend drive energy while support adds two passive cooling");
+            m.setOnGround(true); var eye = h.absolutePos(new BlockPos(5, 2, 3)); p.moveTo(eye.getX() + .5, eye.getY(), eye.getZ() + .5, 0, 0);
+            var target = h.absolutePos(new BlockPos(5, 3, 6)); h.getLevel().setBlockAndUpdate(target, Blocks.STONE.defaultBlockState());
+            h.assertTrue(m.work(p) && h.getLevel().getBlockState(target).isAir() && m.energy() == energy - m.workCost(),
+                    "Deployed support does not prevent the real paid work action");
+            var exit = m.getDismountLocationForPassenger(p); p.stopRiding();
+            h.assertTrue(!p.isPassenger() && h.getLevel().noCollision(p, p.getType().getDimensions().makeBoundingBox(exit))
+                    && h.getLevel().getFluidState(BlockPos.containing(exit)).isEmpty() && m.supportDeployed(),
+                    "Deployed support permits a dry collision-checked dismount");
+            h.assertTrue(p.startRiding(m), "Driver may remount without retracting support");
+            p.getPersistentData().putBoolean("BestDiagnostics", false);
+            h.assertTrue(!m.toggleSupport(p) && m.supportDeployed(), "An unqualified rider cannot retract through a forged request");
+            p.getPersistentData().putBoolean("BestDiagnostics", true);
+            m.setOnGround(false); m.setIsolated(true); m.setDeltaMovement(.5, .5, 0);
+            h.assertTrue(m.toggleSupport(p) && !m.supportDeployed(), "Qualified driver can retract while airborne, moving and isolated");
+            m.setIsolated(false); m.setOnGround(true); m.setDeltaMovement(Vec3.ZERO); p.setPlayerInput(0, 1, false, false);
+            double beforeZ = m.getZ(); int beforeHeat = m.heat(), beforeEnergy = m.energy(); m.tick();
+            h.assertTrue(m.getZ() > beforeZ && m.energy() == beforeEnergy - m.movementCost()
+                    && m.heat() == beforeHeat - 4 + m.movementHeat() && m.coolingRate() == 4,
+                    "Retracted support restores normal movement, cost and passive cooling");
+            p.stopRiding(); h.assertTrue(!p.isPassenger(), "Support never prevents dismount");
+            h.assertTrue(!light.toggleSupport(p), "Initial platform cannot enable support");
+        } finally { clear(p); clear(outsider); m.discard(); light.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void supportSurvivesEntitySaveAndPackDeployButCannotBeForgedOnLight(GameTestHelper h) {
+        var p = player(h); var m = mech(h); var light = BestMechs.TYPE.get().create(h.getLevel());
+        try {
+            h.assertTrue(!m.supportDeployed(), "Old and new absent support state defaults off");
+            var old = m.stateTag(); old.remove("SupportDeployed"); m.loadState(old);
+            h.assertTrue(!m.supportDeployed(), "Legacy saved data defaults off");
+            m.setOnGround(true); m.setDeltaMovement(Vec3.ZERO); h.assertTrue(p.startRiding(m) && m.toggleSupport(p), "Driver deploys support before saving");
+            var saved = new CompoundTag(); m.save(saved); var restored = EntityType.loadEntityRecursive(saved, h.getLevel(), entity -> entity);
+            h.assertTrue(restored instanceof BestMechEntity loaded && loaded.heavy() && loaded.supportDeployed(), "Entity save restores synchronized heavy support state");
+            if(restored != null) restored.discard();
+            p.stopRiding(); service(p, m); var expected = m.stateTag();
+            h.assertTrue(m.pack(p) && BestMechItem.state(p.getMainHandItem()).getBoolean("SupportDeployed"), "Packing retains support state");
+            p.setShiftKeyDown(false); h.assertTrue(deploy(h, p, new BlockPos(6, 0, 6)).consumesAction(), "Packed heavy mech redeploys");
+            m = deployed(h); h.assertTrue(m.supportDeployed() && m.stateTag().equals(expected), "Redeployment preserves all state including support");
+            var forged = m.stateTag(); forged.putBoolean("SupportDeployed", true); light.loadState(forged);
+            h.assertTrue(!light.supportDeployed() && !light.stateTag().getBoolean("SupportDeployed")
+                    && light.coolingRate() == BestMechModules.coolingRate(light.moduleKey()), "Forged initial-platform state cannot enable support or cooling");
+        } finally { clear(p); if(!m.isRemoved()) m.discard(); light.discard(); }
+        h.succeed();
     }
 
     @GameTest(template = "empty")

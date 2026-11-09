@@ -70,7 +70,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
             case 0 -> new int[]{2, 3, 6, 4, 7};
             case 1 -> new int[]{9, 10, 11, 12};
             case 2 -> new int[]{14, 15, 16};
-            case 3 -> new int[]{18, 19, 20, 23, 26};
+            case 3 -> new int[]{18, 19, 20, 23, 26, 29};
             case 4 -> new int[]{21, 22, 27, 28};
             case 5 -> new int[]{24};
             default -> new int[]{25};
@@ -78,8 +78,8 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         for (int i = 0; i < actions.length; i++) {
             int action = actions[i];
             Button button = addRenderableWidget(Button.builder(text("action_" + action), clicked -> {
-                if (action >= 17) selectMaterialAction(action);
-                if (minecraft != null && minecraft.gameMode != null && menu.preview(action).executable())
+                if (action >= 17 && action != 29) selectMaterialAction(action);
+                if (minecraft != null && minecraft.gameMode != null && (action == 29 || menu.preview(action).executable()))
                     minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action);
             }).bounds(leftPos + 8 + (i % 2) * 146, topPos + 63 + (i / 2) * 16, 138, 14).build());
             actionButtons.add(new ActionButton(action, button));
@@ -88,7 +88,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     }
 
     private void updateActions() {
-        for (ActionButton entry : actionButtons) entry.button().active = menu.preview(entry.action()).executable();
+        for (ActionButton entry : actionButtons) entry.button().active = entry.action() == 29 || menu.preview(entry.action()).executable();
     }
     private boolean hovered(Button button, int mouseX, int mouseY) {
         return mouseX >= button.getX() && mouseX < button.getX() + button.getWidth()
@@ -139,13 +139,17 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         updateActions();
         for (ActionButton entry : actionButtons) {
-            if (page >= 3 && hovered(entry.button(), mouseX, mouseY)) selectMaterialAction(entry.action());
+            if (page >= 3 && entry.action() != 29 && hovered(entry.button(), mouseX, mouseY)) selectMaterialAction(entry.action());
         }
         super.render(graphics, mouseX, mouseY, partialTick);
         renderTooltip(graphics, mouseX, mouseY);
         // Inactive vanilla buttons do not consistently expose tooltips; test bounds directly.
         for (ActionButton entry : actionButtons) {
             if (hovered(entry.button(), mouseX, mouseY)) {
+                if (entry.action() == 29) {
+                    graphics.renderTooltip(font, font.split(text("service_detail"), Math.min(280, width - 20)), mouseX, mouseY);
+                    return;
+                }
                 var preview = menu.preview(entry.action());
                 Component tooltip = text("action_" + entry.action()).copy().append("\n").append(preview.reason());
                 if (entry.action() == 26) tooltip = tooltip.copy().append("\n").append(BestEngineering.actionCostComponent(26));

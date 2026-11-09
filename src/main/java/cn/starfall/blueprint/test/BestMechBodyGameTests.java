@@ -184,6 +184,76 @@ public final class BestMechBodyGameTests {
     }
 
     @GameTest(template = "empty")
+    public static void cargoButtonTransfersOnlyActiveSlotsAndPreservesComponents(GameTestHelper h) {
+        var p = player(h); var light = mech(h);
+        var heavy = BestMechs.HEAVY_TYPE.get().create(h.getLevel());
+        heavy.moveTo(light.getX(), light.getY(), light.getZ(), 0, 0); h.getLevel().addFreshEntity(heavy);
+        try {
+            for(int size : new int[]{9, 18, 27}) {
+                var m = size == 27 ? heavy : light;
+                p.closeContainer(); p.getInventory().clearContent(); m.cargo().clearContent();
+                if(size != 27) {
+                    var state = m.stateTag(); state.putString(BestMechBodies.STATE, size == 18 ? BestMechBodies.REINFORCED : ""); m.loadState(state);
+                }
+                service(p, m); BestMechCargoMenu.open(p, m);
+                h.assertTrue(p.containerMenu instanceof BestMechCargoMenu, "Actual cargo menu opens");
+                var menu = (BestMechCargoMenu)p.containerMenu;
+                h.assertTrue(menu.cargoSlots() == size && menu.stillValid(p), "Expected active capacity " + size);
+                var named = new ItemStack(Items.DIAMOND, 8);
+                named.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.literal("Cargo marker"));
+                var destination = named.copy(); destination.setCount(60);
+                for(int i = 0; i < 36; i++) p.getInventory().setItem(i, new ItemStack(Items.COBBLESTONE, 64));
+                p.getInventory().setItem(0, destination);
+                m.cargo().setItem(0, named.copy()); m.cargo().setItem(size - 1, new ItemStack(Items.GOLD_INGOT, 11));
+                if(size < 27) m.cargo().setItem(26, new ItemStack(Items.EMERALD, 3));
+                h.assertTrue(menu.clickMenuButton(p, BestMechCargoMenu.TRANSFER_TO_INVENTORY), "Valid bulk action accepted");
+                var expected = named.copy(); expected.setCount(4); var full = named.copy(); full.setCount(64);
+                h.assertTrue(ItemStack.matches(m.cargo().getItem(0), expected) && ItemStack.matches(p.getInventory().getItem(0), full)
+                        && m.cargo().getItem(size - 1).is(Items.GOLD_INGOT) && m.cargo().getItem(size - 1).getCount() == 11,
+                        "Partial inventory merges exact components and leaves all excess in cargo");
+                p.getInventory().clearContent();
+                h.assertTrue(menu.clickMenuButton(p, BestMechCargoMenu.TRANSFER_TO_INVENTORY), "Bulk action accepts free inventory");
+                h.assertTrue(m.cargo().getItem(0).isEmpty() && m.cargo().getItem(size - 1).isEmpty()
+                        && p.getInventory().items.stream().anyMatch(s -> ItemStack.matches(s, expected))
+                        && p.getInventory().items.stream().filter(s -> s.is(Items.GOLD_INGOT)).mapToInt(ItemStack::getCount).sum() == 11,
+                        "All active items transfer once, including last active cell and named stack");
+                if(size < 27) h.assertTrue(m.cargo().getItem(26).is(Items.EMERALD) && m.cargo().getItem(26).getCount() == 3,
+                        "Inactive storage is never accessed");
+            }
+        } finally { clear(p); light.discard(); heavy.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void cargoButtonRejectsForgedAndInvalidMenus(GameTestHelper h) {
+        var p = player(h); var other = player(h); var m = mech(h);
+        var fake = net.neoforged.neoforge.common.util.FakePlayerFactory.get(h.getLevel(), new GameProfile(UUID.randomUUID(), "CargoFake"));
+        try {
+            service(p, m); service(other, m); m.cargo().setItem(0, new ItemStack(Items.DIAMOND, 5));
+            BestMechCargoMenu.open(p, m); var menu = (BestMechCargoMenu)p.containerMenu;
+            h.assertTrue(menu.stillValid(p) && menu.stillValid(other), "Both real players qualify near mech");
+            other.containerMenu = menu;
+            h.assertTrue(!menu.clickMenuButton(other, BestMechCargoMenu.TRANSFER_TO_INVENTORY)
+                    && !menu.clickMenuButton(p, -1) && !menu.clickMenuButton(p, Integer.MAX_VALUE)
+                    && m.cargo().getItem(0).getCount() == 5 && p.getInventory().isEmpty(), "Other player and unknown actions cannot transfer");
+            other.containerMenu = other.inventoryMenu;
+            fake.setGameMode(GameType.SURVIVAL); fake.getInventory().clearContent();
+            fake.getPersistentData().putInt("BestEngineeringResearch", 3);
+            for(String key : List.of("BestDiagnostics", "BestLightMobility", "BestMechOperation")) fake.getPersistentData().putBoolean(key, true);
+            service(fake, m); var forged = new BestMechCargoMenu(987, fake.getInventory(), m); fake.containerMenu = forged;
+            h.assertTrue(forged.stillValid(fake) && !forged.clickMenuButton(fake, BestMechCargoMenu.TRANSFER_TO_INVENTORY)
+                    && m.cargo().getItem(0).getCount() == 5 && fake.getInventory().isEmpty(), "Qualified fake owner with current menu is rejected");
+            p.moveTo(m.getX() + 9, m.getY(), m.getZ(), 0, 0);
+            h.assertTrue(!menu.stillValid(p) && !menu.clickMenuButton(p, BestMechCargoMenu.TRANSFER_TO_INVENTORY)
+                    && m.cargo().getItem(0).getCount() == 5, "Out-of-range current menu cannot transfer");
+            service(p, m); p.closeContainer();
+            h.assertTrue(menu.stillValid(p) && !menu.clickMenuButton(p, BestMechCargoMenu.TRANSFER_TO_INVENTORY)
+                    && m.cargo().getItem(0).getCount() == 5, "Closed but otherwise valid menu cannot transfer");
+        } finally { fake.containerMenu = fake.inventoryMenu; fake.getInventory().clearContent(); clear(other); clear(p); m.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
     public static void actualRidingUsesBodyMovementBoundariesAndPackedCapacityWithoutHealing(GameTestHelper h) {
         var p = player(h); var m = mech(h);
         try {

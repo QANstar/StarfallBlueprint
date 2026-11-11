@@ -62,11 +62,11 @@ public final class LingchuanMenu extends AbstractContainerMenu {
         boolean result;
         if(action==90&&kind().equals("lc_research_station")){data.set(4,materials()?0:1);result=true;}
         else if(action==91&&kind().equals("lc_armor_assembler")){data.set(5,componentView()?0:1);result=true;}
-        else if(action>=300&&action<312)result=BlackDogWorkstations.connect(player,station,action-300);
+        else if(action>=300&&action<300+Lingchuan.ABILITIES.size())result=BlackDogWorkstations.connect(player,station,action-300);
         else if(action>=0&&action<16)result=Lingchuan.research(player,station,action,materials());
         else if(action>=100&&action<100+Lingchuan.MODULES.size())result=Lingchuan.manufacture(player,station,action-100);
         else if(action==180&&kind().equals("lc_parts_fabricator"))result=Lingchuan.makeFireControl(player,station);
-        else if(action>=200&&action<212)result=BlackDogWorkstations.disconnect(player,station,action-200);
+        else if(action>=200&&action<200+Lingchuan.ABILITIES.size())result=BlackDogWorkstations.disconnect(player,station,action-200);
         else if(action==40||action==41)result=Lingchuan.forge(player,station,action-40);
         else if(action==50)result=Lingchuan.assemble(player,station);
         else if(action==51)result=Lingchuan.refit(player,station);

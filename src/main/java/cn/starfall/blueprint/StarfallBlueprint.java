@@ -132,6 +132,8 @@ public final class StarfallBlueprint {
         NeoForge.EVENT_BUS.addListener(CatalogueEquipment::breakSpeed);
         NeoForge.EVENT_BUS.addListener(BestEngineering::playerTick);
         NeoForge.EVENT_BUS.addListener(BlackDogArmor::playerTick);
+        NeoForge.EVENT_BUS.addListener(BlackDogArmor::interactSwarm);
+        NeoForge.EVENT_BUS.addListener(BlackDogArmor::interactSwarmSpecific);
         NeoForge.EVENT_BUS.addListener(BlackDogArmor::incomingDamage);
         NeoForge.EVENT_BUS.addListener(BlackDogArmor::drops);
         NeoForge.EVENT_BUS.addListener(BlackDogArmor::clonePlayer);

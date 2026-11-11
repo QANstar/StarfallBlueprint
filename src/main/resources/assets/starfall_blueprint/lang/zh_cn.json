@@ -45,7 +45,7 @@
   "key.starfall_blueprint.blackdog_shield": "黑狗：选择粒子护盾开关",
   "key.starfall_blueprint.blackdog_cloak": "黑狗：选择隐身开关",
   "item.starfall_blueprint.blackdog_armed_watch": "夜巡·全武装黑狗战甲腕表",
-  "lc.armed_watch_hint": "创造预装：III阶八部位 · 全部12种组件 · 初始满电1,000,000 XH",
+  "lc.armed_watch_hint": "创造预装：III阶八部位 · 全部13种组件（含追猎蜂群）· 初始满电1,000,000 XH",
   "lc.armed_watch_control": "右键展开／收回；首次展开附送火控终端，右键开火，潜行右键切换武器",
   "itemGroup.starfall_blueprint": "星落蓝图 · 基础工业",
   "block.starfall_blueprint.ore_meteor_phase": "陨相矿",
@@ -868,5 +868,12 @@
   "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm": "仅沧澜；真实铁铲对铲类方块按命中面3×3中心先挖掘；每成功块18000 XH、热18、磨损1，40刻共享冷却；逐块权限与触及校验，预算不足即停；掉落优先有效货舱，余量落地",
   "ui.starfall_blueprint.best_action_28": "制造沧澜区域挖掘臂",
   "ui.starfall_blueprint.best_material_action_28": "沧澜区域挖掘臂",
-  "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm_install": "潜行主手装入重型机甲空工程臂槽；须本人完整知识、隔离空载存活停稳落地非流体。诊断器主手＋原版铁镐副手潜行拆回，铁镐保留且36格主背包须空格；轻型旧存档已装重臂仅可拆回，不能作业或免费转换"
+  "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm_install": "潜行主手装入重型机甲空工程臂槽；须本人完整知识、隔离空载存活停稳落地非流体。诊断器主手＋原版铁镐副手潜行拆回，铁镐保留且36格主背包须空格；轻型旧存档已装重臂仅可拆回，不能作业或免费转换",
+  "item.starfall_blueprint.blackdog_component_swarm": "追猎蜂群飞弹组件",
+  "lc.ability.swarm": "长按火控终端右键瞄准生物，0.8秒锁定；准星移远或遮挡取消。锁定后松开发射16枚追踪飞弹，间隔0.15秒，消耗16000 XH。",
+  "lc.system.swarm": "追猎蜂群",
+  "key.starfall_blueprint.blackdog_swarm": "黑狗：追猎蜂群",
+  "lc.swarm_searching": "追猎蜂群 · 搜索目标",
+  "lc.swarm_locking": "追猎蜂群 · 锁定中 %s%%",
+  "lc.swarm_locked": "追猎蜂群 · 已锁定 · 松开右键发射"
 }

@@ -45,7 +45,7 @@ public final class LingchuanGameTests {
         p.setItemInHand(InteractionHand.MAIN_HAND,stack);
         stack.getItem().use(h.getLevel(),p,InteractionHand.MAIN_HAND);
         h.assertTrue(BlackDogArmor.valid(stack)&&BlackDogArmor.deployed(stack)&&BlackDogArmor.complete(p,stack),"Fresh creative watch deploys without research or assembly");
-        h.assertTrue(BlackDogArmor.charge(stack)==1_000_000&&BlackDogArmor.components(stack).size()==12,"Preset starts full with every component");
+        h.assertTrue(BlackDogArmor.charge(stack)==1_000_000&&BlackDogArmor.components(stack).size()==Lingchuan.ABILITIES.size()&&BlackDogArmor.has(stack,"swarm"),"Preset starts full with every component");
         for(int i=0;i<8;i++)h.assertTrue(Lingchuan.module(BlackDogArmor.modules(stack).get(i)).tier()==3,"Every chassis and core is tier III");
         h.assertTrue(p.getInventory().contains(CatalogueContent.stack("blackdog_fire_control",1)),"First deployment supplies the weapon controller");
         var identity=CatalogueEquipment.getData(stack).getUUID("SuitId");
@@ -58,6 +58,19 @@ public final class LingchuanGameTests {
         var other=new ItemStack(BlackDogArmor.ARMED_WATCH.get());((BlackDogArmor.ArmedWatch)other.getItem()).prepare(other);
         h.assertTrue(!CatalogueEquipment.getData(other).getUUID("SuitId").equals(identity),"Separate creative copies receive independent suit identities");
         h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=100)
+    public static void oldCreativeWatchAddsSwarmWithoutResettingSuit(GameTestHelper h){
+        var p=player(h);var stack=new ItemStack(BlackDogArmor.ARMED_WATCH.get());var item=(BlackDogArmor.ArmedWatch)stack.getItem();item.prepare(stack);
+        var oldFunctions=BlackDogArmor.components(stack).stream().filter(s->!Lingchuan.module(s).ability().equals("swarm")).toList();
+        BlackDogArmor.configure(stack,BlackDogArmor.modules(stack),oldFunctions);BlackDogArmor.setCharge(stack,12345);p.getInventory().setItem(1,stack);BlackDogArmor.toggle(p,stack);
+        var identity=CatalogueEquipment.getData(stack).getUUID("SuitId");item.prepare(stack);item.prepare(stack);p.tickCount=1;BlackDogArmor.tickPlayer(p);
+        h.assertTrue(BlackDogArmor.has(stack,"swarm")&&BlackDogArmor.components(stack).size()==13&&BlackDogArmor.valid(stack),"Old creative watch gains exactly one swarm component and remains valid");
+        h.assertTrue(BlackDogArmor.charge(stack)==12345&&BlackDogArmor.deployed(stack)&&BlackDogArmor.complete(p,stack)&&CatalogueEquipment.getData(stack).getUUID("SuitId").equals(identity),"Upgrade preserves energy, identity and deployed projections");
+        h.assertTrue(BlackDogArmor.selectSystem(p,BlackDogArmor.SYSTEMS.indexOf("swarm"))==false,"Selection still requires a terminal");
+        p.setItemInHand(InteractionHand.MAIN_HAND,CatalogueContent.stack("blackdog_fire_control",1));h.assertTrue(BlackDogArmor.selectSystem(p,BlackDogArmor.SYSTEMS.indexOf("swarm")),"Upgraded watch exposes swarm through the normal terminal");
+        h.assertTrue(!BlackDogArmor.compatible(BlackDogArmor.modules(stack),BlackDogArmor.components(stack)),"Normal survival suits retain their original component and shoulder limits");
+        BlackDogArmor.recall(p,stack);h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)
     public static void researchIsPersonalAtomicAndPaysExactlyOneRoute(GameTestHelper h){
@@ -99,6 +112,17 @@ public final class LingchuanGameTests {
         p.getPersistentData().putInt("LingchuanResearch",3);
         h.assertTrue(Lingchuan.manufacture(p,be,0)&&be.getItem(9).is(CatalogueContent.item("blackdog_head_basic")),"Basic head fabrication succeeds");
         h.assertTrue(!Lingchuan.manufacture(p,be,1)&&p.getInventory().getItem(0).getCount()==2,"Occupied output preserves subsequent materials");h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=100)
+    public static void swarmModuleCanBeManufacturedConnectedAndRemoved(GameTestHelper h){
+        var p=player(h);var fabricator=station(h,"lc_parts_fabricator");input(p,0,"laminar_alloy",8);input(p,2,"laminar_crystal",3);input(p,3,"board",3);
+        int ability=Lingchuan.ABILITIES.indexOf("swarm"),product=24+ability;
+        h.assertTrue(!Lingchuan.manufacture(p,fabricator,product),"Swarm manufacture requires its research");p.getPersistentData().putInt("LingchuanResearch",65535);
+        h.assertTrue(Lingchuan.manufacture(p,fabricator,product)&&fabricator.getPower()==1_970_000,"Swarm manufacture pays its tier-three recipe");
+        p.getInventory().setItem(4,fabricator.removeItem(9,1));var assembler=station(h,"lc_armor_assembler");var watch=BlackDogArmor.build(parts(3));assembler.setItem(8,watch);
+        h.assertTrue(BlackDogWorkstations.connect(p,assembler,ability)&&BlackDogArmor.has(watch,"swarm"),"New ability index can be installed into a tier-three shoulder");
+        h.assertTrue(BlackDogWorkstations.interfaceLoad(BlackDogWorkstations.preview(assembler),7)==3,"Swarm contributes to displayed shoulder load");
+        h.assertTrue(BlackDogWorkstations.disconnect(p,assembler,ability)&&!BlackDogArmor.has(watch,"swarm")&&assembler.getItem(10).is(CatalogueContent.item("blackdog_component_swarm")),"Swarm detaches and returns its real component to staging");h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)
     public static void eightBayAssemblyPersistsOwnedModules(GameTestHelper h){
@@ -269,7 +293,7 @@ public final class LingchuanGameTests {
         var display=BlackDogWorkstations.preview(be);h.assertTrue(display.getIntArray("ChassisTiers")[6]==2&&Integer.bitCount(display.getInt("Abilities"))==1&&display.getInt("Load")==4,"Partial model contains only the placed back and flight");
         var tag=be.getUpdateTag(h.getLevel().registryAccess());h.assertTrue(tag.getCompound("BlackDogDisplay").equals(display)&&!tag.contains("IndustryInventory"),"Client snapshot carries display state without exposing unrelated machine inventory");
         h.assertTrue(BlackDogWorkstations.disconnect(p,be,4)&&be.getItem(10).isEmpty()&&p.getInventory().contains(CatalogueContent.stack("blackdog_component_flight",1))&&be.getPower()==2000000,"Uncommitted wiring returns the owned staging item without a fee");
-        h.assertTrue(!BlackDogWorkstations.connect(p,be,12),"Out-of-range component IDs are rejected");h.succeed();
+        h.assertTrue(!BlackDogWorkstations.connect(p,be,Lingchuan.ABILITIES.size()),"Out-of-range component IDs are rejected");h.succeed();
     }
     @GameTest(template="empty",timeoutTicks=100)
     public static void personalKnowledgeSurvivesDeathAndOrphanProjectionIsRemoved(GameTestHelper h){

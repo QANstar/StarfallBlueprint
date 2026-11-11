@@ -40,17 +40,18 @@ public final class Lingchuan {
         public int power(){return tier*10000;}
     }
     public static final List<Module> MODULES;
-    public static final List<String> ABILITIES=List.of("night","breathing","sprint","jump","flight","shield","heavy","cloak","laser","missile","cannon","turret");
+    public static final List<String> ABILITIES=List.of("night","breathing","sprint","jump","flight","shield","heavy","cloak","laser","missile","cannon","turret","swarm");
     private static final Map<String,Module> LEGACY=new HashMap<>();
     static {
         var list=new ArrayList<Module>();
         for(int tier=1;tier<=3;tier++)for(int i=0;i<PARTS.size();i++)list.add(new Module(baseKey(i,tier),i,tier,tier,1,""));
         int[] slots={0,0,3,4,6,1,1,6,5,7,5,7},tiers={1,1,1,1,2,2,2,3,2,2,3,3},nodes={4,5,6,7,8,9,10,11,12,13,14,15},loads={1,1,1,1,3,2,2,3,2,2,3,3};
         String[] old={"head_night","head_aquatic","legs_sprint","feet_jump","back_flight","chest_shield","chest_heavy","back_cloak","hands_laser","shoulders_missile","hands_cannon","shoulders_turret"};
-        for(int i=0;i<ABILITIES.size();i++){
+        for(int i=0;i<old.length;i++){
             var m=new Module("blackdog_component_"+ABILITIES.get(i),slots[i],tiers[i],nodes[i],loads[i],ABILITIES.get(i));list.add(m);
             LEGACY.put("blackdog_"+old[i],new Module("blackdog_"+old[i],m.slot(),m.tier(),m.research(),m.load(),m.ability()));
         }
+        list.add(new Module("blackdog_component_swarm",7,3,15,3,"swarm"));
         MODULES=List.copyOf(list);
     }
     public static String baseKey(int slot,int tier){return slot==2?switch(tier){case 2->"blackdog_core_compressed";case 3->"blackdog_core_reactor";default->"blackdog_core_basic";}:"blackdog_"+PARTS.get(slot)+switch(tier){case 2->"_reinforced";case 3->"_elite";default->"_basic";};}

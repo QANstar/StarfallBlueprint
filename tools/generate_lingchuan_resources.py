@@ -352,3 +352,4 @@ print(f'Generated {len(names)} Lingchuan definitions, five eight-part machines, 
 # Apply the current hardware silhouettes and open workstations after the original resource baseline.
 import runpy
 runpy.run_path(str(ROOT/'tools/generate_blackdog_workshop.py'), run_name='__main__')
+runpy.run_path(str(ROOT/'tools/generate_blackdog_swarm_resources.py'), run_name='__main__')

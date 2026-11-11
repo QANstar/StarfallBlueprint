@@ -20,13 +20,13 @@ public final class BlackDogWorkstations {
         if(!stored)for(int i=0;i<8;i++){var base=Lingchuan.module(inventory.getItem(i));if(base!=null&&base.ability().isEmpty()&&base.slot()==i)tiers[i]=base.tier();}
         int mask=data.getInt("Abilities");if(!stored)for(int i=10;i<22;i++){var component=Lingchuan.module(inventory.getItem(i));if(component!=null&&!component.ability().isEmpty()&&tiers[component.slot()]>=component.tier())mask|=1<<Lingchuan.ABILITIES.indexOf(component.ability());}
         int load=0;for(int tier:tiers)if(tier>0)load++;
-        for(int i=0;i<12;i++)if((mask&(1<<i))!=0)load+=Lingchuan.MODULES.get(24+i).load();
+        for(int i=0;i<Lingchuan.ABILITIES.size();i++)if((mask&(1<<i))!=0)load+=Lingchuan.MODULES.get(24+i).load();
         // Keep packets compact; no serialized inventory, identity or unrelated watch state.
         var out=new CompoundTag();out.putIntArray("ChassisTiers",tiers);out.putInt("Abilities",mask);out.putInt("CoreTier",tiers[2]);out.putInt("Load",load);out.putInt("Energy",data.getInt("Energy"));return out;
     }
-    public static int interfaceLoad(CompoundTag data,int part){int used=0;for(int i=0;i<12;i++){var m=Lingchuan.MODULES.get(24+i);if(m.slot()==part&&(data.getInt("Abilities")&(1<<i))!=0)used+=m.load();}return used;}
+    public static int interfaceLoad(CompoundTag data,int part){int used=0;for(int i=0;i<Lingchuan.ABILITIES.size();i++){var m=Lingchuan.MODULES.get(24+i);if(m.slot()==part&&(data.getInt("Abilities")&(1<<i))!=0)used+=m.load();}return used;}
     public static boolean connect(Player player,IndustryBlockEntity be,int ability){
-        if(!be.kind().equals("lc_armor_assembler")||ability<0||ability>=12)return false;
+        if(!be.kind().equals("lc_armor_assembler")||ability<0||ability>=Lingchuan.ABILITIES.size())return false;
         var component=Lingchuan.MODULES.get(24+ability);if(!Lingchuan.knows(player,component.research()))return Lingchuan.fail(player,"lc.research_locked");
         var watch=be.getItem(8);boolean refit=watch.getItem() instanceof BlackDogArmor.Watch;
         if(refit&&(!BlackDogArmor.valid(watch)||BlackDogArmor.deployed(watch)))return Lingchuan.fail(player,"lc.watch_missing");
@@ -53,7 +53,7 @@ public final class BlackDogWorkstations {
     }
     private static ItemStack takeSource(Player player,int source){if(source!=-2)return player.getInventory().removeItem(source,1);var carried=player.containerMenu.getCarried();var owned=carried.split(1);if(carried.isEmpty())player.containerMenu.setCarried(ItemStack.EMPTY);return owned;}
     public static boolean disconnect(Player player,IndustryBlockEntity be,int ability){
-        if(!be.kind().equals("lc_armor_assembler")||ability<0||ability>=12)return false;
+        if(!be.kind().equals("lc_armor_assembler")||ability<0||ability>=Lingchuan.ABILITIES.size())return false;
         if(be.getItem(8).getItem() instanceof BlackDogArmor.Watch)return Lingchuan.removeComponent(player,be,ability);
         var item=CatalogueContent.item(Lingchuan.MODULES.get(24+ability).key());int source=-1,destination=-1;
         for(int i=10;i<22;i++)if(be.getItem(i).is(item)){source=i;break;}

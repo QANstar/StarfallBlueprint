@@ -90,7 +90,7 @@ public final class BlackDogArmorModel extends HumanoidModel<LivingEntity> {
         torso.visible=slot==EquipmentSlot.CHEST;belt.visible=slot==EquipmentSlot.LEGS;
         int mask=data.getInt("Abilities");
         flight.visible=slot==EquipmentSlot.CHEST&&ability(mask,"flight");cloak.visible=slot==EquipmentSlot.CHEST&&ability(mask,"cloak");shield.visible=slot==EquipmentSlot.CHEST&&ability(mask,"shield");heavy.visible=slot==EquipmentSlot.CHEST&&ability(mask,"heavy");
-        laser.visible=ability(mask,"laser");cannon.visible=ability(mask,"cannon");leftMissile.visible=rightMissile.visible=ability(mask,"missile");leftTurret.visible=rightTurret.visible=ability(mask,"turret");
+        laser.visible=ability(mask,"laser");cannon.visible=ability(mask,"cannon");leftMissile.visible=rightMissile.visible=ability(mask,"missile")||ability(mask,"swarm");leftTurret.visible=rightTurret.visible=ability(mask,"turret");
         var tiers=data.getIntArray("ChassisTiers");crown.visible=tiers.length==8&&tiers[0]>=3;
         for(var leg:new ModelPart[]{leftLeg,rightLeg}){
             // Base cubes are drawn once with leggings; boots retain their own rigid geometry.

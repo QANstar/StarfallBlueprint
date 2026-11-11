@@ -852,5 +852,19 @@
     "subcategory": "装甲部件",
     "recipes": [],
     "uses": []
+  },
+  "blackdog_component_swarm": {
+    "id": "blackdog_component_swarm",
+    "name": "追猎蜂群飞弹组件",
+    "unit": "件",
+    "icon": "gear",
+    "note": "岭川黑狗模块化武装",
+    "external": false,
+    "vanilla": false,
+    "mass": 100,
+    "category": "岭川黑狗战甲",
+    "subcategory": "装甲部件",
+    "recipes": [],
+    "uses": []
   }
 }

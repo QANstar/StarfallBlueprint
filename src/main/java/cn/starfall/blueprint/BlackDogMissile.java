@@ -8,10 +8,19 @@ import net.minecraft.world.phys.*;
 
 /** Fast physical missile with its own model, exhaust and impact. */
 public final class BlackDogMissile extends Projectile {
+    private LivingEntity target;
+    public void track(LivingEntity target){this.target=target;}
     public BlackDogMissile(EntityType<? extends BlackDogMissile> type,Level level){super(type,level);setNoGravity(true);}
     @Override protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder b){}
     @Override public void tick(){
-        super.tick();Vec3 motion=getDeltaMovement();
+        super.tick();
+        if(!level().isClientSide&&target!=null){
+            if(!target.isAlive()||target.level()!=level()){discard();return;}
+            Vec3 aim=target.getBoundingBox().getCenter().add(target.getDeltaMovement().scale(2)).subtract(position()).normalize();
+            Vec3 steered=getDeltaMovement().normalize().lerp(aim,tickCount<6?.12:.28).normalize();
+            setDeltaMovement(steered.scale(Math.min(1.65,.8+tickCount*.08)));
+        }
+        Vec3 motion=getDeltaMovement();
         var hit=ProjectileUtil.getHitResultOnMoveVector(this,this::canHitEntity);
         if(!level().isClientSide&&hit.getType()!=HitResult.Type.MISS){
             setPos(hit.getLocation());

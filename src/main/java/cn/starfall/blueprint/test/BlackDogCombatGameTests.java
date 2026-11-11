@@ -17,6 +17,53 @@ import net.neoforged.neoforge.gametest.*;
 @GameTestHolder("starfall_blueprint_lingchuan")
 @PrefixGameTestTemplate(false)
 public final class BlackDogCombatGameTests {
+    private static net.minecraft.world.entity.LivingEntity swarmTarget(GameTestHelper h,FakePlayer p,net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.LivingEntity> type){
+        var target=type.create(h.getLevel());target.setPos(p.position().add(0,0,8));h.getLevel().addFreshEntity(target);
+        var direction=target.getBoundingBox().getCenter().subtract(p.getEyePosition());p.setYRot(0);p.setXRot((float)-Math.toDegrees(Math.atan2(direction.y,direction.horizontalDistance())));return target;
+    }
+    private static ItemStack swarmTerminal(FakePlayer p){
+        var watch=equip(p,"swarm");p.setItemInHand(InteractionHand.MAIN_HAND,CatalogueContent.stack("blackdog_fire_control",1));
+        BlackDogArmor.selectSystem(p,BlackDogArmor.SYSTEMS.indexOf("swarm"));return watch;
+    }
+    private static void holdSwarm(FakePlayer p,int ticks){
+        use(p);for(int i=0;i<ticks;i++)p.getMainHandItem().getItem().onUseTick(p.level(),p,p.getMainHandItem(),72000-i);
+    }
+    private static void releaseSwarm(FakePlayer p){p.getMainHandItem().getItem().releaseUsing(p.getMainHandItem(),p.level(),p,71000);p.stopUsingItem();}
+    @GameTest(template="combat",timeoutTicks=100)
+    public static void swarmLocksFriendlyNeutralAndHostileTargetsAndSpacesEveryMissile(GameTestHelper h){
+        var p=player(h);var watch=swarmTerminal(p);
+        for(var type:List.of(net.minecraft.world.entity.EntityType.WOLF,net.minecraft.world.entity.EntityType.COW,net.minecraft.world.entity.EntityType.ZOMBIE)){
+            var target=swarmTarget(h,p,type);if(target instanceof net.minecraft.world.entity.animal.Wolf wolf)wolf.tame(p);
+            int before=BlackDogArmor.charge(watch);holdSwarm(p,BlackDogMissileLock.LOCK_TICKS);releaseSwarm(p);
+            h.assertTrue(BlackDogArmor.charge(watch)==before-BlackDogMissileLock.COST,"Every living faction, including the owner's tamed wolf, can be locked");
+            var missiles=new ArrayList<BlackDogMissile>();
+            for(int tick=0;tick<(BlackDogMissileLock.SALVO_SIZE-1)*BlackDogMissileLock.INTERVAL+1;tick++){
+                BlackDogMissileLock.tick(p);
+                var current=h.getLevel().getEntitiesOfClass(BlackDogMissile.class,p.getBoundingBox().inflate(4),m->m.getOwner()==p);
+                h.assertTrue(current.size()==tick/BlackDogMissileLock.INTERVAL+1,"Exactly one missile launches per interval, never the entire salvo at once");missiles=new ArrayList<>(current);
+            }
+            h.assertTrue(missiles.size()==16,"A completed lock launches the full sixteen-missile salvo");
+            var missile=missiles.getFirst();target.setPos(target.position().add(5,0,0));
+            double beforeAim=missile.getDeltaMovement().normalize().dot(target.getBoundingBox().getCenter().subtract(missile.position()).normalize());
+            missile.tick();double afterAim=missile.getDeltaMovement().normalize().dot(target.getBoundingBox().getCenter().subtract(missile.position()).normalize());
+            h.assertTrue(afterAim>beforeAim,"Guided missile turns toward a moving target");
+            missiles.forEach(BlackDogMissile::discard);target.discard();
+        }
+        BlackDogArmor.recall(p,watch);h.succeed();
+    }
+    @GameTest(template="combat",timeoutTicks=100)
+    public static void swarmRejectsEarlyReleaseLostAimBlockedSightAndDeadTargets(GameTestHelper h){
+        var p=player(h);var watch=swarmTerminal(p);var target=swarmTarget(h,p,net.minecraft.world.entity.EntityType.COW);int energy=BlackDogArmor.charge(watch);
+        holdSwarm(p,15);releaseSwarm(p);h.assertTrue(BlackDogArmor.charge(watch)==energy,"Releasing before sixteen ticks spends no power");
+        holdSwarm(p,16);p.setYRot(90);BlackDogMissileLock.hold(p);p.setYRot(0);BlackDogMissileLock.hold(p);releaseSwarm(p);
+        h.assertTrue(BlackDogArmor.charge(watch)==energy,"Looking away cancels the old lock and reacquiring restarts progress");
+        holdSwarm(p,16);p.setYRot(90);releaseSwarm(p);p.setYRot(0);h.assertTrue(BlackDogArmor.charge(watch)==energy,"Release revalidates aim even before the next hold tick");
+        holdSwarm(p,16);var wall=BlockPos.containing(p.getEyePosition().add(p.getLookAngle().scale(4)));h.getLevel().setBlock(wall,Blocks.STONE.defaultBlockState(),3);h.getLevel().setBlock(wall.above(),Blocks.STONE.defaultBlockState(),3);releaseSwarm(p);
+        h.assertTrue(BlackDogArmor.charge(watch)==energy,"A wall blocks lock release");h.getLevel().setBlock(wall,Blocks.AIR.defaultBlockState(),3);h.getLevel().setBlock(wall.above(),Blocks.AIR.defaultBlockState(),3);
+        holdSwarm(p,16);target.discard();releaseSwarm(p);h.assertTrue(BlackDogArmor.charge(watch)==energy,"Removed targets cannot consume energy or start a salvo");
+        target=swarmTarget(h,p,net.minecraft.world.entity.EntityType.COW);holdSwarm(p,16);releaseSwarm(p);BlackDogArmor.recall(p,watch);BlackDogMissileLock.tick(p);
+        h.assertTrue(h.getLevel().getEntitiesOfClass(BlackDogMissile.class,p.getBoundingBox().inflate(4),m->m.getOwner()==p).isEmpty(),"Recalling the suit cancels queued launches");target.discard();h.succeed();
+    }
     @GameTest(template="combat",timeoutTicks=100)
     public static void landingStopsFlightAndRejectsStaleHeartbeat(GameTestHelper h){
         var p=player(h);var watch=equip(p,"flight");p.setOnGround(true);BlackDogArmor.flightRequest(p,true,false,true);BlackDogArmor.tickPlayer(p);

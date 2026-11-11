@@ -14,7 +14,7 @@ final class BlackDogHudIcons {
             case "laser" -> {
                 box(g,0,6,4,5,color);box(g,4,7,9,2,color);box(g,11,3,2,3,color);box(g,11,10,2,3,color);box(g,14,7,2,2,0xfff4e7ed);box(g,7,1,1,3,color);box(g,7,12,1,3,color);
             }
-            case "missile" -> {
+            case "missile", "swarm" -> {
                 box(g,6,3,4,9,color);box(g,7,1,2,2,color);box(g,5,4,6,2,color);box(g,3,9,3,5,color);box(g,10,9,3,5,color);box(g,7,13,2,3,0xfff5b25e);box(g,7,6,2,4,0xfff2f1e6);
             }
             case "cannon" -> {

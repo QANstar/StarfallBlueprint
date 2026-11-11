@@ -45,7 +45,7 @@
   "key.starfall_blueprint.blackdog_shield": "Black Dog: select particle shield toggle",
   "key.starfall_blueprint.blackdog_cloak": "Black Dog: select cloak toggle",
   "item.starfall_blueprint.blackdog_armed_watch": "Nightwatch Fully Armed Black Dog Watch",
-  "lc.armed_watch_hint": "Creative preset: eight tier III bases, all 12 components, starts with 1,000,000 XH",
+  "lc.armed_watch_hint": "Creative preset: eight tier III bases, all 13 components including Huntsman Swarm, starts with 1,000,000 XH",
   "lc.armed_watch_control": "Right-click to deploy/recall. First deployment supplies a fire-control terminal: right-click to fire, sneak-right-click to cycle weapons.",
   "itemGroup.starfall_blueprint": "Starfall Blueprint · Basic Industry",
   "block.starfall_blueprint.ore_meteor_phase": "Meteor Phase Ore",
@@ -868,5 +868,12 @@
   "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm": "Canglan only. Real iron shovel, shovel-mineable blocks; face-aligned 3x3, center first. Each success: 18,000 XH, 18 heat, 1 wear; shared 40-tick cooldown. Individual permission/reach checks; stops on budget limits. Loot fills active cargo, overflow drops.",
   "ui.starfall_blueprint.best_action_28": "Assemble Canglan Area Excavator Arm",
   "ui.starfall_blueprint.best_material_action_28": "Canglan Area Excavator Arm",
-  "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm_install": "Sneak-use in main hand on an empty heavy-mech arm slot; all personal knowledge, isolated, unoccupied, alive and stationary on dry ground required. Remove with diagnostic main hand + vanilla iron pickaxe offhand (retained); needs an empty main-inventory slot. A heavy arm loaded on a light mech can only be removed, without work or free conversion."
+  "tooltip.starfall_blueprint.best_mech_heavy_excavator_arm_install": "Sneak-use in main hand on an empty heavy-mech arm slot; all personal knowledge, isolated, unoccupied, alive and stationary on dry ground required. Remove with diagnostic main hand + vanilla iron pickaxe offhand (retained); needs an empty main-inventory slot. A heavy arm loaded on a light mech can only be removed, without work or free conversion.",
+  "item.starfall_blueprint.blackdog_component_swarm": "Huntsman Missile Swarm Component",
+  "lc.ability.swarm": "Hold terminal use to aim at any living target. Lock in 0.8s; looking away or blocked sight cancels. Release to launch 16 homing missiles, 0.15s apart. Costs 16000 XH.",
+  "lc.system.swarm": "Huntsman Swarm",
+  "key.starfall_blueprint.blackdog_swarm": "Black Dog: Huntsman Swarm",
+  "lc.swarm_searching": "Huntsman Swarm: searching",
+  "lc.swarm_locking": "Huntsman Swarm: locking %s%%",
+  "lc.swarm_locked": "Huntsman Swarm: locked - release to fire"
 }

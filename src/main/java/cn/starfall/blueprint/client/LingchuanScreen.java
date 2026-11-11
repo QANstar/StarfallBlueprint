@@ -29,21 +29,21 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
         }else if(shownKind.equals("lc_parts_fabricator")){
             var search=addRenderableWidget(new EditBox(font,leftPos+16,topPos+29,196,16,text("search")));search.setHint(text("search"));search.setValue(query);search.setResponder(value->{query=value;listOffset=0;});
             for(int i=0;i<3;i++){final int tab=i;button(text("category."+i),16+i*68,49,64,()->{category=tab;listOffset=0;});}
-            make=button(text("manufacture"),246,166,106,()->{if(selected>=0)send(selected==36?180:100+selected);});
+            make=button(text("manufacture"),246,166,106,()->{if(selected>=0)send(selected==Lingchuan.MODULES.size()?180:100+selected);});
         }else if(shownKind.equals("lc_alloy_forge")){
             button(Component.translatable("lc.forge_crystal"),20,60,180,()->send(40));button(Component.translatable("lc.forge_alloy"),20,95,180,()->send(41));
         }else if(shownKind.equals("lc_research_station"))button(ProgressionInventoryTab.text("open"),100,80,260,ProgressionInventoryTab::open);
     }
     @Override protected void containerTick(){
         super.containerTick();if(!shownKind.equals(menu.kind())){rebuildWidgets();return;}
-        if(make!=null)make.active=selected>=0&&menu.researched(selected==36?12:Lingchuan.MODULES.get(selected).research());
+        if(make!=null)make.active=selected>=0&&menu.researched(selected==Lingchuan.MODULES.size()?12:Lingchuan.MODULES.get(selected).research());
         if(assemble!=null)assemble.active=menu.watch().isEmpty();if(refit!=null)refit.active=menu.watch().getItem() instanceof BlackDogArmor.Watch;
     }
-    private List<Integer> products(){var result=new ArrayList<Integer>();for(int i=0;i<=36;i++){
+    private List<Integer> products(){var result=new ArrayList<Integer>();for(int i=0;i<=Lingchuan.MODULES.size();i++){
         if(category==1&&i>=24||category==2&&i<24)continue;
         if(name(i).getString().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))result.add(i);
     }return result;}
-    private ItemStack product(int index){return CatalogueContent.stack(index==36?"blackdog_fire_control":Lingchuan.MODULES.get(index).key(),1);}
+    private ItemStack product(int index){return CatalogueContent.stack(index==Lingchuan.MODULES.size()?"blackdog_fire_control":Lingchuan.MODULES.get(index).key(),1);}
     private Component name(int index){return product(index).getHoverName();}
     private boolean contains(double mx,double my,int x,int y,int w,int h){return mx>=leftPos+x&&mx<leftPos+x+w&&my>=topPos+y&&my<topPos+y+h;}
     private void label(GuiGraphics g,Component value,int x,int y,int max,int color){g.drawString(font,font.plainSubstrByWidth(value.getString(),max),leftPos+x,topPos+y,color,false);}
@@ -64,7 +64,7 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
     }
     private void assembly(GuiGraphics g){
         var data=menu.preview();var tiers=data.getIntArray("ChassisTiers");int mask=menu.connectedAbilities();label(g,text("drag_hint"),12,29,436,0xff899db5);
-        for(int i=0;i<12;i++){
+        for(int i=0;i<Lingchuan.ABILITIES.size();i++){
             if((mask&(1<<i))==0)continue;
             var component=Lingchuan.MODULES.get(24+i);int part=component.slot(),x=BlackDogWorkstations.optionX(i),y=BlackDogWorkstations.optionY(i);boolean installed=(mask&(1<<i))!=0,available=owned(component.key())>0;
             wire(g,x+8,y+8,BlackDogWorkstations.PART_X[part]+8,BlackDogWorkstations.PART_Y[part]+8,installed?0xff64bdb2:0xff354252);
@@ -93,12 +93,12 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
     private void fabricator(GuiGraphics g,int mx,int my){
         var products=products();listOffset=Math.clamp(listOffset,0,Math.max(0,products.size()-5));
         for(int row=0;row<5&&row+listOffset<products.size();row++){
-            int index=products.get(row+listOffset),y=73+row*24;boolean known=menu.researched(index==36?12:Lingchuan.MODULES.get(index).research());box(g,16,y,196,21,selected==index?0xffce8aa4:0xff303f52,contains(mx,my,16,y,196,21)?0xff29364a:0xff182331);g.renderItem(product(index),leftPos+20,topPos+y+2);label(g,name(index),42,y+6,154,known?0xffdce2ec:0xff718298);
+            int index=products.get(row+listOffset),y=73+row*24;boolean known=menu.researched(index==Lingchuan.MODULES.size()?12:Lingchuan.MODULES.get(index).research());box(g,16,y,196,21,selected==index?0xffce8aa4:0xff303f52,contains(mx,my,16,y,196,21)?0xff29364a:0xff182331);g.renderItem(product(index),leftPos+20,topPos+y+2);label(g,name(index),42,y+6,154,known?0xffdce2ec:0xff718298);
         }
         if(selected<0){label(g,text("select_product"),246,82,196,0xff9eadc3);return;}
         var stack=product(selected);g.pose().pushPose();g.pose().translate(leftPos+247,topPos+36,0);g.pose().scale(2,2,1);g.renderItem(stack,0,0);g.pose().popPose();label(g,name(selected),286,47,158,0xffead3df);
-        int alloy=selected==36?2:Lingchuan.MODULES.get(selected).alloy(),crystals=selected==36?0:Lingchuan.MODULES.get(selected).tier(),boards=selected==36?2:crystals,power=selected==36?10000:Lingchuan.MODULES.get(selected).power();
-        int y=83;for(var input:List.of(new Object[]{"laminar_alloy",alloy},new Object[]{"laminar_crystal",crystals},new Object[]{"board",boards},new Object[]{"minecraft:redstone",selected==36?4:0})){
+        int alloy=selected==Lingchuan.MODULES.size()?2:Lingchuan.MODULES.get(selected).alloy(),crystals=selected==Lingchuan.MODULES.size()?0:Lingchuan.MODULES.get(selected).tier(),boards=selected==Lingchuan.MODULES.size()?2:crystals,power=selected==Lingchuan.MODULES.size()?10000:Lingchuan.MODULES.get(selected).power();
+        int y=83;for(var input:List.of(new Object[]{"laminar_alloy",alloy},new Object[]{"laminar_crystal",crystals},new Object[]{"board",boards},new Object[]{"minecraft:redstone",selected==Lingchuan.MODULES.size()?4:0})){
             String key=(String)input[0];int needed=(Integer)input[1];if(needed==0)continue;g.renderItem(CatalogueContent.stack(key,1),leftPos+246,topPos+y-3);int have=countInventory(key);label(g,Component.literal(have+" / "+needed).append(" ").append(CatalogueContent.stack(key,1).getHoverName()),268,y,175,have>=needed?0xff9ad5be:0xffdd9c96);y+=20;
         }
         label(g,Component.literal(String.format(Locale.ROOT,"%,d XH",power)),362,171,84,menu.power()>=power?0xff87ccce:0xffdb968c);
@@ -108,7 +108,7 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
     @Override public void render(GuiGraphics g,int mx,int my,float partial){
         mx=(int)(mx/uiScale);my=(int)(my/uiScale);g.pose().pushPose();g.pose().scale(uiScale,uiScale,1);
         super.render(g,mx,my,partial);renderTooltip(g,mx,my);
-        if(shownKind.equals("lc_armor_assembler"))for(int i=0;i<12;i++)if((menu.connectedAbilities()&(1<<i))!=0&&contains(mx,my,BlackDogWorkstations.optionX(i)-2,BlackDogWorkstations.optionY(i)-2,20,20)){
+        if(shownKind.equals("lc_armor_assembler"))for(int i=0;i<Lingchuan.ABILITIES.size();i++)if((menu.connectedAbilities()&(1<<i))!=0&&contains(mx,my,BlackDogWorkstations.optionX(i)-2,BlackDogWorkstations.optionY(i)-2,20,20)){
             var m=Lingchuan.MODULES.get(24+i);var lines=new ArrayList<Component>();lines.add(m.name());lines.add(Component.translatable("lc.module_spec",Component.translatable("lc.part."+Lingchuan.PARTS.get(m.slot())),m.tier(),m.load()));lines.add(text("component_hint",owned(m.key())));g.renderComponentTooltip(font,lines,mx,my);
         }
         if(dragging>=0){int part=Lingchuan.MODULES.get(24+dragging).slot();wire(g,BlackDogWorkstations.PART_X[part]+8,BlackDogWorkstations.PART_Y[part]+8,mx-leftPos,my-topPos,0xffffc789);g.pose().pushPose();g.pose().translate(0,0,400);g.renderItem(product(24+dragging),mx-8,my-8);g.pose().popPose();}
@@ -122,7 +122,7 @@ public final class LingchuanScreen extends AbstractContainerScreen<LingchuanMenu
                 if(contains(mx,my,x<200?x-4:x-42,y-4,62,28)){send(300+Lingchuan.ABILITIES.indexOf(component.ability()));return true;}
             }
         }
-        if(shownKind.equals("lc_armor_assembler"))for(int i=0;i<12;i++)if((menu.connectedAbilities()&(1<<i))!=0&&contains(mx,my,BlackDogWorkstations.optionX(i)-2,BlackDogWorkstations.optionY(i)-2,20,20)){
+        if(shownKind.equals("lc_armor_assembler"))for(int i=0;i<Lingchuan.ABILITIES.size();i++)if((menu.connectedAbilities()&(1<<i))!=0&&contains(mx,my,BlackDogWorkstations.optionX(i)-2,BlackDogWorkstations.optionY(i)-2,20,20)){
             if(button==1){send(200+i);return true;}if(button==0&&menu.getCarried().isEmpty()){dragging=i;return true;}
         }
         if(shownKind.equals("lc_parts_fabricator")&&button==0){var products=products();for(int row=0;row<5&&row+listOffset<products.size();row++)if(contains(mx,my,16,73+row*24,196,21)){selected=products.get(row+listOffset);return true;}}

@@ -30,6 +30,19 @@ public final class BlackDogCombatGameTests {
     }
     private static void releaseSwarm(FakePlayer p){p.getMainHandItem().getItem().releaseUsing(p.getMainHandItem(),p.level(),p,71000);p.stopUsingItem();}
     @GameTest(template="combat",timeoutTicks=100)
+    public static void swarmMarkerBelongsToOperatorAndClearsWithLock(GameTestHelper h){
+        var p=player(h);var watch=swarmTerminal(p);var observer=player(h);var target=swarmTarget(h,p,net.minecraft.world.entity.EntityType.COW);
+        holdSwarm(p,7);var marker=BlackDogMissileLock.targetLock(p);
+        h.assertTrue(marker.entityId()==target.getId()&&marker.target().equals(target.getUUID())&&marker.ticks()==7,"Marker identifies the server-selected target and partial lock progress");
+        h.assertTrue(BlackDogMissileLock.targetLock(observer).entityId()==-1,"Another player has no target marker for the operator's lock");
+        p.setYRot(90);BlackDogMissileLock.hold(p);h.assertTrue(BlackDogMissileLock.targetLock(p).entityId()==-1,"Lost aim removes the old marker immediately");
+        p.setYRot(0);for(int i=0;i<16;i++)BlackDogMissileLock.hold(p);
+        h.assertTrue(BlackDogMissileLock.targetLock(p).ticks()==16,"Completed lock marks the same target as ready");
+        releaseSwarm(p);h.assertTrue(BlackDogMissileLock.targetLock(p).entityId()==-1,"Releasing the terminal removes the marker");
+        holdSwarm(p,5);BlackDogArmor.recall(p,watch);h.assertTrue(BlackDogMissileLock.targetLock(p).entityId()==-1,"Recalling the suit clears private targeting feedback");
+        target.discard();h.succeed();
+    }
+    @GameTest(template="combat",timeoutTicks=100)
     public static void swarmLocksFriendlyNeutralAndHostileTargetsAndSpacesEveryMissile(GameTestHelper h){
         var p=player(h);var watch=swarmTerminal(p);
         for(var type:List.of(net.minecraft.world.entity.EntityType.WOLF,net.minecraft.world.entity.EntityType.COW,net.minecraft.world.entity.EntityType.ZOMBIE)){

@@ -38,25 +38,34 @@ public final class BlackDogMissileLock {
         }
         return best;
     }
-    public static void begin(Player p,ItemStack watch){LOCKS.put(p,new Lock(watch));}
+    public static BlackDogNetworking.TargetLock targetLock(Player p){
+        var lock=LOCKS.get(p);
+        return lock==null||lock.target==null?BlackDogNetworking.TargetLock.empty():new BlackDogNetworking.TargetLock(lock.target.getId(),lock.target.getUUID(),lock.ticks);
+    }
+    private static void syncMarker(Player p){
+        if(p instanceof net.minecraft.server.level.ServerPlayer server&&server.connection.getConnection().isConnected())
+            net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(server,targetLock(p));
+    }
+    public static void begin(Player p,ItemStack watch){LOCKS.put(p,new Lock(watch));syncMarker(p);}
     public static void hold(Player p){
         if(p.level().isClientSide)return;
         var lock=LOCKS.get(p);
         if(lock==null||!ready(p,lock.watch)||!BlackDogArmor.selectedSystem(lock.watch).equals("swarm")){cancel(p);return;}
         if(lock.target!=null&&!aimed(p,lock.target,true)){lock.target=null;lock.ticks=0;}
         if(lock.target==null){lock.target=acquire(p);lock.ticks=0;}
-        if(lock.target==null){status(p,"lc.swarm_searching",0);return;}
+        if(lock.target==null){syncMarker(p);status(p,"lc.swarm_searching",0);return;}
         if(lock.ticks<LOCK_TICKS){
             lock.ticks++;
             if(lock.ticks==LOCK_TICKS)BlackDogWeapons.sound(p,SoundEvents.NOTE_BLOCK_PLING.value(),.8f,1.8f);
             else if(lock.ticks%4==0)BlackDogWeapons.sound(p,SoundEvents.NOTE_BLOCK_HAT.value(),.4f,.8f+lock.ticks*.04f);
         }
-        status(p,lock.ticks==LOCK_TICKS?"lc.swarm_locked":"lc.swarm_locking",lock.ticks*100/LOCK_TICKS);
+        syncMarker(p);status(p,lock.ticks==LOCK_TICKS?"lc.swarm_locked":"lc.swarm_locking",lock.ticks*100/LOCK_TICKS);
     }
     private static void status(Player p,String key,int progress){p.displayClientMessage(Component.translatable(key,progress),true);}
     public static void release(Player p){
         if(p.level().isClientSide)return;
         var lock=LOCKS.remove(p);
+        if(lock!=null)syncMarker(p);
         if(lock==null||lock.ticks<LOCK_TICKS||!ready(p,lock.watch)||!BlackDogArmor.selectedSystem(lock.watch).equals("swarm")||!aimed(p,lock.target,true))return;
         if(SALVOS.containsKey(p)||!BlackDogArmor.spend(lock.watch,COST)){Lingchuan.fail(p,"lc.power_missing");return;}
         SALVOS.put(p,new Salvo(lock.watch,lock.target));BlackDogArmor.markCombat(p,lock.watch);
@@ -76,6 +85,6 @@ public final class BlackDogMissileLock {
         }
         salvo.delay=INTERVAL-1;if(--salvo.remaining==0)SALVOS.remove(p);
     }
-    public static void cancel(Player p){LOCKS.remove(p);SALVOS.remove(p);}
+    public static void cancel(Player p){if(LOCKS.remove(p)!=null)syncMarker(p);SALVOS.remove(p);}
     private BlackDogMissileLock(){}
 }

@@ -37,7 +37,8 @@ public final class BestMechAreaExcavatorGameTests {
     }
     private static BestMechEntity mech(GameTestHelper h, boolean heavy) {
         for(int x=0;x<12;x++) for(int z=0;z<12;z++) h.setBlock(new BlockPos(x,0,z), Blocks.STONE);
-        var m=(heavy?BestMechs.HEAVY_TYPE:BestMechs.TYPE).get().create(h.getLevel());
+        var m=BestMechs.TYPE.get().create(h.getLevel());
+        if(heavy) {var state=m.stateTag();state.putInt("UpgradeMask",BestMechProgression.ENGINEERING_EXTENSION);m.loadState(state);}
         var pos=h.absolutePos(new BlockPos(3,1,3)); m.moveTo(pos.getX()+.5,pos.getY(),pos.getZ()+.5,0,0);
         h.getLevel().addFreshEntity(m); reset(m,1_000_000,0,0); return m;
     }

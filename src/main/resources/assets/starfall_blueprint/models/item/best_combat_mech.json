@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "starfall_blueprint:item/best_heavy_mech"
+    "layer0": "starfall_blueprint:item/best_combat_mech"
   }
 }

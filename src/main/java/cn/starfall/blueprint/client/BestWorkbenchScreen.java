@@ -1,6 +1,7 @@
 package cn.starfall.blueprint.client;
 
 import cn.starfall.blueprint.BestEngineering;
+import cn.starfall.blueprint.BestMechAssembly;
 import cn.starfall.blueprint.BestWorkbenchMenu;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +31,14 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
 
     /** Fixture/accessibility entry point: 0 engineering, 1 mobility, 2 diagnostics, 3 mech, 4 tool arms, 5 power core, 6 locomotion. */
     public void selectPage(int page) {
-        if (page < 0 || page > 6) throw new IllegalArgumentException("page must be 0..6");
+        if (page < 0 || page > 9) throw new IllegalArgumentException("page must be 0..9");
         this.page = page;
         if (minecraft != null) rebuildWidgets();
     }
     public int page() { return page; }
     /** Select the material table independently of execution, including disabled learned actions. */
     public void selectMechAction(int action) {
-        if (action < 17 || (action > 20 && action != 23 && action != 26)) throw new IllegalArgumentException("mech action must be 17..20, 23 or 26");
+        if (!BestMechAssembly.handles(action) && (action < 17 || (action > 20 && action != 23 && action != 26))) throw new IllegalArgumentException("mech action must be 17..20, 23 or 26");
         selectedMechAction = action;
     }
     public int selectedMechAction() { return selectedMechAction; }
@@ -48,6 +49,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     private int materialAction() { return page == 6 ? 25 : page == 5 ? 24 : page == 4 ? selectedArmAction : selectedMechAction; }
     private void selectMaterialAction(int action) {
         if (action == 24 || action == 25) return;
+        if(BestMechAssembly.handles(action)){selectedMechAction=action;return;}
         if (action == 21 || action == 22 || action == 27 || action == 28) selectArmAction(action);
         else selectMechAction(action);
     }
@@ -58,10 +60,10 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     @Override protected void init() {
         super.init();
         actionButtons.clear();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 10; i++) {
             final int target = i;
-            Button tab = addRenderableWidget(Button.builder(text("tab_" + i), button -> selectPage(target))
-                    .bounds(leftPos + 8 + i * 41, topPos + 44, 38, 16).build());
+            Button tab = addRenderableWidget(Button.builder(i<7?text("tab_" + i):Component.literal(i==7?"强化":i==8?"安装":"拆卸"), button -> selectPage(target))
+                    .bounds(leftPos + 8 + i * 29, topPos + 44, 27, 16).build());
             tab.active = page != i;
         }
         addRenderableWidget(Button.builder(ProgressionInventoryTab.text("open"), button -> ProgressionInventoryTab.open())
@@ -70,18 +72,21 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
             case 0 -> new int[]{2, 3, 6, 4, 7};
             case 1 -> new int[]{9, 10, 11, 12};
             case 2 -> new int[]{14, 15, 16};
-            case 3 -> new int[]{18, 19, 20, 23, 26, 29};
+            case 3 -> new int[]{18, 54, 55, 52, 53, 29, 19, 20, 23};
+            case 7 -> new int[]{40,41,42,43,44,45,46,47,48,49,50,51};
+            case 8 -> new int[]{100,101,102,103,104,105,106,107,108};
+            case 9 -> new int[]{120,121,122,123,124,125,126,127,128};
             case 4 -> new int[]{21, 22, 27, 28};
             case 5 -> new int[]{24};
             default -> new int[]{25};
         };
         for (int i = 0; i < actions.length; i++) {
             int action = actions[i];
-            Button button = addRenderableWidget(Button.builder(text("action_" + action), clicked -> {
+            Button button = addRenderableWidget(Button.builder(BestMechAssembly.handles(action)?BestMechAssembly.label(action):text("action_" + action), clicked -> {
                 if (action >= 17 && action != 29) selectMaterialAction(action);
                 if (minecraft != null && minecraft.gameMode != null && (action == 29 || menu.preview(action).executable()))
                     minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action);
-            }).bounds(leftPos + 8 + (i % 2) * 146, topPos + 63 + (i / 2) * 16, 138, 14).build());
+            }).bounds(leftPos + 8 + (i % ((page==3||page>=7)?3:2)) * ((page==3||page>=7)?96:146), topPos + 63 + (i / ((page==3||page>=7)?3:2)) * 13, (page==3||page>=7)?92:138, 12).build());
             actionButtons.add(new ActionButton(action, button));
         }
         updateActions();
@@ -122,17 +127,18 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         fitted(graphics, title, titleLabelX, titleLabelY, 280, 0xffedf4eb);
         if (page >= 3) {
             BestEngineering.Preview preview = menu.preview(materialAction());
-            fitted(graphics, text("materials_for", text("material_action_" + materialAction()), preview.reason()), 10, 117, 280, preview.executable() ? 0xff27653f : 0xff88402f);
+            fitted(graphics, text("materials_for", BestMechAssembly.handles(materialAction())?BestMechAssembly.label(materialAction()):text("material_action_" + materialAction()), preview.reason()), 10, 117, 280, preview.executable() ? 0xff27653f : 0xff88402f);
             List<BestEngineering.MaterialRequirement> materials = preview.materials();
             for (int i = 0; i < materials.size(); i++) {
                 var material = materials.get(i);
-                int x = 10 + i % 4 * 71, y = 128 + i / 4 * 18;
+                int x = 10 + i % 4 * 71, y = 126 + i / 4 * 14;
                 graphics.renderItem(material.item(), x, y);
                 fitted(graphics, text("material_count", material.available(), material.required()), x + 18, y + 4, 51,
                         material.available() >= material.required() ? 0xff27653f : 0xffa3332c);
             }
         }
-        fitted(graphics, text("hint_" + page), 10, 164, 280, 0xff435b50);
+        if(page<3||menu.preview(materialAction()).materials().size()<=8)
+            fitted(graphics, (page==3||page>=7)?Component.literal("主手持隔离收纳机体；材料从背包交付"):text("hint_" + page), 10, 164, 280, 0xff435b50);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff344f43, false);
     }
 
@@ -151,8 +157,9 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
                     return;
                 }
                 var preview = menu.preview(entry.action());
-                Component tooltip = text("action_" + entry.action()).copy().append("\n").append(preview.reason());
+                Component tooltip = (BestMechAssembly.handles(entry.action())?BestMechAssembly.label(entry.action()):text("action_" + entry.action())).copy().append("\n").append(preview.reason());
                 if (entry.action() == 26) tooltip = tooltip.copy().append("\n").append(BestEngineering.actionCostComponent(26));
+                if(entry.action()==55)tooltip=tooltip.copy().append("\n涓流与激湍各一台：须隔离、存活、货舱清空；两机与所列材料全部消耗，已装组件及配装返还。能源与损伤保留，返还空间不足则整笔不变。");
                 for (var material : preview.materials())
                     tooltip = tooltip.copy().append("\n").append(text("cost_entry", material.item().getHoverName(), material.available(), material.required()));
                 if (preview.materials().isEmpty()) tooltip = tooltip.copy().append("\n").append(text("no_materials"));
@@ -165,7 +172,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         if (page >= 3) {
             List<BestEngineering.MaterialRequirement> materials = menu.preview(materialAction()).materials();
             for (int i = 0; i < materials.size(); i++) {
-                int x = leftPos + 10 + i % 4 * 71, y = topPos + 128 + i / 4 * 18;
+                int x = leftPos + 10 + i % 4 * 71, y = topPos + 126 + i / 4 * 14;
                 if (mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16) {
                     graphics.renderTooltip(font, materials.get(i).item(), mouseX, mouseY);
                     return;

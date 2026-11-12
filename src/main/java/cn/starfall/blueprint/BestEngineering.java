@@ -31,26 +31,23 @@ public final class BestEngineering {
     public static boolean hasLightMobility(Player player){return player.getPersistentData().getBoolean(LIGHT_MOBILITY);}
     public static boolean hasDiagnostics(Player player){return player.getPersistentData().getBoolean(DIAGNOSTICS);}
     public static boolean hasMechOperation(Player player){return player.getPersistentData().getBoolean("BestMechOperation");}
-    public static boolean hasAdvancedEngineering(Player player){return player.getPersistentData().getBoolean("BestAdvancedEngineering");}
     public static void clonePlayer(PlayerEvent.Clone event){
+        event.getEntity().getPersistentData().put("BestModuleKnowledge",event.getOriginal().getPersistentData().getCompound("BestModuleKnowledge").copy());
         event.getEntity().getPersistentData().putInt(RESEARCH,researchLevel(event.getOriginal()));
         event.getEntity().getPersistentData().putBoolean(LIGHT_MOBILITY,hasLightMobility(event.getOriginal()));
         event.getEntity().getPersistentData().putBoolean(DIAGNOSTICS,hasDiagnostics(event.getOriginal()));
         event.getEntity().getPersistentData().putBoolean("BestMechOperation",hasMechOperation(event.getOriginal()));
-        event.getEntity().getPersistentData().putBoolean("BestAdvancedEngineering",hasAdvancedEngineering(event.getOriginal()));
     }
-    public static Component actionLabelComponent(int action){return action>=13&&action<=28?Component.translatable("message.starfall_blueprint.best_action_"+action):Component.literal(actionLabel(action));}
-    public static Component actionCostComponent(int action){return action>=13&&action<=28?Component.translatable("message.starfall_blueprint."+switch(action){case 13->"best_diagnostics_cost";case 14->"best_diagnostic_tool_cost";case 15->"best_isolate_cost";case 16->"best_connect_cost";case 17->"best_mech_learning_cost";case 19->"best_mech_radiator_cost";case 20->"best_mech_drive_cost";case 21->"best_mech_drill_arm_cost";case 22->"best_mech_excavator_arm_cost";case 23->"best_mech_reinforced_body_cost";case 24->"best_mech_generator_core_cost";case 25->"best_mech_cruise_wheels_cost";case 26->"best_heavy_mech_cost";case 27->"best_mech_heavy_drill_arm_cost";case 28->"best_mech_heavy_excavator_arm_cost";default->"best_mech_assembly_cost";}):Component.literal(actionCost(action));}
+    public static Component actionLabelComponent(int action){if(action==26)return Component.translatable("ui.starfall_blueprint.best_unavailable");if(BestMechAssembly.handles(action))return BestMechAssembly.label(action);return action>=13&&action<=28?Component.translatable("message.starfall_blueprint.best_action_"+action):Component.literal(actionLabel(action));}
+    public static Component actionCostComponent(int action){if(action==26)return Component.translatable("ui.starfall_blueprint.best_unavailable");return action>=13&&action<=28?Component.translatable("message.starfall_blueprint."+switch(action){case 13->"best_diagnostics_cost";case 14->"best_diagnostic_tool_cost";case 15->"best_isolate_cost";case 16->"best_connect_cost";case 17->"best_mech_learning_cost";case 19->"best_mech_radiator_cost";case 20->"best_mech_drive_cost";case 21->"best_mech_drill_arm_cost";case 22->"best_mech_excavator_arm_cost";case 23->"best_mech_reinforced_body_cost";case 24->"best_mech_generator_core_cost";case 25->"best_mech_cruise_wheels_cost";case 27->"best_mech_heavy_drill_arm_cost";case 28->"best_mech_heavy_excavator_arm_cost";default->"best_mech_assembly_cost";}):Component.literal(actionCost(action));}
     public static String actionLabel(int action){if(action>=13&&action<=28)return actionLabelComponent(action).getString();return switch(action){case 0->"学习：基础工务";case 1->"学习：工程钻切";case 2->"装配轻型助力骨架";case 3->"装配工程钻切器";case 4->"维修主手装备";case 5->"学习：野外整备";case 6->"装配便携整备包";case 7->"冷却主手装备";case 8->"学习：轻载通行";case 9->"装配跨步组件";case 10->"安装主手骨架组件";case 11->"切换主手骨架跨步档";case 12->"拆回主手骨架组件";default->"未知操作";};}
     public static String actionCost(int action){if(action>=13&&action<=28)return actionCostComponent(action).getString();return switch(action){case 0->"普通钢×2、基础控制板×1";case 1->"承相结构嵌材×1、导相铜复材板×1；需基础工务";case 2->"普通钢×4、承相结构嵌材×2、基础控制板×1、钢制固定件×2";case 3->"普通钢×3、导相铜复材板×2、钻石磨头×1、基础控制板×1";case 4->"普通钢×1，恢复主手装备200点工务耐久";case 5->"承相结构嵌材×2、导相铜复材板×1、基础控制板×1；需工程钻切";case 6->"普通钢×3、钢制固定件×2、陶瓷护套×1、基础控制板×1；需野外整备";case 7->"水桶×1，返还空桶；主手装备降温400，需对应使用知识";case 8->"承相结构嵌材×2、导相铜复材板×1、基础控制板×1；需野外整备，解锁轻载组件装配、安装、切档与拆回";case 9->"普通钢×4、承相结构嵌材×2、钢制固定件×2、基础控制板×1；需本人轻载通行知识";case 10->"跨步组件×1；主手持未安装骨架，需本人轻载通行知识，安装后默认关闭";case 11->"免费；主手持已安装骨架，需本人轻载通行知识；持续地面跨步档站立也耗能";case 12->"返还跨步组件×1；主手持已安装骨架，需本人轻载通行知识及背包空间";default->"";};}
-    private static Map<String,Integer> cost(int action){return switch(action){case 0->Map.of("steel",2,"board",1);case 1->Map.of("load",1,"conductor",1);case 2->Map.of("steel",4,"load",2,"board",1,"steel_fix",2);case 3->Map.of("steel",3,"conductor",2,"head",1,"board",1);case 4->Map.of("steel",1);case 5->Map.of("load",2,"conductor",1,"board",1);case 6->Map.of("steel",3,"steel_fix",2,"sheath",1,"board",1);case 7->Map.of("minecraft:water_bucket",1);case 8->Map.of("load",2,"conductor",1,"board",1);case 9->Map.of("steel",4,"load",2,"steel_fix",2,"board",1);case 10->Map.of("best_stride_module",1);case 13->Map.of("load",1,"conductor",2,"board",1);case 14->Map.of("steel",2,"conductor",1,"sensor",1,"board",1,"sheath",1);case 17->Map.of("load",4,"conductor",4,"sensor",2,"board",2);case 18->Map.of("steel",32,"load",16,"conductor",8,"board",4,"steel_fix",16,"head",2,"sensor",2,"sheath",8);case 19->Map.of("steel",6,"conductor",4,"sheath",4,"steel_fix",4);case 20->Map.of("steel",8,"load",4,"conductor",4,"board",2,"steel_fix",4);case 21->Map.of("steel",8,"conductor",4,"head",2,"board",1,"steel_fix",4);case 22->Map.of("steel",8,"load",4,"conductor",2,"steel_fix",4,"sheath",2);case 23->Map.of("steel",24,"load",12,"conductor",8,"steel_fix",16,"sheath",8);case 24->Map.of("steel",16,"load",8,"conductor",8,"board",4,"sheath",8,"steel_fix",8);case 25->Map.of("steel",12,"load",6,"conductor",4,"steel_fix",8,"sheath",4);case 26->Map.of("steel",64,"load",32,"conductor",16,"board",8,"steel_fix",32,"head",2,"sensor",4,"sheath",16);case 28->Map.of("steel",16,"load",8,"conductor",4,"steel_fix",8,"sheath",4,"head",2);case 27->Map.of("steel",24,"load",12,"conductor",8,"head",8,"board",4,"steel_fix",12,"sheath",8);default->Map.of();};}
+    private static Map<String,Integer> cost(int action){return switch(action){case 0->Map.of("steel",2,"board",1);case 1->Map.of("load",1,"conductor",1);case 2->Map.of("steel",4,"load",2,"board",1,"steel_fix",2);case 3->Map.of("steel",3,"conductor",2,"head",1,"board",1);case 4->Map.of("steel",1);case 5->Map.of("load",2,"conductor",1,"board",1);case 6->Map.of("steel",3,"steel_fix",2,"sheath",1,"board",1);case 7->Map.of("minecraft:water_bucket",1);case 8->Map.of("load",2,"conductor",1,"board",1);case 9->Map.of("steel",4,"load",2,"steel_fix",2,"board",1);case 10->Map.of("best_stride_module",1);case 13->Map.of("load",1,"conductor",2,"board",1);case 14->Map.of("steel",2,"conductor",1,"sensor",1,"board",1,"sheath",1);case 17->Map.of("load",4,"conductor",4,"sensor",2,"board",2);case 18->Map.of("steel",32,"load",16,"conductor",8,"board",4,"steel_fix",16,"head",2,"sensor",2,"sheath",8);case 19->Map.of("steel",6,"conductor",4,"sheath",4,"steel_fix",4);case 20->Map.of("steel",8,"load",4,"conductor",4,"board",2,"steel_fix",4);case 21->Map.of("steel",8,"conductor",4,"head",2,"board",1,"steel_fix",4);case 22->Map.of("steel",8,"load",4,"conductor",2,"steel_fix",4,"sheath",2);case 23->Map.of("steel",24,"load",12,"conductor",8,"steel_fix",16,"sheath",8);case 24->Map.of("steel",16,"load",8,"conductor",8,"board",4,"sheath",8,"steel_fix",8);case 25->Map.of("steel",12,"load",6,"conductor",4,"steel_fix",8,"sheath",4);case 28->Map.of("steel",16,"load",8,"conductor",4,"steel_fix",8,"sheath",4,"head",2);case 27->Map.of("steel",24,"load",12,"conductor",8,"head",8,"board",4,"steel_fix",12,"sheath",8);default->Map.of();};}
     private static boolean diagnosticFail(Player player,String key){player.displayClientMessage(Component.translatable("message.starfall_blueprint."+key),true);return false;}
     private static boolean fail(Player player,String text){player.displayClientMessage(Component.literal(text),true);return false;}
-    public record Knowledge(int researchLevel, boolean lightMobility, boolean diagnostics, boolean mechOperation, boolean advancedEngineering) {
-        public Knowledge(int researchLevel, boolean lightMobility, boolean diagnostics, boolean mechOperation) {
-            this(researchLevel, lightMobility, diagnostics, mechOperation, false);
-        }
-        public static Knowledge of(Player player) { return new Knowledge(BestEngineering.researchLevel(player), hasLightMobility(player), hasDiagnostics(player), hasMechOperation(player), hasAdvancedEngineering(player)); }
+    public record Knowledge(int researchLevel, boolean lightMobility, boolean diagnostics, boolean mechOperation) {
+
+        public static Knowledge of(Player player) { return new Knowledge(BestEngineering.researchLevel(player), hasLightMobility(player), hasDiagnostics(player), hasMechOperation(player)); }
     }
     public enum Status { READY, ALREADY_LEARNED, PREREQUISITE, MATERIALS, TARGET, SPACE, INVALID }
     public record MaterialRequirement(ItemStack item, int required, int available) {}
@@ -59,10 +56,10 @@ public final class BestEngineering {
     }
     private record Plan(Preview preview, List<ItemStack> inventory, int nextLevel) {}
     /** Read-only: all inventory/equipment simulation uses copies; never learns, commits or sends messages. */
-    public static Preview preview(Player player, int action) { return preview(player, action, Knowledge.of(player)); }
+    public static Preview preview(Player player, int action) { if(BestMechAssembly.handles(action))return BestMechAssembly.preview(player,action,BestMechAssembly.knowledgeMask(player)); return preview(player, action, Knowledge.of(player)); }
     /** Client menus pass their synchronized knowledge; the server always derives its own knowledge. */
     public static Preview preview(Player player, int action, Knowledge knowledge) { return preview(player.getInventory(), action, knowledge); }
-    public static Preview preview(Inventory inventory, int action, Knowledge knowledge) { return plan(inventory, action, knowledge).preview(); }
+    public static Preview preview(Inventory inventory, int action, Knowledge knowledge) { if(BestMechAssembly.handles(action))return BestMechAssembly.preview(inventory.player,action,BestMechAssembly.knowledgeMask(inventory.player)); return plan(inventory, action, knowledge).preview(); }
     private static Plan rejected(Status status, String reason, List<MaterialRequirement> materials) {
         return new Plan(new Preview(status, Component.translatable("ui.starfall_blueprint.best_" + reason), materials), List.of(), 0);
     }
@@ -72,12 +69,12 @@ public final class BestEngineering {
             int available = 0;
             for (int i = 0; i < 36; i++) {
                 ItemStack stack = inventory.getItem(i);
-                if (CatalogueContent.matches(input.getKey(), stack) && usableMaterial(stack) && (action!=26||Progression.usableMaterial(stack))) available += stack.getCount();
+                if (CatalogueContent.matches(input.getKey(), stack) && usableMaterial(stack)) available += stack.getCount();
             }
             materials.add(new MaterialRequirement(CatalogueContent.stack(input.getKey(), 1), input.getValue(), available));
         }
         materials = List.copyOf(materials);
-        if(action<0||action>28)return rejected(Status.INVALID,"unavailable",materials);
+        if(action<0||action>28||action==26)return rejected(Status.INVALID,"unavailable",materials);
         int learned=knowledge.researchLevel();
         int nextLevel=switch(action){case 0->1;case 1->2;case 5->3;default->0;};
         if((nextLevel>0&&learned>=nextLevel)||(action==8&&knowledge.lightMobility())
@@ -90,17 +87,7 @@ public final class BestEngineering {
         if(action>=9&&action<=12&&!knowledge.lightMobility())return rejected(Status.PREREQUISITE,"requires_light",materials);
         if(action>=14&&!knowledge.diagnostics())return rejected(Status.PREREQUISITE,"requires_diagnostics",materials);
         ItemStack held=inventory.getItem(inventory.selected);
-        if(action==26){
-            if(inventory.player!=null&&(!inventory.player.isAlive()||inventory.player.isSpectator()))
-                return rejected(Status.INVALID,"unavailable",materials);
-            if(!knowledge.advancedEngineering())return rejected(Status.PREREQUISITE,"requires_advanced",materials);
-            if(!(held.getItem() instanceof BestMechItem source)||source.heavy()||held.getCount()!=1)
-                return rejected(Status.TARGET,"upgrade_target",materials);
-            var state=BestMechItem.state(held);
-            if(!state.getBoolean("Isolated"))return rejected(Status.TARGET,"upgrade_isolation",materials);
-            if(state.contains("Health")&&(!Float.isFinite(state.getFloat("Health"))||!(state.getFloat("Health")>0)))
-                return rejected(Status.TARGET,"upgrade_alive",materials);
-        }
+
         if(action==15||action==16){
             if(!BestEquipment.isEquipment(held))return rejected(Status.TARGET,"target_equipment",materials);
             if(action==15&&BestEquipment.isIsolated(held))return rejected(Status.TARGET,"already_isolated",materials);
@@ -118,22 +105,14 @@ public final class BestEngineering {
         List<ItemStack> plan=new ArrayList<>();for(int i=0;i<36;i++)plan.add(inventory.getItem(i).copy());
         for(var input:cost(action).entrySet()){
             int need=input.getValue();
-            for(ItemStack stack:plan)if(CatalogueContent.matches(input.getKey(),stack)&&usableMaterial(stack)&&(action!=26||Progression.usableMaterial(stack))){
+            for(ItemStack stack:plan)if(CatalogueContent.matches(input.getKey(),stack)&&usableMaterial(stack)){
                 int n=Math.min(need,stack.getCount());stack.shrink(n);need-=n;if(need==0)break;
             }
             if(need>0)return rejected(Status.MATERIALS,"missing_materials",materials);
         }
-        if(action==26){
-            ItemStack source=plan.get(inventory.selected);
-            ItemStack upgraded=BestMechUpgrades.upgraded(source);
-            if(upgraded.isEmpty())return rejected(Status.TARGET,"upgrade_target",materials);
-            boolean returnBody=BestMechBodies.REINFORCED.equals(BestMechBodies.read(BestMechItem.state(source)));
-            plan.set(inventory.selected,upgraded);
-            if(returnBody&&!insert(plan,CatalogueContent.stack(BestMechBodies.REINFORCED,1)))
-                return rejected(Status.SPACE,"upgrade_space",materials);
-        }
-        if(action==2||action==3||action==6||action==9||action==14||(action>=18&&action!=26)){
-            String output=switch(action){case 2->"best_frame";case 3->"best_cutter";case 6->"best_service_kit";case 9->"best_stride_module";case 14->"best_diagnostic_tool";case 19->"best_mech_radiator";case 20->"best_mech_drive";case 21->"best_mech_drill_arm";case 22->"best_mech_excavator_arm";case 23->"best_mech_reinforced_body";case 24->"best_mech_generator_core";case 25->"best_mech_cruise_wheels";case 26->"best_heavy_mech";case 27->"best_mech_heavy_drill_arm";case 28->"best_mech_heavy_excavator_arm";default->"best_mech";};
+
+        if(action==2||action==3||action==6||action==9||action==14||action>=18){
+            String output=switch(action){case 2->"best_frame";case 3->"best_cutter";case 6->"best_service_kit";case 9->"best_stride_module";case 14->"best_diagnostic_tool";case 19->"best_mech_radiator";case 20->"best_mech_drive";case 21->"best_mech_drill_arm";case 22->"best_mech_excavator_arm";case 23->"best_mech_reinforced_body";case 24->"best_mech_generator_core";case 25->"best_mech_cruise_wheels";case 27->"best_mech_heavy_drill_arm";case 28->"best_mech_heavy_excavator_arm";default->"best_mech";};
             ItemStack out=CatalogueContent.stack(output,1);
             if(!insert(plan,out))return rejected(Status.SPACE,"space_output",materials);
         }
@@ -158,7 +137,8 @@ public final class BestEngineering {
     }
     /** Server-authoritative validation and atomic commit of the same plan used by previews. */
     public static boolean perform(Player player,int action){
-        if(player.level().isClientSide||action<0||action>28)return false;
+        if(BestMechAssembly.handles(action))return BestMechAssembly.perform(player,action);
+        if(player.level().isClientSide||action<0||action>28||action==26)return false;
         String progression=Progression.bestId(action);
         if(progression!=null)return Progression.learn(player,progression);
         Inventory inventory=player.getInventory();
@@ -175,7 +155,7 @@ public final class BestEngineering {
         if(action==13)player.getPersistentData().putBoolean(DIAGNOSTICS,true);
         if(action==17)player.getPersistentData().putBoolean("BestMechOperation",true);
         inventory.setChanged();player.inventoryMenu.broadcastChanges();player.containerMenu.broadcastChanges();
-        if(action>=13){player.displayClientMessage(Component.translatable("message.starfall_blueprint."+switch(action){case 13->"best_diagnostics_learned";case 14->"best_diagnostic_assembled";case 15->"best_battery_isolated";case 16->"best_battery_connected";case 17->"best_mech_learned";case 19->"best_mech_radiator_assembled";case 20->"best_mech_drive_assembled";case 21->"best_mech_drill_arm_assembled";case 22->"best_mech_excavator_arm_assembled";case 23->"best_mech_reinforced_body_assembled";case 24->"best_mech_generator_core_assembled";case 25->"best_mech_cruise_wheels_assembled";case 26->"best_heavy_mech_assembled";case 27->"best_mech_heavy_drill_arm_assembled";case 28->"best_mech_heavy_excavator_arm_assembled";default->"best_mech_assembled";}),true);return true;}
+        if(action>=13){player.displayClientMessage(Component.translatable("message.starfall_blueprint."+switch(action){case 13->"best_diagnostics_learned";case 14->"best_diagnostic_assembled";case 15->"best_battery_isolated";case 16->"best_battery_connected";case 17->"best_mech_learned";case 19->"best_mech_radiator_assembled";case 20->"best_mech_drive_assembled";case 21->"best_mech_drill_arm_assembled";case 22->"best_mech_excavator_arm_assembled";case 23->"best_mech_reinforced_body_assembled";case 24->"best_mech_generator_core_assembled";case 25->"best_mech_cruise_wheels_assembled";case 27->"best_mech_heavy_drill_arm_assembled";case 28->"best_mech_heavy_excavator_arm_assembled";default->"best_mech_assembled";}),true);return true;}
         player.displayClientMessage(Component.literal(nextLevel>0||action==8?"已掌握："+actionLabel(action).replace("学习：",""):action==4?"维修完成；电量与温度保持原状":action==7?"冷却完成；已返还空桶":action==6?"整备包装配完成；主手持包、副手持受损装备右键维修":action==9?"跨步组件装配完成":action==10?"组件安装完成；跨步档已关闭":action==11?"持续地面跨步档："+(BestEquipment.strideEnabled(player.getMainHandItem())?"开启，站立也耗能":"关闭"):action==12?"组件已拆回；骨架电热与耐久保持原状":"装配完成；请用已充电的工具能匣补能"),true);
         return true;
     }

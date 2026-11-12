@@ -129,13 +129,13 @@ public final class BestMechModel extends EntityModel<BestMechEntity> {
     }
 
     @Override public void setupAnim(BestMechEntity entity, float limbSwing, float limbSwingAmount, float age, float yaw, float pitch) {
-        heavyFrame.visible = entity.heavy();
-        reinforcement.visible = !entity.heavy() && cn.starfall.blueprint.BestMechBodies.REINFORCED.equals(entity.bodyKey());
+        heavyFrame.visible = entity.supportsAreaTools();
+        reinforcement.visible = cn.starfall.blueprint.BestMechBodies.REINFORCED.equals(entity.bodyKey());
         generator.visible = cn.starfall.blueprint.BestMechCores.GENERATOR.equals(entity.coreKey());
-        drillHead.visible = BestMechArms.DRILL.equals(entity.armKey());
-        bucketHead.visible = BestMechArms.EXCAVATOR.equals(entity.armKey());
-        heavyDrillHead.visible = BestMechArms.HEAVY_DRILL.equals(entity.armKey());
-        heavyBucketHead.visible = BestMechArms.HEAVY_EXCAVATOR.equals(entity.armKey());
+        drillHead.visible = BestMechArms.DRILL.equals(entity.workArmKey());
+        bucketHead.visible = BestMechArms.EXCAVATOR.equals(entity.workArmKey());
+        heavyDrillHead.visible = BestMechArms.HEAVY_DRILL.equals(entity.workArmKey());
+        heavyBucketHead.visible = BestMechArms.HEAVY_EXCAVATOR.equals(entity.workArmKey());
         boolean cruising = cn.starfall.blueprint.BestMechLegs.CRUISE.equals(entity.legsKey());
         wheels.visible = cruising;
         leftLeg.visible = !cruising; rightLeg.visible = !cruising;

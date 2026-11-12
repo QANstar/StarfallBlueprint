@@ -20,12 +20,11 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 /** Packed state is the only energy balance; never cached in a capability object. */
 public final class BestMechItem extends Item {
     private static final String STATE = "BestMech";
-    private final boolean heavy;
-    public BestMechItem(Properties properties) { this(properties, false); }
-    public BestMechItem(Properties properties, boolean heavy) { super(properties.stacksTo(1)); this.heavy = heavy; }
-    public boolean heavy() { return heavy; }
-    private static boolean heavy(ItemStack stack) { return stack.getItem() instanceof BestMechItem item && item.heavy(); }
-    public static CompoundTag state(ItemStack stack) { return CatalogueEquipment.getData(stack).getCompound(STATE).copy(); }
+    private final String platformType;
+    public String platformType() { return platformType; }
+    public BestMechItem(Properties properties, String type) { super(properties.stacksTo(1)); this.platformType=type; }
+    public BestMechItem(Properties properties) { this(properties, BestMechProgression.ENGINEERING); }
+    public static CompoundTag state(ItemStack stack) { CompoundTag tag=CatalogueEquipment.getData(stack).getCompound(STATE).copy(); return tag; }
     public static void setState(ItemStack stack, CompoundTag state) {
         CompoundTag data = CatalogueEquipment.getData(stack); data.put(STATE, state.copy()); CatalogueEquipment.setData(stack, data);
     }
@@ -41,12 +40,12 @@ public final class BestMechItem extends Item {
         }
         public int extractEnergy(int max, boolean simulate) { return 0; }
         public int getEnergyStored() { return Math.clamp(state(stack).getInt("Energy"), 0, getMaxEnergyStored()); }
-        public int getMaxEnergyStored() { return heavy(stack) ? 60_000_000 : BestMechBodies.capacity(BestMechBodies.read(state(stack))); }
+        public int getMaxEnergyStored() { return BestMechProgression.capacity(BestMechProgression.type(stack),state(stack)); }
         public boolean canReceive() { var tag = state(stack); return !tag.getBoolean("Isolated") && (!tag.contains("Health") || tag.getFloat("Health") > 0); }
         public boolean canExtract() { return false; }
     }; }
     @Override public InteractionResult useOn(UseOnContext context) {
-        Player player = context.getPlayer(); if(player == null || !BestMechEntity.qualified(player)) return InteractionResult.FAIL;
+        Player player = context.getPlayer(); if(player == null || !BestMechEntity.qualifiedFor(player,platformType)) return InteractionResult.FAIL;
         Level level = context.getLevel(); ItemStack stack = context.getItemInHand();
         if(player.isShiftKeyDown()) {
             if(!energy(stack).canReceive()) return InteractionResult.FAIL;
@@ -58,7 +57,7 @@ public final class BestMechItem extends Item {
         if(tag.contains("Health") && !(tag.getFloat("Health") > 0)) return InteractionResult.FAIL;
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
         if(!level.hasChunkAt(pos) || !level.mayInteract(player, pos) || !player.mayUseItemAt(pos, context.getClickedFace(), stack)) return InteractionResult.FAIL;
-        BestMechEntity mech = (heavy ? BestMechs.HEAVY_TYPE.get() : BestMechs.TYPE.get()).create(level); if(mech == null) return InteractionResult.FAIL;
+        BestMechEntity mech = (BestMechProgression.COMBAT.equals(platformType)?BestMechs.COMBAT_TYPE.get():BestMechProgression.UNIVERSAL.equals(platformType)?BestMechs.UNIVERSAL_TYPE.get():BestMechs.TYPE.get()).create(level); if(mech == null) return InteractionResult.FAIL;
         mech.loadState(tag); mech.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, player.getYRot(), 0);
         if(stack.has(DataComponents.CUSTOM_NAME)) mech.setCustomName(stack.get(DataComponents.CUSTOM_NAME));
         AABB box = mech.getBoundingBox();
@@ -78,11 +77,11 @@ public final class BestMechItem extends Item {
     @Override public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if(toggleIsolation(player, hand, stack)) return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
-        if(!player.isShiftKeyDown() || !BestMechEntity.qualified(player) || !energy(stack).canReceive()) return InteractionResultHolder.fail(stack);
+        if(!player.isShiftKeyDown() || !BestMechEntity.qualifiedFor(player,platformType) || !energy(stack).canReceive()) return InteractionResultHolder.fail(stack);
         player.startUsingItem(hand); return InteractionResultHolder.consume(stack);
     }
-    private static boolean toggleIsolation(Player player, InteractionHand hand, ItemStack stack) {
-        if(player.isShiftKeyDown() || hand != InteractionHand.MAIN_HAND || !BestMechEntity.qualified(player)
+    private boolean toggleIsolation(Player player, InteractionHand hand, ItemStack stack) {
+        if(player.isShiftKeyDown() || hand != InteractionHand.MAIN_HAND || !BestMechEntity.qualifiedFor(player,platformType)
                 || !player.getOffhandItem().is(CatalogueContent.item("best_diagnostic_tool"))) return false;
         if(!player.level().isClientSide) {
             CompoundTag tag = state(stack); tag.putBoolean("Isolated", !tag.getBoolean("Isolated")); setState(stack, tag);
@@ -94,7 +93,7 @@ public final class BestMechItem extends Item {
     @Override public UseAnim getUseAnimation(ItemStack stack) { return UseAnim.NONE; }
     @Override public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remaining) {
         if(level.isClientSide || !(user instanceof Player player)) return;
-        if(!player.isShiftKeyDown() || !BestMechEntity.qualified(player) || !energy(stack).canReceive()) { player.stopUsingItem(); return; }
+        if(!player.isShiftKeyDown() || !BestMechEntity.qualifiedFor(player,platformType) || !energy(stack).canReceive()) { player.stopUsingItem(); return; }
         Vec3 from = player.getEyePosition(); double reach = Math.min(5, player.blockInteractionRange());
         BlockHitResult hit = level.clip(new ClipContext(from, from.add(player.getLookAngle().scale(reach)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
         if(hit.getType() != HitResult.Type.BLOCK || !level.hasChunkAt(hit.getBlockPos()) || !level.mayInteract(player, hit.getBlockPos())) return;
@@ -112,7 +111,8 @@ public final class BestMechItem extends Item {
     @Override public int getBarColor(ItemStack stack) { return 0x49bca3; }
     @Override public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
         var tag = state(stack); lines.add(Component.literal(energy(stack).getEnergyStored() + " / " + energy(stack).getMaxEnergyStored() + " XH · 热 " + tag.getInt("Heat") + " · 磨损 " + tag.getInt("Wear")));
-        float maxHealth = heavy(stack) ? 300 : BestMechBodies.maxHealth(BestMechBodies.read(tag));
+        float maxHealth = BestMechProgression.maxHealth(platformType,tag);
+        lines.add(Component.literal("平台 " + platformType + " · 强化 " + BestMechProgression.mask(tag) + " · 战斗机作业键开火；归海V键开火"));
         lines.add(Component.literal("结构 " + (tag.contains("Health") ? tag.getFloat("Health") : maxHealth) + "/" + maxHealth + " · " + (tag.getBoolean("Isolated") ? "已隔离" : "已接通")));
         lines.add(Component.literal("潜行按住右键对准基地储能方块：蓄能 ≤5000 XH/t；普通右键地面部署"));
         lines.add(Component.literal("副手诊断器，主手机甲普通右键空气：切换隔离/接通"));
@@ -120,8 +120,10 @@ public final class BestMechItem extends Item {
         lines.add(BestMechModules.controls());
         lines.add(BestMechArms.installed(BestMechArms.read(tag)));
         lines.add(BestMechArms.controls());
-        lines.add(heavy(stack) ? Component.translatable("mech.starfall_blueprint.platform.heavy") : BestMechBodies.installed(BestMechBodies.read(tag)));
-        lines.add(heavy(stack) ? Component.translatable("mech.starfall_blueprint.body.heavy_rejected") : BestMechBodies.controls());
+        if(BestMechProgression.ENGINEERING.equals(platformType)) {
+            lines.add(BestMechBodies.installed(BestMechBodies.read(tag)));
+            lines.add(BestMechBodies.controls());
+        }
         lines.add(BestMechCores.installed(BestMechCores.read(tag)));
         lines.add(BestMechCores.controls());
         lines.add(BestMechCores.fuel(Math.clamp(tag.getInt("CoreFuelTicks"), 0, BestMechCores.MAX_FUEL_TICKS)));

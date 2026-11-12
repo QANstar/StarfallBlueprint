@@ -8,13 +8,16 @@ import net.minecraft.resources.ResourceLocation;
 
 public final class BestMechRenderer extends MobRenderer<BestMechEntity, BestMechModel> {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID,"textures/entity/best_engineering_mech.png");
-    private static final ResourceLocation HEAVY_TEXTURE = ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID,"textures/entity/best_heavy_engineering_mech.png");
     public BestMechRenderer(EntityRendererProvider.Context context) {
         super(context,new BestMechModel(context.bakeLayer(BestMechModel.LAYER)),0.85F);
     }
     @Override protected void scale(BestMechEntity entity, com.mojang.blaze3d.vertex.PoseStack pose, float partialTick) {
-        if(entity.heavy()) pose.scale(2.6f / 1.8f, 4.4f / 3.2f, 2.6f / 1.8f);
-        shadowRadius = entity.heavy() ? 1.25f : .85f;
+        pose.scale(entity.getBbWidth() / 1.8f, entity.getBbHeight() / 3.2f, entity.getBbWidth() / 1.8f);
+        shadowRadius = entity.getBbWidth() * .47f;
     }
-    @Override public ResourceLocation getTextureLocation(BestMechEntity entity) { return entity.heavy() ? HEAVY_TEXTURE : TEXTURE; }
+    @Override public ResourceLocation getTextureLocation(BestMechEntity entity) {
+        if(entity.getType()==cn.starfall.blueprint.BestMechs.COMBAT_TYPE.get()) return StarfallBlueprint.id("textures/entity/best_combat_mech.png");
+        if(entity.getType()==cn.starfall.blueprint.BestMechs.UNIVERSAL_TYPE.get()) return StarfallBlueprint.id("textures/entity/best_universal_mech.png");
+        return TEXTURE;
+    }
 }

@@ -40,8 +40,9 @@ public final class BestMechLootGameTests {
     }
     private static BestMechEntity mech(GameTestHelper h, ServerPlayer p, int slots) {
         for(int x=0;x<12;x++) for(int z=0;z<12;z++) h.setBlock(new BlockPos(x,0,z), Blocks.STONE);
-        var m=(slots==27?BestMechs.HEAVY_TYPE.get():BestMechs.TYPE.get()).create(h.getLevel());
+        var m=BestMechs.TYPE.get().create(h.getLevel());
         var t=new net.minecraft.nbt.CompoundTag(); t.putInt("Energy",100_000);
+        if(slots==27)t.putInt("UpgradeMask",BestMechProgression.ENGINEERING_EXTENSION);
         if(slots==18) t.putString(BestMechBodies.STATE,BestMechBodies.REINFORCED); m.loadState(t);
         var pos=h.absolutePos(new BlockPos(5,1,3)); m.moveTo(pos.getX()+.5,pos.getY(),pos.getZ()+.5,0,0);
         h.getLevel().addFreshEntity(m); m.setOnGround(true); p.startRiding(m);

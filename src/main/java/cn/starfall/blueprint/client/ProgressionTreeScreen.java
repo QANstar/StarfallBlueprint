@@ -72,7 +72,7 @@ public final class ProgressionTreeScreen extends Screen implements MenuAccess<Pr
     @Override public void render(GuiGraphics g,int mx,int my,float partial){
         g.fill(0,0,width,height,0xff10151e);g.fill(0,0,width,27,0xff242a38);
         g.drawString(font,label("title"),12,9,INK,false);
-        g.drawString(font,label("progress",Progression.NODES.stream().filter(n->menu.isLearned(n.id())).count(),Progression.NODES.size()),Math.max(100,width/2-45),9,MUTED,false);
+        g.drawString(font,label("progress",Progression.NODES.stream().filter(n->menu.isLearned(n.id())).count(),Progression.NODES.stream().count()),Math.max(100,width/2-45),9,MUTED,false);
         g.fill(vx,vy,vx+vw,vy+vh,0xff141c29);g.enableScissor(vx,vy,vx+vw,vy+vh);
         double grid=32*zoom;if(grid>=7){for(double x=vx+panX%grid;x<vx+vw;x+=grid)g.fill((int)x,vy,(int)x+1,vy+vh,0xff202b3b);for(double y=vy+panY%grid;y<vy+vh;y+=grid)g.fill(vx,(int)y,vx+vw,(int)y+1,0xff202b3b);}
         g.pose().pushPose();g.pose().translate(vx+panX,vy+panY,0);g.pose().scale((float)zoom,(float)zoom,1);

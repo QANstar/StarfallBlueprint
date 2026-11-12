@@ -43,6 +43,11 @@ public final class CatalogueContent {
             JsonParser.parseReader(new InputStreamReader(extra,StandardCharsets.UTF_8)).getAsJsonObject().entrySet()
                 .forEach(e->DATA.getAsJsonObject("items").add(e.getKey(),e.getValue()));
         }catch(IOException e){throw new ExceptionInInitializerError(e);}
+        try(var extra=CatalogueContent.class.getResourceAsStream("/assets/starfall_blueprint/best_progression.json")) {
+            if(extra==null)throw new IllegalStateException("Missing Best progression definitions");
+            JsonParser.parseReader(new InputStreamReader(extra,StandardCharsets.UTF_8)).getAsJsonObject().entrySet()
+                .forEach(e->DATA.getAsJsonObject("items").add(e.getKey(),e.getValue()));
+        }catch(IOException e){throw new ExceptionInInitializerError(e);}
         DATA.getAsJsonObject("items").entrySet().forEach(e->DEFINITIONS.put(e.getKey(),e.getValue().getAsJsonObject()));
         DATA.getAsJsonArray("recipes").forEach(r->RECIPES.put(r.getAsJsonObject().get("id").getAsString(),r.getAsJsonObject()));
         for(String key:List.of("rutile","borate","moon"))ORES.put(key,StarfallBlueprint.BLOCKS.register(key+"_ore",()->new Block(BlockBehaviour.Properties.of().strength(3f,3f).requiresCorrectToolForDrops()){

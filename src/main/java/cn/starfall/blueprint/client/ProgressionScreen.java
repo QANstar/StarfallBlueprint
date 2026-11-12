@@ -64,7 +64,7 @@ public final class ProgressionScreen extends AbstractContainerScreen<Progression
     private void filter() {
         visibleNodes.clear();
         for (int i = 0; i < Progression.NODES.size(); i++)
-            if (category.equals("all") || Progression.NODES.get(i).category().equals(category)) visibleNodes.add(i);
+            if ((category.equals("all") || Progression.NODES.get(i).category().equals(category))) visibleNodes.add(i);
         if (!visibleNodes.contains(selected)) {
             selected = visibleNodes.isEmpty() ? -1 : visibleNodes.getFirst();
             detailScroll = 0;

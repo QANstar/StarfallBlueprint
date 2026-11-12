@@ -46,7 +46,8 @@ public final class BestHeavyDrillGameTests {
     }
     private static BestMechEntity mech(GameTestHelper h, boolean heavy) {
         for(int x = 0; x < 12; x++) for(int z = 0; z < 12; z++) h.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
-        var m = (heavy ? BestMechs.HEAVY_TYPE : BestMechs.TYPE).get().create(h.getLevel());
+        var m = BestMechs.TYPE.get().create(h.getLevel());
+        if(heavy) { var state=m.stateTag(); state.putInt("UpgradeMask",BestMechProgression.ENGINEERING_EXTENSION);m.loadState(state); }
         var pos = h.absolutePos(new BlockPos(3, 1, 3)); m.moveTo(pos.getX() + .5, pos.getY(), pos.getZ() + .5, 0, 0);
         m.setOnGround(true); h.getLevel().addFreshEntity(m); reset(m, 1_000_000, 0, 0); return m;
     }
@@ -136,10 +137,10 @@ public final class BestHeavyDrillGameTests {
             h.assertTrue(m.pack(p) && BestMechItem.state(p.getMainHandItem()).equals(before), "Packing retains exact state"); p.setShiftKeyDown(false);
             var floor = h.absolutePos(new BlockPos(7, 0, 7));
             h.assertTrue(p.getMainHandItem().getItem().useOn(new UseOnContext(p, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(floor).add(0, .5, 0), Direction.UP, floor, false))).consumesAction(), "Packed heavy redeploys");
-            m = h.getLevel().getEntitiesOfClass(BestMechEntity.class, new AABB(floor).inflate(5), e -> e.heavy() && !e.isRemoved()).stream().findFirst().orElseThrow();
+            m = h.getLevel().getEntitiesOfClass(BestMechEntity.class, new AABB(floor).inflate(5), e -> e.supportsAreaTools() && !e.isRemoved()).stream().findFirst().orElseThrow();
             h.assertTrue(m.stateTag().equals(before), "Deploy preserves every counter"); var box = m.getBoundingBox().inflate(3);
             m.setHealth(0); m.die(h.getLevel().damageSources().generic()); m.die(h.getLevel().damageSources().generic());
-            var loot = h.getLevel().getEntitiesOfClass(ItemEntity.class, box, e -> e.getItem().is(CatalogueContent.item("best_heavy_mech")));
+            var loot = h.getLevel().getEntitiesOfClass(ItemEntity.class, box, e -> e.getItem().is(CatalogueContent.item("best_mech")));
             before.putFloat("Health", 0); h.assertTrue(loot.size() == 1 && BestMechItem.state(loot.getFirst().getItem()).equals(before), "Death packs one arm-bearing chassis with40 cooldown"); loot.forEach(Entity::discard);
         } finally { h.getLevel().getGameRules().getRule(GameRules.RULE_DOENTITYDROPS).set(drops, h.getLevel().getServer()); clear(p); m.discard(); light.discard(); }
         h.succeed();

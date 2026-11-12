@@ -2610,7 +2610,7 @@
       "name": "赤钛耐磨镶片",
       "unit": "份",
       "icon": "plate",
-      "note": "普通镐耐久＋10%；可用CB-02晋升20%，再以本镶片＋耐温玻璃＋烈焰粉复合晋升30%；同槽分级替换，不相乘，保留损耗比例。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "design_packet_m": 100,
@@ -2629,7 +2629,7 @@
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
         "summary": "制作采样镐与分级耐磨强化",
-        "benefit": "先提供10%耐久，后参与20%镐晋升30%的复合。",
+        "benefit": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
         "operation": "同槽分级替换：10%可用CB-02升20%，再加镶片、耐温玻璃与烈焰粉升30%，保持损耗比例。",
         "targets": [
           "sample_pick"
@@ -9989,7 +9989,7 @@
       "name": "沧澜九格钻掘臂",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Canglan Nine-block Drilling Arm",
@@ -10047,10 +10047,8 @@
         "storage_key": "EngineeringArm",
         "max_installed": 1,
         "variant": "heavy_drill",
-        "target": "best_heavy_mech",
-        "compatible_platforms": [
-          "best_heavy_mech"
-        ],
+        "target": "best_universal_mech",
+        "compatible_platforms": [],
         "manual_action": 27,
         "networking_action": 0,
         "key": "G",
@@ -10106,7 +10104,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "沧澜九格钻掘臂按命中面进行3×3平面钻切",
         "benefit": "仅重型EngineeringArm槽普通实物，stack1无耐久电量；钻石镐级，中心先成功，最多9块；每成功方块48000XH、热35、磨损1，整次首次成功40刻共享冷却，普通掉落。",
@@ -10115,959 +10113,12 @@
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB7klEQVR4nMWXsUoDQRCGd4+tfYHEzk4Lm2AnARvBJxALA2Il2KUUkZR2tiLEQnwCwSZwXCfXWJjOzqT3DU7+IxMmm9nL7d4e/lUys7vz7czsbqKVQ53dXiHZ59Ncq4gyVc6n8ePK94vBZczY6wAdx65dY2JkQ9uLH/b75ecsTcUJ3B8DwLgcFKhtGcnYvT6pnDR7eIsGkKh/lml7h0EAtlwN2QpAJgTDffA8fmkFSktGfhzPB2dLO4e4P/pWBzezxkdRuxyAsG9CgkBwUlOIpMppp50yMpzsLL9/jLq1btAgAF+IEBBd5XT1Atfez5362r5dsR339nV0AJIEYr+S1Dt1QPSmAVUQm55ngGyCSFSApL7wEe8XXXcCzwIywHePJuTC0ZSyQEFhw3wc31pXMQZmShWhzzQPHFyC+TTXJUjgFSwF9wLgQvpcC/r2jYmRRl5zEtWZ6k8ltI+yqQvgCu4zhgIjG+il12nu1wNSGnnAOoC0BmCQVa8M8Aak3SDF7/lnQYu7rmyX3/gASGlEbe1zTuMWfVDQcw0bz0AQAAWnRexjyQG5AAEYKhP5E5/A1AcIIqV6EWRtl5LIlyhPYccIMNn6Ff1lWdLU+d8CgHyu9gUg0fsg/UU7vRqWvUDlsf1NfkGJIC4fQKr88P0BbhkSt2f8tjAAAAAASUVORK5CYII="
     },
-    "best_heavy_mech": {
-      "id": "best_heavy_mech",
-      "name": "SG-E2 沧澜工程机甲",
-      "unit": "件",
-      "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
-      "external": false,
-      "mass": null,
-      "english": "SG-E2 Canglan Engineering Mech",
-      "registry_id": "starfall_blueprint:best_heavy_mech",
-      "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
-      "manual_assembly": {
-        "station": "best_workbench",
-        "personal_learning": true,
-        "automatic": false,
-        "requires": [
-          "field_servicing",
-          "light_mobility",
-          "diagnostics",
-          "mech_operation",
-          "advanced_engineering"
-        ],
-        "inputs": [
-          {
-            "item": "steel",
-            "qty": 64
-          },
-          {
-            "item": "load",
-            "qty": 32
-          },
-          {
-            "item": "conductor",
-            "qty": 16
-          },
-          {
-            "item": "board",
-            "qty": 8
-          },
-          {
-            "item": "steel_fix",
-            "qty": 32
-          },
-          {
-            "item": "head",
-            "qty": 2
-          },
-          {
-            "item": "sensor",
-            "qty": 4
-          },
-          {
-            "item": "sheath",
-            "qty": 16
-          }
-        ],
-        "output_count": 1,
-        "operation": "upgrade",
-        "action": 26,
-        "source_item": "best_mech",
-        "source_hand": "main_hand",
-        "consumes_source": 1,
-        "source_required": [
-          "isolated",
-          "alive"
-        ],
-        "separate_factory_assembly": false,
-        "failure_changes_nothing": true
-      },
-      "max_stack_size": 1,
-      "item_type": "packed_entity",
-      "entity_id": "starfall_blueprint:best_heavy_engineering_mech",
-      "entity_dimensions": {
-        "width": 2.6,
-        "height": 4.4,
-        "rider_seat_height": 3.1
-      },
-      "entity_texture": "starfall_blueprint:textures/entity/best_heavy_engineering_mech.png",
-      "packed_state": {
-        "preserves": [
-          "health",
-          "energy",
-          "heat",
-          "wear",
-          "isolated",
-          "work_ticks",
-          "custom_name",
-          "drill_cooldown",
-          "thermal_lock",
-          "charge_budget",
-          "UtilityModule",
-          "EngineeringArm",
-          "Body",
-          "Cargo",
-          "Core",
-          "CoreFuelTicks",
-          "CoreWorkTicks",
-          "Legs",
-          "CoreFuelTicks",
-          "CoreWorkTicks"
-        ],
-        "initially_empty": true,
-        "occupied_pack_rejected": true,
-        "isolation_required": true,
-        "stationary_grounded_required": true,
-        "full_inventory_rejected": true,
-        "destroyed_health_cannot_deploy": true,
-        "worn_out_can_deploy": true,
-        "deploy_support_and_clearance": "actual_entity_footprint",
-        "packed_isolation_toggle": "main_hand_packed_item_normal_air_use_offhand_diagnostic_tool",
-        "item": "best_heavy_mech",
-        "death_item": "best_heavy_mech",
-        "independent_states": true
-      },
-      "energy_storage": {
-        "capacity": 60000000,
-        "unit": "XH",
-        "initially_empty": true,
-        "source": "s01",
-        "cell_transfer_per_tick": 512,
-        "entity_receive_per_tick": 512,
-        "packed_base_transfer_per_tick": 5000,
-        "isolated_rejects_charging": true,
-        "same_tick_transfer_budget": true,
-        "automatic_rider_inventory_supply": false,
-        "source_caps_apply": true
-      },
-      "thermal": {
-        "overheat": 1000,
-        "resume": 400,
-        "cooling_per_tick": 4
-      },
-      "max_wear": 2400,
-      "driver_knowledge": {
-        "minimum_research_level": 3,
-        "requires": [
-          "field_servicing",
-          "light_mobility",
-          "diagnostics",
-          "mech_operation"
-        ]
-      },
-      "utility_slot": {
-        "max_installed": 1,
-        "mutually_exclusive": true,
-        "storage_key": "UtilityModule",
-        "allowed_items": [
-          "best_mech_radiator",
-          "best_mech_drive"
-        ],
-        "default": "none",
-        "unknown_value": "none",
-        "persistence": [
-          "entity_nbt",
-          "packed_item",
-          "deploy",
-          "death_drop"
-        ],
-        "minimum_research_level": 3,
-        "requires": [
-          "field_servicing",
-          "light_mobility",
-          "diagnostics",
-          "mech_operation"
-        ],
-        "conditions": [
-          "isolated",
-          "unoccupied",
-          "alive",
-          "stationary",
-          "grounded",
-          "nonfluid"
-        ],
-        "install": {
-          "activation": "crouch_main_hand_module_use_on_actual_mech",
-          "consumes": 1,
-          "hot_swap": false,
-          "require_empty_slot": true,
-          "failure_changes_nothing": true
-        },
-        "remove": {
-          "activation": "crouch_main_hand_diagnostic_offhand_steel_fix_use_on_actual_mech",
-          "consumes_fastener": false,
-          "returns_installed_module": 1,
-          "require_main_inventory_space": true,
-          "failure_changes_nothing": true
-        },
-        "plain_crouch_diagnostic": "toggle_isolation",
-        "preserves": [
-          "Energy",
-          "Heat",
-          "Wear",
-          "Health",
-          "WorkTicks",
-          "DrillCooldown",
-          "ThermalLock",
-          "charge_budget",
-          "all_other_state"
-        ]
-      },
-      "operation": {
-        "controls": "vanilla_ground_wasd",
-        "flight": false,
-        "jump": false,
-        "movement_speed": 0.26,
-        "charges_only_actual_ground_movement": true,
-        "energy_per_commanded_movement_tick": 1600,
-        "heat_per_commanded_movement_tick": 10,
-        "wear_per_work_ticks": 100,
-        "unmanned_consumption": false,
-        "idle_consumption": false,
-        "drive_speed": 0.34,
-        "drive_energy_per_tick": 2400,
-        "drive_heat_per_tick": 14
-      },
-      "drill": {
-        "key": "G",
-        "networking_action": 0,
-        "targeting": "single_block",
-        "harvest_tier": "iron",
-        "energy": 32000,
-        "heat": 120,
-        "wear": 1,
-        "cooldown_ticks": 20,
-        "ordinary_drops": true,
-        "deny": [
-          "block_entities",
-          "unbreakable",
-          "protected_blocks"
-        ]
-      },
-      "field_service": {
-        "diagnostics": "noncrouching_diagnostic_tool_read_only",
-        "isolation": "crouching_diagnostic_tool",
-        "requires_isolation_and_no_passengers": [
-          "repair",
-          "cooling"
-        ],
-        "charging_requires_connected_and_no_passengers": true,
-        "repair": {
-          "material": "steel",
-          "count": 1,
-          "wear_restored": 200,
-          "health_restored": 5
-        },
-        "cooling": {
-          "material": "water_bucket",
-          "count": 1,
-          "heat_reduction": 400,
-          "returns": "bucket"
-        }
-      },
-      "engineering_arm_slot": {
-        "max_installed": 1,
-        "storage_key": "EngineeringArm",
-        "independent_of": "UtilityModule",
-        "allowed_items": [
-          "best_mech_drill_arm",
-          "best_mech_excavator_arm",
-          "best_mech_heavy_drill_arm",
-          "best_mech_heavy_excavator_arm"
-        ],
-        "factory_default": "drill",
-        "missing_legacy_value": "drill",
-        "explicit_empty": "none",
-        "unknown_value": "none",
-        "persistence": [
-          "entity_nbt",
-          "packed_item",
-          "deploy",
-          "death_drop"
-        ],
-        "minimum_research_level": 3,
-        "requires": [
-          "field_servicing",
-          "light_mobility",
-          "diagnostics",
-          "mech_operation"
-        ],
-        "conditions": [
-          "isolated",
-          "unoccupied",
-          "alive",
-          "stationary",
-          "grounded",
-          "nonfluid"
-        ],
-        "install": {
-          "activation": "crouch_main_hand_arm_use_on_actual_mech",
-          "consumes": 1,
-          "require_empty_slot": true,
-          "hot_swap": false,
-          "failure_changes_nothing": true,
-          "platform_compatibility_required": true
-        },
-        "remove": {
-          "activation": "crouch_main_hand_diagnostic_offhand_minecraft_iron_pickaxe_use_on_actual_mech",
-          "returns_installed_arm": 1,
-          "consumes_pickaxe": false,
-          "damages_pickaxe": false,
-          "require_empty_main_inventory_slot": true,
-          "inventory_slots": 36,
-          "failure_changes_nothing": true,
-          "failure_falls_through_to_isolation": false
-        },
-        "preserves": [
-          "Energy",
-          "Heat",
-          "Wear",
-          "Health",
-          "WorkTicks",
-          "DrillCooldown",
-          "ThermalLock",
-          "charge_budget",
-          "custom_name",
-          "UtilityModule",
-          "all_other_state"
-        ],
-        "known_items": [
-          "best_mech_drill_arm",
-          "best_mech_excavator_arm",
-          "best_mech_heavy_drill_arm",
-          "best_mech_heavy_excavator_arm"
-        ],
-        "heavy_only_items": [
-          "best_mech_heavy_drill_arm",
-          "best_mech_heavy_excavator_arm"
-        ],
-        "light_loaded_heavy_arm": {
-          "retain_identity": true,
-          "removable": true,
-          "allows_install": false,
-          "allows_work": false,
-          "free_conversion": false
-        }
-      },
-      "engineering_work": {
-        "key": "G",
-        "networking_action": 0,
-        "server_chooses_installed_arm": true,
-        "targeting": "single_block",
-        "harvest_tier": "iron",
-        "ordinary_drops": true,
-        "success_only_costs": true,
-        "requires": [
-          "grounded",
-          "actual_controlling_rider",
-          "personal_mech_knowledge",
-          "permission",
-          "range"
-        ],
-        "deny": [
-          "block_entities",
-          "fluids",
-          "unbreakable",
-          "protected_blocks"
-        ],
-        "no_arm_allows_movement": true,
-        "no_arm_allows_work": false,
-        "automatic_area_operation": false,
-        "snapshot_fields": [
-          "arm_key",
-          "work_cost"
-        ],
-        "right_arm_mesh_follows_installed_arm": true,
-        "heavy_arm_variant": "heavy_drill",
-        "shared_cooldown_max_ticks": 40,
-        "cooldown_persistence": [
-          "arm_swap",
-          "entity_nbt",
-          "packed_item",
-          "deploy",
-          "death_drop"
-        ],
-        "heavy_area_operation": {
-          "slot": "engineering_arm",
-          "storage_key": "EngineeringArm",
-          "max_installed": 1,
-          "variant": "heavy_drill",
-          "target": "best_heavy_mech",
-          "compatible_platforms": [
-            "best_heavy_mech"
-          ],
-          "manual_action": 27,
-          "networking_action": 0,
-          "key": "G",
-          "harvest_tier": "diamond",
-          "tool": "minecraft:diamond_pickaxe",
-          "mineable_tag": "minecraft:mineable/pickaxe",
-          "energy": 48000,
-          "heat": 35,
-          "wear": 1,
-          "cost_basis": "per_successful_block",
-          "cooldown_ticks": 40,
-          "cooldown_basis": "per_action_first_success",
-          "shared_cooldown": true,
-          "single_block": false,
-          "ordinary_drops": true,
-          "success_only_costs": true,
-          "targeting": {
-            "shape": "3x3_plane_perpendicular_to_hit_face",
-            "max_blocks": 9,
-            "center_first": true,
-            "center_success_required": true,
-            "invalid_center_aborts_batch": true,
-            "invalid_center_spends_nothing": true,
-            "invalid_center_sets_cooldown": false,
-            "neighbor_failures": "skip_independently",
-            "recheck_each_block": true,
-            "block_checks": [
-              "protection",
-              "BreakEvent",
-              "actual_player_reach",
-              "loaded_chunk",
-              "world_border",
-              "no_block_entity",
-              "nonfluid",
-              "breakable",
-              "correct_tool"
-            ],
-            "reach": "min(5, player_block_interaction_range)",
-            "all_nine_guaranteed": false,
-            "vein_mining": false
-          },
-          "stops_on": [
-            "insufficient_energy",
-            "thermal_lock",
-            "worn_out"
-          ],
-          "changes_movement": false,
-          "changes_utility_module": false
-        },
-        "drop_collection": {
-          "source": "actual_successful_engineering_block_drops",
-          "event": "BlockDropsEvent",
-          "after_all_listeners_and_spawn": true,
-          "require_uncanceled_event": true,
-          "require_live_spawned_item_entity": true,
-          "match": [
-            "server_level",
-            "breaker",
-            "block_position",
-            "tool_identity"
-          ],
-          "active_cargo_only": true,
-          "slots_by_profile": {
-            "standard": 9,
-            "reinforced": 18,
-            "heavy": 27
-          },
-          "insertion_order": [
-            "merge_same_item_and_components",
-            "empty_active_slots"
-          ],
-          "respect_stack_limits": true,
-          "overflow": "remain_on_ground",
-          "ambient_pickup": false,
-          "packed_mech_nesting": false,
-          "experience": "unchanged_vanilla",
-          "drop_gamerules": "unchanged",
-          "protection_checks": "unchanged",
-          "costs": "actual_success_only"
-        },
-        "heavy_area_excavation": {
-          "slot": "engineering_arm",
-          "storage_key": "EngineeringArm",
-          "max_installed": 1,
-          "variant": "heavy_excavator",
-          "target": "best_heavy_mech",
-          "compatible_platforms": [
-            "best_heavy_mech"
-          ],
-          "manual_action": 28,
-          "networking_action": 0,
-          "key": "G",
-          "harvest_tier": "iron",
-          "tool": "minecraft:iron_shovel",
-          "mineable_tag": "minecraft:mineable/shovel",
-          "energy": 18000,
-          "heat": 18,
-          "wear": 1,
-          "cost_basis": "per_successful_block",
-          "cooldown_ticks": 40,
-          "cooldown_basis": "per_action_first_success",
-          "shared_cooldown": true,
-          "single_block": false,
-          "ordinary_drops": true,
-          "success_only_costs": true,
-          "targeting": {
-            "shape": "3x3_plane_perpendicular_to_hit_face",
-            "max_blocks": 9,
-            "center_first": true,
-            "center_success_required": true,
-            "invalid_center_aborts_batch": true,
-            "invalid_center_spends_nothing": true,
-            "invalid_center_sets_cooldown": false,
-            "neighbor_failures": "skip_independently",
-            "recheck_each_block": true,
-            "block_checks": [
-              "protection",
-              "BreakEvent",
-              "actual_player_reach",
-              "loaded_chunk",
-              "world_border",
-              "no_block_entity",
-              "nonfluid",
-              "breakable",
-              "correct_tool"
-            ],
-            "reach": "min(5, player_block_interaction_range)",
-            "all_nine_guaranteed": false,
-            "vein_mining": false
-          },
-          "stops_on": [
-            "insufficient_energy",
-            "thermal_lock",
-            "worn_out"
-          ],
-          "changes_movement": false,
-          "changes_utility_module": false
-        }
-      },
-      "body_slot": {
-        "compatible": false,
-        "rejected_items": [
-          "best_mech_reinforced_body"
-        ],
-        "explicit_rejection": true,
-        "failure_changes_nothing": true,
-        "failure_falls_through_to_isolation": false
-      },
-      "body_profiles": {
-        "heavy": {
-          "capacity": 60000000,
-          "max_health": 300,
-          "cargo_slots": 27,
-          "movement_speed": 0.26,
-          "drive_speed": 0.34,
-          "movement_energy": 1600,
-          "drive_movement_energy": 2400,
-          "movement_heat": 10,
-          "drive_movement_heat": 14
-        }
-      },
-      "cargo": {
-        "storage_key": "Cargo",
-        "initially_empty": true,
-        "standard_slots": 27,
-        "reinforced_slots": 27,
-        "actual_inventory": true,
-        "menu": "starfall_blueprint:best_mech_cargo",
-        "open": {
-          "activation": "crouch_main_hand_minecraft_chest_use_on_actual_mech",
-          "consumes_chest": false,
-          "conditions": [
-            "isolated",
-            "unoccupied",
-            "alive",
-            "stationary",
-            "grounded",
-            "nonfluid"
-          ],
-          "minimum_research_level": 3,
-          "requires": [
-            "field_servicing",
-            "light_mobility",
-            "diagnostics",
-            "mech_operation"
-          ],
-          "maximum_distance": 8,
-          "recheck_while_open": true
-        },
-        "new_learning": false,
-        "automatic_pickup": false,
-        "packed_mech_nesting": false,
-        "persistence": [
-          "entity_nbt",
-          "packed_item",
-          "deploy"
-        ],
-        "death": {
-          "drop_contents_separately": true,
-          "clear_dead_packed_item": true,
-          "respects_entity_drops_rule": true,
-          "contents_before_dead_packed_item": true
-        },
-        "downgrade_discards_excess": false,
-        "slots": 27,
-        "rejected_packed_items": [
-          "best_mech",
-          "best_heavy_mech"
-        ],
-        "engineering_work_drops": {
-          "source": "actual_successful_engineering_block_drops",
-          "event": "BlockDropsEvent",
-          "after_all_listeners_and_spawn": true,
-          "require_uncanceled_event": true,
-          "require_live_spawned_item_entity": true,
-          "match": [
-            "server_level",
-            "breaker",
-            "block_position",
-            "tool_identity"
-          ],
-          "active_cargo_only": true,
-          "slots_by_profile": {
-            "standard": 9,
-            "reinforced": 18,
-            "heavy": 27
-          },
-          "insertion_order": [
-            "merge_same_item_and_components",
-            "empty_active_slots"
-          ],
-          "respect_stack_limits": true,
-          "overflow": "remain_on_ground",
-          "ambient_pickup": false,
-          "packed_mech_nesting": false,
-          "experience": "unchanged_vanilla",
-          "drop_gamerules": "unchanged",
-          "protection_checks": "unchanged",
-          "costs": "actual_success_only"
-        }
-      },
-      "max_health": 300,
-      "core_slot": {
-        "storage_key": "Core",
-        "max_installed": 1,
-        "independent_of": [
-          "UtilityModule",
-          "Body",
-          "EngineeringArm"
-        ],
-        "allowed_items": [
-          "best_mech_generator_core"
-        ],
-        "default": "",
-        "missing_legacy_value": "",
-        "unknown_value": "",
-        "minimum_research_level": 3,
-        "requires": [
-          "field_servicing",
-          "light_mobility",
-          "diagnostics",
-          "mech_operation"
-        ],
-        "conditions": [
-          "isolated",
-          "unoccupied",
-          "alive",
-          "stationary",
-          "grounded",
-          "nonfluid"
-        ],
-        "persistence": [
-          "entity_nbt",
-          "packed_item",
-          "deploy",
-          "death_drop"
-        ],
-        "install": {
-          "activation": "crouch_main_hand_core_use_on_actual_mech",
-          "consumes": 1,
-          "require_empty_slot": true,
-          "hot_swap": false,
-          "failure_changes_nothing": true
-        },
-        "remove": {
-          "activation": "crouch_main_hand_diagnostic_offhand_minecraft_furnace_use_on_actual_mech",
-          "consumes_furnace": false,
-          "returns": {
-            "item": "best_mech_generator_core",
-            "qty": 1
-          },
-          "require_empty_main_inventory_slot": true,
-          "inventory_slots": 36,
-          "require_fuel_ticks_zero": true,
-          "failure_changes_nothing": true,
-          "failure_falls_through_to_isolation": false
-        },
-        "preserves": [
-          "exact_health",
-          "energy",
-          "heat",
-          "wear",
-          "isolated",
-          "work_ticks",
-          "CoreWorkTicks",
-          "drill_cooldown",
-          "thermal_lock",
-          "charge_budget",
-          "UtilityModule",
-          "Body",
-          "EngineeringArm",
-          "Cargo",
-          "all_other_state"
-        ]
-      },
-      "solid_fuel_generation": {
-        "core_item": "best_mech_generator_core",
-        "fuel_storage_key": "CoreFuelTicks",
-        "work_storage_key": "CoreWorkTicks",
-        "fuel_source": "active_cargo_only",
-        "standard_cargo_slots": 27,
-        "reinforced_cargo_slots": 27,
-        "fuel_rule": "vanilla_furnace_burn_time_positive_and_no_crafting_remainder",
-        "rejects": [
-          "lava_bucket",
-          "fuel_containers_with_crafting_remainder"
-        ],
-        "consume_one_only_when_runnable_and_fuel_zero": true,
-        "energy_per_operating_tick": 2000,
-        "heat_per_operating_tick": 2,
-        "fuel_ticks_per_operating_tick": 1,
-        "wear_per_operating_ticks": 1000,
-        "internal_generation": true,
-        "bypass_external_receiver_budget": true,
-        "requires_rider": false,
-        "requires": [
-          "alive",
-          "connected",
-          "not_thermal_locked",
-          "not_worn_out",
-          "capacity_room_at_least_2000"
-        ],
-        "pause_on": [
-          "isolated",
-          "capacity_room_below_2000",
-          "thermal_lock",
-          "worn_out",
-          "dead"
-        ],
-        "pause_consumes_fuel": false,
-        "pause_decrements_fuel_ticks": false,
-        "pause_increments_work_ticks": false,
-        "phase_order": [
-          "existing_cooling",
-          "core_generation",
-          "movement"
-        ],
-        "persistence": [
-          "entity_nbt",
-          "packed_item",
-          "deploy",
-          "dead_packed_item"
-        ],
-        "random_explosion": false,
-        "automatic_pickup": false,
-        "cannot_sustain_walking_alone": false
-      },
-      "legs_slot": {
-        "storage_key": "Legs",
-        "max_installed": 1,
-        "independent_of": [
-          "Body",
-          "EngineeringArm",
-          "UtilityModule",
-          "Core"
-        ],
-        "allowed_items": [
-          "best_mech_cruise_wheels"
-        ],
-        "default": "",
-        "missing_legacy_value": "",
-        "unknown_value": "",
-        "walking_value": "",
-        "wheels_value": "best_mech_cruise_wheels",
-        "minimum_research_level": 3,
-        "requires": [
-          "field_servicing",
-          "light_mobility",
-          "diagnostics",
-          "mech_operation"
-        ],
-        "conditions": [
-          "isolated",
-          "unoccupied",
-          "alive",
-          "stationary",
-          "grounded",
-          "nonfluid"
-        ],
-        "persistence": [
-          "entity_nbt",
-          "packed_item",
-          "deploy",
-          "death_drop"
-        ],
-        "legacy_missing_grants_item": false,
-        "install": {
-          "activation": "crouch_main_hand_wheels_use_on_actual_mech",
-          "consumes": 1,
-          "require_empty_slot": true,
-          "hot_swap": false,
-          "failure_changes_nothing": true
-        },
-        "remove": {
-          "activation": "crouch_main_hand_diagnostic_offhand_minecraft_minecart_use_on_actual_mech",
-          "consumes_minecart": false,
-          "returns": {
-            "item": "best_mech_cruise_wheels",
-            "qty": 1
-          },
-          "require_empty_main_inventory_slot": true,
-          "inventory_slots": 36,
-          "failure_changes_nothing": true,
-          "failure_falls_through_to_isolation": false
-        },
-        "preserves": [
-          "exact_health",
-          "energy",
-          "heat",
-          "wear",
-          "isolated",
-          "work_ticks",
-          "drill_cooldown",
-          "thermal_lock",
-          "charge_budget",
-          "custom_name",
-          "Body",
-          "EngineeringArm",
-          "UtilityModule",
-          "Core",
-          "CoreFuelTicks",
-          "CoreWorkTicks",
-          "Cargo",
-          "all_other_state"
-        ]
-      },
-      "cruise_wheels": {
-        "speed_multiplier": 1.25,
-        "movement_energy_numerator": 3,
-        "movement_energy_denominator": 4,
-        "movement_heat_reduction": 1,
-        "walking_step_height": 1.0,
-        "wheels_step_height": 0.6,
-        "preserves_unrelated_step_modifiers": true,
-        "half_block_passes": true,
-        "full_block_blocked": true,
-        "charges_only_actual_ground_movement": true,
-        "wear_per_work_ticks": 100,
-        "changes_cooling": false,
-        "changes_arm_work": false,
-        "changes_other_resources": false,
-        "flight": false,
-        "jump": false,
-        "automatic_pickup": false,
-        "profiles": {
-          "heavy": {
-            "base_speed": 0.325,
-            "drive_speed": 0.425,
-            "base_energy": 1200,
-            "drive_energy": 1800,
-            "base_heat": 9,
-            "drive_heat": 13
-          }
-        }
-      },
-      "catalogue": true,
-      "category": "装备与武器",
-      "subcategory": "贝斯特工程装备",
-      "recipes": [],
-      "uses": [],
-      "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
-      "purpose": {
-        "summary": "由SG-E1 涓流全面晋升的SG-E2 沧澜工程机甲",
-        "benefit": "水神计划进阶工程平台，保留旧best_heavy_mech物品和实体ID；宽2.6高4.4座高3.1，300生命上限、60MXH容量、27货格。晋升不治疗、不补电、不清热、不清磨损，不产生额外机甲。",
-        "operation": "背包成长进阶工程best:advanced_engineering仅约束动作26，前置机甲驾驶，承相8导相4感相2控制板4及8级经验，首次奖钢固定件8和80经验点。工位主手持隔离存活的涓流收纳物，动作26另付钢64承相32导相16控制板8钢固定件32磨头2感相4护套16，消耗源并在主手替换。保留全部物品组件与自定义NBT、绝对生命、电热磨损、Cargo、UtilityModule、EngineeringArm、Core、Legs、燃料及工作计数、名字和其它状态。源缺Health标准100／强化160，旧沧澜仍300。强化Body移除返1套件；先在36格主背包的库存副本扣材料，再尝试插入返还件，扣材料腾出的格子可用，放不下则整笔不变；沧澜拒装该轻型Body。基础／驱动速度0.26／0.34，轮组0.325／0.425；移动1600／2400XH热10／14，轮组能耗×3/4且热减1。自然散热4／散热模块6；核心每刻2000XH、热2、耗1燃料刻，每1000发电刻磨损1且须余量2000。外部实体512／收纳5000XH每刻不变。既有沧澜驾驶及九格臂知识规则保持；武装与融合全能仍为未来设计。",
-        "targets": []
-      },
-      "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABoElEQVR4nOVXPUsDQRCdW+ZfmNIujU3QQiSlYJfOD/AgpBLsrrSytLMVIQG1tBNsDsJhoaSx8R/E3n9wMsLIure3N3O58wQf5Gtnd+btzJu9DcB/RySduNYf5Frn72+LSv8oDb4zHGrjQwaQV5FAafDj+FBNQEICNc7G8UQ893p69fVJ5EMkUJv6g/uLyuB3o0RMFDXBGU83z6UOt4+2CmOhLJhQ8N7pHqwK9kH+fJ1koGPg4+LV29+z6a0qzQph5gUNzJxgoZbTCMwHOxbFQWkNU/gQdQCD5ks0hCHj8vIB2gaGjNl8Xhjj1qxrUxEgvJz3gLF5tmzE9qfa0HRNAKsmhNJX1yYikHmEFBqX2HznC5YtsEXEO5LccAh05vvW+4C+Z7y9E9dR00D78mCDiLUR3C2DobSGHjxNYnewEdnf6YVuyokh7Z5OriS1l8tUzUjSdWekRANgBSZQNurcgOsC6Y3KMI4n31cwykjbJPgeEvHA/kmSc/p9oiyrpetQi8h2wLUPgUiWEZCI2V1voGMY+8dvio/x4yiu+/drlfWfuqu5IfYB4VkAAAAASUVORK5CYII=",
-      "platform": "heavy",
-      "independent_packed_item": "best_heavy_mech",
-      "factory_defaults": {
-        "energy": 0,
-        "arm": "drill",
-        "cargo": [],
-        "core": "",
-        "fuel_ticks": 0,
-        "core_work_ticks": 0
-      },
-      "deployment": {
-        "actual_footprint": true,
-        "full_support_every_column": true,
-        "nonfluid": true,
-        "world_border": true,
-        "block_collision": true,
-        "entity_collision": true,
-        "loaded_chunks": true,
-        "cramped_paths_blocked": true
-      },
-      "weapons": {
-        "enabled": false,
-        "heavy_weapon_arm": false
-      },
-      "upgrade": {
-        "action": 26,
-        "source": "best_mech",
-        "target": "best_heavy_mech",
-        "node_id": "best:advanced_engineering",
-        "storage_key": "BestAdvancedEngineering",
-        "consume_and_replace_main_hand": true,
-        "preserve_all_item_components": true,
-        "preserve_all_custom_data": true,
-        "preserve_absolute_health": true,
-        "source_missing_health": {
-          "standard": 100,
-          "reinforced": 160
-        },
-        "legacy_target_missing_health": 300,
-        "preserves": [
-          "Cargo",
-          "UtilityModule",
-          "EngineeringArm",
-          "Core",
-          "Legs",
-          "Energy",
-          "Heat",
-          "Wear",
-          "Health",
-          "CoreFuelTicks",
-          "CoreWorkTicks",
-          "WorkTicks",
-          "DrillCooldown",
-          "ThermalLock",
-          "charge_budget",
-          "custom_name",
-          "all_other_state"
-        ],
-        "reinforced_body": {
-          "remove_from_target": true,
-          "returns": {
-            "item": "best_mech_reinforced_body",
-            "qty": 1
-          },
-          "require_empty_main_inventory_slot": true,
-          "inventory_slots": 36
-        },
-        "heals": false,
-        "refills_energy": false,
-        "clears_heat": false,
-        "clears_wear": false,
-        "failure_changes_nothing": true,
-        "existing_advanced_requires_new_node_to_drive": false
-      }
-    },
     "best_mech_cruise_wheels": {
       "id": "best_mech_cruise_wheels",
       "name": "巡航轮组",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Cruise Wheels",
@@ -11118,8 +10169,7 @@
         "storage_key": "Legs",
         "manual_action": 25,
         "compatible_platforms": [
-          "best_mech",
-          "best_heavy_mech"
+          "best_mech"
         ]
       },
       "catalogue": true,
@@ -11128,7 +10178,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "提高工程机甲平地巡航与运输效率",
         "benefit": "独立Legs槽普通实物，stack1无耐久电量；速度×1.25、实际移动能耗×3/4、移动热−1，基础跨步高度1.0降0.6，半格通行整格受阻，无跳跃飞行自动拾取。",
@@ -11142,7 +10192,7 @@
       "name": "固燃发电核心",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Solid-fuel generator core",
@@ -11197,12 +10247,10 @@
         "storage_key": "Core",
         "manual_action": 24,
         "compatible_platforms": [
-          "best_mech",
-          "best_heavy_mech"
+          "best_mech"
         ],
         "output_by_platform": {
-          "best_mech": 1000,
-          "best_heavy_mech": 2000
+          "best_mech": 1000
         }
       },
       "catalogue": true,
@@ -11211,7 +10259,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "从货舱固体燃料为工程机甲内部发电",
         "benefit": "独立Core槽普通实物，stack1无耐久电量；涓流每刻1000XH、沧澜每刻2000XH，均热2、消耗1燃料刻，每1000发电刻磨损1；无骑手也运行。外部实体512／收纳5000XH每刻限流不变。",
@@ -11225,62 +10273,13 @@
       "name": "贝斯特工务装配台",
       "unit": "件",
       "icon": "machine",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Best Engineering Workbench",
       "registry_id": "starfall_blueprint:best_workbench",
       "implementation": "图册资源与装配规格；运行时及验收以程序仓库记录为准",
       "personal_learning": {
-        "advanced_engineering": {
-          "name": "进阶工程",
-          "english": "Advanced Engineering",
-          "requires": [
-            "mech_operation"
-          ],
-          "independent": true,
-          "minimum_research_level": 3,
-          "storage_key": "BestAdvancedEngineering",
-          "storage_type": "boolean",
-          "persistence": "player_saved_data_and_death_clone",
-          "inputs": [
-            {
-              "item": "load",
-              "qty": 8
-            },
-            {
-              "item": "conductor",
-              "qty": 4
-            },
-            {
-              "item": "sensor",
-              "qty": 2
-            },
-            {
-              "item": "board",
-              "qty": 4
-            }
-          ],
-          "node_id": "best:advanced_engineering",
-          "experience_levels": 8,
-          "entry": "inventory_progression_tab",
-          "payment": "items_and_experience_levels",
-          "old_knowledge_preserved": true,
-          "duplicate_payment": false,
-          "first_unlock_rewards": {
-            "items": [
-              {
-                "item": "steel_fix",
-                "qty": 8
-              }
-            ],
-            "experience_points": 80,
-            "once": true,
-            "retroactive": false,
-            "require_inventory_room_after_costs": true,
-            "atomic_with_costs_and_knowledge": true
-          }
-        },
         "mech_operation": {
           "name": "机甲驾驶",
           "english": "Mech Operation",
@@ -11550,7 +10549,6 @@
         "reinforced_body": 23,
         "generator_core": 24,
         "cruise_wheels": 25,
-        "heavy_mech": 26,
         "heavy_drill_arm": 27,
         "heavy_excavator_arm": 28
       },
@@ -11603,9 +10601,9 @@
       "primary_recipe": "BEST-M01",
       "acquisition": "按原版采集、掉落或贸易取得；本图册未另设制造配方。",
       "purpose": {
-        "summary": "人工装配、维修与整备贝斯特工务装备，执行涓流晋升沧澜",
-        "benefit": "知识统一在玩家背包成长学习，共23节点（贝斯特7、岭川16）；工位七标签只负责制造、维修、模块管理和晋升，不新增工位学习。",
-        "operation": "第五工程臂页含动作21／22／27／28，第六核心页24，第七行走页25；机甲页动作26消耗主手隔离存活涓流并替换沧澜，需本人进阶工程。动作29一键整备附近唯一合格涓流或沧澜：按需消耗最多1普通钢降低磨损200并恢复生命5，最多1水桶降低热400并返空桶，两项可独立完成，不充电。其余逐人知识、材料及整备守卫沿用；晋升保留源全部状态，强化Body返件先在主背包库存副本扣材料再尝试插入，腾出的格子可用，放不下则整笔不变。",
+        "summary": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
+        "benefit": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
+        "operation": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
         "targets": []
       },
       "artwork": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/klEQVR4nGNgGAUDDBjxSUprm/5H5j+9ehqvemSw4/SF/x6mBgTVMxFScLJZBoxJASDLkWl8gIUkk4m0GASI8T0IMA2k5SBAMATMa5/QxGIYYERPdHMXzGagJUhOSEVJzCzoChYuWMpAT8BEV9sGowNY0AUOHThAVwcwklMCossTqw5bScqCy2V2Dg54QyRqXTcKf1lQKVnmMDEMMGAaaAewkKsRV5DTxQFPSaiWKXbAXEjRTLBaxQUIlawsxJbf5ABi6hUWUgwktmFCqAYdVLmAacQ7gIWUECAlbqnqgLk0bCWxkNqEIgWAakNYZUSyAw5RqV1A7/bFKGAgFQAAswlcDML6AtsAAAAASUVORK5CYII=",
@@ -11614,10 +10612,10 @@
     },
     "best_mech": {
       "id": "best_mech",
-      "name": "SG-E1 涓流工程机甲",
+      "name": "SG-E 涓流工程机",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "SG-E1 Juanliu Engineering Mech",
@@ -11999,10 +10997,8 @@
           "storage_key": "EngineeringArm",
           "max_installed": 1,
           "variant": "heavy_excavator",
-          "target": "best_heavy_mech",
-          "compatible_platforms": [
-            "best_heavy_mech"
-          ],
+          "target": "best_universal_mech",
+          "compatible_platforms": [],
           "manual_action": 28,
           "networking_action": 0,
           "key": "G",
@@ -12234,8 +11230,7 @@
           "costs": "actual_success_only"
         },
         "rejected_packed_items": [
-          "best_mech",
-          "best_heavy_mech"
+          "best_mech"
         ]
       },
       "max_health": 100,
@@ -12485,9 +11480,9 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
-        "summary": "驾驶SG-E1 涓流工程机甲，以共享工程臂作业并晋升沧澜",
+        "summary": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
         "benefit": "本人三级与独立轻载、诊断、机甲驾驶后人工装配；20MXH空电出厂，无公共配方，收纳保存生命、电热和磨损。标准100生命／9货格；独立Body强化为30MXH／160生命／18货格，未知或缺失Body按标准。独立Legs轮组提升巡航运输效率，空／缺失／未知维持步行。",
         "operation": "WASD基础速度0.22，仅实际地面移动400XH／刻、热4、每100工作刻磨损1。单个互斥UtilityModule槽：散热模组自然冷4／刻；强化驱动速度0.28、实际移动600XH／刻热6、冷2。模组随NBT收纳部署死亡掉落保留；隔离空载停稳落地非流体时潜行主手模组安装，诊断器主手＋钢固定件副手潜行拆回且不耗固定件，需主背包空间；无固定件潜行诊断仍切换隔离。独立EngineeringArm槽最多1件：新机／旧缺字段默认钻臂，明确空与未知值保持空；随收纳部署死亡掉落保留。G服务端选臂：钻切32000XH热120；挖掘仅铁铲标签12000XH热45，均磨损1冷却20刻且仅成功计费；无臂仍驾驶。潜行主手臂装空槽，诊断主手＋原版铁镐副手拆回，铁镐不耗不损且36格主背包须空格，隔离空载存活停稳落地非流体；失败不切隔离。空手骑乘／Shift下车；隔离空载静止落地、空手潜行收纳且须背包空格。隔离空载钢修／水冷；接通空载s01补512XH／刻。收纳物主手、副手诊断器对空气右键接通，再潜行对基地储能方块按住右键补能≤5000XH／刻。强化机体基础／驱动速度0.18／0.23，移动600／900XH、热6／8；不改变臂作业与磨损、热阈值及冷却。潜行主手普通箱子打开真实9／18格货舱，需本人驾驶全知识、距离≤8、机甲隔离空载存活停稳落地非流体，箱子不耗；禁止收纳机甲嵌套，无自动拾取。收纳保存部署保留货物；死亡遵实体掉落规则单独掉货并清空死亡收纳物货舱，防困货与复制。轮组标准基础／驱动速度0.275／0.35、移动300／450XH热3／5；强化基础／驱动0.225／0.2875、450／675XH热5／7；跨步1.0降0.6保留外部修饰，冷却作业磨损不变。完整装拆与保留状态见巡航轮组条目。",
         "targets": []
@@ -12499,7 +11494,7 @@
       "name": "强化机体",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Reinforced Mech Body",
@@ -12564,7 +11559,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "扩展工程机甲容量、结构上限与真实货舱",
         "benefit": "独立Body槽普通实物，stack1无耐久；强化30MXH、160生命、18格，基础／驱动速度0.18／0.23，移动600／900XH与热6／8；磨损2400、热1000／400、冷2／散热4及工程臂不变。",
@@ -12578,7 +11573,7 @@
       "name": "钻切工程臂",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Drilling arm",
@@ -12643,8 +11638,7 @@
         "changes_movement": false,
         "changes_utility_module": false,
         "compatible_platforms": [
-          "best_mech",
-          "best_heavy_mech"
+          "best_mech"
         ]
       },
       "catalogue": true,
@@ -12653,7 +11647,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "为工程机甲提供可拆铁级单点钻切",
         "benefit": "独立EngineeringArm槽，最多1件，与UtilityModule无关；普通实物，不可堆叠、无耐久电量；成功作业32000XH、热120、磨损1、20刻冷却。",
@@ -12667,7 +11661,7 @@
       "name": "挖掘工程臂",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Excavator arm",
@@ -12732,8 +11726,7 @@
         "changes_movement": false,
         "changes_utility_module": false,
         "compatible_platforms": [
-          "best_mech",
-          "best_heavy_mech"
+          "best_mech"
         ]
       },
       "catalogue": true,
@@ -12742,7 +11735,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "为工程机甲提供铁铲级单点挖掘",
         "benefit": "独立工程臂槽普通实物，无耐久电量；仅minecraft:mineable/shovel与IRON_SHOVEL铁级，成功12000XH、热45、磨损1、20刻冷却，普通掉落，无范围作业。",
@@ -12756,7 +11749,7 @@
       "name": "散热模组",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Mech Radiator Module",
@@ -12831,8 +11824,7 @@
           }
         },
         "compatible_platforms": [
-          "best_mech",
-          "best_heavy_mech"
+          "best_mech"
         ]
       },
       "catalogue": true,
@@ -12841,7 +11833,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "提高工程机甲自然散热",
         "benefit": "真实不可堆叠普通物品，无电量或耐久，单个互斥UtilityModule槽。涓流自然散热4／刻，沧澜6／刻；保持各机体基础移动参数。",
@@ -12855,7 +11847,7 @@
       "name": "强化驱动模组",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Reinforced Mech Drive Module",
@@ -12934,8 +11926,7 @@
           }
         },
         "compatible_platforms": [
-          "best_mech",
-          "best_heavy_mech"
+          "best_mech"
         ]
       },
       "catalogue": true,
@@ -12944,7 +11935,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "提高工程机甲地面移动速度",
         "benefit": "真实不可堆叠普通物品，无电量或耐久，互斥UtilityModule槽。涓流标准／强化驱动速度0.28／0.23，散热2；沧澜驱动速度0.34、移动2400XH／刻热14、散热4。容量、生命及磨损上限不变，轮组另按×1.25速度。",
@@ -12958,7 +11949,7 @@
       "name": "轻型助力骨架",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Lightweight Assist Frame",
@@ -13172,7 +12163,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "腿部穿戴的轻型工程助力骨架",
         "benefit": "原疾跑＋15%，16XH／刻、热6；可装跨步组件，跨步＋0.4与疾跑互斥，24XH／刻、热4（净2），地面站定也计费；无护甲，缓存200000XH。",
@@ -13186,7 +12177,7 @@
       "name": "工程钻切器",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Engineering Drill-Cutter",
@@ -13311,7 +12302,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "用于工程钻切的手持动力工具",
         "benefit": "铁级单点采掘，有效速度12；非零硬度方块耗256XH、发热120、耐久1，缓存200000XH。",
@@ -13325,7 +12316,7 @@
       "name": "便携整备包",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Field Service Kit",
@@ -13390,7 +12381,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "野外维修副手的贝斯特骨架或钻切器",
         "benefit": "不可堆叠，原版耐久32，用尽消失；无电量或热量缓存。",
@@ -13404,7 +12395,7 @@
       "name": "跨步组件",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Stride Assist Module",
@@ -13448,7 +12439,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "为现有轻型助力骨架提供跨步档",
         "benefit": "不可堆叠的普通模块，无耐久、电量、热量或属性；工位人工装配，无公共配方。",
@@ -13462,7 +12453,7 @@
       "name": "工务诊断器",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Field Diagnostic Tool",
@@ -13543,7 +12534,7 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "只读检查副手贝斯特骨架或钻切器",
         "benefit": "可重复使用的普通工具，stack 1，无耐久、电量、热量或属性；本人三级及独立工务诊断，工位人工装配，无公共配方。",
@@ -13557,7 +12548,7 @@
       "name": "沧澜区域挖掘臂",
       "unit": "件",
       "icon": "tool",
-      "note": "水神计划工程与野外整备；背包成长学习，工位人工装配或初代晋升，各物品运行参数见元数据与现行指南。",
+      "note": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "external": false,
       "mass": null,
       "english": "Canglan Area Excavator Arm",
@@ -13611,10 +12602,8 @@
         "storage_key": "EngineeringArm",
         "max_installed": 1,
         "variant": "heavy_excavator",
-        "target": "best_heavy_mech",
-        "compatible_platforms": [
-          "best_heavy_mech"
-        ],
+        "target": "best_universal_mech",
+        "compatible_platforms": [],
         "manual_action": 28,
         "networking_action": 0,
         "key": "G",
@@ -13670,10 +12659,10 @@
       "recipes": [],
       "uses": [],
       "primary_recipe": "",
-      "acquisition": "在背包成长学习；贝斯特工务装配台人工装配，沧澜须由涓流晋升；无普通工作台或机器配方。",
+      "acquisition": "水神计划三机：涓流工程机、激湍战斗机、归海全能机；使用实物组件强化，合成与配装按现行工务装配台办理。",
       "purpose": {
         "summary": "沧澜区域挖掘臂按命中面进行3×3铲类平面挖掘",
-        "benefit": "仅沧澜；真实铁铲，仅铲类方块。每成功块18000 XH、热18、磨损1，中心先成功，40刻共享冷却。",
+        "benefit": "工程扩展或归海；真实铁铲，仅铲类方块。每成功块18000 XH、热18、磨损1，中心先成功，40刻共享冷却。",
         "operation": "\n\n## 沧澜区域挖掘臂：现行操作（2026-11-06）\n\n沧澜区域挖掘臂（Canglan Area Excavator Arm，best_mech_heavy_excavator_arm）为普通不可堆叠实物，无独立耐久、电量或属性。工务装配台工程臂页第四按钮动作28产1件：普通钢16、承相结构嵌材8、导相铜复材板4、钢制固定件8、陶瓷护套4、钻石磨头2；磨头不可堆叠，按真实物品逐格计数并消耗。沿用本人三级野外整备、轻载通行、工务诊断及机甲驾驶，不新增知识或成长节点。\n\n仅SG-E2沧澜可安装与作业。安装空工程臂槽、先拆后换及诊断器主手＋原版铁镐副手拆回沿用已有整备守卫；涓流加载此已知臂保持真实身份且可拆回，禁止安装与作业。G以真实原版铁铲，仅对MINEABLE_WITH_SHOVEL方块按命中面垂直3×3平面挖掘，最多9块、中心先成功。每个成功方块18000 XH、热18、磨损1；首次成功起整次40刻共享冷却。中心拒绝则整批停止且不计费、不设冷却；邻块各自校验实际触及距离、权限与BreakEvent、已加载区块、世界边界、无方块实体、非流体及正确工具，失败独立跳过。电量不足、热锁或磨尽立即停止，允许预算内部分成功。\n\n真实成功方块掉落沿用现行优先货舱规则：只插入当前有效9／18／27格，按原组件合并，余量原地落地；不扫描吸取地面物品。新物品有原创32×32 RGBA透明图标，模型沿用既有纹理。现行计数317项物品、245条配方、183项图鉴、17项Best；本批次不宣称完成构建、测试或UI验收。\n",
         "targets": []
       },
@@ -28107,7 +27096,6 @@
     "auto_smelt",
     "best_mech_heavy_drill_arm",
     "best_mech_heavy_excavator_arm",
-    "best_heavy_mech",
     "best_mech_cruise_wheels",
     "best_mech_generator_core",
     "best_workbench",

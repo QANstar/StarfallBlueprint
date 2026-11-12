@@ -29,12 +29,14 @@ public final class BestMechClient {
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_G,"key.categories.starfall_blueprint");
     private static final KeyMapping SUPPORT = new KeyMapping("key.starfall_blueprint.mech_support",KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H,"key.categories.starfall_blueprint");
+    private static final KeyMapping FIRE = new KeyMapping("key.starfall_blueprint.mech_fire",KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_V,"key.categories.starfall_blueprint");
     // This rate-limits requests, not successful server work. No unsynchronized entity fields are read.
     private static int requestTicks;
     private static BestMechEntity lastVehicle;
 
     private BestMechClient() {}
-    public static void keys(RegisterKeyMappingsEvent event) { event.register(DRILL); event.register(SUPPORT); }
+    public static void keys(RegisterKeyMappingsEvent event) { event.register(DRILL); event.register(SUPPORT); event.register(FIRE); }
     public static void layers(RegisterGuiLayersEvent event) {
         event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID,"mech_status"),(graphics,delta)->render(graphics));
     }
@@ -49,8 +51,14 @@ public final class BestMechClient {
                 requestTicks=20;
             }
         }
+        while (FIRE.consumeClick()) {
+            if(mech != null && mech.combatCapable() && mc.screen == null && !mc.isPaused() && requestTicks == 0) {
+                PacketDistributor.sendToServer(new BestMechNetworking.Action(2));
+                requestTicks=5;
+            }
+        }
         while (SUPPORT.consumeClick()) {
-            if (mech != null && mech.heavy() && mc.screen == null && !mc.isPaused())
+            if (mech != null && mech.supportsParkingSupport() && mc.screen == null && !mc.isPaused())
                 PacketDistributor.sendToServer(new BestMechNetworking.Action(1));
         }
     }
@@ -64,12 +72,12 @@ public final class BestMechClient {
     /** Immutable synchronized inputs. requestTicks is only the local request throttle, never drill cooldown. */
     static record Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                            boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
-                           int requestTicks, int movementCost, String armKey, int workCost, int capacity, boolean heavy, boolean supportDeployed) {
+                           int requestTicks, int movementCost, String armKey, int workCost, int capacity, boolean areaTools, boolean supportDeployed) {
         Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                  boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
-                 int requestTicks, int movementCost, String armKey, int workCost, int capacity, boolean heavy) {
+                 int requestTicks, int movementCost, String armKey, int workCost, int capacity, boolean areaTools) {
             this(health, maxHealth, energy, heat, wear, alive, isolated, thermalLocked, qualified,
-                    requestTicks, movementCost, armKey, workCost, capacity, heavy, false);
+                    requestTicks, movementCost, armKey, workCost, capacity, areaTools, false);
         }
         Snapshot(float health, float maxHealth, int energy, int heat, int wear,
                  boolean alive, boolean isolated, boolean thermalLocked, boolean qualified,
@@ -99,8 +107,15 @@ public final class BestMechClient {
         Minecraft mc=Minecraft.getInstance();
         if(mc.options.hideGui || mc.player==null || !(mc.player.getVehicle() instanceof BestMechEntity mech))return;
         Snapshot sample = new Snapshot(mech.getHealth(), mech.getMaxHealth(), mech.energy(), mech.heat(), mech.wear(),
-                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.armKey(), mech.workCost(), mech.capacity(), mech.heavy(), mech.supportDeployed());
+                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.engineeringCapable() ? mech.workArmKey() : "combat", mech.engineeringCapable() ? mech.workCost() : 12000, mech.capacity(), mech.supportsParkingSupport(), mech.supportDeployed());
         renderPanel(graphics, 8, 8, sample);
+        graphics.fill(16, 12, 249, 27, 0xff22333d);
+        drawFit(graphics, mech.getName(), 17, 14, 230, TEXT);
+        if(mech.combatCapable()) {
+            graphics.fill(16, 123, 249, 146, 0xed111e26);
+            drawFit(graphics, Component.translatable("hud.starfall_blueprint.mech.fire_controls", FIRE.getTranslatedKeyMessage(), DRILL.getTranslatedKeyMessage()), 17, 124, 230, TEXT);
+            drawFit(graphics, label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),17,137,230,MUTED);
+        }
     }
 
     /** Worldless fixture contract: caller supplies position and actual sample; bounds are 248 by 140. */
@@ -111,7 +126,7 @@ public final class BestMechClient {
         graphics.fill(x, y, x + 3, y + PANEL_HEIGHT, status.color());
         graphics.fill(x + 3, y, x + PANEL_WIDTH, y + 20, 0xff22333d);
         graphics.fill(x + 8, y + 20, x + 240, y + 21, 0xff42555b);
-        drawFit(graphics, (sample.heavy() ? Component.translatable("mech.starfall_blueprint.platform.heavy") : label("title")).copy().append(" · ").append(label("arm", BestMechArms.name(sample.armKey()))), x + 9, y + 6, 230, TEXT);
+        drawFit(graphics, label("title").copy().append(" · ").append(label("arm", BestMechArms.name(sample.armKey()))), x + 9, y + 6, 230, TEXT);
         int lineY = y + 25;
         for(var line : mc.font.split(label(status.key()), 230)) {
             if(lineY >= y + 43) break;
@@ -129,10 +144,10 @@ public final class BestMechClient {
         Component request = sample.requestTicks() > 0
                 ? label("request", DRILL.getTranslatedKeyMessage(), sample.requestTicks())
                 : sample.armKey().isEmpty() ? label("no_arm")
-                : BestMechArms.areaWork(sample.armKey()) && !sample.heavy() ? label("incompatible_arm")
+                : BestMechArms.areaWork(sample.armKey()) && !sample.areaTools() ? label("incompatible_arm")
                 : label(BestMechArms.areaWork(sample.armKey()) ? "heavy_standby" : "standby", DRILL.getTranslatedKeyMessage(), compactEnergy(sample.workCost()));
         drawFit(graphics, request, x + 9, y + 116, 230, sample.requestTicks() > 0 ? WARNING : TEXT);
-        drawFit(graphics, sample.heavy() ? label(sample.supportDeployed() ? "support_deployed" : "support_retracted", SUPPORT.getTranslatedKeyMessage())
+        drawFit(graphics, sample.areaTools() ? label(sample.supportDeployed() ? "support_deployed" : "support_retracted", SUPPORT.getTranslatedKeyMessage())
                         : label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
                 x + 9, y + 129, 230, MUTED);
     }
@@ -148,7 +163,7 @@ public final class BestMechClient {
         if(!sample.qualified()) return new PanelStatus("unqualified", ISOLATED);
         if(sample.energy() < sample.movementCost()) return new PanelStatus("no_power", DANGER);
         if(sample.armKey().isEmpty()) return new PanelStatus("no_arm", WARNING);
-        if(BestMechArms.areaWork(sample.armKey()) && !sample.heavy()) return new PanelStatus("incompatible_arm", WARNING);
+        if(BestMechArms.areaWork(sample.armKey()) && !sample.areaTools()) return new PanelStatus("incompatible_arm", WARNING);
         if(sample.energy() < sample.workCost()) return new PanelStatus("work_power", WARNING);
         if(sample.heat() >= 800) return new PanelStatus("hot", WARNING);
         if(sample.energy() < sample.capacity() / 10) return new PanelStatus("low_power", WARNING);

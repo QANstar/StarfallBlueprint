@@ -186,7 +186,8 @@ public final class BestMechBodyGameTests {
     @GameTest(template = "empty")
     public static void cargoButtonTransfersOnlyActiveSlotsAndPreservesComponents(GameTestHelper h) {
         var p = player(h); var light = mech(h);
-        var heavy = BestMechs.HEAVY_TYPE.get().create(h.getLevel());
+        var heavy = BestMechs.TYPE.get().create(h.getLevel());
+        var expanded=heavy.stateTag();expanded.putInt("UpgradeMask",BestMechProgression.ENGINEERING_EXTENSION);heavy.loadState(expanded);
         heavy.moveTo(light.getX(), light.getY(), light.getZ(), 0, 0); h.getLevel().addFreshEntity(heavy);
         try {
             for(int size : new int[]{9, 18, 27}) {

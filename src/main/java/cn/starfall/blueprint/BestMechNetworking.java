@@ -18,6 +18,7 @@ public final class BestMechNetworking {
             if (context.player().getVehicle() instanceof BestMechEntity mech) {
                 if (payload.action == 0) mech.work(context.player());
                 else if (payload.action == 1) mech.toggleSupport(context.player());
+                else if (payload.action == 2) mech.fireWeapon(context.player());
             }
         }));
     }

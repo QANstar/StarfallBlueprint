@@ -30,7 +30,7 @@ public final class ClientSetup {
             }
         },cn.starfall.blueprint.CatalogueContent.item("blackdog_armor_head"),cn.starfall.blueprint.CatalogueContent.item("blackdog_armor_chest"),cn.starfall.blueprint.CatalogueContent.item("blackdog_armor_legs"),cn.starfall.blueprint.CatalogueContent.item("blackdog_armor_feet"));
     }
-    @SubscribeEvent public static void mechRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) { event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.TYPE.get(), BestMechRenderer::new); event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.HEAVY_TYPE.get(), BestMechRenderer::new); }
+    @SubscribeEvent public static void mechRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) { event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.TYPE.get(), BestMechRenderer::new); event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.COMBAT_TYPE.get(), BestMechRenderer::new); event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.UNIVERSAL_TYPE.get(), BestMechRenderer::new); }
     @SubscribeEvent public static void mechLayers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions event) { event.registerLayerDefinition(BestMechModel.LAYER, BestMechModel::createLayer); }
     @SubscribeEvent public static void mechKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) { BestMechClient.keys(event); BlackDogClient.keys(event); }
     @SubscribeEvent public static void mechHud(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) { BestMechClient.layers(event); BlackDogClient.layers(event); }

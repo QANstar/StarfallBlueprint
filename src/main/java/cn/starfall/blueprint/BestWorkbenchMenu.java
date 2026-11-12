@@ -16,7 +16,7 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
     private boolean syncedLightMobility;
     private boolean syncedDiagnostics;
     private boolean syncedMechOperation;
-    private boolean syncedAdvancedEngineering;
+    private int assemblyKnowledge;
 
     public BestWorkbenchMenu(int id, Inventory inventory) {
         this(id, inventory, ContainerLevelAccess.NULL);
@@ -26,6 +26,7 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
         super(BestEngineering.MENU.get(), id);
         this.access = access;
         this.inventory = inventory;
+        addDataSlot(new DataSlot(){public int get(){return inventory.player.level().isClientSide?assemblyKnowledge:BestMechAssembly.knowledgeMask(inventory.player);}public void set(int value){assemblyKnowledge=value;}});
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
                 addSlot(new Slot(inventory, 9 + row * 9 + col, 70 + col * 18, 188 + row * 18));
@@ -60,24 +61,18 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
             }
             @Override public void set(int value) { syncedMechOperation = value != 0; }
         });
-        addDataSlot(new DataSlot() {
-            @Override public int get() {
-                return (inventory.player.level().isClientSide
-                        ? syncedAdvancedEngineering : BestEngineering.hasAdvancedEngineering(inventory.player)) ? 1 : 0;
-            }
-            @Override public void set(int value) { syncedAdvancedEngineering = value != 0; }
-        });
+
     }
 
     public int researchLevel() { return syncedResearchLevel; }
     public boolean hasLightMobility() { return syncedLightMobility; }
     public boolean hasDiagnostics() { return syncedDiagnostics; }
     public boolean hasMechOperation() { return syncedMechOperation; }
-    public boolean hasAdvancedEngineering() { return syncedAdvancedEngineering; }
     public BestEngineering.Preview preview(int action) {
+        if(BestMechAssembly.handles(action))return BestMechAssembly.preview(inventory.player,action,inventory.player.level().isClientSide?assemblyKnowledge:BestMechAssembly.knowledgeMask(inventory.player));
         BestEngineering.Knowledge knowledge = inventory.player != null && !inventory.player.level().isClientSide
                 ? BestEngineering.Knowledge.of(inventory.player)
-                : new BestEngineering.Knowledge(researchLevel(), hasLightMobility(), hasDiagnostics(), hasMechOperation(), hasAdvancedEngineering());
+                : new BestEngineering.Knowledge(researchLevel(), hasLightMobility(), hasDiagnostics(), hasMechOperation());
         return BestEngineering.preview(inventory, action, knowledge);
     }
 
@@ -86,7 +81,7 @@ public final class BestWorkbenchMenu extends AbstractContainerMenu {
     }
 
     @Override public boolean clickMenuButton(Player player, int action) {
-        if (player.level().isClientSide || action < 0 || action > 29 || !stillValid(player)) return false;
+        if (player.level().isClientSide || action < 0 || (action > 29 && !BestMechAssembly.handles(action)) || !stillValid(player)) return false;
         if (action == 29) {
             if (!(player instanceof net.minecraft.server.level.ServerPlayer server) || player.containerMenu != this) return false;
             boolean serviced = access.evaluate((level, pos) -> BestMechEntity.serviceAtWorkbench(server, pos), false);

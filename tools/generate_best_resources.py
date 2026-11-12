@@ -167,10 +167,6 @@ MECH_MESSAGES.update({
 })
 
 MECH_MESSAGES.update({
- 'message.best_action_26': ('装配重型工程机甲', 'Assemble Heavy Engineering Mech'),
- 'message.best_heavy_mech_cost': ('需本人三级、轻载、诊断与驾驶；普通钢96、承相48、导相24、控制板12、钢制固定件48、磨头4、感相6、护套24；出厂空电无燃料', 'Requires your level 3, Mobility, Diagnostics and Mech Operation; 96 steel, 48 load inserts, 24 conductive plates, 12 boards, 48 steel fasteners, 4 drill heads, 6 sensors, 24 sheaths. Starts with no energy or fuel.'),
- 'message.best_heavy_mech_assembled': ('已装配重型工程机甲；空电、默认钻切臂、无燃料与货物', 'Heavy Engineering Mech assembled; empty battery, drilling arm, no fuel or cargo.'),
- 'tooltip.best_heavy_mech': ('独立重型平台：300生命、60M XH、27货格；宽2.6高4.4座高3.1；基础／驱动0.14／0.18、1600／2400 XH、热10／14每刻。兼容既有通用模组、工程臂、核心与轮组；拒绝轻型强化机体；需实际占地承托净空。', 'Independent heavy platform: 300 health, 60M XH, 27 cargo slots; width 2.6, height 4.4, seat 3.1. Base/drive: 0.14/0.18, 1600/2400 XH and 10/14 heat per movement tick. Existing utility modules, arms, core and wheels fit; light reinforced body rejected. Requires full footprint support and clearance.'),
  'mech.platform.heavy': ('重型工程平台', 'Heavy engineering platform'),
  'mech.platform.standard': ('轻型工程平台', 'Light engineering platform'),
  'mech.body.heavy_rejected': ('强化机体仅适用于轻型机甲；重型平台拒绝机体套件整备，状态不变', 'Reinforced body fits light mechs only; heavy platform body changes rejected with state preserved.'),
@@ -181,7 +177,7 @@ MECH_MESSAGES.update({
  'message.best_mech_heavy_drill_arm_cost': ('需本人三级、轻载、诊断与驾驶；普通钢24、承相12、导相8、钻石磨头8、控制板4、钢制固定件12、陶瓷护套8', 'Requires your level 3, Mobility, Diagnostics and Mech Operation; 24 steel, 12 load inserts, 8 conductive plates, 8 drill heads, 4 boards, 12 steel fasteners, 8 ceramic sheaths.'),
  'message.best_mech_heavy_drill_arm_assembled': ('已制造重型钻切工程臂', 'Heavy Drilling Arm assembled.'),
  'tooltip.best_mech_heavy_drill_arm': ('仅重型平台；G按命中面垂直3×3平面钻切，最多9块、中心先成功；钻石镐级，每个成功方块48,000 XH、热35、磨损1，整次40刻共享冷却；逐块校验实际触及与保护，普通掉落', 'Heavy platform only. G drills a 3x3 plane perpendicular to the hit face, up to 9 blocks; center must succeed first. Diamond-pickaxe tier; each successful block costs 48,000 XH, 35 heat and 1 wear. Shared 40-tick cooldown per action; individual reach/protection checks and normal drops.'),
- 'tooltip.best_mech_heavy_drill_arm_install': ('潜行主手装入重型机甲空工程臂槽；须本人完整知识、隔离空载存活停稳落地非流体。诊断器主手＋原版铁镐副手潜行拆回，铁镐保留且36格主背包须空格；轻型旧存档已装重臂仅可拆回，不能作业或免费转换', 'Sneak-use in main hand on an empty heavy-mech arm slot; all personal knowledge, isolated, unoccupied, alive and stationary on dry ground required. Remove with diagnostic main hand + vanilla iron pickaxe offhand (retained); needs an empty main-inventory slot. A heavy arm loaded on a light mech can only be removed, without work or free conversion.'),
+ 'tooltip.best_mech_heavy_drill_arm_install': ('潜行主手装入工程扩展或归海的空工程臂槽；须本人对应驾驶知识、隔离空载存活停稳落地非流体。诊断器主手＋原版铁镐副手潜行拆回，铁镐保留且主背包须有返还空间。', 'Sneak-use on an empty arm slot of an expanded engineering or universal chassis; requires platform knowledge, isolation, no passengers, a living stationary chassis on dry ground. Remove using a main-hand diagnostic tool and an offhand iron pickaxe (retained); inventory needs return space.'),
  'mech.arm.heavy_only': ('重型钻切工程臂仅适用于重型平台；轻型已存重臂可拆回，不能作业', 'Heavy Drilling Arm requires a heavy platform; a loaded heavy arm on a light mech remains removable but cannot work.'),
  'mech.arm.heavy_required': ('需要重型工程平台；工程臂与机体状态保持，轻型已存重臂可拆回', 'Heavy engineering platform required. Arm and mech state preserved; a loaded heavy arm on a light mech can be removed.'),
  'hud.mech.panel.incompatible_arm': ('运行 · 工程臂与轻型平台不兼容，可拆回', 'ONLINE · Arm incompatible with light platform; remove to recover'),
@@ -191,7 +187,6 @@ MECH_MESSAGES.update({
 
 BEST_UI_MESSAGES = {
  'material_action_27': ('重型钻切工程臂', 'Heavy drilling arm'),
- 'material_action_26': ('重型机甲装配', 'Heavy mech assembly'),
  'tab_0': ('工务', 'Build'), 'tab_1': ('轻载', 'Move'),
  'tab_2': ('诊断', 'Care'), 'tab_3': ('机甲', 'Mech'),
  'tab_4': ('工程臂', 'Arms'), 'tab_5': ('核心', 'Core'),
@@ -266,42 +261,30 @@ for action, labels in enumerate([
  ('制造重型钻切工程臂', 'Assemble heavy drilling arm'),
 ]):
     BEST_UI_MESSAGES[f'action_{action}'] = labels
-# SG-E1 -> SG-E2 upgrade; registry IDs and existing progression translations stay intact.
+# Current three-chassis platform labels and shared accessories.
 MECH_MESSAGES.update({
- 'message.best_action_26': ('晋升沧澜工程机甲', 'Upgrade to Canglan Engineering Mech'),
- 'message.best_heavy_mech_cost': ('需本人进阶工程；主手隔离存活的涓流收纳机甲；钢64、承相32、导相16、板8、固定件32、磨头2、感相4、护套16；保留全部状态，强化机体返还须主背包空格', 'Requires personal Advanced Engineering and an isolated living packed Juanliu in main hand; 64 steel, 32 load inserts, 16 conductive plates, 8 boards, 32 fasteners, 2 drill heads, 4 sensors, 16 sheaths. Preserves all state; returning a reinforced body needs an empty main-inventory slot.'),
- 'message.best_heavy_mech_assembled': ('涓流已晋升为沧澜；原生命、电热磨损、部件、货物与已付燃料全部保留', 'Juanliu upgraded to Canglan; original health, energy, heat, wear, components, cargo and paid fuel preserved.'),
- 'message.best_mech_assembled': ('已装配SG-E1 涓流工程机甲；储能为空', 'SG-E1 Juanliu Engineering Mech assembled; energy starts empty.'),
+ 'message.best_mech_assembled': ('已装配SG-E 涓流工程机甲；储能为空', 'SG-E Juanliu Engineering Mech assembled; energy starts empty.'),
  'hud.mech.title': ('水神计划工程机甲', 'Water God Engineering Mech'),
- 'tooltip.best_heavy_mech': ('SG-E2进阶工程：300生命、60M XH、27货格；宽2.6高4.4座高3.1。基础／驱动0.26／0.34、1600／2400 XH、热10／14；自然／散热冷却4／6。由主手隔离存活的涓流晋升，完整保留状态；兼容既有模组、臂、核心与轮组，拒绝轻型强化机体。', 'SG-E2 advanced engineering: 300 health, 60M XH, 27 cargo slots; width 2.6, height 4.4, seat 3.1. Base/drive speed 0.26/0.34, 1600/2400 XH and 10/14 heat; passive/radiator cooling 4/6. Upgrade an isolated living packed Juanliu in main hand with all state preserved. Existing modules, arms, core and wheels fit; light reinforced body rejected.'),
- 'tooltip.best_mech_generator_core': ('独立Core槽；货舱无余物熔炉固燃，涓流1000／沧澜2000 XH每刻、热2、燃料1刻；每1000发电刻磨损1。余量不足对应输出、隔离、热锁或磨尽暂停并保留已付燃料，无需骑手', 'Separate Core slot; remainder-free furnace fuel from cargo. Juanliu 1000 / Canglan 2000 XH per tick, 2 heat and 1 fuel tick; 1 wear per 1000 generator ticks. Pauses with paid fuel retained when capacity room is below output, isolated, heat locked or worn out; no rider needed.'),
+ 'tooltip.best_mech_generator_core': ('独立Core槽；货舱无余物熔炉固燃，基础机1000／工程扩展与归海2000 XH每刻、热2、燃料1刻；每1000发电刻磨损1。余量不足对应输出、隔离、热锁或磨尽暂停并保留已付燃料，无需骑手', 'Separate Core slot; remainder-free furnace fuel from cargo. Base chassis 1000 / expanded or universal 2000 XH per tick, 2 heat and 1 fuel tick; 1 wear per 1000 generator ticks. Pauses with paid fuel retained when capacity room is below output, isolated, heat locked or worn out; no rider needed.'),
  'tooltip.best_mech_radiator': ('自然冷却：涓流4／沧澜6每刻（基础2／4）；涓流标准速度0.22、强化机体0.18，沧澜0.26；移动费用不变', 'Passive cooling: Juanliu 4 / Canglan 6 per tick (base 2/4). Juanliu standard speed 0.22, reinforced body 0.18; Canglan 0.26. Movement costs unchanged.'),
  'tooltip.best_mech_drive': ('涓流标准／强化机体速度0.28／0.23，沧澜0.34；移动600／900／2400 XH、热6／8／14每刻，自然冷却2／2／4', 'Juanliu standard/reinforced speed 0.28/0.23; Canglan 0.34. Movement 600/900/2400 XH and 6/8/14 heat per tick; passive cooling 2/2/4.'),
  'tooltip.best_mech_cruise_wheels': ('速度×1.25、移动电耗×3/4、热−1；涓流标准0.275／0.35、强化0.225／0.2875，沧澜0.325／0.425；跨步1.0→0.6，半格通一格阻，无跳跃飞行拾取', 'Speed x1.25, movement energy x3/4, heat -1. Juanliu standard 0.275/0.35, reinforced 0.225/0.2875; Canglan 0.325/0.425. Step 1.0 to 0.6: half-block passes, full block blocked; no jump, flight or pickup.'),
- 'mech.platform.heavy': ('SG-E2 沧澜工程平台', 'SG-E2 Canglan engineering platform'),
- 'mech.platform.standard': ('SG-E1 涓流工程平台', 'SG-E1 Juanliu engineering platform'),
+ 'mech.platform.heavy': ('工程扩展平台', 'Expanded engineering platform'),
+ 'mech.platform.standard': ('SG-E 涓流工程平台', 'SG-E Juanliu engineering platform'),
  'message.best_action_27': ('制造沧澜九格钻掘臂', 'Assemble Canglan Nine-block Drilling Arm'),
  'message.best_mech_heavy_drill_arm_assembled': ('已制造沧澜九格钻掘臂', 'Canglan Nine-block Drilling Arm assembled.'),
- 'mech.arm.heavy_only': ('沧澜九格钻掘臂仅适用于沧澜平台；涓流已存此臂可拆回，不能作业', 'Canglan Nine-block Drilling Arm requires Canglan; a legacy arm on Juanliu remains removable but cannot work.'),
+ 'mech.arm.heavy_only': ('沧澜九格钻掘臂仅适用于工程扩展或归海；未取得区域作业能力时不能使用', 'Canglan Nine-block Drilling Arm requires an engineering extension or universal chassis for area work.'),
 })
 BEST_UI_MESSAGES.update({
- 'action_26': ('晋升沧澜工程机甲', 'Upgrade to Canglan Engineering Mech'),
- 'material_action_26': ('涓流晋升沧澜', 'Juanliu to Canglan upgrade'),
  'action_27': ('制造沧澜九格钻掘臂', 'Assemble Canglan Nine-block Drilling Arm'),
  'material_action_27': ('沧澜九格钻掘臂', 'Canglan Nine-block Drilling Arm'),
- 'knowledge_advanced': ('进阶工程：%s', 'Advanced engineering: %s'),
- 'requires_advanced': ('前置未满足：先在背包成长学习进阶工程', 'Learn Advanced Engineering in inventory progression first'),
- 'upgrade_target': ('目标不符：主手须持涓流收纳机甲', 'Hold a packed Juanliu mech in your main hand'),
- 'upgrade_isolation': ('晋升前须隔离主手涓流机甲', 'Isolate the main-hand Juanliu mech before upgrading'),
- 'upgrade_alive': ('损毁机甲不能晋升', 'A destroyed mech cannot be upgraded'),
- 'upgrade_space': ('主背包须预留空格返还强化机体', 'Reserve an empty main-inventory slot for the returned reinforced body'),
- 'hint_5': ('货舱固燃；涓流1000／沧澜2000 XH每刻；诊断＋副手熔炉拆回，须无已付燃料', 'Cargo fuel: Juanliu 1000 / Canglan 2000 XH/t. Remove with diagnostic + offhand furnace; requires zero paid fuel.'),
- 'hint_3': ('初代装配／进阶晋升分开计费；晋升须主手隔离存活的涓流，完整保留原状态', 'Initial assembly and advanced upgrade have separate costs; upgrade an isolated living Juanliu in main hand and preserve all state.'),
+ 'hint_5': ('货舱固燃；基础机1000／工程扩展与归海2000 XH每刻；诊断＋副手熔炉拆回，须无已付燃料', 'Cargo fuel: Base chassis 1000 / expanded or universal 2000 XH/t. Remove with diagnostic + offhand furnace; requires zero paid fuel.'),
+ 'hint_3': ('制造三机与汇流总成；主手持隔离收纳机体安装实物组件', 'Manufacture chassis and confluence assemblies; hold an isolated packed chassis to install upgrade components.'),
 })
 MECH_MESSAGES.update({f'ui.best_{key}': value for key, value in BEST_UI_MESSAGES.items()})
 
 
-MECH_MESSAGES.update({'message.best_action_28': ('制造沧澜区域挖掘臂', 'Assemble Canglan Area Excavator Arm'), 'message.best_mech_heavy_excavator_arm_cost': ('需本人三级、轻载、诊断与驾驶；普通钢16、承相8、导相4、钢制固定件8、陶瓷护套4、钻石磨头2（不可堆叠）', 'Requires your level 3, Mobility, Diagnostics and Mech Operation; 16 steel, 8 load inserts, 4 conductive plates, 8 steel fasteners, 4 ceramic sheaths, 2 nonstackable drill heads.'), 'message.best_mech_heavy_excavator_arm_assembled': ('已制造沧澜区域挖掘臂', 'Canglan Area Excavator Arm assembled.'), 'tooltip.best_mech_heavy_excavator_arm': ('仅沧澜；真实铁铲对铲类方块按命中面3×3中心先挖掘；每成功块18000 XH、热18、磨损1，40刻共享冷却；逐块权限与触及校验，预算不足即停；掉落优先有效货舱，余量落地', 'Canglan only. Real iron shovel, shovel-mineable blocks; face-aligned 3x3, center first. Each success: 18,000 XH, 18 heat, 1 wear; shared 40-tick cooldown. Individual permission/reach checks; stops on budget limits. Loot fills active cargo, overflow drops.'), 'ui.best_action_28': ('制造沧澜区域挖掘臂', 'Assemble Canglan Area Excavator Arm'), 'ui.best_material_action_28': ('沧澜区域挖掘臂', 'Canglan Area Excavator Arm'), 'tooltip.best_mech_heavy_excavator_arm_install': ('潜行主手装入重型机甲空工程臂槽；须本人完整知识、隔离空载存活停稳落地非流体。诊断器主手＋原版铁镐副手潜行拆回，铁镐保留且36格主背包须空格；轻型旧存档已装重臂仅可拆回，不能作业或免费转换', 'Sneak-use in main hand on an empty heavy-mech arm slot; all personal knowledge, isolated, unoccupied, alive and stationary on dry ground required. Remove with diagnostic main hand + vanilla iron pickaxe offhand (retained); needs an empty main-inventory slot. A heavy arm loaded on a light mech can only be removed, without work or free conversion.')})
+MECH_MESSAGES.update({'message.best_action_28': ('制造沧澜区域挖掘臂', 'Assemble Canglan Area Excavator Arm'), 'message.best_mech_heavy_excavator_arm_cost': ('需本人三级、轻载、诊断与驾驶；普通钢16、承相8、导相4、钢制固定件8、陶瓷护套4、钻石磨头2（不可堆叠）', 'Requires your level 3, Mobility, Diagnostics and Mech Operation; 16 steel, 8 load inserts, 4 conductive plates, 8 steel fasteners, 4 ceramic sheaths, 2 nonstackable drill heads.'), 'message.best_mech_heavy_excavator_arm_assembled': ('已制造沧澜区域挖掘臂', 'Canglan Area Excavator Arm assembled.'), 'tooltip.best_mech_heavy_excavator_arm': ('工程扩展或归海；真实铁铲对铲类方块按命中面3×3中心先挖掘；每成功块18000 XH、热18、磨损1，40刻共享冷却；逐块权限与触及校验，预算不足即停；掉落优先有效货舱，余量落地', 'Expanded engineering or universal chassis. Real iron shovel, shovel-mineable blocks; face-aligned 3x3, center first. Each success: 18,000 XH, 18 heat, 1 wear; shared 40-tick cooldown. Individual permission/reach checks; stops on budget limits. Loot fills active cargo, overflow drops.'), 'ui.best_action_28': ('制造沧澜区域挖掘臂', 'Assemble Canglan Area Excavator Arm'), 'ui.best_material_action_28': ('沧澜区域挖掘臂', 'Canglan Area Excavator Arm'), 'tooltip.best_mech_heavy_excavator_arm_install': ('潜行主手装入工程扩展或归海的空工程臂槽；须本人对应驾驶知识、隔离空载存活停稳落地非流体。诊断器主手＋原版铁镐副手潜行拆回，铁镐保留且主背包须有返还空间。', 'Sneak-use on an empty arm slot of an expanded engineering or universal chassis; requires platform knowledge, isolation, no passengers, a living stationary chassis on dry ground. Remove using a main-hand diagnostic tool and an offhand iron pickaxe (retained); inventory needs return space.')})
 
 def main():
     spec = importlib.util.spec_from_file_location('best_expansion', ATLAS / 'best_expansion.py')
@@ -343,15 +326,6 @@ def main():
     entity_texture = ART / 'textures/entity/best_engineering_mech.png'
     entity_texture.parent.mkdir(parents=True, exist_ok=True)
     texture.save(entity_texture)
-    # Same UV dimensions as the shared renderer, with a distinct heavy steel palette.
-    heavy_texture = texture.copy()
-    heavy_pixels = heavy_texture.load()
-    for y in range(128):
-        for x in range(128):
-            r, g, b, a = heavy_pixels[x, y]
-            if b >= r and abs(g - b) < 30:
-                heavy_pixels[x, y] = (max(0, r - 12), max(0, g - 13), max(0, b - 11), a)
-    heavy_texture.save(ART / 'textures/entity/best_heavy_engineering_mech.png')
     armor = ART / 'textures/models/armor/best_frame_layer_2.png'
     armor.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(ATLAS / 'item-art/best_frame_layer_2.png', armor)
@@ -455,11 +429,12 @@ def main():
             else:
                 names[f'{prefix}.{MOD}.{suffix}'] = pair[index]
         names[f'entity.{MOD}.best_engineering_mech'] = best.BEST_NAMES['best_mech'][index]
-        names[f'entity.{MOD}.best_heavy_engineering_mech'] = best.BEST_NAMES['best_heavy_mech'][index]
         write(path, names)
     from generate_progression_resources import main as generate_progression
     generate_progression()
     (ROOT / 'docs/BEST_ENGINEERING.md').write_text(best.BEST_DOC, encoding='utf-8', newline='\n')
+    from generate_best_progression_resources import main as generate_three_mechs
+    generate_three_mechs()
     print(f'Generated {len(best.BEST_NAMES)} Best textures/models/names, public bench resources and engineering/field service/light mobility/diagnostics documentation.')
 
 

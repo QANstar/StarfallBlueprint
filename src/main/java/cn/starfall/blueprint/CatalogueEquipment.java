@@ -26,8 +26,10 @@ public final class CatalogueEquipment {
         if(key.equals("blackdog_watch"))return new BlackDogArmor.Watch(p);
         if(key.startsWith("blackdog_armor_"))return BlackDogArmor.createProjection(key,p);
         if(key.startsWith("blackdog_"))return Lingchuan.moduleItem(key,p);
+        if(key.equals("best_combat_mech"))return new BestMechItem(p,"combat");
+        if(key.equals("best_universal_mech"))return new BestMechItem(p,"universal");
+        if(key.startsWith("best_canglan_")||key.startsWith("best_nutao_")||Set.of("best_zhenyuan_module","best_tianpu_module","best_changchuan_module").contains(key))return new Item(p.stacksTo(1));
         if(key.equals("best_mech"))return new BestMechItem(p);
-        if(key.equals("best_heavy_mech"))return new BestMechItem(p,true);
         if(key.equals("best_mech_radiator")||key.equals("best_mech_drive"))return new Item(p.stacksTo(1)){
             @Override public void appendHoverText(ItemStack s,TooltipContext c,List<Component> lines,TooltipFlag f){
                 lines.add(Component.translatable("tooltip.starfall_blueprint."+key));

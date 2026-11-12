@@ -100,16 +100,20 @@ public final class Progression {
         register(new Node(BEST.get(action),"best",BestEngineering.actionLabelComponent(action),
                 BestEngineering.actionCostComponent(action),parents,costs,xp,()->CatalogueContent.stack(icon,1),learned,grant,reward));
     }
-    public static final String ADVANCED_ENGINEERING = "best:advanced_engineering";
     static {
-        register(new Node(ADVANCED_ENGINEERING,"best",
-                Component.translatable("growth.starfall_blueprint.advanced_engineering_title"),
-                Component.translatable("growth.starfall_blueprint.advanced_engineering_description"),
-                List.of("best:mech_operation"),
-                List.of(new Cost("load",8),new Cost("conductor",4),new Cost("sensor",2),new Cost("board",4)),
-                8,()->CatalogueContent.stack("best_heavy_mech",1),BestEngineering::hasAdvancedEngineering,
-                p->p.getPersistentData().putBoolean("BestAdvancedEngineering",true),
-                new Reward(List.of(new Cost("steel_fix",8)),80)));
+        moduleNode("combat_operation","激湍武装控制", "best_combat_mech",List.of("best:servicing"),5);
+        for(int i=0;i<6;i++)moduleNode(BestMechAssembly.KNOWLEDGE.get(i),BestMechAssembly.RECIPES.get(i).title(),BestMechAssembly.MODULES.get(i),List.of(i<3?"best:mech_operation":"best:combat_operation"),8);
+        moduleNode("confluence","归海汇流装配","best_universal_mech",List.of("best:mech_operation","best:combat_operation"),12);
+        moduleNode("zhenyuan","镇渊最终强化",BestMechAssembly.MODULES.get(6),List.of("best:confluence","best:engineering_extension","best:engineering_endurance"),15);
+        moduleNode("tianpu","天瀑最终强化",BestMechAssembly.MODULES.get(7),List.of("best:confluence","best:combat_fire_control","best:combat_sustained"),15);
+        moduleNode("changchuan","长川最终强化",BestMechAssembly.MODULES.get(8),List.of("best:confluence","best:engineering_mobility","best:combat_armor"),15);
+    }
+    private static void moduleNode(String key,String title,String icon,List<String> parents,int xp){
+        register(new Node("best:"+key,"best",Component.literal(title),Component.literal("学习制造及安装权限；实物需在工务装配台另行制作"),parents,
+                List.of(new Cost("load",xp),new Cost("conductor",4),new Cost("sensor",2),new Cost("board",4)),xp,
+                ()->CatalogueContent.stack(icon,1),
+                p->p.getPersistentData().getCompound("BestModuleKnowledge").getBoolean(key),
+                p->{var data=p.getPersistentData().getCompound("BestModuleKnowledge").copy();data.putBoolean(key,true);p.getPersistentData().put("BestModuleKnowledge",data);}));
     }
     public static void initialize() {}
     public static synchronized void register(Node node) {

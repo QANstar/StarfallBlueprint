@@ -10,3 +10,13 @@ runs/
 __pycache__/
 mdk-*
 neoforge-metadata.xml
+
+# Local runtime data from the machine-upgrade UI checks; keep curated evidence tracked.
+/docs/verification/2026-10-26-machine-upgrades/*/blueprints/
+/docs/verification/2026-10-26-machine-upgrades/*/config/
+/docs/verification/2026-10-26-machine-upgrades/*/downloads/
+/docs/verification/2026-10-26-machine-upgrades/*/logs/
+/docs/verification/2026-10-26-machine-upgrades/*/options.txt
+/docs/verification/2026-10-26-machine-upgrades/*/screenshots/blueprint-constructor.png
+/docs/verification/2026-10-26-machine-upgrades/*/screenshots/industrial-machines.png
+/tools/remove_obsolete_mech.py

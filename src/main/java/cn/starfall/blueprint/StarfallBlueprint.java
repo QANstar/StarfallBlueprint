@@ -107,7 +107,10 @@ public final class StarfallBlueprint {
         .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint.best"))
         .icon(()->new ItemStack(CatalogueContent.item("best_frame"))).displayItems((p,o)->{
             o.accept(BestEngineering.WORKBENCH_ITEM.get());
-            CatalogueContent.ITEMS.forEach((k,v)->{if(k.startsWith("best_"))o.accept(v.get());});
+            // Keep the three complete mechs together before their optional equipment.
+            var mechs=java.util.List.of("best_mech","best_combat_mech","best_universal_mech");
+            mechs.forEach(key->o.accept(CatalogueContent.item(key)));
+            CatalogueContent.ITEMS.forEach((k,v)->{if(k.startsWith("best_")&&!mechs.contains(k))o.accept(v.get());});
         }).build());
     public static final DeferredHolder<CreativeModeTab,CreativeModeTab> LINGCHUAN_TAB=TABS.register("lingchuan",()->CreativeModeTab.builder()
         .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint.lingchuan"))

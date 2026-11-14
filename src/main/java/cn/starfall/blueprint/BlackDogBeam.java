@@ -18,8 +18,9 @@ public final class BlackDogBeam extends Entity {
     public void configure(Vec3 end,int style){entityData.set(END,end.toVector3f());entityData.set(STYLE,style);}
     public Vec3 end(){return new Vec3(entityData.get(END));}
     public int style(){return entityData.get(STYLE);}
-    public int lifetime(){return style()==1?16:style()==3?18:8;}
+    public int lifetime(){return style()==5?10:style()==1?16:style()==3?18:8;}
     @Override public void tick(){super.tick();if(!level().isClientSide&&tickCount>=lifetime())discard();}
+    @Override public boolean shouldRenderAtSqrDistance(double distance){return distance<512d*512;}
     @Override public AABB getBoundingBoxForCulling(){return new AABB(position(),position().add(end())).inflate(3);}
     @Override protected void readAdditionalSaveData(CompoundTag d){}
     @Override protected void addAdditionalSaveData(CompoundTag d){}

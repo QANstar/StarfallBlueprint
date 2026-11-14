@@ -26,7 +26,7 @@ public final class ProgressionTreeScreen extends Screen implements MenuAccess<Pr
     @Override public void renderBackground(GuiGraphics g,int mx,int my,float partial){}
     @Override protected void init(){
         pw=Math.min(236,Math.max(142,width/3));vx=8;vy=57;px=width-pw-8;vw=px-vx-8;vh=height-vy-23;
-        String[] categories={"all","best","lingchuan"};
+        String[] categories={"all","best","lingchuan","haijia"};
         for(int i=0;i<categories.length;i++){
             String target=categories[i];var button=addRenderableWidget(Button.builder(label("category."+target),b->{category=target;selected=-1;detailScroll=0;layout();overview();rebuildWidgets();}).bounds(8+i*74,31,70,18).build());button.active=!category.equals(target);
         }
@@ -49,7 +49,7 @@ public final class ProgressionTreeScreen extends Screen implements MenuAccess<Pr
                 if(n>=0){nx=LC[n][0];ny=LC[n][1]+300;}else {nx=depth*230;ny=0;}
             }else {
                 String lane=node.category()+depth;int row=rows.getOrDefault(lane,0);rows.put(lane,row+1);
-                nx=depth*230;ny=row*100+(category.equals("all")?850:0);
+                nx=depth*230;ny=row*100+(category.equals("all")?(node.category().equals("haijia")?1500:850):0);
             }
             positions.put(i,new double[]{nx,ny});
         }

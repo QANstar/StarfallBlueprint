@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:control_board"
+    },
+    {
+      "item": "starfall_blueprint:control_board"
+    },
+    {
+      "item": "starfall_blueprint:sensor"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "minecraft:quartz"
+    },
+    {
+      "item": "minecraft:quartz"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_processor",
+    "count": 1
+  }
+}

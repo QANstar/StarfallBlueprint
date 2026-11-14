@@ -1,0 +1,6 @@
+{
+  "parent": "starfall_blueprint:item/hj_sat_charge",
+  "textures": {
+    "hull": "starfall_blueprint:block/hj_orange"
+  }
+}

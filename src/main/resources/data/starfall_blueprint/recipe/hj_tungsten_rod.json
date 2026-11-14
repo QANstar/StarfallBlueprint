@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:hj_tungsten_ingot"
+    },
+    {
+      "item": "starfall_blueprint:hj_tungsten_ingot"
+    },
+    {
+      "item": "starfall_blueprint:hj_tungsten_ingot"
+    },
+    {
+      "item": "starfall_blueprint:hj_tungsten_ingot"
+    },
+    {
+      "item": "starfall_blueprint:hj_tungsten_ingot"
+    },
+    {
+      "item": "starfall_blueprint:hj_tungsten_ingot"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:hj_processor"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_tungsten_rod",
+    "count": 1
+  }
+}

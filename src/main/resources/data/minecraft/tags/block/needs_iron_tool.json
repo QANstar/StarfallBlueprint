@@ -47,6 +47,11 @@
     "starfall_blueprint:lc_parts_fabricator",
     "starfall_blueprint:lc_armor_assembler",
     "starfall_blueprint:lc_armor_charger",
-    "starfall_blueprint:lc_research_station"
+    "starfall_blueprint:lc_research_station",
+    "starfall_blueprint:hj_relay",
+    "starfall_blueprint:hj_assembler",
+    "starfall_blueprint:hj_launchpad",
+    "starfall_blueprint:hj_console",
+    "starfall_blueprint:hj_tungsten_ore"
   ]
 }

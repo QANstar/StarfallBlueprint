@@ -8,6 +8,15 @@ final class BlackDogHudIcons {
     static void draw(GuiGraphics g,String system,int x,int y,int color){
         g.pose().pushPose();g.pose().translate(x,y,0);
         switch(system){
+            case "bomb" -> {
+                box(g,5,3,6,8,color);box(g,6,11,4,2,color);box(g,7,13,2,2,color);box(g,3,1,4,3,color);box(g,9,1,4,3,color);box(g,7,5,2,3,0xfff4e7ed);
+            }
+            case "energy" -> {
+                box(g,7,1,5,3,color);box(g,5,4,5,3,color);box(g,3,7,10,2,color);box(g,7,9,4,3,color);box(g,6,12,3,3,color);
+            }
+            case "boost" -> {
+                box(g,3,3,3,10,color);box(g,6,5,3,6,color);box(g,9,7,4,2,color);box(g,0,5,2,2,color);box(g,0,10,2,2,color);
+            }
             case "armor" -> {
                 box(g,0,2,5,4,color);box(g,11,2,5,4,color);box(g,3,5,10,9,color);box(g,6,2,4,2,color);box(g,6,6,4,5,0xff263848);box(g,7,7,2,3,0xffa8d4de);
             }

@@ -1,0 +1,56 @@
+{
+  "hj_engine": {
+    "subtitle": "hj.subtitle.engine",
+    "sounds": [
+      {
+        "name": "minecraft:item.elytra.flying",
+        "type": "event"
+      }
+    ]
+  },
+  "hj_boost": {
+    "subtitle": "hj.subtitle.boost",
+    "sounds": [
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event"
+      }
+    ]
+  },
+  "hj_laser": {
+    "subtitle": "hj.subtitle.laser",
+    "sounds": [
+      {
+        "name": "minecraft:entity.guardian.attack",
+        "type": "event"
+      }
+    ]
+  },
+  "hj_missile": {
+    "subtitle": "hj.subtitle.missile",
+    "sounds": [
+      {
+        "name": "minecraft:entity.firework_rocket.launch",
+        "type": "event"
+      }
+    ]
+  },
+  "hj_bomb_release": {
+    "subtitle": "hj.subtitle.bomb_release",
+    "sounds": [
+      {
+        "name": "minecraft:block.iron_trapdoor.open",
+        "type": "event"
+      }
+    ]
+  },
+  "hj_weapon_select": {
+    "subtitle": "hj.subtitle.weapon_select",
+    "sounds": [
+      {
+        "name": "minecraft:ui.button.click",
+        "type": "event"
+      }
+    ]
+  }
+}

@@ -15,7 +15,7 @@ public record ConstructionPlan(String title,List<Cell> blocks) {
     public static final int MAX_TEXT=60000,MAX_BLOCKS=512,MAX_SIDE=48;
     public record Cell(BlockPos pos,BlockState state,String recipe,boolean materialMode){}
     private static final Set<String> DYNAMIC=Set.of("lit","powered","north","south","east","west","up","down");
-    public ConstructionPlan {blocks=List.copyOf(blocks);LargeMachineBlock.validatePlan(blocks);}
+    public ConstructionPlan {blocks=List.copyOf(blocks);LargeMachineBlock.validatePlan(blocks);OrbitalBlock.validatePlan(blocks);}
     public static ConstructionPlan parse(String text){
         if(text.length()>MAX_TEXT)throw new IllegalArgumentException("蓝图文件过大（最多60000字符）");
         try{

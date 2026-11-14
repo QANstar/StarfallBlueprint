@@ -1,0 +1,110 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "hull": "starfall_blueprint:block/hj_hull",
+    "navy": "starfall_blueprint:block/hj_navy",
+    "glass": "starfall_blueprint:block/hj_glass",
+    "orange": "starfall_blueprint:block/hj_orange",
+    "solar": "starfall_blueprint:block/hj_solar",
+    "particle": "starfall_blueprint:block/hj_hull"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        15
+      ],
+      "to": [
+        11,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hull"
+        },
+        "south": {
+          "texture": "#hull"
+        },
+        "east": {
+          "texture": "#hull"
+        },
+        "west": {
+          "texture": "#hull"
+        },
+        "up": {
+          "texture": "#hull"
+        },
+        "down": {
+          "texture": "#hull"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        9,
+        1
+      ],
+      "to": [
+        16,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#orange"
+        },
+        "south": {
+          "texture": "#orange"
+        },
+        "east": {
+          "texture": "#orange"
+        },
+        "west": {
+          "texture": "#orange"
+        },
+        "up": {
+          "texture": "#orange"
+        },
+        "down": {
+          "texture": "#orange"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        3,
+        15
+      ],
+      "to": [
+        12,
+        6,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#orange"
+        },
+        "south": {
+          "texture": "#orange"
+        },
+        "east": {
+          "texture": "#orange"
+        },
+        "west": {
+          "texture": "#orange"
+        },
+        "up": {
+          "texture": "#orange"
+        },
+        "down": {
+          "texture": "#orange"
+        }
+      }
+    }
+  ]
+}

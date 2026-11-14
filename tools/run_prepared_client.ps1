@@ -6,7 +6,10 @@ param(
     [switch]$BlackDogPlaytest,
     [switch]$BlackDogWorkshopCheck,
     [switch]$BlackDogPolishCheck,
-    [switch]$BlackDogLockMarkerCheck
+    [switch]$BlackDogLockMarkerCheck,
+    [switch]$HaijiaVisualCheck,
+    [switch]$ShowWindow,
+    [switch]$HaijiaFlightCheck
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -45,7 +48,14 @@ try {
     if ($BlackDogLockMarkerCheck) {
         $arguments = @('-Dstarfall.blackdogLockMarkerCheck=true') + $arguments + @('--width', '1440', '--height', '900')
     }
-    $process = Start-Process -FilePath $JavaExecutable -ArgumentList $arguments -WorkingDirectory $gameDirectoryPath -WindowStyle Hidden `
+    if ($HaijiaVisualCheck) {
+        $arguments = @('-Dstarfall.haijiaVisualCheck=true') + $arguments + @('--width', '1440', '--height', '1000')
+    }
+    if ($HaijiaFlightCheck) {
+        $arguments = @('-Dstarfall.haijiaFlightCheck=true') + $arguments + @('--width', '1440', '--height', '1000')
+    }
+    $launchWindowStyle = if ($ShowWindow) { 'Normal' } else { 'Hidden' }
+    $process = Start-Process -FilePath $JavaExecutable -ArgumentList $arguments -WorkingDirectory $gameDirectoryPath -WindowStyle $launchWindowStyle `
         -RedirectStandardOutput (Join-Path $gameDirectoryPath 'prepared-client.log') `
         -RedirectStandardError (Join-Path $gameDirectoryPath 'prepared-client-error.log') -PassThru
     Write-Output "Started Minecraft client PID $($process.Id) in $gameDirectoryPath"

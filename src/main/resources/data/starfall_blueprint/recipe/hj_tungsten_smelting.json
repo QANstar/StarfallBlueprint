@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "starfall_blueprint:hj_tungsten_ore"
+  },
+  "result": {
+    "id": "starfall_blueprint:hj_tungsten_ingot"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

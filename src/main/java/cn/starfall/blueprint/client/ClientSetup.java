@@ -9,6 +9,9 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 @EventBusSubscriber(modid = StarfallBlueprint.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
     @SubscribeEvent public static void blackDogRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event){
+        event.registerBlockEntityRenderer(cn.starfall.blueprint.Haijia.BE.get(),OrbitalStationRenderer::new);
+        event.registerEntityRenderer(cn.starfall.blueprint.Haijia.FIGHTER.get(),PeregrineRenderer::new);
+        event.registerEntityRenderer(cn.starfall.blueprint.Haijia.STRIKE.get(),OrbitalStrikeRenderer::new);
         event.registerBlockEntityRenderer(cn.starfall.blueprint.CatalogueContent.ENTITY.get(),BlackDogStationRenderer::new);
         event.registerEntityRenderer(cn.starfall.blueprint.BlackDogWeapons.DRONE.get(),c->new BlackDogHardwareRenderer<>(c,false));
         event.registerEntityRenderer(cn.starfall.blueprint.BlackDogWeapons.MISSILE.get(),c->new BlackDogHardwareRenderer<>(c,true));
@@ -32,8 +35,9 @@ public final class ClientSetup {
     }
     @SubscribeEvent public static void mechRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) { event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.TYPE.get(), BestMechRenderer::new); event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.COMBAT_TYPE.get(), BestMechRenderer::new); event.registerEntityRenderer(cn.starfall.blueprint.BestMechs.UNIVERSAL_TYPE.get(), BestMechRenderer::new); }
     @SubscribeEvent public static void mechLayers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions event) { event.registerLayerDefinition(BestMechModel.LAYER, BestMechModel::createLayer); }
-    @SubscribeEvent public static void mechKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) { BestMechClient.keys(event); BlackDogClient.keys(event); }
-    @SubscribeEvent public static void mechHud(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) { BestMechClient.layers(event); BlackDogClient.layers(event); }
+    @SubscribeEvent public static void orbitalScreens(RegisterMenuScreensEvent event){event.register(cn.starfall.blueprint.Haijia.MENU.get(),OrbitalScreen::new);}
+    @SubscribeEvent public static void mechKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) { BestMechClient.keys(event); BlackDogClient.keys(event); OrbitalClient.keys(event); }
+    @SubscribeEvent public static void mechHud(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) { BestMechClient.layers(event); BlackDogClient.layers(event); OrbitalClient.hud(event); }
     @SubscribeEvent public static void fluids(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event){
         cn.starfall.blueprint.CatalogueFluids.ENTRIES.forEach((key,entry)->event.registerFluidType(new net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions(){
             public net.minecraft.resources.ResourceLocation getStillTexture(){return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_still");}

@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "starfall_blueprint:copper_plate"
+    },
+    {
+      "item": "starfall_blueprint:copper_plate"
+    },
+    {
+      "item": "starfall_blueprint:insulation"
+    },
+    {
+      "item": "starfall_blueprint:insulation"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_coil",
+    "count": 2
+  }
+}

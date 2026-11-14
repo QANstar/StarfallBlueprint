@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:hj_coil"
+    },
+    {
+      "item": "starfall_blueprint:hj_coil"
+    },
+    {
+      "item": "starfall_blueprint:hj_processor"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "starfall_blueprint:ceramic"
+    },
+    {
+      "item": "starfall_blueprint:ceramic"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_thruster",
+    "count": 1
+  }
+}

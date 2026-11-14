@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:machine_frame"
+    },
+    {
+      "item": "starfall_blueprint:machine_frame"
+    },
+    {
+      "item": "starfall_blueprint:machine_frame"
+    },
+    {
+      "item": "starfall_blueprint:load"
+    },
+    {
+      "item": "starfall_blueprint:load"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:steel_fasteners"
+    },
+    {
+      "item": "starfall_blueprint:steel_fasteners"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_airframe",
+    "count": 1
+  }
+}

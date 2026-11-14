@@ -1,0 +1,230 @@
+{
+  "textures": {
+    "hull": "starfall_blueprint:block/hj_hull",
+    "navy": "starfall_blueprint:block/hj_navy",
+    "glass": "starfall_blueprint:block/hj_glass",
+    "orange": "starfall_blueprint:block/hj_orange",
+    "solar": "starfall_blueprint:block/hj_solar",
+    "particle": "starfall_blueprint:block/hj_hull"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        5,
+        5
+      ],
+      "to": [
+        11,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hull"
+        },
+        "south": {
+          "texture": "#hull"
+        },
+        "east": {
+          "texture": "#hull"
+        },
+        "west": {
+          "texture": "#hull"
+        },
+        "up": {
+          "texture": "#hull"
+        },
+        "down": {
+          "texture": "#hull"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        7,
+        4
+      ],
+      "to": [
+        5,
+        8,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#solar"
+        },
+        "south": {
+          "texture": "#solar"
+        },
+        "east": {
+          "texture": "#solar"
+        },
+        "west": {
+          "texture": "#solar"
+        },
+        "up": {
+          "texture": "#solar"
+        },
+        "down": {
+          "texture": "#solar"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        7,
+        4
+      ],
+      "to": [
+        16,
+        8,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#solar"
+        },
+        "south": {
+          "texture": "#solar"
+        },
+        "east": {
+          "texture": "#solar"
+        },
+        "west": {
+          "texture": "#solar"
+        },
+        "up": {
+          "texture": "#solar"
+        },
+        "down": {
+          "texture": "#solar"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        11,
+        7
+      ],
+      "to": [
+        9,
+        15,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#orange"
+        },
+        "south": {
+          "texture": "#orange"
+        },
+        "east": {
+          "texture": "#orange"
+        },
+        "west": {
+          "texture": "#orange"
+        },
+        "up": {
+          "texture": "#orange"
+        },
+        "down": {
+          "texture": "#orange"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        5,
+        1
+      ],
+      "to": [
+        4,
+        6,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#solar"
+        },
+        "south": {
+          "texture": "#solar"
+        },
+        "east": {
+          "texture": "#solar"
+        },
+        "west": {
+          "texture": "#solar"
+        },
+        "up": {
+          "texture": "#solar"
+        },
+        "down": {
+          "texture": "#solar"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        5,
+        1
+      ],
+      "to": [
+        15,
+        6,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#solar"
+        },
+        "south": {
+          "texture": "#solar"
+        },
+        "east": {
+          "texture": "#solar"
+        },
+        "west": {
+          "texture": "#solar"
+        },
+        "up": {
+          "texture": "#solar"
+        },
+        "down": {
+          "texture": "#solar"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        25,
+        35,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ]
+    },
+    "ground": {
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    }
+  }
+}

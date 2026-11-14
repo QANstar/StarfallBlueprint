@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:hj_processor"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:firework_rocket"
+    },
+    {
+      "item": "minecraft:firework_rocket"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_missile",
+    "count": 4
+  }
+}

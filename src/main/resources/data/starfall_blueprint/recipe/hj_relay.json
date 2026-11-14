@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:hj_coil"
+    },
+    {
+      "item": "starfall_blueprint:hj_coil"
+    },
+    {
+      "item": "starfall_blueprint:hj_coil"
+    },
+    {
+      "item": "starfall_blueprint:hj_coil"
+    },
+    {
+      "item": "starfall_blueprint:hj_processor"
+    },
+    {
+      "item": "starfall_blueprint:machine_frame"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "starfall_blueprint:ceramic"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_relay",
+    "count": 1
+  }
+}

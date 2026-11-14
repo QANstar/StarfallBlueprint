@@ -1,0 +1,274 @@
+{
+  "items": [
+    "relay",
+    "assembler",
+    "launchpad",
+    "console",
+    "terminal",
+    "coil",
+    "processor",
+    "solar_wing",
+    "bus",
+    "thruster",
+    "launch_vehicle",
+    "laser_array",
+    "tungsten_ore",
+    "tungsten_ingot",
+    "tungsten_rod",
+    "weather_array",
+    "airframe",
+    "engine",
+    "missile",
+    "fighter",
+    "bomb",
+    "sat_charge_upgrade",
+    "sat_laser_upgrade",
+    "sat_kinetic_upgrade",
+    "creative_terminal",
+    "creative_fighter",
+    "sat_charge",
+    "sat_laser",
+    "sat_kinetic",
+    "sat_weather"
+  ],
+  "recipes": {
+    "coil": {
+      "count": 2,
+      "inputs": [
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:copper_plate",
+        "starfall_blueprint:copper_plate",
+        "starfall_blueprint:insulation",
+        "starfall_blueprint:insulation"
+      ]
+    },
+    "processor": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:control_board",
+        "starfall_blueprint:control_board",
+        "starfall_blueprint:sensor",
+        "starfall_blueprint:conductor",
+        "minecraft:quartz",
+        "minecraft:quartz",
+        "minecraft:gold_ingot"
+      ]
+    },
+    "solar_wing": {
+      "count": 1,
+      "inputs": [
+        "minecraft:daylight_detector",
+        "minecraft:daylight_detector",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:iron_plate",
+        "starfall_blueprint:iron_plate",
+        "starfall_blueprint:boroglass"
+      ]
+    },
+    "bus": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:steel_fasteners",
+        "starfall_blueprint:steel_fasteners",
+        "starfall_blueprint:load"
+      ]
+    },
+    "thruster": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_processor",
+        "minecraft:blaze_powder",
+        "minecraft:blaze_powder",
+        "starfall_blueprint:ceramic",
+        "starfall_blueprint:ceramic"
+      ]
+    },
+    "launch_vehicle": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:hj_thruster",
+        "starfall_blueprint:hj_thruster",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:ordinary_steel",
+        "minecraft:firework_rocket",
+        "minecraft:firework_rocket"
+      ]
+    },
+    "laser_array": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_coil",
+        "minecraft:diamond",
+        "minecraft:quartz",
+        "minecraft:quartz",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor"
+      ]
+    },
+    "tungsten_rod": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:hj_tungsten_ingot",
+        "starfall_blueprint:hj_tungsten_ingot",
+        "starfall_blueprint:hj_tungsten_ingot",
+        "starfall_blueprint:hj_tungsten_ingot",
+        "starfall_blueprint:hj_tungsten_ingot",
+        "starfall_blueprint:hj_tungsten_ingot",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:hj_processor"
+      ]
+    },
+    "weather_array": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:sensor",
+        "starfall_blueprint:sensor",
+        "minecraft:lightning_rod",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_coil",
+        "minecraft:amethyst_shard"
+      ]
+    },
+    "airframe": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:load",
+        "starfall_blueprint:load",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:steel_fasteners",
+        "starfall_blueprint:steel_fasteners"
+      ]
+    },
+    "engine": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:hj_thruster",
+        "starfall_blueprint:hj_thruster",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:ceramic",
+        "starfall_blueprint:ceramic"
+      ]
+    },
+    "bomb": {
+      "count": 4,
+      "inputs": [
+        "minecraft:tnt",
+        "minecraft:tnt",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:hj_processor",
+        "minecraft:gunpowder",
+        "minecraft:gunpowder"
+      ]
+    },
+    "missile": {
+      "count": 4,
+      "inputs": [
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:ordinary_steel",
+        "minecraft:gunpowder",
+        "minecraft:gunpowder",
+        "minecraft:gunpowder",
+        "minecraft:firework_rocket",
+        "minecraft:firework_rocket"
+      ]
+    },
+    "relay": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:ceramic"
+      ]
+    },
+    "assembler": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:steel_fasteners",
+        "starfall_blueprint:steel_fasteners",
+        "minecraft:crafting_table"
+      ]
+    },
+    "launchpad": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:ordinary_steel",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:hj_coil",
+        "minecraft:dispenser"
+      ]
+    },
+    "console": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:machine_frame",
+        "starfall_blueprint:sensor",
+        "starfall_blueprint:sensor",
+        "starfall_blueprint:boroglass",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor"
+      ]
+    },
+    "terminal": {
+      "count": 1,
+      "inputs": [
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_processor",
+        "starfall_blueprint:hj_coil",
+        "starfall_blueprint:sensor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:conductor",
+        "starfall_blueprint:boroglass"
+      ]
+    }
+  }
+}

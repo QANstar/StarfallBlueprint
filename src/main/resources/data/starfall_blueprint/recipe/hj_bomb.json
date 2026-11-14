@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:tnt"
+    },
+    {
+      "item": "minecraft:tnt"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:hj_processor"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_bomb",
+    "count": 4
+  }
+}

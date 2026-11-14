@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "hull": "starfall_blueprint:block/hj_hull",
+    "navy": "starfall_blueprint:block/hj_navy",
+    "glass": "starfall_blueprint:block/hj_glass",
+    "orange": "starfall_blueprint:block/hj_orange",
+    "solar": "starfall_blueprint:block/hj_solar",
+    "particle": "starfall_blueprint:block/hj_hull"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        3
+      ],
+      "to": [
+        7,
+        14,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hull"
+        },
+        "south": {
+          "texture": "#hull"
+        },
+        "east": {
+          "texture": "#hull"
+        },
+        "west": {
+          "texture": "#hull"
+        },
+        "up": {
+          "texture": "#hull"
+        },
+        "down": {
+          "texture": "#hull"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        9,
+        3
+      ],
+      "to": [
+        16,
+        15,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#navy"
+        },
+        "south": {
+          "texture": "#navy"
+        },
+        "east": {
+          "texture": "#navy"
+        },
+        "west": {
+          "texture": "#navy"
+        },
+        "up": {
+          "texture": "#navy"
+        },
+        "down": {
+          "texture": "#navy"
+        }
+      }
+    }
+  ]
+}

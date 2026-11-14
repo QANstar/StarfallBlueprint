@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "starfall_blueprint:hj_processor"
+    },
+    {
+      "item": "starfall_blueprint:hj_processor"
+    },
+    {
+      "item": "starfall_blueprint:sensor"
+    },
+    {
+      "item": "starfall_blueprint:sensor"
+    },
+    {
+      "item": "minecraft:lightning_rod"
+    },
+    {
+      "item": "starfall_blueprint:hj_coil"
+    },
+    {
+      "item": "starfall_blueprint:hj_coil"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:hj_weather_array",
+    "count": 1
+  }
+}

@@ -13,18 +13,22 @@ public final class BlackDogBeamRenderer extends EntityRenderer<BlackDogBeam> {
     public ResourceLocation getTextureLocation(BlackDogBeam entity){return StarfallBlueprint.id("textures/models/armor/blackdog_exosuit.png");}
     @Override public void render(BlackDogBeam beam,float yaw,float partial,PoseStack pose,MultiBufferSource source,int light){
         var buffer=source.getBuffer(beam.style()==3?BlackDogShieldEffects.RENDER_TYPE:RenderType.lightning());float age=beam.tickCount+partial,alpha=Math.max(0,1-age/beam.lifetime());
-        int style=beam.style();Vec3 end=beam.end();int color=style==1?0x70ddff:style==2?0xffce65:style==3?0xe44d76:style==4?0xff8a45:0xff4868;
+        int style=beam.style();Vec3 end=beam.end();int color=style==1?0x70ddff:style==2?0xffce65:style==3?0xe44d76:style==4?0xff8a45:style==5?0x83e7ff:0xff4868;
         if(style==3){
             var mc=net.minecraft.client.Minecraft.getInstance();if(mc.player!=null&&mc.options.getCameraType().isFirstPerson()&&beam.shieldOwner()==mc.player.getId())return;
             BlackDogShieldEffects.impact(buffer,pose,end,age);
             return;
         }
         if(style==4){sphere(buffer,pose,Vec3.ZERO,1+age*.07,color,alpha*.65f);return;}
-        double radius=style==1?.16:style==2?.035:.045;
+        double radius=style==5?.6:style==1?.16:style==2?.035:.045;
         tube(buffer,pose,Vec3.ZERO,end,radius*3.4,color,alpha*.16f,8);
         tube(buffer,pose,Vec3.ZERO,end,radius,color,alpha*.75f,8);
         tube(buffer,pose,Vec3.ZERO,end,radius*.28,0xffffff,alpha,6);
         Vec3 axis=end.normalize(),right=axis.cross(new Vec3(0,1,0)).normalize();if(right.lengthSqr()<.01)right=new Vec3(1,0,0);Vec3 up=right.cross(axis).normalize();
+        if(style==5){
+            ring(buffer,pose,end,right,up,.7+age*.12,.09,color,alpha);
+            sphere(buffer,pose,end,.45+age*.025,0xd5faff,alpha*.8f);
+        }
         if(style==1){
             for(double distance=1;distance<end.length();distance+=2.5)ring(buffer,pose,axis.scale(distance),right,up,.45+age*.018,.025,color,alpha*.6f);
             for(int rail=0;rail<2;rail++){

@@ -77,6 +77,6 @@ public final class LargeMachineBlock extends IndustryBlock {
             }
         }
     }
-    public static boolean consumesMaterial(BlockState state){return !(state.getBlock()instanceof LargeMachineBlock)||state.getValue(PART)==0;}
+    public static boolean consumesMaterial(BlockState state){if(state.getBlock()instanceof OrbitalBlock)return state.getValue(OrbitalBlock.PART)==0;return !(state.getBlock()instanceof LargeMachineBlock)||state.getValue(PART)==0;}
     public static void restoreSnapshot(net.neoforged.neoforge.common.util.BlockSnapshot snapshot){boolean old=DISMANTLING.get();DISMANTLING.set(true);try{snapshot.restore(18);}finally{DISMANTLING.set(old);}}
 }

@@ -113,6 +113,7 @@ public final class CatalogueContent {
     public static void initialize(){CatalogueFluids.initialize();}
     private static boolean isExisting(String key){return key.equals("best_workbench")||Set.of("ore","common","tail","joint","brace","shield","finder","prep","tank","rain_collector","alloy_furnace","fix","steel_pre","steel","substrate","board","breaker","sheath","steel_fix","box").contains(key)||StarfallBlueprint.STRUCTURAL_ITEMS.containsKey(key);}
     public static Item item(String key) {
+        if(key.startsWith("hj_")) return Haijia.item(key);
         Item old=existing(key);if(old!=null)return old;
         if(ITEMS.containsKey(key))return ITEMS.get(key).get();
         return switch(key){case "iron"->net.minecraft.world.item.Items.IRON_INGOT;case "copper"->net.minecraft.world.item.Items.COPPER_INGOT;

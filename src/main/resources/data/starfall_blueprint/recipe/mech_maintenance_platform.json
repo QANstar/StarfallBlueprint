@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "CEC",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    "C": {
+      "item": "starfall_blueprint:control_board"
+    },
+    "E": {
+      "item": "starfall_blueprint:best_frame"
+    }
+  },
+  "result": {
+    "id": "starfall_blueprint:mech_maintenance_platform",
+    "count": 1
+  }
+}

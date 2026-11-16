@@ -11,11 +11,16 @@ public final class BestMechCores {
     public static final int MAX_FUEL_TICKS = 20_000;
     private BestMechCores() {}
 
-    public static String sanitize(String key) { return GENERATOR.equals(key) ? key : ""; }
+    public static final String FUSION = BestMechPowerSystems.FUSION;
+    public static String sanitize(String key) { return GENERATOR.equals(key) || FUSION.equals(key) ? key : ""; }
     public static String read(CompoundTag tag) { return sanitize(tag.getString(STATE)); }
-    public static String key(ItemStack stack) { return !stack.isEmpty() && stack.is(CatalogueContent.item(GENERATOR)) ? GENERATOR : ""; }
+    public static String key(ItemStack stack) {
+        if (stack.isEmpty()) return "";
+        if (stack.is(CatalogueContent.item(GENERATOR))) return GENERATOR;
+        return stack.is(CatalogueContent.item(FUSION)) ? FUSION : "";
+    }
     public static Component name(String key) {
-        return Component.translatable(sanitize(key).isEmpty() ? "mech.starfall_blueprint.core.none" : "item.starfall_blueprint." + GENERATOR);
+        return Component.translatable(sanitize(key).isEmpty() ? "mech.starfall_blueprint.core.none" : "item.starfall_blueprint." + sanitize(key));
     }
     public static Component installed(String key) { return Component.translatable("mech.starfall_blueprint.core.installed", name(key)); }
     public static Component controls() { return Component.translatable("mech.starfall_blueprint.core.controls"); }

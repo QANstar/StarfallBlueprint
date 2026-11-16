@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "starfall_blueprint:control_board"
+    },
+    {
+      "item": "starfall_blueprint:control_board"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    },
+    {
+      "item": "starfall_blueprint:ordinary_steel"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:best_mech_heavy_fusion_core",
+    "count": 1
+  }
+}

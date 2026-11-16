@@ -107,6 +107,7 @@ public final class StarfallBlueprint {
         .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint.best"))
         .icon(()->new ItemStack(CatalogueContent.item("best_frame"))).displayItems((p,o)->{
             o.accept(BestEngineering.WORKBENCH_ITEM.get());
+            o.accept(MechMaintenancePlatforms.ITEM.get());
             // Keep the three complete mechs together before their optional equipment.
             var mechs=java.util.List.of("best_mech","best_combat_mech","best_universal_mech");
             mechs.forEach(key->o.accept(CatalogueContent.item(key)));
@@ -124,6 +125,7 @@ public final class StarfallBlueprint {
         BlackDogWeapons.register(bus);
         bus.addListener(BlackDogNetworking::register);
         CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();Blueprints.initialize();AggregateMachines.initialize();BestEngineering.initialize();Lingchuan.initialize();
+        MechMaintenancePlatforms.initialize();
         BestMechs.initialize(); BestMechs.register(bus); Progression.initialize();
         bus.addListener(ProgressionNetworking::register);
         CatalogueFluids.register(bus);
@@ -160,6 +162,7 @@ public final class StarfallBlueprint {
         }
     }
     private void capabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, MechMaintenancePlatforms.ENTITY.get(), (be, side) -> be.energyPort());
         event.registerEntity(Capabilities.EnergyStorage.ENTITY, BestMechs.TYPE.get(), (mech, context) -> mech.energyPort());
         event.registerEntity(Capabilities.EnergyStorage.ENTITY, BestMechs.COMBAT_TYPE.get(), (mech, context) -> mech.energyPort());
         event.registerEntity(Capabilities.EnergyStorage.ENTITY, BestMechs.UNIVERSAL_TYPE.get(), (mech, context) -> mech.energyPort());

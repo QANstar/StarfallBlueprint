@@ -53,7 +53,7 @@ public final class BestMechThreePlatformGameTests {
         h.assertTrue(m.fireWeapon(p)&&cow.getHealth()==before,"opaque block must prevent damage behind wall");
         h.assertTrue(m.energy()==988_000,"blocked shot still consumes energy");
         h.setBlock(wall,net.minecraft.world.level.block.Blocks.AIR);resetWeapon(m);
-        h.assertTrue(m.fireWeapon(p)&&cow.getHealth()<before,"nonhostile animal is a physical target with real damage");
+        h.assertTrue(m.fireWeapon(p)&&cow.getHealth()==before,"nonhostile animal blocks the ray without friendly damage");
         p.stopRiding();m.discard();cow.discard();h.succeed();
     }
     @GameTest(template="combat_arena")
@@ -63,7 +63,7 @@ public final class BestMechThreePlatformGameTests {
         h.assertTrue(m.workArmKey().equals(BestMechArms.DRILL),"empty universal arm retains built in drill");
         var block=new net.minecraft.core.BlockPos(4,2,5);h.setBlock(block,net.minecraft.world.level.block.Blocks.STONE);
         h.assertTrue(m.work(p)&&h.getBlockState(block).isAir(),"universal engineering action must really mine");
-        var cow=target(h,net.minecraft.world.entity.EntityType.COW);p.setXRot(8);float before=cow.getHealth();
+        var cow=target(h,net.minecraft.world.entity.EntityType.ZOMBIE);p.setXRot(8);float before=cow.getHealth();
         h.assertTrue(m.fireWeapon(p)&&cow.getHealth()<before,"separate weapon action remains usable after engineering action");
         h.assertTrue(m.stateTag().getInt("DrillCooldown")>0&&m.stateTag().getInt("WeaponCooldown")>0,"independent work and weapon cooldowns coexist");
         p.stopRiding();m.discard();cow.discard();h.succeed();

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "starfall_blueprint:conductor"
+    },
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "result": {
+    "id": "starfall_blueprint:best_mech_heavy_fusion_fuel",
+    "count": 1
+  }
+}

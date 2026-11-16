@@ -23,6 +23,15 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 
 /** A manually driven industrial vehicle. No goals, targeting, or autonomous work. */
 public final class BestMechEntity extends PathfinderMob {
+    private final BestMechPowerSystems powerSystems = new BestMechPowerSystems();
+    public BestMechPowerSystems powerSystems() { return powerSystems; }
+    private final BestMechCombatSystems combatSystems = new BestMechCombatSystems(this);
+    public BestMechCombatSystems combatSystems() { return combatSystems; }
+    public void spendSystems(int energy, int heat, int wear) { spend(energy, heat, wear); }
+    public boolean consumeSupportEnergy(int cost) {
+        if(level().isClientSide || !ready(cost)) return false;
+        spend(cost, 2, 0); return true;
+    }
     public static final int CAPACITY = 20_000_000, MAX_HEAT = 1000, RECOVER_HEAT = 400, MAX_WEAR = 2400;
     private static final EntityDataAccessor<Integer> ENERGY = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> HEAT = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.INT);
@@ -80,6 +89,17 @@ public final class BestMechEntity extends PathfinderMob {
     public boolean thermalLocked() { return entityData.get(LOCKED); }
     public boolean supportDeployed() { return supportsParkingSupport() && entityData.get(SUPPORT_DEPLOYED); }
     public boolean operatorQualified() { return entityData.get(OPERATOR_QUALIFIED); }
+    public boolean maintenanceAuthorized(Player owner) {
+        if(owner == null || !owner.isAlive() || owner.isSpectator() || !isAlive() || !qualifiedFor(owner)) return false;
+        if(getControllingPassenger() instanceof Player driver)
+            return driver == owner || owner.getTeam() != null && owner.isAlliedTo(driver);
+        return getPassengers().isEmpty() && getPersistentData().hasUUID("BestSupportPilot")
+                && owner.getUUID().equals(getPersistentData().getUUID("BestSupportPilot"));
+    }
+    public boolean repairFromMaintenancePlatform() {
+        if(level().isClientSide || !isAlive() || wear() == 0 && getHealth() >= getMaxHealth()) return false;
+        entityData.set(WEAR, Math.max(0, wear()-200)); setHealth(Math.min(getMaxHealth(),getHealth()+5)); return true;
+    }
     public String moduleKey() { return entityData.get(UTILITY_MODULE); }
     public String armKey() { return entityData.get(ENGINEERING_ARM); }
     public String bodyKey() { return entityData.get(BODY); }
@@ -110,10 +130,11 @@ public final class BestMechEntity extends PathfinderMob {
         ItemStack held = player.getItemInHand(hand);
         if(hand != InteractionHand.MAIN_HAND || !player.isShiftKeyDown() || !canServiceModule(player)
                 || !coreKey().isEmpty() || BestMechCores.key(held).isEmpty()) return false;
-        entityData.set(CORE, BestMechCores.GENERATOR); held.shrink(1); player.getInventory().setChanged(); return true;
+        if(BestMechCores.FUSION.equals(BestMechCores.key(held)) && !BestMechProgression.UNIVERSAL.equals(platformType())) return false;
+        entityData.set(CORE, BestMechCores.key(held)); held.shrink(1); player.getInventory().setChanged(); return true;
     }
     public boolean removeCore(Player player) {
-        if(!canServiceModule(player) || coreKey().isEmpty() || coreFuelTicks() > 0) return false;
+        if(!canServiceModule(player) || coreKey().isEmpty() || coreFuelTicks() > 0 || !powerSystems.fusionCanRemove()) return false;
         int slot = player.getInventory().getFreeSlot(); if(slot < 0) return false;
         player.getInventory().setItem(slot, CatalogueContent.stack(coreKey(), 1)); entityData.set(CORE, "");
         player.getInventory().setChanged(); return true;
@@ -222,7 +243,8 @@ public final class BestMechEntity extends PathfinderMob {
     }
     public boolean installModule(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand); String key = BestMechModules.key(held);
-        if(!canServiceModule(player) || !moduleKey().isEmpty() || key.isEmpty()) return false;
+        if(!canServiceModule(player) || !moduleKey().isEmpty() || key.isEmpty()
+                || BestMechSupport.isModule(key) && !engineeringCapable()) return false;
         entityData.set(UTILITY_MODULE, key); held.shrink(1); player.getInventory().setChanged(); return true;
     }
     public boolean removeModule(Player player) {
@@ -333,7 +355,12 @@ public final class BestMechEntity extends PathfinderMob {
             if(drillCooldown > 0) drillCooldown--; if(weaponCooldown>0) weaponCooldown--;
             entityData.set(HEAT, Math.max(0, heat() - coolingRate()));
             if(heat() <= RECOVER_HEAT) entityData.set(LOCKED, false);
+            powerSystems.tickFusion(this, n -> entityData.set(ENERGY, energy()+n));
+            java.util.UUID powerOwner=getControllingPassenger() instanceof Player owner && qualifiedFor(owner)?owner.getUUID():getPersistentData().hasUUID("BestSupportPilot")?getPersistentData().getUUID("BestSupportPilot"):null;
+            if(powerOwner!=null) powerSystems.tickWireless(this,powerOwner);
             tickCore();
+            BestMechSupport.tick(this);
+            combatSystems.tick();
             if(supportDeployed() || !(getControllingPassenger() instanceof Player p) || !qualifiedFor(p) || !ready(movementCost())) stopHorizontal();
         }
         super.tick();
@@ -392,6 +419,13 @@ public final class BestMechEntity extends PathfinderMob {
         }
         return super.getDismountLocationForPassenger(passenger);
     }
+    public int receiveMaintenanceEnergy(int max, boolean simulate) {
+        if(level().isClientSide || !isAlive() || workbenchServiceCommit) return 0;
+        long now=level().getGameTime(); int used=chargeTick==now?chargeUsed:0;
+        int n=Math.max(0,Math.min(Math.min(max,20000-used),capacity()-energy()));
+        if(!simulate && n>0){entityData.set(ENERGY,energy()+n);chargeTick=now;chargeUsed=used+n;}
+        return n;
+    }
     public IEnergyStorage energyPort() { return new IEnergyStorage() {
         public int receiveEnergy(int max, boolean simulate) {
             if(level().isClientSide || isolated() || workbenchServiceCommit || !isAlive()) return 0;
@@ -407,7 +441,7 @@ public final class BestMechEntity extends PathfinderMob {
         public boolean canReceive() { return !isolated() && !workbenchServiceCommit && isAlive(); }
     }; }
     public CompoundTag stateTag() {
-        CompoundTag tag = new CompoundTag(); tag.putInt(BestMechProgression.STATE,upgradeMask()); tag.putInt("WeaponCooldown",weaponCooldown); tag.putInt("Energy", energy()); tag.putInt("Heat", heat()); tag.putInt("Wear", wear());
+        CompoundTag tag = new CompoundTag(); tag.putInt(BestMechProgression.STATE,upgradeMask()); tag.putInt("WeaponCooldown",combatSystems.cooldown()); tag.putInt("Energy", energy()); tag.putInt("Heat", heat()); tag.putInt("Wear", wear());
         tag.putBoolean("Isolated", isolated()); tag.putBoolean("ThermalLock", entityData.get(LOCKED)); tag.putBoolean("SupportDeployed", supportDeployed());
         tag.putInt("WorkTicks", workTicks); tag.putInt("DrillCooldown", drillCooldown); tag.putFloat("Health", getHealth());
         tag.putLong("ChargeTick", chargeTick); tag.putInt("ChargeUsed", chargeUsed);
@@ -424,6 +458,10 @@ public final class BestMechEntity extends PathfinderMob {
         if(engineeringSource!=null) tag.putUUID("EngineeringSource",engineeringSource);
         if(combatSource!=null) tag.putUUID("CombatSource",combatSource);
         if(hasCustomName()) tag.putString("Name", Component.Serializer.toJson(getCustomName(), registryAccess()));
+        combatSystems.save(tag);
+        powerSystems.save(tag);
+        if(getControllingPassenger() instanceof Player pilot && qualifiedFor(pilot)) tag.putUUID("BestSupportPilot",pilot.getUUID());
+        else if(getPersistentData().hasUUID("BestSupportPilot")) tag.putUUID("BestSupportPilot",getPersistentData().getUUID("BestSupportPilot"));
         return tag;
     }
     public void loadState(CompoundTag tag) {
@@ -453,7 +491,10 @@ public final class BestMechEntity extends PathfinderMob {
         entityData.set(SUPPORT_DEPLOYED, supportsParkingSupport() && tag.getBoolean("SupportDeployed"));
         workTicks = Math.clamp(tag.getInt("WorkTicks"), 0, 99); drillCooldown = Math.clamp(tag.getInt("DrillCooldown"), 0, 40);
         chargeTick = tag.contains("ChargeTick") ? tag.getLong("ChargeTick") : Long.MIN_VALUE;
-        chargeUsed = Math.clamp(tag.getInt("ChargeUsed"), 0, 5000);
+        chargeUsed = Math.clamp(tag.getInt("ChargeUsed"), 0, 20000);
+        if(tag.hasUUID("BestSupportPilot")) getPersistentData().putUUID("BestSupportPilot",tag.getUUID("BestSupportPilot"));
+        combatSystems.load(tag);
+        powerSystems.load(tag);
         setHealth(tag.contains("Health") ? Math.clamp(tag.getFloat("Health"), 0, getMaxHealth()) : getMaxHealth());
         if(tag.contains("Name")) { try { setCustomName(Component.Serializer.fromJson(tag.getString("Name"), registryAccess())); } catch(RuntimeException ignored) {} }
     }
@@ -520,31 +561,11 @@ public final class BestMechEntity extends PathfinderMob {
     }
     /** Server-authoritative direct fire: nearest intersected living target, never through blocks. */
     public boolean fireWeapon(Player player) {
-        int cost=hasUpgrade(BestMechProgression.TIANPU)?24000:12000;
-        if(level().isClientSide || !combatCapable() || getControllingPassenger()!=player || !qualifiedFor(player) || !ready(cost) || weaponCooldown>0 || player.isSpectator()) return false;
-        Vec3 start=player.getEyePosition(), end=start.add(player.getLookAngle().scale(hasUpgrade(BestMechProgression.FIRE_CONTROL)?64:40));
-        var block=level().clip(new ClipContext(start,end,ClipContext.Block.COLLIDER,ClipContext.Fluid.NONE,player));
-        if(block.getType()!=HitResult.Type.MISS) end=block.getLocation();
-        LivingEntity target=null; double nearest=start.distanceToSqr(end); final Vec3 rayEnd=end;
-        for(LivingEntity candidate:level().getEntitiesOfClass(LivingEntity.class,new AABB(start,end).inflate(1),e->e!=this&&e!=player&&e.isAlive()&&!e.isSpectator())) {
-            var hit=candidate.getBoundingBox().inflate(.15).clip(start,rayEnd);
-            if(hit.isPresent() && start.distanceToSqr(hit.get())<nearest) { nearest=start.distanceToSqr(hit.get());target=candidate; }
-        }
-        spend(cost,hasUpgrade(BestMechProgression.SUSTAINED_FIRE)?35:65,1);
-        weaponCooldown=hasUpgrade(BestMechProgression.TIANPU)?8:hasUpgrade(BestMechProgression.SUSTAINED_FIRE)?12:20;
-        if(target!=null) {
-            target.hurt(damageSources().playerAttack(player),hasUpgrade(BestMechProgression.TIANPU)?18:10);
-            if(hasUpgrade(BestMechProgression.FIRE_CONTROL)||hasUpgrade(BestMechProgression.TIANPU)) {
-                for(LivingEntity marked:level().getEntitiesOfClass(LivingEntity.class,target.getBoundingBox().inflate(6),e->e!=this&&e!=player&&e.isAlive()&&hasLineOfSight(e)))
-                    marked.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING,100,0));
-            }
-        }
-        ((ServerLevel)level()).sendParticles(net.minecraft.core.particles.ParticleTypes.ELECTRIC_SPARK,end.x,end.y,end.z,12,.15,.15,.15,.02);
-        return true;
+        return combatSystems.fire(player);
     }
     @Override public boolean hurt(DamageSource source,float damage) {
         if(hasUpgrade(BestMechProgression.ARMOR)||hasUpgrade(BestMechProgression.ZHENYUAN)) damage*=.75f;
-        return super.hurt(source,damage);
+        return super.hurt(source,combatSystems.reduceDamage(source, damage));
     }
     private boolean breakWorkBlock(ServerPlayer player, BlockPos pos, Vec3 eye, double reach, boolean areaWork) {
         if(!level().hasChunkAt(pos) || !level().getWorldBorder().isWithinBounds(pos) || !level().mayInteract(player, pos)) return false;
@@ -588,6 +609,22 @@ public final class BestMechEntity extends PathfinderMob {
     @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
         if(level().isClientSide) return InteractionResult.SUCCESS;
+        if(held.is(CatalogueContent.item(BestMechPowerSystems.WIRELESS))) {
+            if(hand==InteractionHand.MAIN_HAND && player.isShiftKeyDown() && canServiceModule(player) && powerSystems.installWireless()) {
+                held.shrink(1); player.getInventory().setChanged();
+                player.displayClientMessage(Component.literal("无线充能组件已安装：同主人平台8格内接通充电"),true);
+            } else player.displayClientMessage(Component.literal("安装失败：须隔离停稳、无人乘坐，且无线槽为空"),true);
+            return InteractionResult.CONSUME;
+        }
+        if(player.isShiftKeyDown() && hand==InteractionHand.MAIN_HAND && held.is(CatalogueContent.item("best_diagnostic_tool")) && player.getOffhandItem().is(Items.COPPER_INGOT)) {
+            int slot=player.getInventory().getFreeSlot();
+            if(canServiceModule(player) && slot>=0 && powerSystems.removeWireless()) {
+                player.getInventory().setItem(slot,CatalogueContent.stack(BestMechPowerSystems.WIRELESS,1)); player.getInventory().setChanged();
+                player.displayClientMessage(Component.literal("无线充能组件已拆回"),true);
+            } else player.displayClientMessage(Component.literal("无法拆卸无线组件：检查隔离、停稳和背包空位"),true);
+            return InteractionResult.CONSUME;
+        }
+        if(combatSystems.install(player, hand)) return InteractionResult.CONSUME;
         if(player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND && held.is(Items.CHEST)) {
             if(canAccessCargo(player)) BestMechCargoMenu.open(player, this);
             return InteractionResult.CONSUME;

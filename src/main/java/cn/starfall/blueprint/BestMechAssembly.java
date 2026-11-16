@@ -89,6 +89,7 @@ public final class BestMechAssembly {
         for(int i=0;i<36;i++){ItemStack s=inv.get(i);if(!ready(s))continue;String type=BestMechProgression.type(s);if(type.equals("engineering")&&engineering==null){engineering=s;ei=i;}else if(type.equals("combat")&&combat==null){combat=s;ci=i;}}
         if(engineering==null||combat==null)return "需要隔离存活的涓流与激湍各一台";
         var a=BestMechItem.state(engineering);var b=BestMechItem.state(combat);
+        if(a.getInt("FusionFuelTicks")>0 || b.getInt("FusionFuelTicks")>0) return "请先消耗聚变核心剩余燃料";
         if(!a.getList("Cargo",10).isEmpty()||!b.getList("Cargo",10).isEmpty())return "请先清空两台机甲货舱";
         if(a.hasUUID("MechId")&&b.hasUUID("MechId")&&a.getUUID("MechId").equals(b.getUUID("MechId")))return "两台机甲身份重复";
         CompoundTag result=new CompoundTag();long energy=(long)a.getInt("Energy")+b.getInt("Energy");if(energy<0||energy>BestMechProgression.capacity("universal",result))return "输入总能源超出归海容量，请先取出能源";
@@ -104,8 +105,13 @@ public final class BestMechAssembly {
         result.putInt("Wear",result.getInt("Wear")+carry);result.putInt("WorkTicks",result.getInt("WorkTicks")%100);result.putInt("CoreWorkTicks",result.getInt("CoreWorkTicks")%1000);
         result.putBoolean("ThermalLock",a.getBoolean("ThermalLock")||b.getBoolean("ThermalLock"));result.putLong("ChargeTick",Math.max(a.getLong("ChargeTick"),b.getLong("ChargeTick")));
         result.putUUID("MechId",UUID.randomUUID());result.putUUID("EngineeringSource",a.hasUUID("MechId")?a.getUUID("MechId"):UUID.randomUUID());result.putUUID("CombatSource",b.hasUUID("MechId")?b.getUUID("MechId"):UUID.randomUUID());
+        var combatState=new CompoundTag();
+        for(String key:List.of("Cooldown","DroneCooldown")) combatState.putInt(key,Math.max(a.getCompound(BestMechCombatSystems.STATE).getInt(key),b.getCompound(BestMechCombatSystems.STATE).getInt(key)));
+        result.put(BestMechCombatSystems.STATE,combatState);
         inv.set(ei,ItemStack.EMPTY);inv.set(ci,ItemStack.EMPTY);
         for(CompoundTag tag:List.of(a,b)){
+            if(tag.getBoolean(BestMechPowerSystems.WIRELESS_STATE) && !insert(inv,CatalogueContent.stack(BestMechPowerSystems.WIRELESS,1))) return "背包没有无线组件返还空间";
+            for(String key:List.of("Weapon","Drone")){String id=tag.getCompound(BestMechCombatSystems.STATE).getString(key);if(!id.isEmpty()&&!insert(inv,CatalogueContent.stack(id,1)))return "背包没有战斗组件返还空间";}
             for(int i=0;i<9;i++)if((BestMechProgression.mask(tag)&(1<<i))!=0&&!insert(inv,CatalogueContent.stack(MODULES.get(i),1)))return "背包没有组件返还空间";
             for(String key:List.of(BestMechModules.STATE,BestMechArms.STATE,BestMechBodies.STATE,BestMechCores.STATE,BestMechLegs.STATE)){String id=tag.getString(key);if(!id.isEmpty()&&!insert(inv,CatalogueContent.stack(id,1)))return "背包没有配装返还空间";}
         }

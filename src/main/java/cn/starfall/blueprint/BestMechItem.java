@@ -126,6 +126,7 @@ public final class BestMechItem extends Item {
         }
         lines.add(BestMechCores.installed(BestMechCores.read(tag)));
         lines.add(BestMechCores.controls());
+        lines.add(Component.literal("无线充能："+(tag.getBoolean(BestMechPowerSystems.WIRELESS_STATE)?"已安装（同主人平台8格内）":"未安装")+" · 聚变剩余 "+tag.getInt("FusionFuelTicks")+" 刻"));
         lines.add(BestMechCores.fuel(Math.clamp(tag.getInt("CoreFuelTicks"), 0, BestMechCores.MAX_FUEL_TICKS)));
         lines.add(BestMechLegs.installed(BestMechLegs.read(tag)));
         lines.add(BestMechLegs.controls());

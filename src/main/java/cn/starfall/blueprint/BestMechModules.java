@@ -9,11 +9,13 @@ public final class BestMechModules {
     public static final String RADIATOR = "best_mech_radiator", DRIVE = "best_mech_drive";
     private BestMechModules() {}
 
-    public static String sanitize(String key) { return RADIATOR.equals(key) || DRIVE.equals(key) ? key : ""; }
+    public static String sanitize(String key) { return RADIATOR.equals(key) || DRIVE.equals(key) || BestMechSupport.isModule(key) ? key : ""; }
     public static String key(ItemStack stack) {
         if(stack.isEmpty()) return "";
         if(stack.is(CatalogueContent.item(RADIATOR))) return RADIATOR;
         if(stack.is(CatalogueContent.item(DRIVE))) return DRIVE;
+        for(String support : java.util.List.of(BestMechSupport.REPAIR, BestMechSupport.FRIENDLY_REPAIR, BestMechSupport.MAINTENANCE_DRONE, BestMechSupport.HEALING_DRONE))
+            if(stack.is(CatalogueContent.item(support))) return support;
         return "";
     }
     public static int movementCost(String key) { return DRIVE.equals(key) ? 600 : 400; }
@@ -27,5 +29,5 @@ public final class BestMechModules {
     public static Component installed(String key) {
         return Component.translatable("mech.starfall_blueprint.module.installed", name(key));
     }
-    public static Component controls() { return Component.translatable("mech.starfall_blueprint.module.controls"); }
+    public static Component controls() { return Component.translatable("mech.starfall_blueprint.module.controls").append(" ").append(Component.translatable("mech.starfall_blueprint.support.controls")); }
 }

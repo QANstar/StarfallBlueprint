@@ -59,7 +59,7 @@ public final class OrbitalTerminalItem extends Item {
         if(!Haijia.knows(p,OrbitalFleet.TYPES[type])||f.count[type]==0||!f.active[type]||f.energy<cost||now<(style==0?f.laserReady:f.rodReady)||style==1&&f.rods==0||hit.getType()==HitResult.Type.MISS||!l.hasChunkAt(pos)||!l.getWorldBorder().isWithinBounds(pos)||l.dimension()!=Level.OVERWORLD||!l.mayInteract(p,pos)){
             p.displayClientMessage(Haijia.text("strike.blocked"),true);return false;
         }
-        var entity=Haijia.STRIKE.get().create(l);if(entity==null)return false;entity.setPos(hit.getLocation());entity.configure(style,p.getUUID(),style==0?60:100);entity.strength(f.strikeDamage(type),f.strikeRadius(type),f.strikeBlast(type));
+        var entity=Haijia.STRIKE.get().create(l);if(entity==null)return false;entity.setPos(hit.getLocation());entity.configure(style,p.getUUID(),style==0?60:100);entity.strength(f.strikeDamage(type),f.strikeRadius(type),f.strikeBlast(type));entity.terrain(f.blockDestruction,f.upgrades[type]);
         if(!l.addFreshEntity(entity))return false;f.energy-=cost;if(style==0)f.laserReady=now+200;else{f.rods--;f.rodReady=now+600;}d.setDirty();p.displayClientMessage(Haijia.text("strike.marked",style==0?3:5),true);return true;
     }
 }

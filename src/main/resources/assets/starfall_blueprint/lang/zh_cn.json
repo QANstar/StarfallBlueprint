@@ -1076,5 +1076,11 @@
   "item.starfall_blueprint.best_mech_heavy_fusion_fuel": "重核聚变燃料芯",
   "block.starfall_blueprint.mech_maintenance_platform": "机甲维护平台（3×3）",
   "message.starfall_blueprint.platform_denied": "仅平台所有者可操作物资。",
-  "message.starfall_blueprint.platform_status": "平台：%s FE / %s 钢材 / 完整：%s"
+  "message.starfall_blueprint.platform_status": "平台：%s FE / %s 钢材 / 完整：%s",
+  "hj.ui.destruction_off": "方块破坏：关闭",
+  "hj.ui.destruction_on": "方块破坏：开启",
+  "hj.ui.destruction_hint": "对当前舰队生效，默认关闭。激光形成深坑（满级深约68格）；钨棒形成宽阔扩散坑。不破坏基岩，不产生掉落。发射时锁定此设置。",
+  "hj.ui.fleet_personal": "舰队：个人",
+  "hj.ui.fleet_team": "舰队：队伍共享",
+  "hj.ui.fleet_hint": "加入原版 /team 队伍后点击切换。队友须各自切换到队伍舰队；发射、升级、能源、弹药、冷却及破坏开关共享。个人卫星保留，不转移。研究仍须各自解锁；创造终端不参与共享。"
 }

@@ -20,7 +20,144 @@ import net.neoforged.neoforge.gametest.*;
 @GameTestHolder("starfall_blueprint_haijia")
 @PrefixGameTestTemplate(false)
 public final class HaijiaGameTests {
-    private static ServerPlayer player(GameTestHelper h){var profile=new GameProfile(UUID.randomUUID(),"OrbitTest");var p=new ServerPlayer(h.getLevel().getServer(),h.getLevel(),profile,ClientInformation.createDefault());var c=new Connection(PacketFlow.SERVERBOUND);new EmbeddedChannel(c);p.connection=new ServerGamePacketListenerImpl(h.getLevel().getServer(),c,p,CommonListenerCookie.createInitial(profile,false)){@Override public void send(net.minecraft.network.protocol.Packet<?> packet){}};p.setGameMode(GameType.SURVIVAL);var tag=new CompoundTag();for(String k:Haijia.KNOWLEDGE)tag.putBoolean(k,true);p.getPersistentData().put("HaijiaKnowledge",tag);return p;}
+    @GameTest(template="empty",timeoutTicks=140)
+    public static void orbital_crater_opens_from_center_in_horizontal_layers(GameTestHelper h){
+        var l=h.getLevel();var p=player(h);var base=h.absolutePos(new BlockPos(2,5,2));var root=new BlockPos(base.getX(),192,base.getZ());
+        p.setPos(root.getX()+30,192,root.getZ());l.addNewPlayer(p);
+        for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)for(int y=-12;y<=4;y++)l.setBlock(root.offset(x,y,z),Blocks.STONE.defaultBlockState(),2);
+        var order=new ArrayList<BlockPos>();
+        java.util.function.Consumer<net.neoforged.neoforge.event.level.BlockEvent.BreakEvent> observer=e->{if(e.getPlayer()==p)order.add(e.getPos().immutable());};
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(observer);
+        h.runAfterDelay(15,()->{
+            var strike=Haijia.STRIKE.get().create(l);strike.setPos(net.minecraft.world.phys.Vec3.atCenterOf(root));strike.configure(0,p.getUUID(),1);strike.strength(0,4,0);strike.terrain(true,0);l.addFreshEntity(strike);
+            h.runAfterDelay(100,()->{try{
+                h.assertTrue(strike.isRemoved()&&!order.isEmpty()&&order.getFirst().equals(root.above(4)),"Crater starts at the upper center and finishes under the tick budget");
+                for(int i=1;i<order.size();i++){
+                    var before=order.get(i-1);var after=order.get(i);
+                    h.assertTrue(after.getY()<=before.getY(),"No lower column is drilled before the upper horizontal layer finishes");
+                    if(after.getY()==before.getY())h.assertTrue(after.distSqr(root)>=before.distSqr(root),"Each layer expands radially from the center instead of sweeping in stripes");
+                }
+                h.assertTrue(l.getBlockState(root.below(12)).isAir()&&l.getBlockState(root.offset(2,-12,2)).is(Blocks.STONE),"Layer traversal preserves depth and footprint");h.succeed();
+            }finally{net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(observer);p.discard();}});
+        });
+    }
+    @GameTest(template="empty",timeoutTicks=140)
+    public static void legacy_excavation_cursor_keeps_its_original_order(GameTestHelper h){
+        var l=h.getLevel();var p=player(h);var base=h.absolutePos(new BlockPos(2,5,2));var root=new BlockPos(base.getX(),256,base.getZ());
+        p.setPos(root.getX()+30,256,root.getZ());l.addNewPlayer(p);
+        l.setBlock(root,Blocks.STONE.defaultBlockState(),2);l.setBlock(root.west(),Blocks.STONE.defaultBlockState(),2);
+        var strike=Haijia.STRIKE.get().create(l);strike.setPos(net.minecraft.world.phys.Vec3.atCenterOf(root));strike.configure(0,p.getUUID(),1);strike.terrain(true,0);
+        var saved=new CompoundTag();strike.saveWithoutId(saved);saved.remove("TerrainOrder");saved.putBoolean("Impacted",true);saved.putBoolean("TerrainPending",true);saved.putInt("Age",1);saved.putInt("TerrainCursor",12*17+4);
+        var resumed=Haijia.STRIKE.get().create(l);resumed.load(saved);
+        h.runAfterDelay(20,()->{l.addFreshEntity(resumed);h.runAfterDelay(100,()->{try{
+            h.assertTrue(resumed.isRemoved()&&l.getBlockState(root).isAir()&&l.getBlockState(root.west()).is(Blocks.STONE),"An old in-progress column cursor continues without revisiting completed columns or skipping its next block");h.succeed();
+        }finally{p.discard();}});});
+    }
+    @GameTest(template="empty",timeoutTicks=200)
+    public static void concurrent_orbital_excavations_share_budget_and_resume_next_ticks(GameTestHelper h){
+        var l=h.getLevel();var p=player(h);var base=h.absolutePos(new BlockPos(2,5,2));var root=new BlockPos(base.getX(),224,base.getZ());
+        p.setPos(root.getX()+24,224,root.getZ());l.addNewPlayer(p);
+        var samples=new ArrayList<BlockPos>();
+        for(int site=0;site<2;site++)for(int x=-4;x<=4;x++)for(int z=-4;z<=4;z++)for(int y=-40;y<=4;y++){
+            var pos=root.offset(site*12+x,y,z);l.setBlock(pos,Blocks.STONE.defaultBlockState(),2);samples.add(pos);
+        }
+        h.runAfterDelay(10,()->{
+            var strikes=new ArrayList<OrbitalStrike>();
+            for(int site=0;site<2;site++){
+                var strike=Haijia.STRIKE.get().create(l);strike.setPos(net.minecraft.world.phys.Vec3.atCenterOf(root.offset(site*12,0,0)));strike.configure(0,p.getUUID(),1);strike.strength(0,4,0);strike.terrain(true,4);strikes.add(strike);
+            }
+            strikes.getFirst().tick();long first=samples.stream().filter(pos->l.getBlockState(pos).isAir()).count();
+            h.assertTrue(first<=512,"One excavation invocation changes at most 512 blocks");
+            // Repeated work in the same real server tick must not reset the shared budget.
+            for(int repeat=0;repeat<10;repeat++)for(var strike:strikes)strike.tick();
+            long removed=samples.stream().filter(pos->l.getBlockState(pos).isAir()).count();
+            h.assertTrue(removed<=1024&&removed<samples.size(),"Concurrent strikes together cannot exceed 1024 direct mutations in a server tick");
+            for(var strike:strikes)l.addFreshEntity(strike);
+            h.runAfterDelay(120,()->{try{
+                h.assertTrue(strikes.stream().allMatch(OrbitalStrike::isRemoved),"Budget replenishes on subsequent server ticks and both excavations finish");
+                for(int site=0;site<2;site++){
+                    h.assertTrue(l.getBlockState(root.offset(site*12,-40,0)).isAir(),"Both deep centers finish");
+                    h.assertTrue(l.getBlockState(root.offset(site*12+4,-40,4)).is(Blocks.STONE),"Blocks outside both crater profiles remain");
+                }
+                h.succeed();
+            }finally{p.discard();}});
+        });
+    }
+    @GameTest(template="empty",timeoutTicks=100)
+    public static void teammates_launch_upgrade_and_share_service_cooldowns(GameTestHelper h){
+        var a=player(h);var b=player(h);var pos=h.absolutePos(new BlockPos(2,3,2));var pad=block(h,pos,"launchpad");
+        for(int y=pos.getY()+4;y<h.getLevel().getMaxBuildHeight();y++)h.getLevel().setBlock(new BlockPos(pos.getX()+2,y,pos.getZ()+2),Blocks.AIR.defaultBlockState(),3);
+        a.setPos(pos.getX(),pos.getY(),pos.getZ());b.setPos(pos.getX(),pos.getY(),pos.getZ());fill(pad,600000);
+        var board=h.getLevel().getScoreboard();var team=board.addPlayerTeam("launch_"+a.getUUID().toString().substring(0,7));
+        board.addPlayerToTeam(a.getScoreboardName(),team);board.addPlayerToTeam(b.getScoreboardName(),team);
+        try{
+            var ma=new OrbitalMenu(1,a.getInventory(),ContainerLevelAccess.create(h.getLevel(),pos),2);var mb=new OrbitalMenu(1,b.getInventory(),ContainerLevelAccess.create(h.getLevel(),pos),2);
+            h.assertTrue(ma.clickMenuButton(a,211)&&mb.clickMenuButton(b,211),"Launchpad selects shared destination for both players");
+            a.getInventory().add(Haijia.stack("hj_sat_weather",1));a.getInventory().add(Haijia.stack("hj_launch_vehicle",1));
+            b.getInventory().add(Haijia.stack("hj_sat_charge",1));b.getInventory().add(Haijia.stack("hj_sat_charge_upgrade",1));b.getInventory().add(Haijia.stack("hj_launch_vehicle",2));
+            h.assertTrue(ma.clickMenuButton(a,103)&&mb.clickMenuButton(b,100)&&mb.clickMenuButton(b,104),"Different members contribute real satellites and upgrades to the same orbit");
+            var data=OrbitalFleet.get(h.getLevel());var f=data.fleet(a);h.assertTrue(f==data.fleet(b)&&f.count[3]==1&&f.count[0]==1&&f.upgrades[0]==1&&pad.energy.getEnergyStored()==0,"Shared fleet receives all launches with exact station costs");
+            f.energy=800000;h.assertTrue(OrbitalTerminalItem.weather(a,0)&&f.energy==400000,"One member spends shared energy");
+            h.assertTrue(!OrbitalTerminalItem.weather(b,2)&&f.energy==400000,"Another member cannot bypass the shared cooldown");
+            b.getInventory().setItem(0,Haijia.stack("hj_terminal",1));var terminal=new OrbitalMenu(1,b.getInventory());
+            h.assertTrue(terminal.clickMenuButton(b,210)&&data.fleet(a).blockDestruction,"Team terrain setting is shared through the real terminal action");
+        }finally{board.removePlayerTeam(team);}h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=100)
+    public static void team_fleet_shares_resources_and_preserves_personal_fleets(GameTestHelper h){
+        var a=player(h);var b=player(h);var outsider=player(h);var data=new OrbitalFleet();
+        var personal=data.fleet(a);personal.count[1]=3;
+        h.assertTrue(!data.toggleTeam(a),"A player without a team cannot select shared orbit");
+        var board=h.getLevel().getScoreboard();var team=board.addPlayerTeam("orbit_"+a.getUUID().toString().substring(0,8));
+        board.addPlayerToTeam(a.getScoreboardName(),team);board.addPlayerToTeam(b.getScoreboardName(),team);
+        try{
+            h.assertTrue(data.toggleTeam(a)&&data.toggleTeam(b),"Both players opt into their team");
+            var shared=data.fleet(a);shared.count[2]=1;shared.energy=900000;shared.rods=8;shared.rodReady=1234;shared.blockDestruction=true;
+            h.assertTrue(data.fleet(b)==shared&&data.fleet(outsider)!=shared,"Only opted-in teammates share the same resource object");
+            shared.energy-=600000;shared.rods--;h.assertTrue(data.fleet(b).energy==300000&&data.fleet(b).rods==7&&data.fleet(b).rodReady==1234,"Costs and cooldowns are shared without copying");
+            var loaded=OrbitalFleet.load(data.save(new CompoundTag(),h.getLevel().registryAccess()),h.getLevel().registryAccess());
+            h.assertTrue(loaded.usesTeam(b)&&loaded.fleet(a)==loaded.fleet(b)&&loaded.fleet(b).blockDestruction,"Team selection, shared resources and terrain switch survive reload");
+            board.removePlayerFromTeam(b.getScoreboardName(),team);h.assertTrue(loaded.fleet(b)!=loaded.fleet(a),"Leaving the team immediately revokes shared access");
+            h.assertTrue(data.toggleTeam(a)&&data.fleet(a)==personal&&personal.count[1]==3,"Returning to personal orbit preserves original satellites");
+        }finally{board.removePlayerTeam(team);}h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=100)
+    public static void terminal_terrain_switch_defaults_off_and_persists(GameTestHelper h){
+        var p=player(h);p.getInventory().setItem(0,Haijia.stack("hj_terminal",1));var data=OrbitalFleet.get(h.getLevel());var f=data.fleet(p);
+        var menu=new OrbitalMenu(1,p.getInventory());h.assertTrue(!f.blockDestruction,"Old and new fleets default to no block destruction");
+        h.assertTrue(menu.clickMenuButton(p,210)&&f.blockDestruction&&menu.info[22]==1,"Terminal enables server-owned fleet setting");
+        var loaded=OrbitalFleet.load(data.save(new CompoundTag(),h.getLevel().registryAccess()),h.getLevel().registryAccess());h.assertTrue(loaded.fleet(p).blockDestruction,"Terrain switch persists");
+        h.assertTrue(menu.clickMenuButton(p,210)&&!f.blockDestruction,"Terminal can disable terrain destruction again");h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=180)
+    public static void orbital_terrain_switch_and_crater_profiles_affect_real_blocks(GameTestHelper h){
+        var p=player(h);var base=h.absolutePos(new BlockPos(2,5,2));var root=new BlockPos(base.getX(),160,base.getZ());
+        p.setPos(root.getX()+50,160,root.getZ());h.getLevel().addNewPlayer(p);
+        h.runAfterDelay(5,()->{
+            var l=h.getLevel();l.setBlock(root,Blocks.STONE.defaultBlockState(),3);
+            var off=Haijia.STRIKE.get().create(l);off.setPos(net.minecraft.world.phys.Vec3.atCenterOf(root));off.configure(1,p.getUUID(),1);off.tick();
+            h.assertTrue(l.getBlockState(root).is(Blocks.STONE),"Disabled terrain setting prevents even vanilla explosion block damage");
+            for(var pos:List.of(root.below(60),root.offset(8,-2,0),root.below(50)))l.setBlock(pos,Blocks.STONE.defaultBlockState(),3);
+            l.setBlock(root.below(40),Blocks.BEDROCK.defaultBlockState(),3);
+            java.util.function.Consumer<net.neoforged.neoforge.event.level.BlockEvent.BreakEvent> deny=e->{if(e.getPos().equals(root.below(50)))e.setCanceled(true);};
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(deny);
+            var laser=Haijia.STRIKE.get().create(l);laser.setPos(net.minecraft.world.phys.Vec3.atCenterOf(root));laser.configure(0,p.getUUID(),1);laser.terrain(true,8);
+            laser.tick();var saved=new CompoundTag();laser.saveWithoutId(saved);var resumed=Haijia.STRIKE.get().create(l);resumed.load(saved);l.addFreshEntity(resumed);
+            h.runAfterDelay(60,()->{
+                try{
+                    h.assertTrue(resumed.isRemoved()&&l.getBlockState(root.below(60)).isAir()&&l.getBlockState(root.offset(8,-2,0)).is(Blocks.STONE),"Max laser drills a deep narrow crater after saving mid-excavation");
+                    h.assertTrue(l.getBlockState(root.below(40)).is(Blocks.BEDROCK)&&l.getBlockState(root.below(50)).is(Blocks.STONE),"Bedrock and canceled protection events survive");
+                    for(var pos:List.of(root.offset(10,-3,0),root.offset(10,-15,0),root.below(20)))l.setBlock(pos,Blocks.STONE.defaultBlockState(),3);
+                    var rod=Haijia.STRIKE.get().create(l);rod.setPos(net.minecraft.world.phys.Vec3.atCenterOf(root));rod.configure(1,p.getUUID(),1);rod.terrain(true,8);l.addFreshEntity(rod);
+                    h.runAfterDelay(60,()->{try{
+                        h.assertTrue(rod.isRemoved()&&l.getBlockState(root.offset(10,-3,0)).isAir()&&l.getBlockState(root.below(20)).isAir()&&l.getBlockState(root.offset(10,-15,0)).is(Blocks.STONE),"Rod crater spreads widely and becomes shallower toward its edge");h.succeed();
+                    }finally{p.discard();}});
+                }catch(RuntimeException error){p.discard();throw error;}
+                finally{net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(deny);}
+            });
+        });
+    }
+    private static ServerPlayer player(GameTestHelper h){var profile=new GameProfile(UUID.randomUUID(),"Orbit_"+UUID.randomUUID().toString().substring(0,8));var p=new ServerPlayer(h.getLevel().getServer(),h.getLevel(),profile,ClientInformation.createDefault());var c=new Connection(PacketFlow.SERVERBOUND);new EmbeddedChannel(c);p.connection=new ServerGamePacketListenerImpl(h.getLevel().getServer(),c,p,CommonListenerCookie.createInitial(profile,false)){@Override public void send(net.minecraft.network.protocol.Packet<?> packet){}};p.setGameMode(GameType.SURVIVAL);var tag=new CompoundTag();for(String k:Haijia.KNOWLEDGE)tag.putBoolean(k,true);p.getPersistentData().put("HaijiaKnowledge",tag);return p;}
     private static OrbitalBlockEntity block(GameTestHelper h,BlockPos p,String key){var state=Haijia.BLOCKS.get(key).get().defaultBlockState();var def=OrbitalStructure.of(key);for(int i=0;i<def.parts();i++)h.getLevel().setBlock(p.offset(def.offset(Direction.NORTH,i)),state.setValue(OrbitalBlock.PART,i),3);return (OrbitalBlockEntity)h.getLevel().getBlockEntity(p);}
     private static void fill(OrbitalBlockEntity b,int value){for(int n=value;n>0;){int got=b.energy.receiveEnergy(n,false);if(got==0)break;n-=got;}}
     @GameTest(template="empty",timeoutTicks=100)

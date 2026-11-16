@@ -21,7 +21,7 @@ public final class OrbitalMenu extends AbstractContainerMenu {
         new Recipe("hj_sat_kinetic_upgrade","kinetic",480000,Map.of("hj_bus",1,"hj_solar_wing",2,"hj_tungsten_rod",8,"hj_processor",4,"hj_thruster",1)));
     private final ContainerLevelAccess access;
     private final Inventory inventory;
-    public final int[] info=new int[24];
+    public final int[] info=new int[25];
     public OrbitalMenu(int id,Inventory inv){this(id,inv,ContainerLevelAccess.NULL,4);}
     public OrbitalMenu(int id,Inventory inv,ContainerLevelAccess access,int kind){
         super(Haijia.MENU.get(),id);this.access=access;inventory=inv;info[0]=kind;
@@ -30,7 +30,7 @@ public final class OrbitalMenu extends AbstractContainerMenu {
         for(int col=0;col<9;col++)addSlot(new Slot(inv,col,96+col*18,256));
     }
     @Override public void broadcastChanges(){
-        if(inventory.player instanceof ServerPlayer p){var data=OrbitalFleet.get(p.serverLevel());var f=info[0]>=3?data.serviceFleet(p):data.fleet(p);for(int i=0;i<4;i++){info[1+i]=f.count[i];info[5+i]=(i==0?f.chargingEnabled&&f.active[0]:f.active[i])?1:0;}info[9]=(int)(f.energy/1000);info[10]=f.rods;info[11]=(int)Math.max(0,(f.laserReady-p.level().getGameTime()+19)/20);info[12]=(int)Math.max(0,(f.rodReady-p.level().getGameTime()+19)/20);info[13]=(int)Math.max(0,(f.weatherReady-p.level().getGameTime()+19)/20);for(int i=0;i<3;i++)info[18+i]=f.upgrades[i];info[21]=f.chargePerTick()/50;info[16]=f.capacity()/1000;info[17]=OrbitalFleet.hasTerminal(p)?1:0;info[15]=CatalogueEquipment.getData(OrbitalTerminalItem.find(p)).getInt("OrbitalMode");access.execute((l,pos)->{if(l.getBlockEntity(pos) instanceof OrbitalBlockEntity b)info[14]=b.energy.getEnergyStored()/1000;});}
+        if(inventory.player instanceof ServerPlayer p){var data=OrbitalFleet.get(p.serverLevel());var f=info[0]>=3?data.serviceFleet(p):data.fleet(p);for(int i=0;i<4;i++){info[1+i]=f.count[i];info[5+i]=(i==0?f.chargingEnabled&&f.active[0]:f.active[i])?1:0;}info[9]=(int)(f.energy/1000);info[10]=f.rods;info[11]=(int)Math.max(0,(f.laserReady-p.level().getGameTime()+19)/20);info[12]=(int)Math.max(0,(f.rodReady-p.level().getGameTime()+19)/20);info[13]=(int)Math.max(0,(f.weatherReady-p.level().getGameTime()+19)/20);for(int i=0;i<3;i++)info[18+i]=f.upgrades[i];info[21]=f.chargePerTick()/50;info[22]=f.blockDestruction?1:0;info[23]=data.usesTeam(p)?1:0;info[24]=p.getTeam()!=null?1:0;info[16]=f.capacity()/1000;info[17]=OrbitalFleet.hasTerminal(p)?1:0;info[15]=CatalogueEquipment.getData(OrbitalTerminalItem.find(p)).getInt("OrbitalMode");access.execute((l,pos)->{if(l.getBlockEntity(pos) instanceof OrbitalBlockEntity b)info[14]=b.energy.getEnergyStored()/1000;});}
         super.broadcastChanges();
     }
     public static boolean transact(Player p,Map<String,Integer> cost,ItemStack output){
@@ -59,7 +59,9 @@ public final class OrbitalMenu extends AbstractContainerMenu {
             if(upgrade)f.upgrades[type]++;else f.count[type]=Math.min(16,f.count[type]+1);f.lastTick=l.getGameTime();if(type==2)f.rods=Math.min(256,f.rods+8);data.setDirty();success[0]=true;
             var fx=Haijia.STRIKE.get().create(l);if(fx!=null){fx.setPos(center.getX()+.5,pos.getY()+.7,center.getZ()+.5);fx.configure(3,p.getUUID(),80);l.addFreshEntity(fx);}
         });
+        if(action==211&&info[0]>=2&&!OrbitalTerminalItem.creativeAccess(p)){success[0]=data.toggleTeam(p);}
         if(info[0]>=3){
+            if(action==210){f.blockDestruction=!f.blockDestruction;success[0]=true;}
             if(action==110&&f.count[0]>0){f.chargingEnabled=!(f.chargingEnabled&&f.active[0]);f.active[0]=true;success[0]=true;}
             if(action>=120&&action<=122)success[0]=OrbitalTerminalItem.weather(p,action-120);
             if(action>=200&&action<=204){if(action==201&&f.count[1]>0)f.active[1]=true;if(action==202&&f.count[2]>0)f.active[2]=true;ItemStack terminal=OrbitalTerminalItem.find(p);if(!terminal.isEmpty()){var t=CatalogueEquipment.getData(terminal);t.putInt("OrbitalMode",action-200);CatalogueEquipment.setData(terminal,t);success[0]=true;}}

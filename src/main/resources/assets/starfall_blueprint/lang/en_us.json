@@ -1076,5 +1076,11 @@
   "item.starfall_blueprint.best_mech_heavy_fusion_fuel": "Heavy Fusion Fuel Cell",
   "block.starfall_blueprint.mech_maintenance_platform": "Mech Maintenance Platform (3×3)",
   "message.starfall_blueprint.platform_denied": "Only the platform owner may access supplies.",
-  "message.starfall_blueprint.platform_status": "Platform: %s FE / %s steel / complete: %s"
+  "message.starfall_blueprint.platform_status": "Platform: %s FE / %s steel / complete: %s",
+  "hj.ui.destruction_off": "Terrain: OFF",
+  "hj.ui.destruction_on": "Terrain: ON",
+  "hj.ui.destruction_hint": "Applies to this fleet; off by default. Lasers drill deep (up to 68 blocks); rods carve wide craters. Bedrock is preserved; no block drops. Setting is captured at launch.",
+  "hj.ui.fleet_personal": "Fleet: Personal",
+  "hj.ui.fleet_team": "Fleet: Team",
+  "hj.ui.fleet_hint": "Join a vanilla /team, then switch here. Each member must select Team. Launches, upgrades, energy, ammo, cooldowns and terrain setting are shared. Personal satellites stay separate. Research is individual; creative terminals stay separate."
 }

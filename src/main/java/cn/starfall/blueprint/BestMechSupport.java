@@ -2,6 +2,9 @@ package cn.starfall.blueprint;
 
 import java.util.Comparator;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -9,7 +12,7 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/** Server-authoritative support. Each pulse purchases one treatment from real cargo and energy. */
+/** Server-authoritative maintenance and Changchuan support pulses. */
 public final class BestMechSupport {
     public static final String REPAIR = "best_mech_repair_module";
     public static final String FRIENDLY_REPAIR = "best_mech_friendly_repair_module";
@@ -17,7 +20,28 @@ public final class BestMechSupport {
     public static final String MAINTENANCE_DRONE = "best_mech_maintenance_drone";
     public static final String HEALING_DRONE = "best_mech_healing_drone";
     public static final String MEDICAL_SUPPLY = "best_mech_medical_supply";
+    public static final String CHANGCHUAN_ENABLED = "BestChangchuanSupportEnabled";
+    public static final int CHANGCHUAN_COST = 3000;
+    public static final int CHANGCHUAN_INTERVAL = 40;
+    public static final int CHANGCHUAN_DURATION = 100;
+    public static final double CHANGCHUAN_RADIUS = 10;
     private BestMechSupport() {}
+
+    public static boolean isChangchuanEnabled(BestMechEntity mech) {
+        CompoundTag data = mech.getPersistentData();
+        return !data.contains(CHANGCHUAN_ENABLED) || data.getBoolean(CHANGCHUAN_ENABLED);
+    }
+    public static void setChangchuanEnabled(BestMechEntity mech, boolean enabled) {
+        if (!mech.level().isClientSide) mech.getPersistentData().putBoolean(CHANGCHUAN_ENABLED, enabled);
+    }
+    /** Include this field in stateTag so packing/redeployment retains the switch. */
+    public static void writeChangchuanState(BestMechEntity mech, CompoundTag state) {
+        state.putBoolean(CHANGCHUAN_ENABLED, isChangchuanEnabled(mech));
+    }
+    /** Restore from loadState; missing legacy fields default to enabled. */
+    public static void readChangchuanState(BestMechEntity mech, CompoundTag state) {
+        setChangchuanEnabled(mech, !state.contains(CHANGCHUAN_ENABLED) || state.getBoolean(CHANGCHUAN_ENABLED));
+    }
 
     public static boolean isModule(String key) {
         return REPAIR.equals(key) || FRIENDLY_REPAIR.equals(key) || MAINTENANCE_DRONE.equals(key) || HEALING_DRONE.equals(key);
@@ -52,6 +76,12 @@ public final class BestMechSupport {
                 || !(mech.getControllingPassenger() instanceof Player pilot) || !mech.qualifiedFor(pilot)) return;
         String module = mech.moduleKey();
         boolean builtin = BestMechProgression.UNIVERSAL.equals(mech.platformType());
+        boolean finalSupport = builtin && mech.hasUpgrade(BestMechProgression.CHANGCHUAN);
+        if (finalSupport) {
+            if (isChangchuanEnabled(mech) && mech.tickCount % CHANGCHUAN_INTERVAL == 0)
+                changchuanPulse(level, mech, pilot);
+            return;
+        }
         boolean medical = HEALING_DRONE.equals(module);
         boolean drone = medical || MAINTENANCE_DRONE.equals(module);
         if (drone && mech.tickCount % 5 == 0) {
@@ -86,6 +116,26 @@ public final class BestMechSupport {
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, target.getX(), target.getY() + 1,
                     target.getZ(), 5, .4, .4, .4, 0);
             return;
+        }
+    }
+    private static void changchuanPulse(ServerLevel level, BestMechEntity mech, Player pilot) {
+        var targets = level.getEntitiesOfClass(LivingEntity.class, mech.getBoundingBox().inflate(CHANGCHUAN_RADIUS),
+                target -> target.isAlive() && mech.distanceToSqr(target) <= CHANGCHUAN_RADIUS * CHANGCHUAN_RADIUS
+                        && isFriendly(mech, target) && mech.hasLineOfSight(target));
+        // Passengers and the source may not be returned by a spatial query in all situations.
+        if (mech.isAlive() && !targets.contains(mech)) targets.add(mech);
+        if (pilot.isAlive() && !pilot.isSpectator() && mech.distanceToSqr(pilot) <= CHANGCHUAN_RADIUS * CHANGCHUAN_RADIUS
+                && mech.hasLineOfSight(pilot) && !targets.contains(pilot)) targets.add(pilot);
+        if (targets.isEmpty() || !mech.ready(CHANGCHUAN_COST)) return;
+        mech.spendSystems(CHANGCHUAN_COST, 0, 0);
+        for (LivingEntity target : targets) {
+            target.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, CHANGCHUAN_DURATION, 0));
+            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, CHANGCHUAN_DURATION, 0));
+            target.addEffect(new MobEffectInstance(MobEffects.REGENERATION, CHANGCHUAN_DURATION, 0));
+            target.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, CHANGCHUAN_DURATION, 0));
+            target.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, CHANGCHUAN_DURATION, 0));
+            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, target.getX(), target.getY() + 1,
+                    target.getZ(), 5, .4, .4, .4, 0);
         }
     }
     private static int findSupply(BestMechEntity mech, String key) {

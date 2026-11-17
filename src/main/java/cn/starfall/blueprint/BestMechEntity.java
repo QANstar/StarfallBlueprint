@@ -39,6 +39,7 @@ public final class BestMechEntity extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> ISOLATED = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LOCKED = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SUPPORT_DEPLOYED = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SILK_COLLECTION = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.BOOLEAN);
     // Presentation snapshot of the actual operator; player persistent knowledge is not synced to clients.
     private static final EntityDataAccessor<Boolean> OPERATOR_QUALIFIED = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<String> UTILITY_MODULE = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
@@ -78,7 +79,7 @@ public final class BestMechEntity extends PathfinderMob {
     }
     @Override protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder); builder.define(UPGRADES,0); builder.define(ENERGY, 0); builder.define(HEAT, 0); builder.define(WEAR, 0);
-        builder.define(ISOLATED, false); builder.define(LOCKED, false); builder.define(SUPPORT_DEPLOYED, false); builder.define(OPERATOR_QUALIFIED, false);
+        builder.define(ISOLATED, false); builder.define(LOCKED, false); builder.define(SUPPORT_DEPLOYED, false); builder.define(SILK_COLLECTION, false); builder.define(OPERATOR_QUALIFIED, false);
         builder.define(UTILITY_MODULE, ""); builder.define(ENGINEERING_ARM, BestMechArms.DRILL); builder.define(BODY, "");
         builder.define(CORE, ""); builder.define(CORE_FUEL_TICKS, 0); builder.define(LEGS, "");
     }
@@ -87,7 +88,15 @@ public final class BestMechEntity extends PathfinderMob {
     public int wear() { return entityData.get(WEAR); }
     public boolean isolated() { return entityData.get(ISOLATED); }
     public boolean thermalLocked() { return entityData.get(LOCKED); }
-    public boolean supportDeployed() { return supportsParkingSupport() && entityData.get(SUPPORT_DEPLOYED); }
+    public boolean supportDeployed() { return !hasUpgrade(BestMechProgression.ZHENYUAN) && supportsParkingSupport() && entityData.get(SUPPORT_DEPLOYED); }
+    /** Synchronized collection selection; false means Fortune III, true means Silk Touch. */
+    public boolean silkCollection() { return entityData.get(SILK_COLLECTION); }
+    /** Only the qualified controlling pilot can change Zhenyuan's selection on the server. */
+    public boolean toggleCollectionMode(Player player) {
+        if(level().isClientSide || !isAlive() || !hasUpgrade(BestMechProgression.ZHENYUAN)
+                || player == null || player.getVehicle() != this || getControllingPassenger() != player || !qualifiedFor(player)) return false;
+        entityData.set(SILK_COLLECTION, !silkCollection()); return true;
+    }
     public boolean operatorQualified() { return entityData.get(OPERATOR_QUALIFIED); }
     public boolean maintenanceAuthorized(Player owner) {
         if(owner == null || !owner.isAlive() || owner.isSpectator() || !isAlive() || !qualifiedFor(owner)) return false;
@@ -161,7 +170,7 @@ public final class BestMechEntity extends PathfinderMob {
     }
     /** Tool and support capabilities come from the current platform and installed components. */
     public boolean supportsAreaTools() { return engineeringCapable() && (BestMechProgression.UNIVERSAL.equals(platformType()) || hasUpgrade(BestMechProgression.ENGINEERING_EXTENSION)); }
-    public boolean supportsParkingSupport() { return supportsAreaTools(); }
+    public boolean supportsParkingSupport() { return false; }
     public boolean hasExpandedCargo() { return supportsAreaTools(); }
     public int coreOutput() { return supportsAreaTools() ? 2000 : 1000; }
     public int capacity() { return BestMechProgression.capacity(platformType(),capabilityState()); }
@@ -198,9 +207,9 @@ public final class BestMechEntity extends PathfinderMob {
         if(engineeringCapable() && (hasUpgrade(BestMechProgression.ENGINEERING_EXTENSION)||hasUpgrade(BestMechProgression.ZHENYUAN))) return BestMechArms.HEAVY_DRILL;
         return BestMechProgression.UNIVERSAL.equals(platformType()) ? BestMechArms.DRILL : "";
     }
-    public int workCost() { return BestMechArms.workCost(effectiveArm()); }
-    public int workHeat() { return BestMechArms.workHeat(effectiveArm()); }
-    public int workCooldown() { return BestMechArms.cooldown(effectiveArm()); }
+    public int workCost() { int cost=BestMechArms.workCost(effectiveArm()); return hasUpgrade(BestMechProgression.ZHENYUAN)?Math.max(1,cost*3/4):cost; }
+    public int workHeat() { int heat=BestMechArms.workHeat(effectiveArm()); return hasUpgrade(BestMechProgression.ZHENYUAN)?Math.max(1,heat*3/4):heat; }
+    public int workCooldown() { int cooldown=BestMechArms.cooldown(effectiveArm()); return hasUpgrade(BestMechProgression.ZHENYUAN)?Math.max(1,cooldown*3/4):cooldown; }
     public boolean installArm(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand); String key = BestMechArms.key(held);
         if(hand != InteractionHand.MAIN_HAND || !player.isShiftKeyDown() || !canServiceModule(player)
@@ -227,7 +236,7 @@ public final class BestMechEntity extends PathfinderMob {
     }
     public int coolingRate() { return (hasUpgrade(BestMechProgression.ENDURANCE)||hasUpgrade(BestMechProgression.SUSTAINED_FIRE)?3:0)+(hasUpgrade(BestMechProgression.TIANPU)||hasUpgrade(BestMechProgression.CHANGCHUAN)?5:0)+BestMechModules.coolingRate(moduleKey()) + (supportsAreaTools() ? 2 : 0) + (supportDeployed() ? 2 : 0); }
     public boolean toggleSupport(Player player) {
-        if(level().isClientSide || !supportsParkingSupport() || player.getVehicle() != this || getControllingPassenger() != player || !qualifiedFor(player)) return false;
+        if(level().isClientSide || hasUpgrade(BestMechProgression.ZHENYUAN) || !supportsParkingSupport() || player.getVehicle() != this || getControllingPassenger() != player || !qualifiedFor(player)) return false;
         if(supportDeployed()) { entityData.set(SUPPORT_DEPLOYED, false); return true; }
         if(!isAlive() || !onGround() || isInWater() || isInLava()
                 || getDeltaMovement().horizontalDistanceSqr() > 0.001 || Math.abs(getDeltaMovement().y) > 0.1) return false;
@@ -333,6 +342,7 @@ public final class BestMechEntity extends PathfinderMob {
     public boolean qualifiedFor(Player player) { return qualifiedFor(player,platformType()); }
     public static boolean qualifiedFor(Player player,String type) {
         if(!player.isAlive() || player.isSpectator()) return false;
+        if(player.isCreative()) return true;
         if(BestMechProgression.COMBAT.equals(type)) return Progression.isLearned(player,"best:combat_operation");
         if(BestMechProgression.UNIVERSAL.equals(type)) return Progression.isLearned(player,"best:confluence");
         return qualified(player);
@@ -359,6 +369,7 @@ public final class BestMechEntity extends PathfinderMob {
             java.util.UUID powerOwner=getControllingPassenger() instanceof Player owner && qualifiedFor(owner)?owner.getUUID():getPersistentData().hasUUID("BestSupportPilot")?getPersistentData().getUUID("BestSupportPilot"):null;
             if(powerOwner!=null) powerSystems.tickWireless(this,powerOwner);
             tickCore();
+            BestMechLifting.tick(this);
             BestMechSupport.tick(this);
             combatSystems.tick();
             if(supportDeployed() || !(getControllingPassenger() instanceof Player p) || !qualifiedFor(p) || !ready(movementCost())) stopHorizontal();
@@ -443,6 +454,8 @@ public final class BestMechEntity extends PathfinderMob {
     public CompoundTag stateTag() {
         CompoundTag tag = new CompoundTag(); tag.putInt(BestMechProgression.STATE,upgradeMask()); tag.putInt("WeaponCooldown",combatSystems.cooldown()); tag.putInt("Energy", energy()); tag.putInt("Heat", heat()); tag.putInt("Wear", wear());
         tag.putBoolean("Isolated", isolated()); tag.putBoolean("ThermalLock", entityData.get(LOCKED)); tag.putBoolean("SupportDeployed", supportDeployed());
+        tag.putBoolean("SilkCollection", silkCollection());
+        BestMechSupport.writeChangchuanState(this, tag);
         tag.putInt("WorkTicks", workTicks); tag.putInt("DrillCooldown", drillCooldown); tag.putFloat("Health", getHealth());
         tag.putLong("ChargeTick", chargeTick); tag.putInt("ChargeUsed", chargeUsed);
         tag.putString(BestMechModules.STATE, moduleKey()); tag.putString(BestMechArms.STATE, armKey()); tag.putString(BestMechBodies.STATE, bodyKey());
@@ -488,7 +501,9 @@ public final class BestMechEntity extends PathfinderMob {
         }
         entityData.set(HEAT, Math.clamp(tag.getInt("Heat"), 0, MAX_HEAT)); entityData.set(WEAR, Math.clamp(tag.getInt("Wear"), 0, MAX_WEAR));
         entityData.set(ISOLATED, tag.getBoolean("Isolated")); entityData.set(LOCKED, tag.getBoolean("ThermalLock") || heat() >= MAX_HEAT);
-        entityData.set(SUPPORT_DEPLOYED, supportsParkingSupport() && tag.getBoolean("SupportDeployed"));
+        entityData.set(SUPPORT_DEPLOYED, !hasUpgrade(BestMechProgression.ZHENYUAN) && supportsParkingSupport() && tag.getBoolean("SupportDeployed"));
+        entityData.set(SILK_COLLECTION, tag.getBoolean("SilkCollection"));
+        BestMechSupport.readChangchuanState(this, tag);
         workTicks = Math.clamp(tag.getInt("WorkTicks"), 0, 99); drillCooldown = Math.clamp(tag.getInt("DrillCooldown"), 0, 40);
         chargeTick = tag.contains("ChargeTick") ? tag.getLong("ChargeTick") : Long.MIN_VALUE;
         chargeUsed = Math.clamp(tag.getInt("ChargeUsed"), 0, 20000);
@@ -577,6 +592,11 @@ public final class BestMechEntity extends PathfinderMob {
         }
         var state = level().getBlockState(pos); boolean excavator = BestMechArms.EXCAVATOR.equals(armKey()) || BestMechArms.HEAVY_EXCAVATOR.equals(armKey());
         ItemStack tool = new ItemStack(BestMechArms.HEAVY_DRILL.equals(effectiveArm()) ? Items.DIAMOND_PICKAXE : excavator ? Items.IRON_SHOVEL : Items.IRON_PICKAXE);
+        if(hasUpgrade(BestMechProgression.ZHENYUAN)) {
+            var enchantments = registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+            tool.enchant(enchantments.getHolderOrThrow(silkCollection()
+                    ? net.minecraft.world.item.enchantment.Enchantments.SILK_TOUCH : net.minecraft.world.item.enchantment.Enchantments.FORTUNE), silkCollection() ? 1 : 3);
+        }
         if((excavator && !state.is(net.minecraft.tags.BlockTags.MINEABLE_WITH_SHOVEL))
                 || state.isAir() || state.hasBlockEntity() || !level().getFluidState(pos).isEmpty() || state.getDestroySpeed(level(), pos) < 0
                 || (state.requiresCorrectToolForDrops() && !tool.isCorrectToolForDrops(state))) return false;

@@ -29,6 +29,8 @@ public final class BestMechs {
     public static void initialize() {}
     public static void register(IEventBus bus) {
         TYPES.register(bus);
+        BestMechDrones.register(bus);
+        BestMechMissiles.register(bus);
         bus.addListener(BestMechs::attributes);
         bus.addListener(BestMechNetworking::register);
         NeoForge.EVENT_BUS.addListener(BestMechs::playerLogout);

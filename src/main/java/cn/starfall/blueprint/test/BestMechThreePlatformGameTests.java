@@ -53,7 +53,7 @@ public final class BestMechThreePlatformGameTests {
         h.assertTrue(m.fireWeapon(p)&&cow.getHealth()==before,"opaque block must prevent damage behind wall");
         h.assertTrue(m.energy()==988_000,"blocked shot still consumes energy");
         h.setBlock(wall,net.minecraft.world.level.block.Blocks.AIR);resetWeapon(m);
-        h.assertTrue(m.fireWeapon(p)&&cow.getHealth()==before,"nonhostile animal blocks the ray without friendly damage");
+        h.assertTrue(!m.fireWeapon(p)&&cow.getHealth()==before&&m.energy()==988_000,"nonhostile animal blocks firing without damage or resource use");
         p.stopRiding();m.discard();cow.discard();h.succeed();
     }
     @GameTest(template="combat_arena")
@@ -93,6 +93,45 @@ public final class BestMechThreePlatformGameTests {
         live.forEach(net.minecraft.world.entity.Entity::discard);h.succeed();
     }
 
+    @GameTest(template="combat_arena")
+    public static void zhenyuanWorksWithoutParkingAndPersistsCollectionMode(GameTestHelper h) {
+        var p=pilot(h);knowledge(p,"confluence");var m=vehicle(h,BestMechs.UNIVERSAL_TYPE.get(),p);
+        int cost=m.workCost(), heat=m.workHeat(), cooldown=m.workCooldown();
+        h.assertTrue(!m.toggleCollectionMode(p),"collection selection requires Zhenyuan");
+        var tag=m.stateTag();tag.putInt("UpgradeMask",BestMechProgression.ZHENYUAN);tag.putBoolean("SupportDeployed",true);tag.remove("SilkCollection");m.loadState(tag);
+        h.assertTrue(!m.supportDeployed() && !m.toggleSupport(p),"old support state cannot immobilize Zhenyuan");
+        h.assertTrue(m.workCost()==cost*3/4 && m.workHeat()==heat*3/4 && m.workCooldown()==cooldown*3/4,"efficiency always applies without parking");
+        h.assertTrue(!m.silkCollection(),"old saves default to Fortune III");
+        var enchants=h.getLevel().registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+        var fortune=enchants.getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.FORTUNE);
+        var silk=enchants.getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.SILK_TOUCH);
+        int[] observed={-1,-1,0};
+        java.util.function.Consumer<net.neoforged.neoforge.event.level.BlockDropsEvent> observer=e->{
+            if(e.getBreaker()==p) {observed[0]=e.getTool().getEnchantmentLevel(fortune);observed[1]=e.getTool().getEnchantmentLevel(silk);observed[2]++;}
+        };
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(observer);
+        try {
+            var block=new net.minecraft.core.BlockPos(4,2,5);h.setBlock(block,net.minecraft.world.level.block.Blocks.COAL_ORE);
+            int energy=m.energy(), beforeHeat=m.heat();m.setDeltaMovement(.2,0,0);
+            h.assertTrue(m.work(p) && h.getBlockState(block).isAir(),"moving unparked mech mines ore");
+            h.assertTrue(m.energy()==energy-m.workCost() && m.heat()==beforeHeat+m.workHeat(),"work pays discounted energy and heat");
+            h.assertTrue(observed[2]==1 && observed[0]==3 && observed[1]==0,"actual Fortune III tool reaches block drops");
+            h.assertTrue(m.toggleCollectionMode(p) && m.silkCollection(),"pilot selects Silk Touch");
+            var saved=new CompoundTag();m.addAdditionalSaveData(saved);
+            var restored=BestMechs.UNIVERSAL_TYPE.get().create(h.getLevel());restored.readAdditionalSaveData(saved);
+            h.assertTrue(restored.silkCollection() && !restored.supportDeployed(),"entity save restores collection mode without support");
+            restored.discard();
+            tag=m.stateTag();tag.putInt("DrillCooldown",0);m.loadState(tag);
+            h.setBlock(block,net.minecraft.world.level.block.Blocks.COAL_ORE);
+            h.assertTrue(m.work(p) && h.getBlockState(block).isAir(),"Silk Touch mode mines ore");
+            h.assertTrue(observed[2]==2 && observed[0]==0 && observed[1]==1,"actual Silk Touch tool excludes Fortune");
+            boolean ore=false;for(int i=0;i<m.cargoSlots();i++) if(m.cargo().getItem(i).is(net.minecraft.world.item.Items.COAL_ORE)) ore=true;
+            h.assertTrue(ore,"Silk Touch ore drop reaches cargo");
+            h.assertTrue(m.toggleCollectionMode(p) && !m.silkCollection(),"pilot returns to Fortune III");
+            p.stopRiding();h.assertTrue(!m.toggleCollectionMode(p),"unmounted player cannot change selection");
+        } finally {net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(observer);m.discard();}
+        h.succeed();
+    }
     @GameTest(template="combat_arena")
     public static void platformsAndIndependentFinals(GameTestHelper h) {
         var combat=BestMechs.COMBAT_TYPE.get().create(h.getLevel());combat.loadState(new CompoundTag());

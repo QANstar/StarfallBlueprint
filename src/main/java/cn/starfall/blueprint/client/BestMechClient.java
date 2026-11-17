@@ -25,18 +25,29 @@ import java.util.Locale;
 /** Presentation only: all operation permission and resource costs are server authoritative. */
 @EventBusSubscriber(modid=StarfallBlueprint.ID,value=Dist.CLIENT)
 public final class BestMechClient {
+    private static final KeyMapping LIFT = new KeyMapping("key.starfall_blueprint.mech_lift",KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H,"key.categories.starfall_blueprint");
     private static final KeyMapping DRILL = new KeyMapping("key.starfall_blueprint.mech_drill",KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_G,"key.categories.starfall_blueprint");
-    private static final KeyMapping SUPPORT = new KeyMapping("key.starfall_blueprint.mech_support",KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H,"key.categories.starfall_blueprint");
     private static final KeyMapping FIRE = new KeyMapping("key.starfall_blueprint.mech_fire",KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_V,"key.categories.starfall_blueprint");
+    private static final KeyMapping MINING_MODE = new KeyMapping("key.starfall_blueprint.mech_mining_mode",KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_J,"key.categories.starfall_blueprint");
+    private static final KeyMapping FRIENDLY_FIRE = new KeyMapping("key.starfall_blueprint.mech_friendly_fire",KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_K,"key.categories.starfall_blueprint");
+    private static final KeyMapping TERRAIN_DAMAGE = new KeyMapping("key.starfall_blueprint.mech_terrain_damage",KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_L,"key.categories.starfall_blueprint");
+    private static final KeyMapping LINGCHUAN_SUPPORT = new KeyMapping("key.starfall_blueprint.mech_lingchuan_support",KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_UNKNOWN,"key.categories.starfall_blueprint");
     // This rate-limits requests, not successful server work. No unsynchronized entity fields are read.
     private static int requestTicks;
     private static BestMechEntity lastVehicle;
 
     private BestMechClient() {}
-    public static void keys(RegisterKeyMappingsEvent event) { event.register(DRILL); event.register(SUPPORT); event.register(FIRE); }
+    public static void keys(RegisterKeyMappingsEvent event) {
+        event.register(DRILL); event.register(FIRE); event.register(LIFT);
+        event.register(MINING_MODE); event.register(FRIENDLY_FIRE); event.register(TERRAIN_DAMAGE); event.register(LINGCHUAN_SUPPORT);
+    }
     public static void layers(RegisterGuiLayersEvent event) {
         event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID,"mech_status"),(graphics,delta)->render(graphics));
     }
@@ -57,9 +68,17 @@ public final class BestMechClient {
                 requestTicks=5;
             }
         }
-        while (SUPPORT.consumeClick()) {
-            if (mech != null && mech.supportsParkingSupport() && mc.screen == null && !mc.isPaused())
-                PacketDistributor.sendToServer(new BestMechNetworking.Action(1));
+        toggleClicks(LIFT, 7, mech, mc);
+        toggleClicks(MINING_MODE, 3, mech, mc);
+        toggleClicks(FRIENDLY_FIRE, 4, mech, mc);
+        toggleClicks(TERRAIN_DAMAGE, 5, mech, mc);
+        toggleClicks(LINGCHUAN_SUPPORT, 6, mech, mc);
+    }
+
+    private static void toggleClicks(KeyMapping key, int action, BestMechEntity mech, Minecraft mc) {
+        while (key.consumeClick()) {
+            if (mech != null && mc.screen == null && !mc.isPaused())
+                PacketDistributor.sendToServer(new BestMechNetworking.Action(action));
         }
     }
 
@@ -147,8 +166,7 @@ public final class BestMechClient {
                 : BestMechArms.areaWork(sample.armKey()) && !sample.areaTools() ? label("incompatible_arm")
                 : label(BestMechArms.areaWork(sample.armKey()) ? "heavy_standby" : "standby", DRILL.getTranslatedKeyMessage(), compactEnergy(sample.workCost()));
         drawFit(graphics, request, x + 9, y + 116, 230, sample.requestTicks() > 0 ? WARNING : TEXT);
-        drawFit(graphics, sample.areaTools() ? label(sample.supportDeployed() ? "support_deployed" : "support_retracted", SUPPORT.getTranslatedKeyMessage())
-                        : label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
+        drawFit(graphics, label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
                 x + 9, y + 129, 230, MUTED);
     }
 

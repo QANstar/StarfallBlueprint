@@ -28,6 +28,37 @@ public final class BestMechItem extends Item {
     public static void setState(ItemStack stack, CompoundTag state) {
         CompoundTag data = CatalogueEquipment.getData(stack); data.put(STATE, state.copy()); CatalogueEquipment.setData(stack, data);
     }
+    public static ItemStack creativeStack(String type) {
+        if(!java.util.Set.of(BestMechProgression.ENGINEERING, BestMechProgression.COMBAT, BestMechProgression.UNIVERSAL).contains(type))
+            throw new IllegalArgumentException("Unknown mech type: " + type);
+        ItemStack stack = CatalogueContent.stack(BestMechProgression.itemKey(type), 1);
+        CompoundTag tag = new CompoundTag();
+        int upgrades = BestMechProgression.sanitize(type, 511);
+        tag.putInt(BestMechProgression.STATE, upgrades);
+        tag.putString(BestMechModules.STATE, BestMechModules.RADIATOR);
+        tag.putString(BestMechLegs.STATE, BestMechLegs.CRUISE);
+        tag.putBoolean(BestMechPowerSystems.WIRELESS_STATE, true);
+        if(BestMechProgression.ENGINEERING.equals(type)) tag.putString(BestMechBodies.STATE, BestMechBodies.REINFORCED);
+        tag.putString(BestMechArms.STATE, BestMechProgression.COMBAT.equals(type) ? "" : BestMechArms.HEAVY_DRILL);
+        if(BestMechProgression.UNIVERSAL.equals(type)) {
+            tag.putString(BestMechCores.STATE, BestMechCores.FUSION);
+            tag.putInt("FusionFuelTicks", BestMechPowerSystems.FUEL_TICKS);
+        } else {
+            tag.putString(BestMechCores.STATE, BestMechCores.GENERATOR);
+            tag.putInt("CoreFuelTicks", BestMechCores.MAX_FUEL_TICKS);
+        }
+        if(!BestMechProgression.ENGINEERING.equals(type)) {
+            CompoundTag combat = new CompoundTag();
+            combat.putString("Weapon", BestMechCombatSystems.LASER);
+            combat.putString("Drone", BestMechCombatSystems.ATTACK_DRONE);
+            tag.put(BestMechCombatSystems.STATE, combat);
+        }
+        tag.putInt("Energy", BestMechProgression.capacity(type, tag));
+        tag.putFloat("Health", BestMechProgression.maxHealth(type, tag));
+        setState(stack, tag);
+        stack.set(DataComponents.ITEM_NAME, Component.translatable("item.starfall_blueprint.creative_mech", stack.getHoverName()));
+        return stack;
+    }
     public static IEnergyStorage energy(ItemStack stack) { return new IEnergyStorage() {
         private long tick() { var server = ServerLifecycleHooks.getCurrentServer(); return server == null ? 0 : server.overworld().getGameTime(); }
         public int receiveEnergy(int max, boolean simulate) {

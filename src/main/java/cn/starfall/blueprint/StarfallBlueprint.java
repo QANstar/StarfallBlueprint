@@ -111,6 +111,8 @@ public final class StarfallBlueprint {
             // Keep the three complete mechs together before their optional equipment.
             var mechs=java.util.List.of("best_mech","best_combat_mech","best_universal_mech");
             mechs.forEach(key->o.accept(CatalogueContent.item(key)));
+            for(String type : java.util.List.of(BestMechProgression.ENGINEERING, BestMechProgression.COMBAT, BestMechProgression.UNIVERSAL))
+                o.accept(BestMechItem.creativeStack(type));
             CatalogueContent.ITEMS.forEach((k,v)->{if(k.startsWith("best_")&&!mechs.contains(k))o.accept(v.get());});
         }).build());
     public static final DeferredHolder<CreativeModeTab,CreativeModeTab> LINGCHUAN_TAB=TABS.register("lingchuan",()->CreativeModeTab.builder()

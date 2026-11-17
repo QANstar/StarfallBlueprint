@@ -130,7 +130,9 @@ public final class BestMechCoreGameTests {
             running(m); m.cargo().setItem(0, new ItemStack(Items.LAVA_BUCKET)); m.cargo().setItem(1, new ItemStack(Items.STONE));
             m.cargo().setItem(9, new ItemStack(Items.COAL, 2)); m.tick();
             h.assertTrue(m.energy() == 0 && m.coreFuelTicks() == 0 && m.cargo().getItem(0).is(Items.LAVA_BUCKET) && m.cargo().getItem(9).getCount() == 2, "Reject remainder and nonfuel; inactive standard cargo never burns");
-            var t = m.stateTag(); t.putString(BestMechBodies.STATE, BestMechBodies.REINFORCED); m.loadState(t); m.tick();
+            var t = m.stateTag(); t.putString(BestMechBodies.STATE, BestMechBodies.REINFORCED); m.loadState(t);
+            // Inactive cargo is intentionally excluded from stateTag; insert fuel after expanding the cargo.
+            m.cargo().setItem(9, new ItemStack(Items.COAL, 2)); m.tick();
             int coalTicks = new ItemStack(Items.COAL).getBurnTime(RecipeType.SMELTING);
             h.assertTrue(m.energy() == 1000 && m.heat() == 2 && m.coreFuelTicks() == coalTicks - 1 && m.cargo().getItem(9).getCount() == 1
                     && m.stateTag().getInt("CoreWorkTicks") == 1 && m.getPassengers().isEmpty(), "Driverless first tick consumes exactly one active coal and generates 1000/2");

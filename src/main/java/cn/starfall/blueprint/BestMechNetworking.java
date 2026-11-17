@@ -1,5 +1,6 @@
 package cn.starfall.blueprint;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -19,6 +20,30 @@ public final class BestMechNetworking {
                 if (payload.action == 0) mech.work(context.player());
                 else if (payload.action == 1) mech.toggleSupport(context.player());
                 else if (payload.action == 2) mech.fireWeapon(context.player());
+                else if (payload.action == 7) BestMechLifting.toggle(mech, context.player());
+                else if (payload.action == 3 && mech.toggleCollectionMode(context.player()))
+                    context.player().displayClientMessage(Component.translatable(mech.silkCollection()
+                            ? "message.starfall_blueprint.mech_mining_silk" : "message.starfall_blueprint.mech_mining_fortune"), true);
+                else if (payload.action >= 4 && payload.action <= 6 && !mech.level().isClientSide
+                        && mech.isAlive() && mech.getControllingPassenger() == context.player() && mech.qualifiedFor(context.player())) {
+                    boolean enabled;
+                    String key;
+                    if (payload.action == 4 && mech.hasUpgrade(BestMechProgression.TIANPU)) {
+                        enabled = !mech.combatSystems().friendlyFire();
+                        mech.combatSystems().setFriendlyFire(enabled);
+                        key = "message.starfall_blueprint.mech_friendly_fire";
+                    } else if (payload.action == 5 && mech.hasUpgrade(BestMechProgression.TIANPU)) {
+                        enabled = !mech.combatSystems().terrainDamage();
+                        mech.combatSystems().setTerrainDamage(enabled);
+                        key = "message.starfall_blueprint.mech_terrain_damage";
+                    } else if (payload.action == 6 && mech.hasUpgrade(BestMechProgression.CHANGCHUAN)) {
+                        enabled = !BestMechSupport.isChangchuanEnabled(mech);
+                        BestMechSupport.setChangchuanEnabled(mech, enabled);
+                        key = "message.starfall_blueprint.mech_changchuan_support";
+                    } else return;
+                    context.player().displayClientMessage(Component.translatable(key, Component.translatable(enabled
+                            ? "message.starfall_blueprint.mech_toggle_on" : "message.starfall_blueprint.mech_toggle_off")), true);
+                }
             }
         }));
     }

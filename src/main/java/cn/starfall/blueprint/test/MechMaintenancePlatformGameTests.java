@@ -63,7 +63,7 @@ public final class MechMaintenancePlatformGameTests {
         be.energyPort().receiveEnergy(100000,false); be.interact(owner,CatalogueContent.stack("steel",2));
         var mech=BestMechs.UNIVERSAL_TYPE.get().create(h.getLevel()); var state=mech.stateTag(); state.putFloat("Health",100);state.putInt("Wear",400);state.putBoolean("Isolated",true); state.putUUID("BestSupportPilot",owner.getUUID());mech.loadState(state);
         mech.moveTo(center.getX()+.5,center.getY()+1,center.getZ()+.5,0,0);mech.setOnGround(true);h.getLevel().addFreshEntity(mech);
-        h.runAfterDelay(21-h.getLevel().getGameTime()%20,()->{
+        h.runAfterDelay(22-h.getLevel().getGameTime()%20,()->{
             h.assertTrue(mech.energy()>0 && mech.getHealth()==105 && mech.wear()==200 && be.storedSteel()==1,"Parked isolated mech receives real paid charge and one repair: energy="+mech.energy()+" hp="+mech.getHealth()+" wear="+mech.wear()+" steel="+be.storedSteel()+" contains="+be.containsMech(mech)+" auth="+mech.maintenanceAuthorized(owner)+" complete="+be.complete()+" owner="+(h.getLevel().getPlayerByUUID(owner.getUUID())!=null)+" y="+mech.getY()+" expected="+(center.getY()+1)+" ground="+mech.onGround()+" motion="+mech.getDeltaMovement()+" box="+mech.getBoundingBox());
             h.assertTrue(be.storedEnergy()+mech.energy()==99000,"Platform charge is conserved; repair costs exactly 1000");
             mech.discard();owner.discard();h.succeed();

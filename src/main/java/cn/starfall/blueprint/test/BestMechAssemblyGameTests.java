@@ -49,6 +49,35 @@ public final class BestMechAssemblyGameTests {
 
 
     @GameTest(template="empty",timeoutTicks=100)
+    public static void finalsRequireKnowledgeAndConsumeRealIngredients(GameTestHelper h){
+        for(int i=6;i<9;i++){
+            var p=player(h);materials(p,i);
+            var before=p.getInventory().items.stream().map(ItemStack::copy).toList();
+            h.assertTrue(!BestMechAssembly.perform(p,40+i),"Final recipe requires its own knowledge");
+            for(int slot=0;slot<36;slot++)h.assertTrue(ItemStack.matches(before.get(slot),p.getInventory().getItem(slot)),"Failure preserves all ingredients");
+            grant(p,BestMechAssembly.KNOWLEDGE.get(i));
+            h.assertTrue(BestMechAssembly.perform(p,40+i),"Final recipe accepts actual materials");
+            h.assertTrue(count(p,BestMechAssembly.MODULES.get(i))==1,"Craft yields exactly one final component");
+            h.assertTrue(!BestMechAssembly.perform(p,40+i),"Inputs cannot be consumed twice");
+        }
+        h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=100)
+    public static void finalsInstallIndependentlyAndPreserveState(GameTestHelper h){
+        var p=player(h);grant(p,"zhenyuan","tianpu","changchuan");
+        p.getInventory().setItem(0,packed("best_universal_mech",1000,250,0));
+        for(int i=6;i<9;i++)p.getInventory().add(CatalogueContent.stack(BestMechAssembly.MODULES.get(i),1));
+        for(int i=6;i<9;i++)h.assertTrue(BestMechAssembly.perform(p,100+i),"Each final component installs separately");
+        var t=BestMechItem.state(p.getInventory().getItem(0));
+        h.assertTrue(t.getInt("UpgradeMask")==448 && t.getInt("Energy")==1000 && t.getFloat("Health")==250 && t.getInt("Wear")==90,"Installing all finals preserves damage, energy and wear");
+        h.assertTrue(!BestMechAssembly.perform(p,106),"Duplicate install fails");
+        for(int i=8;i>=6;i--)h.assertTrue(BestMechAssembly.perform(p,120+i),"Each component can be removed independently");
+        t=BestMechItem.state(p.getInventory().getItem(0));h.assertTrue(t.getInt("UpgradeMask")==0 && t.getInt("Energy")==1000 && t.getFloat("Health")<=250 && t.getInt("Wear")==90,"Removal cannot heal or reset resources");
+        for(int i=6;i<9;i++)h.assertTrue(count(p,BestMechAssembly.MODULES.get(i))==1,"Each physical component is returned once");
+        h.succeed();
+    }
+
+    @GameTest(template="empty",timeoutTicks=100)
     public static void full_health_armor_removal_and_reinstall_never_heals(GameTestHelper h){
         var p=player(h);grant(p,"combat_armor");p.getInventory().setItem(0,packed("best_combat_mech",0,350,16));
         h.assertTrue(BestMechAssembly.perform(p,124),"Full health armor may be removed");

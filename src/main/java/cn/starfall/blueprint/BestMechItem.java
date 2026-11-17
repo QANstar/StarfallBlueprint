@@ -141,7 +141,13 @@ public final class BestMechItem extends Item {
     @Override public int getBarWidth(ItemStack stack) { return (int)((long)energy(stack).getEnergyStored() * 13 / energy(stack).getMaxEnergyStored()); }
     @Override public int getBarColor(ItemStack stack) { return 0x49bca3; }
     @Override public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
-        var tag = state(stack); lines.add(Component.literal(energy(stack).getEnergyStored() + " / " + energy(stack).getMaxEnergyStored() + " XH · 热 " + tag.getInt("Heat") + " · 磨损 " + tag.getInt("Wear")));
+        var tag = state(stack);
+        if (!net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
+            lines.add(Component.literal("右键地面部署 · " + energy(stack).getEnergyStored() + "/" + energy(stack).getMaxEnergyStored() + " XH"));
+            lines.add(Component.literal("按住 Shift 查看详细信息"));
+            return;
+        }
+        lines.add(Component.literal(energy(stack).getEnergyStored() + " / " + energy(stack).getMaxEnergyStored() + " XH · 热 " + tag.getInt("Heat") + " · 磨损 " + tag.getInt("Wear")));
         float maxHealth = BestMechProgression.maxHealth(platformType,tag);
         lines.add(Component.literal("平台 " + platformType + " · 强化 " + BestMechProgression.mask(tag) + " · 战斗机作业键开火；归海V键开火"));
         lines.add(Component.literal("结构 " + (tag.contains("Health") ? tag.getFloat("Health") : maxHealth) + "/" + maxHealth + " · " + (tag.getBoolean("Isolated") ? "已隔离" : "已接通")));

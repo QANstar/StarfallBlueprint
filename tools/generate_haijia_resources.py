@@ -189,7 +189,7 @@ def rid(k):return k if ':' in k else 'starfall_blueprint:'+alias.get(k,k)
 for key,(count,inputs) in RECIPES.items():write(D/f'recipe/hj_{key}.json',{'type':'minecraft:crafting_shapeless','category':'misc','ingredients':[{'item':rid(k)} for k in inputs],'result':{'id':f'starfall_blueprint:hj_{key}','count':count}})
 # Common text values, deliberately shared across GUI, research and tooltips.
 STR={
- 'tab':('海岬轨道与航空','Haijia Orbit & Aviation'),'station':('海岬轨道工位','Haijia Orbital Station'),'terminal':N['terminal'],
+ 'tab':('星落蓝图 · 海岬轨道与航空','Starfall Blueprint · Haijia Orbit & Aviation'),'station':('海岬轨道工位','Haijia Orbital Station'),'terminal':N['terminal'],
  'assembler':N['assembler'],'launchpad':N['launchpad'],'console':N['console'],
  'relay.status':('储能 %s XH · %s 条中继连接','Energy %s XH / %s links'),'relay.selected':('已选择首个输能塔，右键另一座完成连线','First relay selected; use another relay to link'),
  'relay.linked':('输能塔已双向连线','Relays linked in both directions'),'relay.cleared':('已清除这座输能塔的全部连线','All links on this relay cleared'),

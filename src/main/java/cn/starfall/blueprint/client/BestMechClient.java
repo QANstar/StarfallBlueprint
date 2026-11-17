@@ -25,6 +25,8 @@ import java.util.Locale;
 /** Presentation only: all operation permission and resource costs are server authoritative. */
 @EventBusSubscriber(modid=StarfallBlueprint.ID,value=Dist.CLIENT)
 public final class BestMechClient {
+    private static final KeyMapping PANEL = new KeyMapping("key.starfall_blueprint.mech_controls",KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_B,"key.categories.starfall_blueprint");
     private static final KeyMapping LIFT = new KeyMapping("key.starfall_blueprint.mech_lift",KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H,"key.categories.starfall_blueprint");
     private static final KeyMapping DRILL = new KeyMapping("key.starfall_blueprint.mech_drill",KeyConflictContext.IN_GAME,
@@ -45,7 +47,7 @@ public final class BestMechClient {
 
     private BestMechClient() {}
     public static void keys(RegisterKeyMappingsEvent event) {
-        event.register(DRILL); event.register(FIRE); event.register(LIFT);
+        event.register(PANEL); event.register(DRILL); event.register(FIRE); event.register(LIFT);
         event.register(MINING_MODE); event.register(FRIENDLY_FIRE); event.register(TERRAIN_DAMAGE); event.register(LINGCHUAN_SUPPORT);
     }
     public static void layers(RegisterGuiLayersEvent event) {
@@ -56,6 +58,9 @@ public final class BestMechClient {
         BestMechEntity mech = mc.player != null && mc.player.getVehicle() instanceof BestMechEntity vehicle ? vehicle : null;
         if (mech != lastVehicle) { requestTicks=0; lastVehicle=mech; }
         if (!mc.isPaused() && requestTicks>0) requestTicks--;
+        while (PANEL.consumeClick()) {
+            if (mech != null && mc.screen == null && !mc.isPaused()) mc.setScreen(new ControlsScreen());
+        }
         while (DRILL.consumeClick()) {
             if (mech != null && mc.screen == null && !mc.isPaused() && requestTicks == 0) {
                 PacketDistributor.sendToServer(new BestMechNetworking.Action(0));
@@ -127,14 +132,31 @@ public final class BestMechClient {
         if(mc.options.hideGui || mc.player==null || !(mc.player.getVehicle() instanceof BestMechEntity mech))return;
         Snapshot sample = new Snapshot(mech.getHealth(), mech.getMaxHealth(), mech.energy(), mech.heat(), mech.wear(),
                 mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.engineeringCapable() ? mech.workArmKey() : "combat", mech.engineeringCapable() ? mech.workCost() : 12000, mech.capacity(), mech.supportsParkingSupport(), mech.supportDeployed());
-        renderPanel(graphics, 8, 8, sample);
-        graphics.fill(16, 12, 249, 27, 0xff22333d);
-        drawFit(graphics, mech.getName(), 17, 14, 230, TEXT);
-        if(mech.combatCapable()) {
-            graphics.fill(16, 123, 249, 146, 0xed111e26);
-            drawFit(graphics, Component.translatable("hud.starfall_blueprint.mech.fire_controls", FIRE.getTranslatedKeyMessage(), DRILL.getTranslatedKeyMessage()), 17, 124, 230, TEXT);
-            drawFit(graphics, label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),17,137,230,MUTED);
-        }
+        float scale = Math.min(1f, Math.min((graphics.guiWidth() - 8f) / 170f, (graphics.guiHeight() - 8f) / 101f));
+        graphics.pose().pushPose();
+        graphics.pose().translate(4, 4, 0);
+        graphics.pose().scale(scale, scale, 1);
+        PanelStatus state = status(sample);
+        graphics.fill(0, 0, 170, 101, 0xd9111e26);
+        graphics.fill(0, 0, 3, 101, state.color());
+        drawFit(graphics, mech.getName(), 7, 4, 156, TEXT);
+        drawFit(graphics, label(state.key()), 7, 16, 156, state.color());
+        compactResource(graphics, 29, "health", decimal(sample.health()) + " / " + decimal(sample.maxHealth()), sample.health(), sample.maxHealth(), NORMAL);
+        compactResource(graphics, 43, "energy", compactEnergy(sample.energy()) + " / " + compactEnergy(sample.capacity()) + " XH", sample.energy(), sample.capacity(), NORMAL);
+        compactResource(graphics, 57, "heat", sample.heat() + " / " + BestMechEntity.MAX_HEAT, sample.heat(), BestMechEntity.MAX_HEAT, WARNING);
+        compactResource(graphics, 71, "wear", sample.wear() + " / " + BestMechEntity.MAX_WEAR, sample.wear(), BestMechEntity.MAX_WEAR, WORN);
+        drawFit(graphics, Component.translatableWithFallback("hud.starfall_blueprint.mech.open_controls", "%s: Controls", PANEL.getTranslatedKeyMessage()), 7, 88, 156, TEXT);
+        graphics.pose().popPose();
+    }
+
+    private static void compactResource(GuiGraphics graphics, int y, String key, String value, double current, double maximum, int color) {
+        drawFit(graphics, label(key), 7, y, 52, MUTED);
+        Component number = Component.literal(value);
+        drawFit(graphics, number, 62, y, 101, TEXT);
+        graphics.fill(7, y + 10, 163, y + 12, 0xff34464e);
+        int fill = (int) Math.floor(156 * (maximum > 0 ? Math.clamp(current / maximum, 0, 1) : 0));
+        if (current < maximum) fill = Math.min(fill, 155);
+        if (fill > 0) graphics.fill(7, y + 10, 7 + fill, y + 12, color);
     }
 
     /** Worldless fixture contract: caller supplies position and actual sample; bounds are 248 by 140. */
@@ -168,6 +190,36 @@ public final class BestMechClient {
         drawFit(graphics, request, x + 9, y + 116, 230, sample.requestTicks() > 0 ? WARNING : TEXT);
         drawFit(graphics, label("controls", mc.options.keyUp.getTranslatedKeyMessage(), mc.options.keyShift.getTranslatedKeyMessage()),
                 x + 9, y + 129, 230, MUTED);
+    }
+
+    /** Shows the current bindings, including keys changed in the controls settings. */
+    private static final class ControlsScreen extends net.minecraft.client.gui.screens.Screen {
+        private ControlsScreen() {
+            super(Component.translatableWithFallback("ui.starfall_blueprint.mech_controls_title", "机甲操作 / Mech controls"));
+        }
+
+        @Override public boolean isPauseScreen() { return false; }
+
+        @Override public void tick() {
+            if (minecraft == null || minecraft.player == null || !(minecraft.player.getVehicle() instanceof BestMechEntity)) onClose();
+        }
+
+        @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+            int x = Math.max(4, (width - 260) / 2), y = Math.max(4, (height - 150) / 2);
+            int panelWidth = Math.min(260, width - 8);
+            graphics.fill(x, y, x + panelWidth, y + 150, 0xf0111e26);
+            drawFit(graphics, title, x + 8, y + 7, panelWidth - 16, TEXT);
+            KeyMapping[] keys = {DRILL, FIRE, LIFT, MINING_MODE, FRIENDLY_FIRE, TERRAIN_DAMAGE, LINGCHUAN_SUPPORT};
+            for (int i = 0; i < keys.length; i++) {
+                KeyMapping key = keys[i];
+                Component line = Component.empty().append(key.getTranslatedKeyMessage()).append("  ·  ")
+                        .append(Component.translatable(key.getName()));
+                drawFit(graphics, line, x + 8, y + 23 + i * 15, panelWidth - 16, TEXT);
+            }
+            drawFit(graphics, label("controls", minecraft.options.keyUp.getTranslatedKeyMessage(), minecraft.options.keyShift.getTranslatedKeyMessage()),
+                    x + 8, y + 130, panelWidth - 16, MUTED);
+            super.render(graphics, mouseX, mouseY, partialTick);
+        }
     }
 
     private record PanelStatus(String key, int color) {}

@@ -130,6 +130,7 @@ public final class StarfallBlueprint {
         MechMaintenancePlatforms.initialize();
         BestMechs.initialize(); BestMechs.register(bus); Progression.initialize(); Haijia.register(bus);
         bus.addListener(ProgressionNetworking::register);
+        Esper.register(bus);
         CatalogueFluids.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus); COMPONENTS.register(bus); TABS.register(bus); RECIPES.register(bus); RECIPE_TYPES.register(bus);
         bus.addListener(this::capabilities);

@@ -8,6 +8,15 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 @EventBusSubscriber(modid = StarfallBlueprint.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
+    @SubscribeEvent public static void esperScreens(RegisterMenuScreensEvent event) {
+        event.register(cn.starfall.blueprint.Esper.MENU.get(), EsperScreen::new);
+    }
+    @SubscribeEvent public static void esperRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(cn.starfall.blueprint.Esper.SHOT.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+    }
+    @SubscribeEvent public static void esperKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) {
+        EsperClient.keys(event);
+    }
     @SubscribeEvent public static void blackDogRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event){
         event.registerBlockEntityRenderer(cn.starfall.blueprint.Haijia.BE.get(),OrbitalStationRenderer::new);
         event.registerEntityRenderer(cn.starfall.blueprint.Haijia.FIGHTER.get(),PeregrineRenderer::new);

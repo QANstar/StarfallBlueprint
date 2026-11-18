@@ -1,4 +1,4 @@
-param([string]$JavaExecutable = 'java')
+param([string]$JavaExecutable = 'java', [string]$Namespaces = '')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $vmArgs = Join-Path $projectRoot 'build/moddev/gameTestServerRunVmArgs.txt'
@@ -16,11 +16,21 @@ $classpath = (@($gameJar, $modClasses, $modResources) + (Get-Content -LiteralPat
 $previousModClasses = $env:MOD_CLASSES
 $env:MOD_CLASSES = "starfall_blueprint%%$modClasses$([IO.Path]::PathSeparator)starfall_blueprint%%$modResources"
 $testDirectory = Join-Path $projectRoot 'run/gametest'
+if ($Namespaces -split ',' -contains 'starfall_blueprint_esper') {
+    $testDirectory = Join-Path $projectRoot ('run/baiwan-gametest-' + [guid]::NewGuid().ToString('N'))
+    $datapacks = Join-Path $testDirectory 'world/datapacks'
+    New-Item -ItemType Directory -Path $datapacks -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'baiwan-test-dimensions') -Destination $datapacks -Recurse
+}
 New-Item -ItemType Directory -Path $testDirectory -Force | Out-Null
 Push-Location $testDirectory
 try {
     # Use the official prepared bootstrap arguments directly. No DevLaunch download is needed.
-    & $JavaExecutable -cp $classpath "@$vmArgs" "@$programArgs"
+    if ($Namespaces) {
+        & $JavaExecutable -cp $classpath "@$vmArgs" "-Dneoforge.enabledGameTestNamespaces=$Namespaces" "@$programArgs"
+    } else {
+        & $JavaExecutable -cp $classpath "@$vmArgs" "@$programArgs"
+    }
     $testResult = $LASTEXITCODE
 } finally {
     Pop-Location

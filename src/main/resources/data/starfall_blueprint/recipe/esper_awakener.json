@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "QAQ",
+    "ICI",
+    "ORO"
+  ],
+  "key": {
+    "Q": {
+      "item": "minecraft:smooth_quartz"
+    },
+    "A": {
+      "item": "minecraft:amethyst_block"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "result": {
+    "id": "starfall_blueprint:esper_awakener"
+  }
+}

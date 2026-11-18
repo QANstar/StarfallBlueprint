@@ -1,0 +1,13 @@
+{
+  "type": "starfall_blueprint:esper_domain",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:the_void",
+      "features": false,
+      "lakes": false,
+      "structure_overrides": [],
+      "layers": []
+    }
+  }
+}

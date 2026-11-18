@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "#starfall_blueprint:baiwan_facilities",
     "starfall_blueprint:ore_meteor_phase",
     "starfall_blueprint:deepslate_ore_meteor_phase",
     "starfall_blueprint:preparation_bench",

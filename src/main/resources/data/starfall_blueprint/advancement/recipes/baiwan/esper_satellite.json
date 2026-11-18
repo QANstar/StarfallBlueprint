@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "materials": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:redstone"
+          }
+        ]
+      }
+    },
+    "recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "starfall_blueprint:esper_satellite"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "materials",
+      "recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "starfall_blueprint:esper_satellite"
+    ]
+  }
+}

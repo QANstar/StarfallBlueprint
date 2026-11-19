@@ -11,11 +11,14 @@ import net.minecraft.world.phys.*;
 
 public final class EsperProjectile extends ThrowableItemProjectile {
     private int strength = 1;
+    private boolean conjured;
     public EsperProjectile(EntityType<? extends EsperProjectile> type, Level level) { super(type, level); }
-    void prepare(LivingEntity owner, ItemStack stack, int strength) {
+    void prepare(LivingEntity owner, ItemStack stack, int strength, Vec3 from, boolean conjured) {
         setOwner(owner); setItem(stack); this.strength = strength;
-        setPos(owner.getEyePosition().subtract(0, .12, 0));
+        setPos(from);
+        this.conjured = conjured;
     }
+    @Override protected double getDefaultGravity() { return .012; }
     @Override protected Item getDefaultItem() { return Items.IRON_NUGGET; }
     @Override protected boolean canHitEntity(Entity entity) {
         return entity != getOwner() && (getOwner() == null || EsperEffects.canAffect(getOwner(), entity))
@@ -31,29 +34,36 @@ public final class EsperProjectile extends ThrowableItemProjectile {
                     at.x, at.y, at.z, 2F + strength * .35F, false, Level.ExplosionInteraction.NONE);
         } else {
             if (hit instanceof EntityHitResult result && canHitEntity(result.getEntity())) {
-                double[] damage = {2 + strength * .75};
+                double[] damage = {conjured ? 2 + strength * .6 : 3 + strength * .9};
                 var modifiers = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
-                if (modifiers != null) modifiers.forEach(EquipmentSlot.MAINHAND, (attribute, mod) -> {
+                if (!conjured && modifiers != null) modifiers.forEach(EquipmentSlot.MAINHAND, (attribute, mod) -> {
                     if (attribute.equals(Attributes.ATTACK_DAMAGE)) damage[0] += mod.amount();
                 });
                 result.getEntity().hurt(damageSources().thrown(this, getOwner()), (float) Math.clamp(damage[0], 1, 60));
             }
-            spawnAtLocation(stack.copy());
+            if (!conjured) spawnAtLocation(stack.copy());
         }
+        if (level() instanceof net.minecraft.server.level.ServerLevel server)
+            EsperNetworking.fracture(server, EsperNetworking.Pattern.SHATTER, hit.getLocation(),
+                    getDeltaMovement().normalize(), .62F, 15);
         discard();
     }
     @Override public void tick() {
         super.tick();
-        if (level() instanceof net.minecraft.server.level.ServerLevel server && !isRemoved()) {
-            if (tickCount % 2 == 0) server.sendParticles(EsperEffects.VIOLET, getX(), getY(), getZ(), 2, .06, .06, .06, 0);
+        if (!level().isClientSide && !isRemoved()) {
             if (tickCount >= 100) {
-                if (!getItem().is(Items.TNT)) spawnAtLocation(getItem().copy());
+                if (!conjured && !getItem().is(Items.TNT)) spawnAtLocation(getItem().copy());
                 discard();
             }
         }
     }
-    @Override public void addAdditionalSaveData(CompoundTag tag) { super.addAdditionalSaveData(tag); tag.putInt("Strength", strength); }
+    @Override public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("Strength", strength);
+        tag.putBoolean("Conjured", conjured);
+    }
     @Override public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag); strength = Math.clamp(tag.getInt("Strength"), 1, Esper.MAX_LEVEL);
+        conjured = tag.getBoolean("Conjured");
     }
 }

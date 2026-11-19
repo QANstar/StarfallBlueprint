@@ -13,18 +13,28 @@ import net.minecraft.world.entity.player.Inventory;
 public final class OrbitalScreen extends AbstractContainerScreen<OrbitalMenu> {
     private static final int INK=0xffe2edf5,MUTED=0xff9bb3c9,BLUE=0xff82d9ef,ORANGE=0xffefa650;
     private int kind=-1,shownLaser=-1,shownRod=-1;
-    private OrbitButton charging,destruction,fleet;
+    private OrbitButton charging,destruction,fleet,compute;
     private final Map<Integer,OrbitButton> modes=new HashMap<>();
     private final List<OrbitButton> assembly=new ArrayList<>();
     private final List<OrbitButton> weather=new ArrayList<>();
     public OrbitalScreen(OrbitalMenu m,Inventory i,Component t){super(m,i,t);imageWidth=352;imageHeight=280;inventoryLabelX=96;inventoryLabelY=186;}
     private void action(int id){if(minecraft.gameMode!=null)minecraft.gameMode.handleInventoryButtonClick(menu.containerId,id);}
     private OrbitButton button(Component text,int x,int y,int w,int action,Component tooltip){var b=new OrbitButton(leftPos+x,topPos+y,w,20,text,who->action(action));if(tooltip!=null)b.setTooltip(Tooltip.create(tooltip));return addRenderableWidget(b);}
-    @Override protected void init(){super.init();kind=menu.info[0];shownLaser=menu.info[19];shownRod=menu.info[20];modes.clear();assembly.clear();weather.clear();charging=null;destruction=null;fleet=null;addFleetButtons();
+    @Override protected void init(){super.init();kind=menu.info[0];shownLaser=menu.info[19];shownRod=menu.info[20];modes.clear();assembly.clear();weather.clear();charging=null;destruction=null;fleet=null;compute=null;addFleetButtons();
         if(kind==1){for(int i=0;i<OrbitalMenu.RECIPES.size();i++){var r=OrbitalMenu.RECIPES.get(i);var row=button(Component.translatable("item.starfall_blueprint."+r.output()),12,45+i*16,328,i,cost(r));row.setHeight(15);assembly.add(row);}}
-        else if(kind==2){for(int i=0;i<7;i++){var row=button(Haijia.text(i<4?"launch."+OrbitalFleet.TYPES[i]:"launch.upgrade."+OrbitalFleet.TYPES[i-4]),12,45+i*18,328,100+i,Haijia.text(i<4?"ui.launch_cost":"ui.upgrade_cost"));row.setHeight(17);}}
+        else if(kind==2){
+            for(int i=0;i<7;i++){
+                var row=button(Haijia.text(i<4?"launch."+OrbitalFleet.TYPES[i]:"launch.upgrade."+OrbitalFleet.TYPES[i-4]),
+                        12,43+i*15,328,100+i,Haijia.text(i<4?"ui.launch_cost":"ui.upgrade_cost"));
+                row.setHeight(14);
+            }
+            button(Esper.label("orbit_launch"),12,148,328,OrbitalMenu.LAUNCH_COMPUTE,
+                    Haijia.text("ui.launch_cost")).setHeight(16);
+        }
         else {
             charging=button(Haijia.text("ui.charge_enable"),18,91,142,110,Haijia.text("ui.charge_hint"));
+            compute=button(Esper.label("orbit_enable", 0),18,127,142,OrbitalMenu.TOGGLE_COMPUTE,Esper.label("orbit_hint"));
+            compute.setHeight(16);
             modes.put(1,button(Haijia.text("ui.select_laser"),184,49,150,201,Haijia.text("ui.laser_hint").copy().append("\n").append(Haijia.text("ui.upgrade_level",menu.info[19]))));
             modes.put(2,button(Haijia.text("ui.select_rod"),184,91,150,202,Haijia.text("ui.rod_hint").copy().append("\n").append(Haijia.text("ui.upgrade_level",menu.info[20]))));
             weather.add(button(Haijia.text("weather.clear"),82,145,80,120,Haijia.text("ui.weather_hint")));weather.add(button(Haijia.text("weather.rain"),170,145,80,121,Haijia.text("ui.weather_hint")));weather.add(button(Haijia.text("weather.thunder"),258,145,80,122,Haijia.text("ui.weather_hint")));
@@ -52,6 +62,11 @@ public final class OrbitalScreen extends AbstractContainerScreen<OrbitalMenu> {
         for(int row=0;row<4;row++)for(int col=0;col<9;col++){int x=leftPos+96+col*18,y=topPos+(row==3?256:198+row*18);g.fill(x-1,y-1,x+17,y+17,0xff293e53);g.fill(x,y,x+16,y+16,0xff0b1727);}
     }
     @Override public void render(GuiGraphics g,int mx,int my,float partial){
+        if(compute!=null){
+            compute.active=menu.info[25]>0;
+            compute.selected=compute.active&&menu.info[26]!=0;
+            compute.setMessage(Esper.label(compute.selected?"orbit_disable":"orbit_enable",menu.info[25]));
+        }
         if(charging!=null){charging.active=menu.info[1]>0;charging.selected=menu.info[1]>0&&menu.info[5]!=0;charging.setMessage(Haijia.text(menu.info[1]==0?"ui.no_charge_sat":menu.info[5]!=0?"ui.charge_disable":"ui.charge_enable"));}
         if(destruction!=null){destruction.selected=menu.info[22]!=0;destruction.setMessage(Haijia.text(menu.info[22]!=0?"ui.destruction_on":"ui.destruction_off"));}
         if(fleet!=null){fleet.selected=menu.info[23]!=0;fleet.active=(menu.info[24]!=0||menu.info[23]!=0)&&!OrbitalTerminalItem.creativeAccess(minecraft.player);fleet.setMessage(Haijia.text(menu.info[23]!=0?"ui.fleet_team":"ui.fleet_personal"));}

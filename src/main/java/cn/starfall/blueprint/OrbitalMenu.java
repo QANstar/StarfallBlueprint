@@ -21,7 +21,8 @@ public final class OrbitalMenu extends AbstractContainerMenu {
         new Recipe("hj_sat_kinetic_upgrade","kinetic",480000,Map.of("hj_bus",1,"hj_solar_wing",2,"hj_tungsten_rod",8,"hj_processor",4,"hj_thruster",1)));
     private final ContainerLevelAccess access;
     private final Inventory inventory;
-    public final int[] info=new int[25];
+    public final int[] info=new int[27];
+    public static final int LAUNCH_COMPUTE = 107, TOGGLE_COMPUTE = 212;
     public OrbitalMenu(int id,Inventory inv){this(id,inv,ContainerLevelAccess.NULL,4);}
     public OrbitalMenu(int id,Inventory inv,ContainerLevelAccess access,int kind){
         super(Haijia.MENU.get(),id);this.access=access;inventory=inv;info[0]=kind;
@@ -30,7 +31,7 @@ public final class OrbitalMenu extends AbstractContainerMenu {
         for(int col=0;col<9;col++)addSlot(new Slot(inv,col,96+col*18,256));
     }
     @Override public void broadcastChanges(){
-        if(inventory.player instanceof ServerPlayer p){var data=OrbitalFleet.get(p.serverLevel());var f=info[0]>=3?data.serviceFleet(p):data.fleet(p);for(int i=0;i<4;i++){info[1+i]=f.count[i];info[5+i]=(i==0?f.chargingEnabled&&f.active[0]:f.active[i])?1:0;}info[9]=(int)(f.energy/1000);info[10]=f.rods;info[11]=(int)Math.max(0,(f.laserReady-p.level().getGameTime()+19)/20);info[12]=(int)Math.max(0,(f.rodReady-p.level().getGameTime()+19)/20);info[13]=(int)Math.max(0,(f.weatherReady-p.level().getGameTime()+19)/20);for(int i=0;i<3;i++)info[18+i]=f.upgrades[i];info[21]=f.chargePerTick()/50;info[22]=f.blockDestruction?1:0;info[23]=data.usesTeam(p)?1:0;info[24]=p.getTeam()!=null?1:0;info[16]=f.capacity()/1000;info[17]=OrbitalFleet.hasTerminal(p)?1:0;info[15]=CatalogueEquipment.getData(OrbitalTerminalItem.find(p)).getInt("OrbitalMode");access.execute((l,pos)->{if(l.getBlockEntity(pos) instanceof OrbitalBlockEntity b)info[14]=b.energy.getEnergyStored()/1000;});}
+        if(inventory.player instanceof ServerPlayer p){var data=OrbitalFleet.get(p.serverLevel());if(p.getPersistentData().contains(Esper.DATA))data.migrateEsper(p,Esper.data(p));var f=info[0]>=3?data.serviceFleet(p):data.fleet(p);for(int i=0;i<4;i++){info[1+i]=f.count[i];info[5+i]=(i==0?f.chargingEnabled&&f.active[0]:f.active[i])?1:0;}info[9]=(int)(f.energy/1000);info[10]=f.rods;info[11]=(int)Math.max(0,(f.laserReady-p.level().getGameTime()+19)/20);info[12]=(int)Math.max(0,(f.rodReady-p.level().getGameTime()+19)/20);info[13]=(int)Math.max(0,(f.weatherReady-p.level().getGameTime()+19)/20);for(int i=0;i<3;i++)info[18+i]=f.upgrades[i];info[21]=f.chargePerTick()/50;info[22]=f.blockDestruction?1:0;info[23]=data.usesTeam(p)?1:0;info[25]=f.compute;info[26]=f.computeEnabled?1:0;info[24]=p.getTeam()!=null?1:0;info[16]=f.capacity()/1000;info[17]=OrbitalFleet.hasTerminal(p)?1:0;info[15]=CatalogueEquipment.getData(OrbitalTerminalItem.find(p)).getInt("OrbitalMode");access.execute((l,pos)->{if(l.getBlockEntity(pos) instanceof OrbitalBlockEntity b)info[14]=b.energy.getEnergyStored()/1000;});}
         super.broadcastChanges();
     }
     public static boolean transact(Player p,Map<String,Integer> cost,ItemStack output){
@@ -49,18 +50,33 @@ public final class OrbitalMenu extends AbstractContainerMenu {
             if(transact(p,r.inputs(),Haijia.stack(r.output(),1))){b.energy.extractEnergy(r.energy(),false); // drain all assembly cost, bypass per-tick port limit below
                 int remaining=r.energy()-Math.min(8192,r.energy());while(remaining>0){int n=b.energy.extractEnergy(remaining,false);if(n==0)break;remaining-=n;}success[0]=true;}
         });
-        if(info[0]==2&&(action>=100&&action<104||action>=104&&action<=106))access.execute((l,pos)->{
-            boolean upgrade=action>=104;int type=upgrade?action-104:action-100;if(!(l.getBlockEntity(pos) instanceof OrbitalBlockEntity b)||b.kind()!=2||!Haijia.knows(p,OrbitalFleet.TYPES[type])||(!upgrade&&type!=2&&f.count[type]>=16)||(type==2&&f.rods>248)||(upgrade&&(f.count[type]==0||f.upgrades[type]>=OrbitalFleet.Fleet.MAX_UPGRADE))||b.energy.getEnergyStored()<200000||!OrbitalBlock.complete(b))return;
+        if(info[0]==2&&action>=100&&action<=LAUNCH_COMPUTE)access.execute((l,pos)->{
+            boolean compute = action == LAUNCH_COMPUTE;
+            boolean upgrade = action >= 104 && !compute;
+            int type = upgrade ? action - 104 : action - 100;
+            if (!(l.getBlockEntity(pos) instanceof OrbitalBlockEntity b) || b.kind() != 2
+                    || b.energy.getEnergyStored() < 200000 || !OrbitalBlock.complete(b)) return;
+            if (compute) {
+                data.migrateEsper(p, Esper.data(p));
+                if (!Haijia.knows(p, "orbit") || f.compute >= OrbitalFleet.Fleet.MAX_COMPUTE) return;
+            } else if (!Haijia.knows(p, OrbitalFleet.TYPES[type]) || (!upgrade && type != 2 && f.count[type] >= 16)
+                    || (type == 2 && f.rods > 248)
+                    || (upgrade && (f.count[type] == 0 || f.upgrades[type] >= OrbitalFleet.Fleet.MAX_UPGRADE))) return;
             var def=OrbitalStructure.of("launchpad");var facing=b.getBlockState().getValue(OrbitalBlock.FACING);
             var center=pos.offset(def.offset(facing,(def.depth/2)*def.width+def.width/2));
             for(int y=pos.getY()+def.height;y<l.getMaxBuildHeight();y++){var above=new BlockPos(center.getX(),y,center.getZ());if(!l.getBlockState(above).getCollisionShape(l,above).isEmpty())return;}
-            if(!transact(p,Map.of("hj_sat_"+OrbitalFleet.TYPES[type]+(upgrade?"_upgrade":""),1,"hj_launch_vehicle",1),ItemStack.EMPTY))return;
+            String payload = compute ? Esper.SATELLITE.getId().toString()
+                    : "hj_sat_" + OrbitalFleet.TYPES[type] + (upgrade ? "_upgrade" : "");
+            if(!transact(p,Map.of(payload,1,"hj_launch_vehicle",1),ItemStack.EMPTY))return;
             for(int n=200000;n>0;){int take=b.energy.extractEnergy(n,false);n-=take;}
-            if(upgrade)f.upgrades[type]++;else f.count[type]=Math.min(16,f.count[type]+1);f.lastTick=l.getGameTime();if(type==2)f.rods=Math.min(256,f.rods+8);data.setDirty();success[0]=true;
+            if (compute) f.compute++;
+            else if(upgrade)f.upgrades[type]++;else f.count[type]=Math.min(16,f.count[type]+1);
+            f.lastTick=l.getGameTime();if(type==2)f.rods=Math.min(256,f.rods+8);data.setDirty();success[0]=true;
             var fx=Haijia.STRIKE.get().create(l);if(fx!=null){fx.setPos(center.getX()+.5,pos.getY()+.7,center.getZ()+.5);fx.configure(3,p.getUUID(),80);l.addFreshEntity(fx);}
         });
         if(action==211&&info[0]>=2&&!OrbitalTerminalItem.creativeAccess(p)){success[0]=data.toggleTeam(p);}
         if(info[0]>=3){
+            if(action==TOGGLE_COMPUTE && f.compute>0){f.computeEnabled=!f.computeEnabled;success[0]=true;}
             if(action==210){f.blockDestruction=!f.blockDestruction;success[0]=true;}
             if(action==110&&f.count[0]>0){f.chargingEnabled=!(f.chargingEnabled&&f.active[0]);f.active[0]=true;success[0]=true;}
             if(action>=120&&action<=122)success[0]=OrbitalTerminalItem.weather(p,action-120);

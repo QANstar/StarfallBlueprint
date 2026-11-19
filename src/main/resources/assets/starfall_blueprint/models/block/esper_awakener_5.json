@@ -1,0 +1,208 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/quartz_block_bottom",
+    "shell": "minecraft:block/quartz_block_bottom",
+    "frame": "minecraft:block/polished_deepslate",
+    "circuit": "minecraft:block/oxidized_copper",
+    "resonant": "minecraft:block/amethyst_block",
+    "emitter": "minecraft:block/sea_lantern",
+    "vent": "minecraft:block/observer_top"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        6,
+        13,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#shell"
+        },
+        "south": {
+          "texture": "#shell"
+        },
+        "west": {
+          "texture": "#shell"
+        },
+        "east": {
+          "texture": "#shell"
+        },
+        "up": {
+          "texture": "#shell"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        7,
+        2
+      ],
+      "to": [
+        6,
+        9,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#emitter"
+        },
+        "south": {
+          "texture": "#emitter"
+        },
+        "west": {
+          "texture": "#emitter"
+        },
+        "east": {
+          "texture": "#emitter"
+        },
+        "up": {
+          "texture": "#emitter"
+        },
+        "down": {
+          "texture": "#emitter"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        0,
+        12
+      ],
+      "to": [
+        16,
+        8,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#resonant"
+        },
+        "west": {
+          "texture": "#resonant"
+        },
+        "up": {
+          "texture": "#resonant"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        4,
+        11
+      ],
+      "to": [
+        16,
+        5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#emitter"
+        },
+        "west": {
+          "texture": "#emitter"
+        },
+        "up": {
+          "texture": "#emitter"
+        },
+        "down": {
+          "texture": "#emitter"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        9,
+        8
+      ],
+      "to": [
+        16,
+        11,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#circuit"
+        },
+        "west": {
+          "texture": "#circuit"
+        },
+        "up": {
+          "texture": "#emitter"
+        },
+        "down": {
+          "texture": "#emitter"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        12,
+        1
+      ],
+      "to": [
+        16,
+        15,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#shell"
+        },
+        "south": {
+          "texture": "#shell"
+        },
+        "west": {
+          "texture": "#shell"
+        },
+        "up": {
+          "texture": "#shell"
+        },
+        "down": {
+          "texture": "#shell"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        12,
+        6
+      ],
+      "to": [
+        6,
+        15,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#shell"
+        },
+        "west": {
+          "texture": "#shell"
+        },
+        "east": {
+          "texture": "#shell"
+        },
+        "up": {
+          "texture": "#shell"
+        },
+        "down": {
+          "texture": "#shell"
+        }
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ public final class ClientSetup {
         event.register(cn.starfall.blueprint.Esper.MENU.get(), EsperScreen::new);
     }
     @SubscribeEvent public static void esperRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(cn.starfall.blueprint.Esper.SHOT.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+        event.registerEntityRenderer(cn.starfall.blueprint.Esper.SHOT.get(), EsperSwordRenderer::new);
     }
     @SubscribeEvent public static void esperKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) {
         EsperClient.keys(event);
@@ -46,7 +46,7 @@ public final class ClientSetup {
     @SubscribeEvent public static void mechLayers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions event) { event.registerLayerDefinition(BestMechModel.LAYER, BestMechModel::createLayer); }
     @SubscribeEvent public static void orbitalScreens(RegisterMenuScreensEvent event){event.register(cn.starfall.blueprint.Haijia.MENU.get(),OrbitalScreen::new);}
     @SubscribeEvent public static void mechKeys(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) { BestMechClient.keys(event); BlackDogClient.keys(event); OrbitalClient.keys(event); }
-    @SubscribeEvent public static void mechHud(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) { BestMechClient.layers(event); BlackDogClient.layers(event); OrbitalClient.hud(event); }
+    @SubscribeEvent public static void mechHud(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) { BestMechClient.layers(event); BlackDogClient.layers(event); OrbitalClient.hud(event); EsperClient.hud(event); }
     @SubscribeEvent public static void fluids(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event){
         cn.starfall.blueprint.CatalogueFluids.ENTRIES.forEach((key,entry)->event.registerFluidType(new net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions(){
             public net.minecraft.resources.ResourceLocation getStillTexture(){return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_still");}

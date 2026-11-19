@@ -1,6 +1,30 @@
 {
   "variants": {
-    "": {
+    "part=0": {
+      "model": "starfall_blueprint:block/esper_launcher"
+    },
+    "part=1": {
+      "model": "starfall_blueprint:block/esper_launcher"
+    },
+    "part=2": {
+      "model": "starfall_blueprint:block/esper_launcher"
+    },
+    "part=3": {
+      "model": "starfall_blueprint:block/esper_launcher"
+    },
+    "part=4": {
+      "model": "starfall_blueprint:block/esper_launcher"
+    },
+    "part=5": {
+      "model": "starfall_blueprint:block/esper_launcher"
+    },
+    "part=6": {
+      "model": "starfall_blueprint:block/esper_launcher"
+    },
+    "part=7": {
+      "model": "starfall_blueprint:block/esper_launcher"
+    },
+    "part=8": {
       "model": "starfall_blueprint:block/esper_launcher"
     }
   }

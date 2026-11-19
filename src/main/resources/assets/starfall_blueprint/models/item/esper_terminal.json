@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "starfall_blueprint:item/esper_terminal"
-  }
+  "parent": "starfall_blueprint:item/hj_terminal"
 }

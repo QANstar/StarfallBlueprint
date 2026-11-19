@@ -8,8 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlags;
@@ -17,10 +15,8 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -30,7 +26,8 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 public final class Esper {
     static final String DATA = "StarfallEsper";
     public static final int MAX_RANK = 7, MAX_LEVEL = 5;
-    static final int MAX_SATELLITES = 512;
+    public static final double SLASH_HALF_ANGLE = Math.toRadians(56);
+    public static final float BARRIER_RADIUS = 1.55F;
     public enum School {
         SPACE, ELECTRIC;
         public Component title() { return label("school." + name().toLowerCase(Locale.ROOT)); }
@@ -38,8 +35,8 @@ public final class Esper {
         public java.util.List<Skill> skills() { return java.util.Arrays.stream(SKILLS).filter(s -> s.school == this).toList(); }
     }
     public enum Skill {
-        BLINK(1, 20, 20, 0, 1), PORTAL(3, 45, 60, 2, 0), SLASH(2, 22, 24, 1, 1),
-        STORAGE(2, 0, 60, 1, 2), COLLAPSE(5, 58, 80, 4, 2), VOLLEY(3, 34, 30, 2, 2),
+        BLINK(1, 20, 20, 0, 1), PORTAL(3, 45, 60, 2, 0), SLASH(2, 17, 10, 1, 1),
+        STORAGE(2, 0, 60, 1, 2), COLLAPSE(5, 58, 80, 4, 2), VOLLEY(3, 34, 12, 2, 2),
         SLING(2, 20, 24, 1, 0), SHIFT(4, 22, 12, 3, 0), PULL(3, 28, 32, 2, 1),
         DOMAIN(5, 65, 50, 4, 0), BARRIER(5, 50, 100, 4, 1),
         ARC(3, 25, 32, 2, 0, 15), LOCK(4, 32, 75, 3, 1),
@@ -54,6 +51,7 @@ public final class Esper {
         public final int rank, cost, cooldown, column, row, charge;
         public final School school;
         public final String key;
+        public int cooldownAt(int level) { return cooldown + cooldown * (Math.max(1, level) - 1) / 5; }
         Skill(int rank, int cost, int cooldown, int column, int row) {
             this(rank, cost, cooldown, column, row, -1);
         }
@@ -93,15 +91,20 @@ public final class Esper {
     public static final Skill[] SKILLS = Skill.values();
     public static final int SLOTS = 4;
 
-    public static final net.neoforged.neoforge.registries.DeferredBlock<Facility> AWAKENER = facility("esper_awakener", 0);
-    public static final net.neoforged.neoforge.registries.DeferredBlock<Facility> COMPUTE = facility("esper_compute_unit", 1);
-    public static final net.neoforged.neoforge.registries.DeferredBlock<Facility> LAUNCHER = facility("esper_launcher", 2);
+    public static final net.neoforged.neoforge.registries.DeferredBlock<EsperFacility> AWAKENER = facility("esper_awakener", 0);
+    public static final net.neoforged.neoforge.registries.DeferredBlock<EsperFacility> COMPUTE = facility("esper_compute_unit", 1);
+    public static final net.neoforged.neoforge.registries.DeferredBlock<EsperFacility> LAUNCHER = facility("esper_launcher", 2);
+    static final net.neoforged.neoforge.registries.DeferredHolder<BlockEntityType<?>, BlockEntityType<EsperFacility.Controller>>
+            CONTROLLER = StarfallBlueprint.ENTITIES.register("esper_facility",
+                    () -> BlockEntityType.Builder.of(EsperFacility.Controller::new, AWAKENER.get(), COMPUTE.get()).build(null));
     public static final net.neoforged.neoforge.registries.DeferredItem<Item> SATELLITE =
             StarfallBlueprint.ITEMS.registerSimpleItem("esper_satellite");
     public static final net.neoforged.neoforge.registries.DeferredItem<Item> TERMINAL =
-            StarfallBlueprint.ITEMS.register("esper_terminal", () -> new Terminal(new Item.Properties().stacksTo(1)));
+            StarfallBlueprint.ITEMS.registerItem("esper_terminal", OrbitalTerminalItem::new);
     public static final net.neoforged.neoforge.registries.DeferredItem<Item> RETUNER =
             StarfallBlueprint.ITEMS.registerSimpleItem("esper_retuner");
+    public static final net.neoforged.neoforge.registries.DeferredItem<Item> MAXIMIZER =
+            StarfallBlueprint.ITEMS.registerItem("esper_maximizer", Maximizer::new);
     public static final net.neoforged.neoforge.registries.DeferredHolder<MenuType<?>, MenuType<EsperMenu>> MENU =
             StarfallBlueprint.MENUS.register("esper_awakener", () -> new MenuType<>(EsperMenu::new, FeatureFlags.DEFAULT_FLAGS));
     public static final net.neoforged.neoforge.registries.DeferredRegister<net.minecraft.world.entity.EntityType<?>> PROJECTILES =
@@ -115,14 +118,15 @@ public final class Esper {
         StarfallBlueprint.TABS.register("baiwan", () -> CreativeModeTab.builder()
                 .title(label("name")).icon(() -> new ItemStack(AWAKENER.get()))
                 .displayItems((p, out) -> {
-                    out.accept(AWAKENER.get()); out.accept(COMPUTE.get()); out.accept(LAUNCHER.get());
-                    out.accept(SATELLITE.get()); out.accept(TERMINAL.get()); out.accept(RETUNER.get());
+                    out.accept(AWAKENER.get()); out.accept(COMPUTE.get()); out.accept(SATELLITE.get());
+                    out.accept(Haijia.item("hj_terminal")); out.accept(RETUNER.get()); out.accept(MAXIMIZER.get());
                 }).build());
     }
 
-    private static net.neoforged.neoforge.registries.DeferredBlock<Facility> facility(String name, int kind) {
-        var block = StarfallBlueprint.BLOCKS.register(name, () -> new Facility(kind,
-                BlockBehaviour.Properties.of().strength(3.5F).requiresCorrectToolForDrops().lightLevel(s -> kind == 0 ? 10 : 6)));
+    private static net.neoforged.neoforge.registries.DeferredBlock<EsperFacility> facility(String name, int kind) {
+        var block = StarfallBlueprint.BLOCKS.register(name, () -> new EsperFacility(kind,
+                BlockBehaviour.Properties.of().strength(3.5F).requiresCorrectToolForDrops().noOcclusion()
+                        .lightLevel(s -> s.getValue(EsperFacility.PART) <= 1 ? 8 : 3)));
         StarfallBlueprint.ITEMS.registerSimpleBlockItem(block);
         return block;
     }
@@ -169,19 +173,23 @@ public final class Esper {
     static boolean prerequisites(CompoundTag data, Skill skill) {
         return skill.prerequisites().stream().allMatch(required -> level(data, required) > 0);
     }
-    static int practiceNeeded(int level) { return 5 * level; }
-    static int rankPractice(int rank) { return rank * 10; }
-    static int price(int level) { return level == 0 ? 2 : 2 + 2 * level; }
-    static int rankPrice(int rank) { return 3 * rank; }
+    static int practiceNeeded(int level) { return level == 0 ? 0 : 8 * level * (level + 1); }
+    static int rankPractice(int rank) { return 18 + 12 * rank * rank; }
+    static int price(Skill skill, int level) { return 2 + skill.rank + 2 * level + level * level; }
+    static int rankPrice(int rank) { return 3 + 3 * rank; }
+    static int trainingEnergy(Skill skill, int level, boolean awakening) {
+        return awakening ? 8000 : 12000 * skill.rank + 10000 * level * (level + 1);
+    }
+    static int promotionEnergy(int rank) { return 20000 * rank * (rank + 1); }
 
-    static boolean train(ServerPlayer player, Skill skill) {
+    static boolean train(ServerPlayer player, Skill skill, EsperFacility.Controller machine) {
         CompoundTag d = data(player);
         int rank = rank(d), level = level(d, skill);
         boolean awakening = school(d) == null;
         if (awakening ? skill != skill.school.root() : (skill.school != school(d) || skill.rank > rank || level >= MAX_LEVEL
                 || level >= rank || !prerequisites(d, skill) || mastery(d, skill) < practiceNeeded(level))) return false;
-        int cost = awakening ? 0 : price(level);
-        if (!pay(player, cost)) return false;
+        int cost = awakening ? 0 : price(skill, level);
+        if (!pay(player, machine, cost, trainingEnergy(skill, level, awakening))) return false;
         d.putInt("Level_" + skill.key, level + 1);
         d.putInt("Mastery_" + skill.key, mastery(d, skill) - practiceNeeded(level));
         if (awakening) {
@@ -191,7 +199,7 @@ public final class Esper {
         }
         return true;
     }
-    private static void activate(CompoundTag data, School school) {
+    static void activate(CompoundTag data, School school) {
         data.putString("School", school.name());
         if (rank(data) > 0) return;
         data.putInt("Rank_" + school, 1);
@@ -204,7 +212,9 @@ public final class Esper {
         CompoundTag d = data(p);
         School from = school(d);
         if (from == null || p.isSpectator() || !p.isAlive() || p.level().dimension().equals(EsperDomain.KEY)
-                || !stack.is(RETUNER.get()) || !p.level().getBlockState(pos).is(AWAKENER.get())) return false;
+                || !stack.is(RETUNER.get()) || !p.level().getBlockState(pos).is(AWAKENER.get())
+                || !p.level().mayInteract(p, pos)
+                || !pay(p, EsperFacility.controller(p.level(), pos), 0, 8000)) return false;
         stack.consume(1, p);
         EsperEffects.endSchoolEffects(p, d);
         activate(d, from == School.SPACE ? School.ELECTRIC : School.SPACE);
@@ -212,11 +222,11 @@ public final class Esper {
         p.displayClientMessage(label("retuned", school(d).title()), true);
         return true;
     }
-    static boolean promote(ServerPlayer player) {
+    static boolean promote(ServerPlayer player, EsperFacility.Controller machine) {
         CompoundTag d = data(player);
         int rank = rank(d);
         if (rank < 1 || rank >= MAX_RANK || rankProgress(d) < rankPractice(rank)
-                || !pay(player, rankPrice(rank))) return false;
+                || !pay(player, machine, rankPrice(rank), promotionEnergy(rank))) return false;
         d.putInt("Rank_" + school(d), rank + 1);
         d.putInt("RankPractice_" + school(d), rankProgress(d) - rankPractice(rank));
         refresh(player, d);
@@ -232,14 +242,18 @@ public final class Esper {
         d.putInt("Slot" + slot + "_" + school, index + 1);
         return true;
     }
-    private static boolean pay(ServerPlayer p, int xp) {
+    private static boolean pay(ServerPlayer p, EsperFacility.Controller machine, int xp, int energy) {
+        if (machine == null || !EsperFacility.complete(machine)) return false;
         if (p.isCreative()) return true;
-        if (p.experienceLevel < xp) return false;
+        if (p.experienceLevel < xp || !machine.spend(energy)) return false;
         if (xp > 0) p.giveExperienceLevels(-xp);
         return true;
     }
 
     public record Cast(int slot) implements CustomPacketPayload {
+        public static final int TOGGLE = -1;
+        public static final int CANCEL_CHARGE = -2;
+        public static final int RELEASE = 8;
         static final Type<Cast> TYPE = new Type<>(StarfallBlueprint.id("esper_cast"));
         static final StreamCodec<RegistryFriendlyByteBuf, Cast> CODEC =
                 StreamCodec.of((buf, msg) -> buf.writeByte(msg.slot), buf -> new Cast(buf.readByte()));
@@ -247,41 +261,67 @@ public final class Esper {
     }
     public static void register(IEventBus bus) {
         PROJECTILES.register(bus);
-        bus.addListener((net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent event) ->
-                event.registrar("1").playToServer(Cast.TYPE, Cast.CODEC, (msg, ctx) ->
-                        ctx.enqueueWork(() -> { if (ctx.player() instanceof ServerPlayer p) cast(p, msg.slot); })));
+        bus.addListener((net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent event) ->
+                event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.EnergyStorage.BLOCK,
+                        CONTROLLER.get(), (part, side) -> {
+                            var machine = EsperFacility.controller(part.getLevel(), part.getBlockPos());
+                            return machine != null && machine.getBlockState().is(AWAKENER.get())
+                                    && EsperFacility.complete(machine) ? machine.energy : null;
+                        }));
+        bus.addListener(EsperNetworking::register);
         NeoForge.EVENT_BUS.addListener(Esper::tick);
         NeoForge.EVENT_BUS.addListener(Esper::clonePlayer);
         NeoForge.EVENT_BUS.addListener(Esper::damage);
         NeoForge.EVENT_BUS.addListener(EsperEffects::tickPortals);
+        NeoForge.EVENT_BUS.addListener(EsperCollapse::tick);
         NeoForge.EVENT_BUS.addListener(EsperEffects::tickBinding);
         NeoForge.EVENT_BUS.addListener(EsperElectric::tickFields);
         NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST, EsperEffects::blockDrops);
         NeoForge.EVENT_BUS.addListener(EsperDomain::guardTravel);
         NeoForge.EVENT_BUS.addListener(EsperDomain::commands);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
-            if (e.getEntity() instanceof ServerPlayer p && p.getPersistentData().contains(DATA))
-                EsperEffects.stopShift(p, data(p));
+            if (e.getEntity() instanceof ServerPlayer p && p.getPersistentData().contains(DATA)) {
+                var d = data(p);
+                d.remove("Mode");
+                EsperVolley.cancel(p);
+                EsperEffects.stopShift(p, d);
+            }
         });
     }
 
+    static void toggleMode(ServerPlayer p) {
+        if (!p.isAlive() || p.isSpectator() || p.containerMenu != p.inventoryMenu) return;
+        var d = data(p);
+        long now = p.serverLevel().getServer().overworld().getGameTime();
+        if (now < d.getLong("NextMode")) return;
+        d.putLong("NextMode", now + 4);
+        boolean enabled = rank(d) > 0 && !d.getBoolean("Mode");
+        d.putBoolean("Mode", enabled);
+        if (!enabled) {
+            EsperVolley.cancel(p);
+            EsperEffects.stopShift(p, d);
+        }
+        EsperNetworking.sync(p, d, now);
+    }
+
     static boolean cast(ServerPlayer p, int slot) {
-        if (slot < 0 || slot >= SLOTS || p.isSpectator() || !p.isAlive() || p.isSleeping()
-                || p.isPassenger() || p.containerMenu != p.inventoryMenu) return false;
+        if (slot < 0 || slot >= SLOTS || !canCast(p)) return false;
         CompoundTag d = data(p);
+        if (!d.getBoolean("Mode")) return false;
         int index = slot(d, slot);
         if (index < 0 || index >= SKILLS.length) return false;
         Skill skill = SKILLS[index];
         int level = level(d, skill);
         long now = p.serverLevel().getServer().overworld().getGameTime();
         if (school(d) != skill.school || level <= 0 || rank(d) < skill.rank || !prerequisites(d, skill)
-                || now < d.getLong("NextCast") || now < d.getLong("Ready_" + skill.key))
+                || now < d.getLong("NextCast"))
             return false;
-        d.putLong("NextCast", now + 4);
         if (skill == Skill.SHIFT && d.contains("Shift")) {
             EsperEffects.stopShift(p, d);
             return true;
         }
+        if (now < d.getLong("Ready_" + skill.key)) return false;
+        d.putLong("NextCast", now + 4);
         if (d.getInt("Power") < skill.cost) {
             p.displayClientMessage(label("low"), true);
             return false;
@@ -290,30 +330,38 @@ public final class Esper {
             p.displayClientMessage(label("low_charge"), true);
             return false;
         }
+        if (skill == Skill.VOLLEY) return EsperVolley.begin(p, slot, level, now);
         if (!EsperEffects.cast(p, d, skill, level)) {
             p.displayClientMessage(label("no_target"), true);
             return false;
         }
+        completeCast(d, skill, level, now);
+        return true;
+    }
+
+    static boolean canCast(ServerPlayer p) {
+        return p.isAlive() && !p.isSpectator() && !p.isSleeping() && !p.isPassenger() && p.containerMenu == p.inventoryMenu;
+    }
+
+    static void completeCast(CompoundTag d, Skill skill, int level, long now) {
         d.putInt("Power", d.getInt("Power") - skill.cost);
         if (skill.charge > 0) d.putInt("Charge", d.getInt("Charge") - skill.charge);
-        d.putLong("Ready_" + skill.key, now + skill.cooldown);
+        d.putLong("Ready_" + skill.key, now + skill.cooldownAt(level));
         d.putInt("Mastery_" + skill.key, Math.min(9999, mastery(d, skill) + 1));
         d.putInt("RankPractice_" + skill.school, Math.min(9999, rankProgress(d) + 1));
-        p.displayClientMessage(label("cast", skill.title(), d.getInt("Power"), d.getInt("Max")), true);
-        return true;
     }
 
     static void refresh(ServerPlayer p, CompoundTag d) {
         int local = EsperDomain.Ledger.get(p.serverLevel()).local(p);
         int remote = EsperDomain.Ledger.get(p.serverLevel()).remote(p);
-        int satellites = d.getBoolean("Uplink") && hasTerminal(p) ? d.getInt("Satellites") : 0;
+        OrbitalFleet orbit = OrbitalFleet.get(p.serverLevel());
+        orbit.migrateEsper(p, d);
+        var fleet = OrbitalFleet.hasTerminal(p) ? orbit.serviceFleet(p) : null;
+        int satellites = fleet != null && fleet.computeEnabled ? fleet.compute : 0;
         d.putInt("Local", local); d.putInt("Remote", remote); d.putInt("Online", satellites);
         d.putInt("Max", 80 + rank(d) * 20 + (local + remote) * 8 + satellites * 18);
         d.putInt("Regen", 3 + rank(d) + (local + remote) + satellites * 2);
         d.putInt("Power", Math.min(d.getInt("Power"), d.getInt("Max")));
-    }
-    private static boolean hasTerminal(ServerPlayer p) {
-        return p.getOffhandItem().is(TERMINAL.get()) || p.getInventory().items.stream().anyMatch(s -> s.is(TERMINAL.get()));
     }
     private static void tick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer p) || !p.isAlive()) return;
@@ -321,7 +369,13 @@ public final class Esper {
         CompoundTag d = p.getPersistentData().contains(DATA) ? data(p) : p.getPersistentData().getCompound(DATA);
         if (rank(d) == 0) return;
         long now = p.serverLevel().getServer().overworld().getGameTime();
+        EsperVolley.tick(p, d, now);
         EsperEffects.tickPlayer(p, d, now);
+        if (p.isSpectator() && d.getBoolean("Mode")) {
+            d.remove("Mode");
+            EsperNetworking.sync(p, d, now);
+        }
+        if (d.getBoolean("Mode") && p.tickCount % 5 == 0) EsperNetworking.sync(p, d, now);
         if (p.tickCount % 20 != 0) return;
         refresh(p, d);
         d.putInt("Power", Math.min(d.getInt("Max"), d.getInt("Power") + d.getInt("Regen")));
@@ -332,68 +386,28 @@ public final class Esper {
         CompoundTag d = data(event.getOriginal()).copy();
         d.remove("Barrier"); d.remove("Sling"); d.remove("NextCast"); d.remove("Shift");
         if (d.contains("ShiftGranted")) EsperEffects.stopShift(event.getEntity(), d);
-        if (event.isWasDeath()) d.remove("DomainReturn");
+        if (event.isWasDeath()) { d.remove("DomainReturn"); d.remove("Mode"); }
         event.getEntity().getPersistentData().put(DATA, d);
     }
     private static void damage(LivingIncomingDamageEvent event) {
         if (event.getEntity() instanceof ServerPlayer p) EsperEffects.protect(p, event);
     }
 
-    static boolean launch(ServerPlayer p, BlockPos pos, ItemStack stack) {
-        CompoundTag d = data(p);
-        if (p.isSpectator() || rank(d) == 0 || d.getInt("Satellites") >= MAX_SATELLITES
-                || !stack.is(SATELLITE.get()) || !p.serverLevel().dimensionType().hasSkyLight()
-                || !p.serverLevel().canSeeSky(pos.above())) return false;
-        stack.consume(1, p);
-        d.putInt("Satellites", d.getInt("Satellites") + 1);
-        refresh(p, d);
-        EsperEffects.launch(p.serverLevel(), pos);
-        p.displayClientMessage(label("launch", d.getInt("Satellites")), true);
-        return true;
-    }
-    public static final class Facility extends Block {
-        private final int kind;
-        Facility(int kind, Properties props) { super(props); this.kind = kind; }
-        @Override protected void onPlace(BlockState s, Level l, BlockPos pos, BlockState old, boolean moving) {
-            super.onPlace(s, l, pos, old, moving);
-            if (kind == 1 && l instanceof net.minecraft.server.level.ServerLevel server && !old.is(this))
-                EsperDomain.Ledger.get(server).unit(server, pos, true);
-        }
-        @Override protected void onRemove(BlockState s, Level l, BlockPos pos, BlockState next, boolean moving) {
-            super.onRemove(s, l, pos, next, moving);
-            if (kind == 1 && l instanceof net.minecraft.server.level.ServerLevel server && !next.is(this))
-                EsperDomain.Ledger.get(server).unit(server, pos, false);
-        }
-        @Override protected InteractionResult useWithoutItem(BlockState s, Level l, BlockPos pos, Player player, BlockHitResult hit) {
-            if (player instanceof ServerPlayer p && !p.isSpectator()) {
-                if (kind == 0) p.openMenu(new SimpleMenuProvider(
-                        (id, inv, who) -> new EsperMenu(id, inv, ContainerLevelAccess.create(l, pos)), getName()));
-                else if (kind == 1) p.displayClientMessage(label("local", EsperDomain.Ledger.get(p.serverLevel()).local(p)), true);
-                else p.displayClientMessage(label("launcher_hint"), true);
-            }
-            return InteractionResult.sidedSuccess(l.isClientSide);
-        }
-        @Override protected ItemInteractionResult useItemOn(ItemStack stack, BlockState s, Level l, BlockPos pos,
-                Player player, InteractionHand hand, BlockHitResult hit) {
-            if (kind == 0 && stack.is(RETUNER.get())) {
-                if (player instanceof ServerPlayer p && !retune(p, pos, stack)) p.displayClientMessage(label("retune_failed"), true);
-                return ItemInteractionResult.sidedSuccess(l.isClientSide);
-            }
-            if (kind != 2 || !stack.is(SATELLITE.get())) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-            if (player instanceof ServerPlayer p && !launch(p, pos, stack)) p.displayClientMessage(label("launch_failed"), true);
-            return ItemInteractionResult.sidedSuccess(l.isClientSide);
-        }
-    }
-    private static final class Terminal extends Item {
-        Terminal(Properties props) { super(props); }
+    private static final class Maximizer extends Item {
+        Maximizer(Properties props) { super(props.stacksTo(1)); }
         @Override public InteractionResultHolder<ItemStack> use(Level l, Player user, InteractionHand hand) {
-            if (user instanceof ServerPlayer p && !p.isSpectator()) {
+            if (!user.isCreative()) return InteractionResultHolder.fail(user.getItemInHand(hand));
+            if (user instanceof ServerPlayer p) {
                 CompoundTag d = data(p);
-                if (p.isShiftKeyDown()) d.putBoolean("Uplink", !d.getBoolean("Uplink"));
-                if (rank(d) > 0) refresh(p, d);
-                p.displayClientMessage(label(d.getBoolean("Uplink") ? "online" : "offline",
-                        d.getInt("Satellites"), d.getInt("Power"), d.getInt("Max"), d.getInt("Regen")), true);
-                l.playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, .6F, 1.3F);
+                if (school(d) == null) {
+                    p.displayClientMessage(label("maximizer_awaken"), true);
+                    return InteractionResultHolder.fail(user.getItemInHand(hand));
+                }
+                d.putInt("Rank_" + school(d), MAX_RANK);
+                for (Skill skill : school(d).skills()) d.putInt("Level_" + skill.key, MAX_LEVEL);
+                refresh(p, d);
+                d.putInt("Power", d.getInt("Max"));
+                p.displayClientMessage(label("maximizer_done", school(d).title()), true);
             }
             return InteractionResultHolder.sidedSuccess(user.getItemInHand(hand), l.isClientSide);
         }

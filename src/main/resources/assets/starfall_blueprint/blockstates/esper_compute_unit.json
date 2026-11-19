@@ -1,7 +1,31 @@
 {
   "variants": {
-    "": {
+    "part=0": {
       "model": "starfall_blueprint:block/esper_compute_unit"
+    },
+    "part=1": {
+      "model": "starfall_blueprint:block/esper_compute_unit_1"
+    },
+    "part=2": {
+      "model": "starfall_blueprint:block/esper_compute_unit_2"
+    },
+    "part=3": {
+      "model": "starfall_blueprint:block/esper_compute_unit_3"
+    },
+    "part=4": {
+      "model": "starfall_blueprint:block/esper_compute_unit_4"
+    },
+    "part=5": {
+      "model": "starfall_blueprint:block/esper_compute_unit_5"
+    },
+    "part=6": {
+      "model": "starfall_blueprint:block/esper_compute_unit_6"
+    },
+    "part=7": {
+      "model": "starfall_blueprint:block/esper_compute_unit_7"
+    },
+    "part=8": {
+      "model": "starfall_blueprint:block/esper_compute_unit_8"
     }
   }
 }

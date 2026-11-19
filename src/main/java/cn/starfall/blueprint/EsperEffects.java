@@ -1,5 +1,7 @@
 package cn.starfall.blueprint;
 
+import static cn.starfall.blueprint.EsperNetworking.Pattern.*;
+
 import java.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,7 +13,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -20,11 +21,15 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import org.joml.Vector3f;
 
 final class EsperEffects {
-    static final DustParticleOptions VIOLET = new DustParticleOptions(new Vector3f(.66F, .28F, 1F), 1.3F);
     private static final DustParticleOptions CYAN = new DustParticleOptions(new Vector3f(.13F, .94F, 1F), 1.15F);
     private static final DustParticleOptions WHITE = new DustParticleOptions(new Vector3f(.86F, .98F, 1F), .85F);
     private record Portal(UUID owner, Vec3 a, Vec3 b, long end, Set<UUID> inside) {}
-    private record Harvest(ServerPlayer caster, EsperStorage storage) {}
+    private static final class Harvest {
+        final ServerPlayer caster;
+        final int cargoLevel;
+        EsperStorage storage;
+        Harvest(ServerPlayer caster, int cargoLevel) { this.caster = caster; this.cargoLevel = cargoLevel; }
+    }
     private record Binding(UUID owner, ServerLevel dimension, Vec3 anchor, long until) {}
     private static final Map<ServerLevel, List<Portal>> PORTALS = new WeakHashMap<>();
     private static final Map<LivingEntity, Binding> BINDINGS = new WeakHashMap<>();
@@ -38,12 +43,14 @@ final class EsperEffects {
         switch (skill) {
             case BLINK -> {
                 double range = 7 + level * 3;
-                Entity selected = target(p, trace(p, range), entity -> entity instanceof LivingEntity living
-                        && living.isAlive() && !living.isSpectator());
-                Vec3 to = selected instanceof LivingEntity living ? behind(p, living, range) : landing(p, range, false);
+                LivingEntity selected = visibleCreature(p);
+                Vec3 to = selected != null ? behind(p, selected) : landing(p, range, false);
                 if (to == null) return false;
-                teleport(p, to); ring(l, at.add(0, .8, 0), 1.1, VIOLET, false);
-                ring(l, to.add(0, .8, 0), 1.1, CYAN, false);
+                Vec3 look = p.getLookAngle();
+                teleport(p, to);
+                if (selected != null) p.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, selected.getEyePosition());
+                fracture(l, RIFT, at.add(0, .9, 0), look, 1.2F, 23);
+                fracture(l, RIFT, to.add(0, .9, 0), p.getLookAngle(), 1.2F, 23);
                 sound(l, at, SoundEvents.CHORUS_FRUIT_TELEPORT, 1.3F);
             }
             case PORTAL -> {
@@ -52,51 +59,18 @@ final class EsperEffects {
                 List<Portal> list = PORTALS.computeIfAbsent(l, key -> new ArrayList<>());
                 list.removeIf(portal -> portal.owner.equals(p.getUUID()));
                 list.add(new Portal(p.getUUID(), a, b, l.getGameTime() + 120 + level * 60, new HashSet<>()));
-                ring(l, a.add(0, 1, 0), 1.05, VIOLET, true);
-                ring(l, b.add(0, 1, 0), 1.05, CYAN, true);
+                fracture(l, PORTAL, a.add(0, 1, 0), b.subtract(a), 1.12F, 38);
+                fracture(l, PORTAL, b.add(0, 1, 0), a.subtract(b), 1.12F, 38);
                 sound(l, at, SoundEvents.PORTAL_TRIGGER, 1.7F);
             }
-            case SLASH -> {
-                Vec3 start = p.getEyePosition(), to = trace(p, 6 + level * 2);
-                Entity target = target(p, to, e -> canAffect(p, e));
-                if (target != null) target.hurt(p.damageSources().playerAttack(p), 5 + 2.5F * level);
-                Vec3 side = horizontal(p.getLookAngle()).cross(new Vec3(0, 1, 0));
-                for (int i = 0; i < 25; i++) {
-                    double t = i / 24.0;
-                    Vec3 q = start.lerp(to, t).add(side.scale(Math.sin(t * Math.PI) * 1.35)).add(0, t - .5, 0);
-                    dot(l, q, VIOLET); if (i % 2 == 0) dot(l, q.add(0, .12, 0), WHITE);
-                }
-                sound(l, at, SoundEvents.PLAYER_ATTACK_SWEEP, .8F); return target != null || start.distanceToSqr(to) > 1;
-            }
+            case SLASH -> slash(p, level);
             case STORAGE -> new EsperStorage(p, level).open();
-            case COLLAPSE -> {
-                if (!collapse(p, level)) return false;
-            }
-            case VOLLEY -> {
-                int storageLevel = Esper.level(d, Esper.Skill.STORAGE);
-                if (storageLevel == 0) return false;
-                EsperStorage storage = new EsperStorage(p, storageLevel);
-                int fired = 0;
-                for (int i = 0; i < 1 + (level - 1) / 2; i++) {
-                    int slot = storage.firstAmmo();
-                    if (slot < 0) break;
-                    EsperProjectile shot = Esper.SHOT.get().create(l);
-                    if (shot == null) break;
-                    shot.prepare(p, storage.getItem(slot).copyWithCount(1), level);
-                    shot.shootFromRotation(p, p.getXRot(), p.getYRot() + (i == 0 ? 0 : i == 1 ? -7 : 7),
-                            0, 2.1F + level * .23F, 0);
-                    if (l.addFreshEntity(shot)) { storage.removeItem(slot, 1); fired++; }
-                }
-                if (fired == 0) return false;
-                ring(l, p.getEyePosition().add(p.getLookAngle()), .65, VIOLET, true);
-                sound(l, at, SoundEvents.CROSSBOW_SHOOT, .7F);
-            }
+            case COLLAPSE -> { return EsperCollapse.start(p, level); }
             case SLING -> {
                 Vec3 v = p.getLookAngle().scale(.95 + .24 * level);
                 push(p, new Vec3(v.x, Math.max(.28, v.y + .23), v.z));
                 d.putLong("Sling", time + 100);
-                ring(l, at, 1.35, CYAN, false);
-                burst(l, at, ParticleTypes.CLOUD, 18, .38);
+                fracture(l, WAKE, at.add(0, .65, 0), v, 1.45F, 27);
                 sound(l, at, SoundEvents.BREEZE_JUMP, 1.25F);
             }
             case SHIFT -> {
@@ -108,7 +82,7 @@ final class EsperEffects {
                 p.resetFallDistance();
                 p.onUpdateAbilities();
                 push(p, new Vec3(0, .22, 0));
-                ring(l, at, 1.4, CYAN, false);
+                fracture(l, WAKE, at, new Vec3(0, 1, 0), 1.55F, 27);
                 sound(l, at, SoundEvents.BEACON_ACTIVATE, 1.5F);
             }
             case PULL -> {
@@ -117,13 +91,15 @@ final class EsperEffects {
                 Vec3 destination = at.add(horizontal(p.getLookAngle()).scale(1.7));
                 if (!safe(l, target, destination, false) || !EsperDomain.allows(l, p, destination)
                         || (target instanceof ServerPlayer other && !EsperDomain.allows(l, other, destination))) return false;
-                beam(l, target.position().add(0, .8, 0), destination.add(0, .8, 0), VIOLET);
+                fracture(l, RIFT, target.getBoundingBox().getCenter(), p.getLookAngle(), 1.05F, 24);
+                fracture(l, RIFT, destination.add(0, .8, 0), p.getLookAngle(), 1.05F, 24);
                 teleport(target, destination); sound(l, at, SoundEvents.ENDERMAN_TELEPORT, 1.5F);
+                if (level >= 3) bind(p, target, 8 + level * 3);
             }
             case LOCK -> {
                 if (!(target(p, trace(p, 8 + level * 2), e -> canAffect(p, e)) instanceof LivingEntity target)) return false;
                 bind(p, target, 28 + level * 14);
-                ring(l, target.position().add(0, .8, 0), .9, VIOLET, true);
+                fracture(l, BIND, target.getBoundingBox().getCenter(), p.getLookAngle(), .95F, 33);
                 sound(l, target.position(), SoundEvents.AMETHYST_BLOCK_RESONATE, .6F);
             }
             case DOMAIN -> {
@@ -133,14 +109,14 @@ final class EsperEffects {
                 ServerPlayer traveller = selected instanceof ServerPlayer guest ? guest : p;
                 Vec3 old = traveller.position();
                 if (!EsperDomain.move(p, traveller)) return false;
-                ring(l, old.add(0, 1, 0), 1.3, VIOLET, true);
-                ring(traveller.serverLevel(), traveller.position().add(0, 1, 0), 1.3, CYAN, true);
+                fracture(l, PORTAL, old.add(0, 1, 0), p.getLookAngle(), 1.35F, 34);
+                fracture(traveller.serverLevel(), PORTAL, traveller.position().add(0, 1, 0), traveller.getLookAngle(), 1.35F, 34);
                 sound(l, old, SoundEvents.RESPAWN_ANCHOR_CHARGE, 1.3F);
             }
             case BARRIER -> {
                 d.putLong("Barrier", time + 70 + level * 24);
                 d.putInt("BarrierHits", level + 2);
-                ring(l, at.add(0, 1, 0), 1.45, CYAN, false);
+                EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, level + 2, 70 + level * 24);
                 sound(l, at, SoundEvents.AMETHYST_BLOCK_RESONATE, .85F);
             }
             default -> { return false; }
@@ -178,46 +154,47 @@ final class EsperEffects {
         return true;
     }
 
-    private static boolean collapse(ServerPlayer p, int level) {
-        ServerLevel l = p.serverLevel();
-        Vec3 from = p.getEyePosition(), to = trace(p, 8 + level);
-        BlockHitResult hit = l.clip(new ClipContext(from, to.add(p.getLookAngle().scale(.07)),
-                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, p));
-        if (hit.getType() != HitResult.Type.BLOCK) return false;
-        BlockPos center = hit.getBlockPos();
-        int radius = 1 + (level - 1) / 2;
-        int storageLevel = Esper.level(Esper.data(p), Esper.Skill.STORAGE);
+    static double slashRadius(int level) { return 4.8 + level * .85; }
+
+    private static void slash(ServerPlayer player, int level) {
+        var world = player.serverLevel();
+        Vec3 from = player.getEyePosition();
+        Vec3 direction = Vec3.directionFromRotation(0, player.getYRot());
+        double radius = slashRadius(level);
+        var area = new AABB(from, from).inflate(radius, 1.6, radius);
+        for (var target : world.getEntitiesOfClass(LivingEntity.class, area, e -> canAffect(player, e))) {
+            Vec3 center = target.getBoundingBox().getCenter();
+            Vec3 relative = center.subtract(from);
+            Vec3 horiz = new Vec3(relative.x, 0, relative.z);
+            double distance = horiz.length();
+            if (distance > radius || Math.abs(relative.y) > 1.65
+                    || horiz.dot(direction) < distance * Math.cos(Esper.SLASH_HALF_ANGLE)) continue;
+            if (world.clip(new ClipContext(from, center, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player))
+                    .getType() != HitResult.Type.MISS) continue;
+            if (target.hurt(player.damageSources().playerAttack(player), 4.5F + level * 1.75F))
+                fracture(world, SHATTER, center, direction, .68F, 13);
+        }
+        fracture(world, SLICE, from.subtract(0, .42, 0), direction, (float) radius, 24);
+        sound(world, player.position(), SoundEvents.PLAYER_ATTACK_SWEEP, .67F);
+        sound(world, player.position(), SoundEvents.AMETHYST_BLOCK_BREAK, 1.2F);
+    }
+
+    static void withHarvest(ServerPlayer player, int level, Runnable work) {
+        int storageLevel = Esper.level(Esper.data(player), Esper.Skill.STORAGE);
+        if (level < 3 || storageLevel == 0) { work.run(); return; }
         Harvest previous = HARVEST.get();
-        if (level >= 3 && storageLevel != 0) HARVEST.set(new Harvest(p, new EsperStorage(p, storageLevel)));
-        int broken = 0;
-        try {
-            for (BlockPos candidate : BlockPos.betweenClosed(center.offset(-radius, -radius, -radius), center.offset(radius, radius, radius))) {
-                if (candidate.distSqr(center) > radius * radius || !l.hasChunkAt(candidate)
-                        || !l.mayInteract(p, candidate) || !EsperDomain.allows(l, p, Vec3.atCenterOf(candidate))) continue;
-                var state = l.getBlockState(candidate);
-                if (state.isAir() || state.hasBlockEntity() || state.getDestroySpeed(l, candidate) < 0
-                        || !state.getFluidState().isEmpty()) continue;
-                var be = candidate.immutable();
-                if (p.gameMode.destroyBlock(be)) {
-                    broken++;
-                    burst(l, Vec3.atCenterOf(be), ParticleTypes.REVERSE_PORTAL, 6, .35);
-                    if (broken >= 48 + level * 10) break;
-                }
-            }
-        } finally {
+        HARVEST.set(new Harvest(player, storageLevel));
+        try { work.run(); }
+        finally {
             if (previous == null) HARVEST.remove(); else HARVEST.set(previous);
         }
-        if (broken == 0) return false;
-        Vec3 at = Vec3.atCenterOf(center);
-        ring(l, at, radius + .3, VIOLET, false); ring(l, at, radius + .3, CYAN, true);
-        sound(l, at, SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), .65F);
-        return true;
     }
     static void blockDrops(BlockDropsEvent event) {
         Harvest harvest = HARVEST.get();
         if (harvest == null || event.getBreaker() != harvest.caster || event.isCanceled()) return;
+        if (harvest.storage == null) harvest.storage = new EsperStorage(harvest.caster, harvest.cargoLevel);
         event.getDrops().removeIf(drop -> {
-            ItemStack rest = harvest.storage.store(drop.getItem());
+            var rest = harvest.storage.store(drop.getItem());
             if (rest.isEmpty()) return true;
             drop.setItem(rest); return false;
         });
@@ -246,14 +223,50 @@ final class EsperEffects {
         Vec3 flat = new Vec3(v.x, 0, v.z);
         return flat.lengthSqr() < .0001 ? new Vec3(0, 0, 1) : flat.normalize();
     }
-    private static Vec3 behind(ServerPlayer p, LivingEntity target, double range) {
+    private static Vec3 loadedSight(ServerPlayer p, Vec3 from, Vec3 ray, int range) {
+        Vec3 last = from;
+        for (int distance = 1; distance <= range; distance++) {
+            Vec3 point = from.add(ray.scale(distance));
+            if (!p.level().hasChunkAt(BlockPos.containing(point))) break;
+            last = point;
+        }
+        return last;
+    }
+    private static LivingEntity visibleCreature(ServerPlayer p) {
+        Vec3 from = p.getEyePosition();
+        Vec3 ray = p.getLookAngle();
+        int serverView = Math.max(2, p.serverLevel().getServer().getPlayerList().getViewDistance());
+        int view = Math.clamp(p.requestedViewDistance(), 2, serverView);
+        Vec3 to = loadedSight(p, from, ray, (view + 1) * 16);
+        Vec3 stop = p.level().clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, p)).getLocation();
+        double length = from.distanceTo(stop);
+        for (int distance = 0; distance < length; distance += 8) {
+            Vec3 start = from.add(ray.scale(distance));
+            Vec3 end = from.add(ray.scale(Math.min(distance + 8, length)));
+            var nearby = p.level().getEntitiesOfClass(LivingEntity.class, new AABB(start, end).inflate(.45),
+                    entity -> entity != p && entity.isAlive() && !entity.isSpectator() && !entity.isInvisibleTo(p));
+            LivingEntity closest = null;
+            double best = Double.POSITIVE_INFINITY;
+            for (LivingEntity entity : nearby) {
+                var box = entity.getBoundingBox().inflate(entity.getPickRadius());
+                Vec3 hit = box.contains(start) ? start : box.clip(start, end).orElse(null);
+                if (hit != null && from.distanceToSqr(hit) < best) {
+                    best = from.distanceToSqr(hit);
+                    closest = entity;
+                }
+            }
+            if (closest != null) return closest;
+        }
+        return null;
+    }
+    private static Vec3 behind(ServerPlayer p, LivingEntity target) {
         Vec3 forward = Vec3.directionFromRotation(0, target.getYRot());
         double gap = (p.getBbWidth() + target.getBbWidth()) / 2 + .55;
         for (double depth = 0; depth <= 1.5; depth += .5) {
             Vec3 base = target.position().subtract(forward.scale(gap + depth));
             for (int dy : new int[]{0, 1, -1}) {
                 Vec3 at = base.add(0, dy, 0);
-                if (p.distanceToSqr(at) <= (range + 2) * (range + 2) && EsperDomain.allows(p.serverLevel(), p, at)
+                if (EsperDomain.allows(p.serverLevel(), p, at)
                         && safe(p.serverLevel(), p, at, target.onGround())) return at;
             }
         }
@@ -304,10 +317,13 @@ final class EsperEffects {
         if (target.isPassenger()) target.stopRiding();
         if (target.position().distanceToSqr(binding.anchor) > .025) teleport(target, binding.anchor);
         else if (target.getDeltaMovement().lengthSqr() > .002) push(target, Vec3.ZERO);
-        if (level.getGameTime() % 6 == 0) ring(level, binding.anchor.add(0, .75, 0), .9, VIOLET, false);
+        if (level.getGameTime() % 20 == 0)
+            fracture(level, BIND, binding.anchor.add(0, .75, 0), target.getLookAngle(), .9F, 23);
     }
     static void endSchoolEffects(ServerPlayer player, CompoundTag data) {
         stopShift(player, data);
+        EsperVolley.cancel(player);
+        if (data.getInt("BarrierHits") > 0) EsperNetworking.aura(player, EsperNetworking.Aura.GUARD, 0, 0);
         for (String key : new String[]{"Sling", "Barrier", "BarrierHits", "Insulation", "InsulationHits", "Overdrive"})
             data.remove(key);
         List<Portal> portals = PORTALS.get(player.serverLevel());
@@ -324,11 +340,8 @@ final class EsperEffects {
             stopShift(p, data);
             data.putLong("Sling", now + 100);
         }
-        if (now < data.getLong("Barrier") && data.getInt("BarrierHits") > 0 && now % 8 == 0) {
-            Vec3 center = p.position().add(0, .95, 0);
-            ring(p.serverLevel(), center, 1.35, CYAN, false);
-            ring(p.serverLevel(), center, 1.35, VIOLET, true);
-        }
+        if (now < data.getLong("Barrier") && data.getInt("BarrierHits") > 0 && now % 20 == 0)
+            EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, data.getInt("BarrierHits"), (int) (data.getLong("Barrier") - now));
     }
     static void stopShift(Player p, CompoundTag data) {
         data.remove("Shift");
@@ -350,10 +363,16 @@ final class EsperEffects {
         if (now >= data.getLong("Barrier") || data.getInt("BarrierHits") <= 0
                 || event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)
                 || (event.getSource().getDirectEntity() == null && !event.getSource().is(DamageTypeTags.IS_EXPLOSION))) return;
-        data.putInt("BarrierHits", data.getInt("BarrierHits") - 1);
+        int hits = data.getInt("BarrierHits") - 1;
+        data.putInt("BarrierHits", hits);
+        EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, hits, hits == 0 ? 0 : (int) (data.getLong("Barrier") - now));
         event.setCanceled(true);
         Vec3 center = p.position().add(0, 1, 0);
-        burst(p.serverLevel(), center, ParticleTypes.END_ROD, 22, .6);
+        Vec3 source = event.getSource().getSourcePosition();
+        Vec3 direction = source != null ? source.subtract(center).normalize() : p.getLookAngle();
+        fracture(p.serverLevel(), hits == 0 ? BUBBLE_IMPACT : SHATTER,
+                hits == 0 ? center : center.add(direction.scale(Esper.BARRIER_RADIUS)), direction,
+                hits == 0 ? Esper.BARRIER_RADIUS : .78F, 25);
         sound(p.serverLevel(), center, SoundEvents.AMETHYST_BLOCK_BREAK, .8F);
     }
     static void tickPortals(LevelTickEvent.Post event) {
@@ -366,9 +385,9 @@ final class EsperEffects {
         if (now % 4 != 0) return;
         for (Portal portal : portals) {
             if (!l.hasChunkAt(BlockPos.containing(portal.a)) || !l.hasChunkAt(BlockPos.containing(portal.b))) continue;
-            if (now % 8 == 0) {
-                ring(l, portal.a.add(0, 1, 0), 1.05, VIOLET, true);
-                ring(l, portal.b.add(0, 1, 0), 1.05, CYAN, true);
+            if (now % 28 == 0) {
+                fracture(l, PORTAL, portal.a.add(0, 1, 0), portal.b.subtract(portal.a), 1.1F, 32);
+                fracture(l, PORTAL, portal.b.add(0, 1, 0), portal.a.subtract(portal.b), 1.1F, 32);
             }
             for (ServerPlayer p : l.players()) {
                 Vec3 to = p.position().distanceToSqr(portal.a) < 1 ? portal.b
@@ -383,18 +402,11 @@ final class EsperEffects {
             }
         }
     }
-    static void launch(ServerLevel l, BlockPos pos) {
-        Vec3 center = Vec3.atCenterOf(pos);
-        ring(l, center.add(0, .7, 0), 1.35, CYAN, false);
-        for (int i = 1; i <= 20; i++) {
-            double phase = i * .58;
-            Vec3 point = center.add(Math.cos(phase) * .42, i * .52, Math.sin(phase) * .42);
-            burst(l, point, i < 6 ? ParticleTypes.CAMPFIRE_COSY_SMOKE : ParticleTypes.END_ROD, 3, .1);
-        }
-        sound(l, center, SoundEvents.FIREWORK_ROCKET_LAUNCH, .72F);
-    }
     static void sound(ServerLevel l, Vec3 at, SoundEvent sound, float pitch) {
         l.playSound(null, at.x, at.y, at.z, sound, SoundSource.PLAYERS, .75F, pitch);
+    }
+    private static void fracture(ServerLevel l, EsperNetworking.Pattern pattern, Vec3 at, Vec3 normal, float radius, int life) {
+        EsperNetworking.fracture(l, pattern, at, normal.normalize(), radius, life);
     }
     private static void dot(ServerLevel l, Vec3 at, ParticleOptions effect) {
         l.sendParticles(effect, at.x, at.y, at.z, 1, 0, 0, 0, 0);

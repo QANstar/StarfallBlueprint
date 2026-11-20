@@ -8,6 +8,7 @@ param(
     [switch]$BlackDogPolishCheck,
     [switch]$BlackDogLockMarkerCheck,
     [switch]$HaijiaVisualCheck,
+    [switch]$BestCockpitCheck,
     [switch]$BestMechVisualCheck,
     [switch]$ShowWindow,
     [switch]$HaijiaFlightCheck
@@ -51,6 +52,9 @@ try {
     }
     if ($HaijiaVisualCheck) {
         $arguments = @('-Dstarfall.haijiaVisualCheck=true') + $arguments + @('--width', '1440', '--height', '1000')
+    }
+    if ($BestCockpitCheck) {
+        $arguments = @('-Dstarfall.bestCockpitCheck=true') + $arguments + @('--width', '1440', '--height', '1000')
     }
     if ($BestMechVisualCheck) {
         $arguments = @('-Dstarfall.visualCheck=true', '-Dstarfall.bestMechVisualCheck=true') + $arguments + @('--width', '1440', '--height', '1000')

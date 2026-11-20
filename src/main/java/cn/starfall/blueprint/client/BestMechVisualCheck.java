@@ -70,7 +70,7 @@ public final class BestMechVisualCheck {
         private static final String[] NAMES = {"SG-E / JUANLIU", "SG-C / JITUAN", "SG-X / GUIHAI"};
         private static final String[] ROLES = {"ENGINEERING", "COMBAT", "UNIVERSAL"};
         private static final String[] TYPES = {BestMechProgression.ENGINEERING, BestMechProgression.COMBAT, BestMechProgression.UNIVERSAL};
-        private static final int[] ACCENTS = {0xffefba4f, 0xffdd7265, 0xff7be7e6};
+        private static final int[] ACCENTS = {0xff81d4cb, 0xffffb76c, 0xffcef4dc};
         private final boolean equipped;
         private BestMechModel model;
 
@@ -117,7 +117,7 @@ public final class BestMechVisualCheck {
                             cn.starfall.blueprint.BestMechCores.read(state), state.getString(cn.starfall.blueprint.BestMechModules.STATE),
                             combat.getString("Weapon"), combat.getString("Drone"), state.getBoolean(cn.starfall.blueprint.BestMechPowerSystems.WIRELESS_STATE));
                 } else {
-                    model.posePreview(platforms[i], 0, i == 0 ? cn.starfall.blueprint.BestMechArms.DRILL : "", "", "", "", "", "", "");
+                    model.posePreview(platforms[i], 0);
                 }
                 model.render(g.pose(), g.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
                 g.flush();

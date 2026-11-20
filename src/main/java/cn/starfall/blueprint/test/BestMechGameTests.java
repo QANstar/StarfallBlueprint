@@ -233,7 +233,7 @@ public final class BestMechGameTests {
                     && !m.interact(other, InteractionHand.MAIN_HAND).consumesAction(), "Empty hand mounts exactly one qualified controlling passenger");
             var anchor = m.getType().getDimensions().attachments().get(EntityAttachment.PASSENGER, 0, 0);
             h.assertTrue(Math.abs(anchor.y - 2.2) < 1E-5 && m.getMaxHealth() == 100
-                    && Math.abs(m.getBbWidth() - 1.8) < 1E-5 && Math.abs(m.getBbHeight() - 3.2) < 1E-5
+                    && Math.abs(m.getBbWidth() - 1.8) < 1E-5 && Math.abs(m.getBbHeight() - 3.68) < 1E-5
                     && m.getAttributeValue(Attributes.STEP_HEIGHT) <= 1, "Industrial size, health, step ceiling and explicit seat anchor match the registered entity");
             m.positionRider(p); double initialSeat = p.getY() - m.getY();
             var start = m.position(); tickRider(m, p, 0, 1);

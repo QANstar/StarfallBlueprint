@@ -394,6 +394,20 @@ public final class BestMechEntity extends PathfinderMob {
         }
         super.tick();
     }
+    public double cockpitEyeHeight() {
+        return switch (platformType()) {
+            case BestMechProgression.COMBAT -> 3.94;
+            case BestMechProgression.UNIVERSAL -> 4.375;
+            default -> 3.45;
+        };
+    }
+    @Override protected void positionRider(Entity passenger, Entity.MoveFunction move) {
+        if (passenger instanceof Player) {
+            move.accept(passenger, getX(), getY() + cockpitEyeHeight() - passenger.getEyeHeight(), getZ());
+        } else {
+            super.positionRider(passenger, move);
+        }
+    }
     @Override public LivingEntity getControllingPassenger() { return getFirstPassenger() instanceof Player p ? p : null; }
     @Override protected boolean canAddPassenger(Entity passenger) { return getPassengers().isEmpty() && passenger instanceof Player; }
     /** The server runs vanilla riding input, collision and gravity; clients interpolate tracking updates. */
@@ -597,7 +611,36 @@ public final class BestMechEntity extends PathfinderMob {
     public boolean fireWeapon(Player player) {
         return combatSystems.fire(player);
     }
+    // Area effects may enumerate both occupants of the same space in either order.
+    // Pair only opposite routes in the same tick. Repeated hits on one route remain independent.
+    private record Impact(net.minecraft.world.damagesource.DamageType type, int direct, int attacker, Vec3 origin) {}
+    private final java.util.Map<Impact, Integer> cockpitHits = new java.util.HashMap<>();
+    private long impactTick = Long.MIN_VALUE;
+    private boolean duplicateImpact(DamageSource source, boolean viaPilot) {
+        long now = level().getGameTime();
+        if (impactTick != now) {
+            cockpitHits.clear();
+            impactTick = now;
+        }
+        var direct = source.getDirectEntity();
+        var attacker = source.getEntity();
+        var impact = new Impact(source.type(), direct == null ? -1 : direct.getId(),
+                attacker == null ? -1 : attacker.getId(), source.getSourcePosition());
+        int old = cockpitHits.getOrDefault(impact, 0);
+        int direction = viaPilot ? 1 : -1;
+        int balance = old + direction;
+        if (balance == 0) cockpitHits.remove(impact);
+        else cockpitHits.put(impact, balance);
+        return old * direction < 0;
+    }
     @Override public boolean hurt(DamageSource source,float damage) {
+        if (getControllingPassenger() != null && duplicateImpact(source, false)) return false;
+        return hurtHull(source, damage);
+    }
+    void hurtOccupant(DamageSource source, float damage) {
+        if (!duplicateImpact(source, true)) hurtHull(source, damage);
+    }
+    private boolean hurtHull(DamageSource source, float damage) {
         if(hasUpgrade(BestMechProgression.ARMOR)||hasUpgrade(BestMechProgression.ZHENYUAN)) damage*=.75f;
         return super.hurt(source,combatSystems.reduceDamage(source, damage));
     }

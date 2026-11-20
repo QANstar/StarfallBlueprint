@@ -127,38 +127,71 @@ public final class BestMechClient {
         }
     }
 
+    @SubscribeEvent
+    public static void hideVehicleHearts(net.neoforged.neoforge.client.event.RenderGuiLayerEvent.Pre event) {
+        var player = Minecraft.getInstance().player;
+        if (player != null && player.getVehicle() instanceof BestMechEntity
+                && event.getName().equals(net.neoforged.neoforge.client.gui.VanillaGuiLayers.VEHICLE_HEALTH)) {
+            event.setCanceled(true);
+        }
+    }
+
     private static void render(GuiGraphics graphics) {
         Minecraft mc=Minecraft.getInstance();
         if(mc.options.hideGui || mc.player==null || !(mc.player.getVehicle() instanceof BestMechEntity mech))return;
         Snapshot sample = new Snapshot(mech.getHealth(), mech.getMaxHealth(), mech.energy(), mech.heat(), mech.wear(),
                 mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.engineeringCapable() ? mech.workArmKey() : "combat", mech.engineeringCapable() ? mech.workCost() : 12000, mech.capacity(), mech.supportsParkingSupport(), mech.supportDeployed());
-        float scale = Math.min(1f, Math.min((graphics.guiWidth() - 8f) / 170f, (graphics.guiHeight() - 8f) / 101f));
+        if (mc.screen != null) return;
+        int width = graphics.guiWidth(), height = graphics.guiHeight();
+        int center = width / 2, horizon = height / 2;
+        var state = status(sample);
+        int lamp = state.color();
+        // Shallow canopy braces leave the sight picture clear at every GUI scale.
+        for (int strip = 0; strip < 15; strip++) {
+            int span = (15-strip)*3;
+            graphics.fill(0,strip,span,strip+1,0xff23333d);
+            graphics.fill(width-span,strip,width,strip+1,0xff23333d);
+            graphics.fill(0,height-strip-1,span,height-strip,0xff192b37);
+            graphics.fill(width-span,height-strip-1,width,height-strip,0xff192b37);
+        }
+        graphics.fillGradient(center-70,0,center+70,24,0xe113212b,0x92203341);
+        int heading = Math.floorMod(Math.round(mc.player.getYRot()) + 180, 360);
+        graphics.drawCenteredString(mc.font, String.format(Locale.ROOT,"%03d°", heading), center,4,NORMAL);
+        for (int i=-8; i<=8; i++) {
+            int tickX=center+i*8-Math.floorMod(heading,5);
+            graphics.fill(tickX,17,tickX+1,i%2==0?23:20,0xffa4d2d1);
+        }
+        for (int side : new int[]{-1,1}) {
+            int x=center+side*12;
+            graphics.fill(x,horizon-4,x+1,horizon+5,0xffb0e4d9);
+            graphics.fill(Math.min(x,x+side*5),horizon,Math.max(x,x+side*5),horizon+1,0xffb0e4d9);
+        }
+        float scale = Math.min(1f, Math.min(width / 390f,height / 240f));
         graphics.pose().pushPose();
-        graphics.pose().translate(4, 4, 0);
-        graphics.pose().scale(scale, scale, 1);
-        PanelStatus state = status(sample);
-        graphics.fill(0, 0, 170, 101, 0xd9111e26);
-        graphics.fill(0, 0, 3, 101, state.color());
-        drawFit(graphics, mech.getName(), 7, 4, 156, TEXT);
-        drawFit(graphics, label(state.key()), 7, 16, 156, state.color());
-        compactResource(graphics, 29, "health", decimal(sample.health()) + " / " + decimal(sample.maxHealth()), sample.health(), sample.maxHealth(), NORMAL);
-        compactResource(graphics, 43, "energy", compactEnergy(sample.energy()) + " / " + compactEnergy(sample.capacity()) + " XH", sample.energy(), sample.capacity(), NORMAL);
-        compactResource(graphics, 57, "heat", sample.heat() + " / " + BestMechEntity.MAX_HEAT, sample.heat(), BestMechEntity.MAX_HEAT, WARNING);
-        compactResource(graphics, 71, "wear", sample.wear() + " / " + BestMechEntity.MAX_WEAR, sample.wear(), BestMechEntity.MAX_WEAR, WORN);
-        drawFit(graphics, Component.translatableWithFallback("hud.starfall_blueprint.mech.open_controls", "%s: Controls", PANEL.getTranslatedKeyMessage()), 7, 88, 156, TEXT);
+        graphics.pose().translate(6,height-8-67*scale,0);
+        graphics.pose().scale(scale,scale,1);
+        BestHangarTerminal.frame(graphics,mc.font,0,0,142,67,"SYS");
+        drawFit(graphics,mech.getName(),8,6,101,TEXT);
+        meter(graphics,24,"health",decimal(sample.health())+" / "+decimal(sample.maxHealth()),sample.health(),sample.maxHealth(),NORMAL);
+        meter(graphics,45,"energy",compactEnergy(sample.energy())+" XH",sample.energy(),sample.capacity(),NORMAL);
         graphics.pose().popPose();
+        graphics.pose().pushPose();
+        graphics.pose().translate(width-6-142*scale,height-8-67*scale,0);
+        graphics.pose().scale(scale,scale,1);
+        BestHangarTerminal.frame(graphics,mc.font,0,0,142,67,"OPS");
+        drawFit(graphics,label(state.key()),8,6,101,lamp);
+        meter(graphics,24,"heat",Integer.toString(sample.heat()),sample.heat(),BestMechEntity.MAX_HEAT,sample.thermalLocked()?DANGER:WARNING);
+        meter(graphics,45,"wear",Integer.toString(sample.wear()),sample.wear(),BestMechEntity.MAX_WEAR,WORN);
+        graphics.pose().popPose();
+        drawFit(graphics,Component.translatableWithFallback("hud.starfall_blueprint.mech.open_controls","%s: Controls",PANEL.getTranslatedKeyMessage()),8,20,86,TEXT);
     }
 
-    private static void compactResource(GuiGraphics graphics, int y, String key, String value, double current, double maximum, int color) {
-        drawFit(graphics, label(key), 7, y, 52, MUTED);
-        Component number = Component.literal(value);
-        drawFit(graphics, number, 62, y, 101, TEXT);
-        graphics.fill(7, y + 10, 163, y + 12, 0xff34464e);
-        int fill = (int) Math.floor(156 * (maximum > 0 ? Math.clamp(current / maximum, 0, 1) : 0));
-        if (current < maximum) fill = Math.min(fill, 155);
-        if (fill > 0) graphics.fill(7, y + 10, 7 + fill, y + 12, color);
+    private static void meter(GuiGraphics graphics,int y,String key,String value,double current,double maximum,int tint) {
+        drawFit(graphics,label(key),8,y,48,MUTED);
+        drawFit(graphics,Component.literal(value),62,y,74,TEXT);
+        double fraction=maximum>0?Math.clamp(current/maximum,0,1):0;
+        for(int i=0;i<16;i++) graphics.fill(8+i*8,y+11,14+i*8,y+14,i+1<=Math.ceil(fraction*16)?tint:0xff324551);
     }
-
     /** Worldless fixture contract: caller supplies position and actual sample; bounds are 248 by 140. */
     static void renderPanel(GuiGraphics graphics, int x, int y, Snapshot sample) {
         Minecraft mc = Minecraft.getInstance();
@@ -207,11 +240,12 @@ public final class BestMechClient {
         @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             int x = Math.max(4, (width - 260) / 2), y = Math.max(4, (height - 150) / 2);
             int panelWidth = Math.min(260, width - 8);
-            graphics.fill(x, y, x + panelWidth, y + 150, 0xf0111e26);
+            BestHangarTerminal.frame(graphics,font,x,y,panelWidth,150,"CTRL");
             drawFit(graphics, title, x + 8, y + 7, panelWidth - 16, TEXT);
             KeyMapping[] keys = {DRILL, FIRE, LIFT, MINING_MODE, FRIENDLY_FIRE, TERRAIN_DAMAGE, LINGCHUAN_SUPPORT};
             for (int i = 0; i < keys.length; i++) {
                 KeyMapping key = keys[i];
+                if ((i & 1) == 0) graphics.fill(x+4,y+20+i*15,x+panelWidth-4,y+34+i*15,BestHangarTerminal.PANEL);
                 Component line = Component.empty().append(key.getTranslatedKeyMessage()).append("  ·  ")
                         .append(Component.translatable(key.getName()));
                 drawFit(graphics, line, x + 8, y + 23 + i * 15, panelWidth - 16, TEXT);

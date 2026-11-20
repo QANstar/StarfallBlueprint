@@ -38,7 +38,18 @@ public final class BestMechCombatSystems {
     public int cooldown() { return cooldown; }
     private boolean universal() { return BestMechProgression.UNIVERSAL.equals(mech.platformType()); }
     public void save(CompoundTag root) { var t=new CompoundTag(); t.putString("Weapon",weapon); t.putString("Drone",drone); t.putInt("Cooldown",cooldown); t.putInt("DroneCooldown",droneCooldown); if(friendlyFire)t.putBoolean("FriendlyFire",true); if(terrainDamage)t.putBoolean("TerrainDamage",true); root.put(STATE,t); }
-    public void load(CompoundTag root) { var t=root.getCompound(STATE); weapon=WEAPONS.contains(t.getString("Weapon"))?t.getString("Weapon"):""; String d=t.getString("Drone"); drone=ATTACK_DRONE.equals(d)||DEFENSE_DRONE.equals(d)?d:""; cooldown=Math.max(0,Math.min(100,root.contains("WeaponCooldown")?root.getInt("WeaponCooldown"):t.getInt("Cooldown"))); droneCooldown=Math.max(0,Math.min(100,t.getInt("DroneCooldown"))); friendlyFire=t.getBoolean("FriendlyFire"); terrainDamage=t.getBoolean("TerrainDamage"); }
+    public void load(CompoundTag root) {
+        var state = root.getCompound(STATE);
+        String savedWeapon = state.getString("Weapon");
+        String savedDrone = state.getString("Drone");
+        weapon = WEAPONS.contains(savedWeapon) ? savedWeapon : "";
+        drone = ATTACK_DRONE.equals(savedDrone) || DEFENSE_DRONE.equals(savedDrone) ? savedDrone : "";
+        cooldown = Math.clamp(root.contains("WeaponCooldown") ? root.getInt("WeaponCooldown") : state.getInt("Cooldown"), 0, 100);
+        droneCooldown = Math.clamp(state.getInt("DroneCooldown"), 0, 100);
+        friendlyFire = state.getBoolean("FriendlyFire");
+        terrainDamage = state.getBoolean("TerrainDamage");
+        mech.syncCombatAppearance(weapon, drone);
+    }
     private boolean service(Player p) { return !mech.level().isClientSide && mech.combatCapable() && mech.isolated() && mech.isAlive() && mech.qualifiedFor(p) && p.level()==mech.level() && mech.distanceToSqr(p)<=64 && mech.getPassengers().isEmpty() && mech.onGround() && mech.getDeltaMovement().lengthSqr()<.01 && !mech.isInWater() && !mech.isInLava() && mech.level().mayInteract(p,mech.blockPosition()); }
     public boolean install(Player p, InteractionHand hand) {
         ItemStack held=p.getItemInHand(hand);
@@ -50,6 +61,7 @@ public final class BestMechCombatSystems {
             boolean isDrone=key.equals(ATTACK_DRONE)||key.equals(DEFENSE_DRONE);
             if(!(isDrone?drone:weapon).isEmpty()) { p.displayClientMessage(Component.literal("对应战斗槽已占用"),true); return true; }
             if(isDrone) drone=key; else weapon=key;
+            mech.syncCombatAppearance(weapon, drone);
             held.shrink(1); p.getInventory().setChanged(); p.displayClientMessage(Component.literal("战斗组件已安装"),true); return true;
         }
         return false;
@@ -60,6 +72,7 @@ public final class BestMechCombatSystems {
         int slot=p.getInventory().getFreeSlot(); if(slot<0) { p.displayClientMessage(Component.literal("背包需要一个空位"),true); return true; }
         p.getInventory().setItem(slot,CatalogueContent.stack(key,1)); p.getInventory().setChanged();
         if(removeDrone) drone=""; else weapon="";
+        mech.syncCombatAppearance(weapon, drone);
         p.displayClientMessage(Component.literal("战斗组件已卸载"),true); return true;
     }
     /** Conservative faction rule: no player, pet, passenger, team ally or neutral creature is ever a target. */

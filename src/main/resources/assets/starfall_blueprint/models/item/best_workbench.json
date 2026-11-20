@@ -1,3 +1,6 @@
 {
-  "parent": "starfall_blueprint:block/best_workbench"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "starfall_blueprint:item/best_workbench"
+  }
 }

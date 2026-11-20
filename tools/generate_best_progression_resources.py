@@ -79,5 +79,7 @@ def main():
             if 'BEST_THREE_MECHS.md' not in text:
                 heading, separator, body=text.partition('\n')
                 path.write_text(heading+'\n\n> 2026-11-12：现行三机组件成长见[三机指南](BEST_THREE_MECHS.md)。下文旧代际晋升与23节点说明为历史记录。\n'+body,encoding='utf-8')
+    from generate_best_visuals import write_assets
+    write_assets()
     print(f'Generated {len(NAMES)} Water God definitions, models, icons and translations.')
 if __name__ == '__main__': main()

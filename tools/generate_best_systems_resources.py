@@ -62,4 +62,6 @@ def main():
             '维护：隔离停稳后潜行持组件右键安装；潜行主手诊断器＋副手钢制固定件拆卸。货舱放钢材/医疗物资；每2秒最多服务1友方，耗3000–4000 XH及1份物资。',
             'Support: isolate and park, then sneak-use a component to install; sneak-use a main-hand diagnostic tool with off-hand steel fasteners to remove. Cargo steel/medical supplies: one ally per 2s, 3000–4000 XH and one supply per treatment.')[index]
         write(path,data)
+    from generate_best_visuals import write_assets
+    write_assets()
 if __name__=='__main__': main()

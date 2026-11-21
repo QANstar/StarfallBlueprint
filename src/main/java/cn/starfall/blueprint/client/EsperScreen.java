@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 final class EsperScreen extends AbstractContainerScreen<EsperMenu> {
     private static final String[] GRADES = {"-", "F", "E", "D", "C", "B", "A", "S"};
-    private static final int INK = 0xffeaf4f4, MUTED = 0xffa5bec3, SPACE = 0xffa9e4ee, ELECTRIC = 0xffefcc8a;
+    private static final int INK = 0xffeaf4f4, MUTED = 0xffa5bec3, SPACE = 0xffa9e4ee, ELECTRIC = 0xff68baff;
     private static final int CARD_W = 116, CARD_H = 46, STEP_X = 153, STEP_Y = 67;
     private final Button[] equip = new Button[Esper.SLOTS], clear = new Button[Esper.SLOTS];
     private Esper.School preview = Esper.School.SPACE, displayed;
@@ -165,7 +165,8 @@ final class EsperScreen extends AbstractContainerScreen<EsperMenu> {
             g.fill(x, y, x + CARD_W, y + CARD_H, node == selected ? 0xff304b51 : node == hovered ? 0xff294047 : 0xff1b2c31);
             g.renderOutline(x, y, CARD_W, CARD_H, node == selected ? accent() : 0xff4c686e);
             g.fill(x + 1, y + 1, x + 4, y + CARD_H - 1, color);
-            g.drawString(font, font.plainSubstrByWidth(node.title().getString(), CARD_W - 20), x + 10, y + 8, INK, false);
+            EsperSkillIcons.draw(g, node, x + 6, y + 5);
+            g.drawString(font, font.plainSubstrByWidth(node.title().getString(), CARD_W - 32), x + 25, y + 8, INK, false);
             g.drawString(font, GRADES[node.rank], x + 10, y + 24, color, false);
             for (int i = 0; i < Esper.MAX_LEVEL; i++)
                 g.fill(x + 61 + i * 8, y + 29, x + 67 + i * 8, y + 33, i < level ? color : 0xff3d545a);
@@ -237,7 +238,7 @@ final class EsperScreen extends AbstractContainerScreen<EsperMenu> {
                 var label = key.copy().append(" ").append(index < 0 ? Component.literal("-") : Esper.SKILLS[index].title());
                 equip[i].setMessage(Component.literal(font.plainSubstrByWidth(label.getString(), equip[i].getWidth() - 8)));
                 equip[i].setTooltip(Tooltip.create(index < 0 ? Esper.label("equip", i + 1) : label));
-                equip[i].active = menu.school() == displayed && menu.level(selectedIndex) > 0 && index != selectedIndex;
+                equip[i].active = !selected.passive() && menu.school() == displayed && menu.level(selectedIndex) > 0 && index != selectedIndex;
                 clear[i].active = index >= 0;
             }
         }

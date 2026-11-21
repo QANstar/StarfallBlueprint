@@ -66,6 +66,22 @@ final class EsperStorage extends SimpleContainer {
         setChanged();
         return rest;
     }
+    ItemStack returnAmmo(int preferred, ItemStack payload) {
+        ItemStack rest = payload.copy();
+        int slot = Math.clamp(preferred, AMMO, SIZE - 1);
+        for (int n = 0; n < SIZE - AMMO && !rest.isEmpty(); n++) {
+            int i = AMMO + (slot - AMMO + n) % (SIZE - AMMO);
+            ItemStack existing = getItem(i);
+            if (existing.isEmpty()) setItem(i, rest.split(rest.getMaxStackSize()));
+            else if (ItemStack.isSameItemSameComponents(existing, rest)) {
+                int count = Math.min(rest.getCount(), existing.getMaxStackSize() - existing.getCount());
+                existing.grow(count); rest.shrink(count);
+            }
+        }
+        if (!rest.isEmpty()) rest = store(rest);
+        setChanged();
+        return rest;
+    }
     int firstAmmo() {
         for (int i = AMMO; i < SIZE; i++) if (!getItem(i).isEmpty()) return i;
         return -1;

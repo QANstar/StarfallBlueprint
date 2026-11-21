@@ -35,23 +35,27 @@ public final class Esper {
         public java.util.List<Skill> skills() { return java.util.Arrays.stream(SKILLS).filter(s -> s.school == this).toList(); }
     }
     public enum Skill {
-        BLINK(1, 20, 20, 0, 1), PORTAL(3, 45, 60, 2, 0), SLASH(2, 17, 10, 1, 1),
+        BLINK(1, 20, 20, 0, 1), PORTAL(3, 45, 60, 2, 0), SLASH(2, 8, 10, 1, 1),
         STORAGE(2, 0, 60, 1, 2), COLLAPSE(5, 58, 80, 4, 2), VOLLEY(3, 34, 12, 2, 2),
-        SLING(2, 20, 24, 1, 0), SHIFT(4, 22, 12, 3, 0), PULL(3, 28, 32, 2, 1),
-        DOMAIN(5, 65, 50, 4, 0), BARRIER(5, 50, 100, 4, 1),
+        SLING(2, 28, 28, 1, 0), SHIFT(4, 10, 12, 3, 0), PULL(3, 28, 32, 2, 1),
+        DOMAIN(5, 65, 50, 4, 0), BARRIER(5, 0, 10, 4, 1),
         ARC(3, 25, 32, 2, 0, 15), LOCK(4, 32, 75, 3, 1),
-        INDUCTION(1, 12, 100, 0, 1, 0), SPARK(1, 17, 18, 1, 0, 7),
+        INDUCTION(1, 8, 24, 0, 1, 0), SPARK(1, 17, 18, 1, 0, 7),
         BOOST(2, 18, 40, 1, 1, 8), FEED(2, 15, 50, 1, 2, 10),
         INSULATE(3, 27, 90, 2, 1, 13), SCAN(3, 16, 100, 2, 2, 8),
         PARALYZE(4, 32, 85, 3, 0, 20), PULSE(4, 41, 95, 3, 1, 24),
         OVERDRIVE(4, 32, 130, 3, 2, 18), STORM(5, 58, 160, 4, 0, 36),
         SURGE(5, 50, 145, 4, 2, 30), LANCE(4, 36, 55, 3, 3, 23),
-        IONIZE(3, 21, 70, 2, 3, 12);
+        IONIZE(3, 12, 32, 2, 3, 4),
+        CAPACITOR(1, 0, 0, 0, 2, 0), RECYCLING(3, 0, 0, 2, 4, 0),
+        ANCHOR(2, 0, 0, 0, 3), RESONANCE(4, 0, 0, 3, 3);
 
         public final int rank, cost, cooldown, column, row, charge;
         public final School school;
         public final String key;
-        public int cooldownAt(int level) { return cooldown + cooldown * (Math.max(1, level) - 1) / 5; }
+        public boolean passive() { return this == CAPACITOR || this == RECYCLING || this == ANCHOR || this == RESONANCE; }
+        public boolean channelled() { return this == SLASH || this == COLLAPSE || this == VOLLEY; }
+        public int cooldownAt(int level) { return Math.max(0, cooldown - cooldown * (Math.max(1, level) - 1) / 12); }
         Skill(int rank, int cost, int cooldown, int column, int row) {
             this(rank, cost, cooldown, column, row, -1);
         }
@@ -64,7 +68,7 @@ public final class Esper {
         public java.util.List<Skill> prerequisites() {
             return switch (this) {
                 case BLINK, INDUCTION -> java.util.List.of();
-                case SLING, SLASH, STORAGE -> java.util.List.of(BLINK);
+                case SLING, SLASH, STORAGE, ANCHOR -> java.util.List.of(BLINK);
                 case PORTAL -> java.util.List.of(SLING);
                 case PULL -> java.util.List.of(SLASH);
                 case VOLLEY -> java.util.List.of(STORAGE);
@@ -73,7 +77,7 @@ public final class Esper {
                 case DOMAIN -> java.util.List.of(SHIFT, STORAGE);
                 case BARRIER -> java.util.List.of(LOCK);
                 case COLLAPSE -> java.util.List.of(VOLLEY, LOCK);
-                case SPARK, BOOST, FEED -> java.util.List.of(INDUCTION);
+                case SPARK, BOOST, FEED, CAPACITOR -> java.util.List.of(INDUCTION);
                 case ARC -> java.util.List.of(SPARK);
                 case INSULATE -> java.util.List.of(BOOST);
                 case SCAN -> java.util.List.of(FEED);
@@ -84,6 +88,8 @@ public final class Esper {
                 case SURGE -> java.util.List.of(OVERDRIVE, PULSE);
                 case IONIZE -> java.util.List.of(SPARK);
                 case LANCE -> java.util.List.of(IONIZE, ARC);
+                case RECYCLING -> java.util.List.of(IONIZE, CAPACITOR);
+                case RESONANCE -> java.util.List.of(ANCHOR, SLASH);
             };
         }
         public Component title() { return label("skill." + key); }
@@ -236,7 +242,7 @@ public final class Esper {
         if (slot < 0 || slot >= SLOTS || index < -1 || index >= SKILLS.length) return false;
         CompoundTag d = data(player);
         School school = school(d);
-        if (school == null || (index >= 0 && (SKILLS[index].school != school || level(d, SKILLS[index]) == 0))) return false;
+        if (school == null || (index >= 0 && (SKILLS[index].school != school || SKILLS[index].passive() || level(d, SKILLS[index]) == 0))) return false;
         for (int i = 0; i < SLOTS; i++)
             if (index >= 0 && slot(d, i) == index) d.remove("Slot" + i + "_" + school);
         d.putInt("Slot" + slot + "_" + school, index + 1);
@@ -254,6 +260,7 @@ public final class Esper {
         public static final int TOGGLE = -1;
         public static final int CANCEL_CHARGE = -2;
         public static final int RELEASE = 8;
+        public static final int HOLD = 16;
         static final Type<Cast> TYPE = new Type<>(StarfallBlueprint.id("esper_cast"));
         static final StreamCodec<RegistryFriendlyByteBuf, Cast> CODEC =
                 StreamCodec.of((buf, msg) -> buf.writeByte(msg.slot), buf -> new Cast(buf.readByte()));
@@ -273,9 +280,10 @@ public final class Esper {
         NeoForge.EVENT_BUS.addListener(Esper::clonePlayer);
         NeoForge.EVENT_BUS.addListener(Esper::damage);
         NeoForge.EVENT_BUS.addListener(EsperEffects::tickPortals);
-        NeoForge.EVENT_BUS.addListener(EsperCollapse::tick);
         NeoForge.EVENT_BUS.addListener(EsperEffects::tickBinding);
         NeoForge.EVENT_BUS.addListener(EsperElectric::tickFields);
+        NeoForge.EVENT_BUS.addListener(EsperWarp::tick);
+        NeoForge.EVENT_BUS.addListener(EsperCollapse::tick);
         NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST, EsperEffects::blockDrops);
         NeoForge.EVENT_BUS.addListener(EsperDomain::guardTravel);
         NeoForge.EVENT_BUS.addListener(EsperDomain::commands);
@@ -283,8 +291,7 @@ public final class Esper {
             if (e.getEntity() instanceof ServerPlayer p && p.getPersistentData().contains(DATA)) {
                 var d = data(p);
                 d.remove("Mode");
-                EsperVolley.cancel(p);
-                EsperEffects.stopShift(p, d);
+                EsperEffects.endSchoolEffects(p, d);
             }
         });
     }
@@ -298,8 +305,7 @@ public final class Esper {
         boolean enabled = rank(d) > 0 && !d.getBoolean("Mode");
         d.putBoolean("Mode", enabled);
         if (!enabled) {
-            EsperVolley.cancel(p);
-            EsperEffects.stopShift(p, d);
+            EsperEffects.endModeEffects(p, d);
         }
         EsperNetworking.sync(p, d, now);
     }
@@ -316,6 +322,11 @@ public final class Esper {
         if (school(d) != skill.school || level <= 0 || rank(d) < skill.rank || !prerequisites(d, skill)
                 || now < d.getLong("NextCast"))
             return false;
+        if (skill.passive()) return false;
+        if (skill == Skill.BARRIER && d.contains("Barrier")) {
+            EsperEffects.stopBarrier(p, d);
+            return true;
+        }
         if (skill == Skill.SHIFT && d.contains("Shift")) {
             EsperEffects.stopShift(p, d);
             return true;
@@ -331,6 +342,11 @@ public final class Esper {
             return false;
         }
         if (skill == Skill.VOLLEY) return EsperVolley.begin(p, slot, level, now);
+        if (skill == Skill.SLASH || skill == Skill.COLLAPSE) {
+            if (!EsperChannel.begin(p, slot, skill, level, now)) return false;
+            completeCast(d, skill, level, now);
+            return true;
+        }
         if (!EsperEffects.cast(p, d, skill, level)) {
             p.displayClientMessage(label("no_target"), true);
             return false;
@@ -370,6 +386,7 @@ public final class Esper {
         if (rank(d) == 0) return;
         long now = p.serverLevel().getServer().overworld().getGameTime();
         EsperVolley.tick(p, d, now);
+        EsperChannel.tick(p, d, now);
         EsperEffects.tickPlayer(p, d, now);
         if (p.isSpectator() && d.getBoolean("Mode")) {
             d.remove("Mode");
@@ -378,14 +395,16 @@ public final class Esper {
         if (d.getBoolean("Mode") && p.tickCount % 5 == 0) EsperNetworking.sync(p, d, now);
         if (p.tickCount % 20 != 0) return;
         refresh(p, d);
-        d.putInt("Power", Math.min(d.getInt("Max"), d.getInt("Power") + d.getInt("Regen")));
-        if (school(d) == School.ELECTRIC && d.getInt("Charge") < 18) d.putInt("Charge", d.getInt("Charge") + 1);
+        if (!d.contains("Shift") && !EsperChannel.active(p))
+            d.putInt("Power", Math.min(d.getInt("Max"), d.getInt("Power") + d.getInt("Regen")));
+        for (Skill skill : school(d).skills()) if (skill.passive() && level(d, skill) > 0)
+            d.putInt("Mastery_" + skill.key, Math.min(9999, mastery(d, skill) + 1));
     }
     private static void clonePlayer(PlayerEvent.Clone event) {
         if (!event.getOriginal().getPersistentData().contains(DATA)) return;
         CompoundTag d = data(event.getOriginal()).copy();
-        d.remove("Barrier"); d.remove("Sling"); d.remove("NextCast"); d.remove("Shift");
-        if (d.contains("ShiftGranted")) EsperEffects.stopShift(event.getEntity(), d);
+        d.remove("Barrier"); d.remove("BarrierHits"); d.remove("Sling"); d.remove("NextCast");
+        EsperEffects.stopShift(event.getEntity(), d);
         if (event.isWasDeath()) { d.remove("DomainReturn"); d.remove("Mode"); }
         event.getEntity().getPersistentData().put(DATA, d);
     }

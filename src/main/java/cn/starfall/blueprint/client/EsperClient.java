@@ -6,6 +6,7 @@ import cn.starfall.blueprint.StarfallBlueprint;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -44,7 +45,7 @@ public final class EsperClient {
         for (int i = 0; i < CAST.length; i++) {
             if (pressed(CAST[i]) && acceptsInput && enabled() && !toggle) {
                 PacketDistributor.sendToServer(new Esper.Cast(i));
-                if (state.slots().get(i).skill() == Esper.Skill.VOLLEY.ordinal()) charging = i;
+                if (state.slots().get(i).skill() >= 0 && Esper.SKILLS[state.slots().get(i).skill()].channelled()) charging = i;
             }
         }
         if (charging >= 0) {
@@ -54,6 +55,8 @@ public final class EsperClient {
             } else if (!CAST[charging].isDown()) {
                 PacketDistributor.sendToServer(new Esper.Cast(Esper.Cast.RELEASE + charging));
                 charging = -1;
+            } else if (mc.player.tickCount % 4 == 0) {
+                PacketDistributor.sendToServer(new Esper.Cast(Esper.Cast.HOLD + charging));
             }
         }
     }
@@ -67,43 +70,49 @@ public final class EsperClient {
             var mc = Minecraft.getInstance();
             if (!enabled() || mc.player == null || !mc.player.isAlive() || mc.player.isSpectator()
                     || mc.screen != null || mc.options.hideGui) return;
-            var font = mc.font;
-            int x = g.guiWidth() - 141, y = 9, right = x + 132;
-            boolean electric = state.school() == Esper.School.ELECTRIC.ordinal();
-            int accent = electric ? 0xfff3c775 : 0xffbcebf0;
-            g.fill(x, y, right, y + (electric ? 92 : 84), 0xd5142026);
-            g.fill(x, y, right, y + 2, accent);
-            g.drawString(font, Esper.label("hud_power"), x + 6, y + 6, accent, false);
-            String power = state.power() + "/" + state.capacity();
-            g.drawString(font, power, right - 6 - font.width(power), y + 6, 0xfff1f6f6, false);
-            int fill = 120 * Math.clamp(state.power(), 0, Math.max(1, state.capacity())) / Math.max(1, state.capacity());
-            g.fill(x + 6, y + 18, right - 6, y + 21, 0xff32464d);
-            g.fill(x + 6, y + 18, x + 6 + fill, y + 21, accent);
-            if (electric) g.drawString(font, Esper.label("charge", state.charge()), x + 6, y + 25, accent, false);
-            for (int i = 0; i < Esper.SLOTS; i++) {
-                var slot = state.slots().get(i);
-                int row = y + (electric ? 37 : 27) + i * 13;
-                int ticks = Math.max(0, slot.ticks() - age);
-                int color = ticks > 0 ? 0xffa2b5b8 : 0xffe9f5f2;
-                g.fill(x + 6, row, right - 6, row + 12, 0x8842535b);
-                String key = font.plainSubstrByWidth(CAST[i].getTranslatedKeyMessage().getString(), 29);
-                g.drawString(font, key, x + 9, row + 2, accent, false);
-                if (slot.skill() < 0 || slot.skill() >= Esper.SKILLS.length) {
-                    g.drawString(font, "-", x + 42, row + 2, 0xff789098, false);
-                    continue;
-                }
-                var skill = Esper.SKILLS[slot.skill()];
-                String cooldown = ticks > 0 ? String.format(java.util.Locale.ROOT, "%.1f", ticks / 20F) : "";
-                int cooldownWidth = font.width(cooldown);
-                g.drawString(font, font.plainSubstrByWidth(skill.title().getString(), 81 - cooldownWidth),
-                        x + 41, row + 2, color, false);
-                if (ticks > 0) {
-                    int cooldownFill = 120 * ticks / Math.max(ticks, skill.cooldownAt(slot.rank()));
-                    g.fill(x + 6, row + 11, x + 6 + cooldownFill, row + 12, accent);
-                    g.drawString(font, cooldown, right - 8 - cooldownWidth, row + 2, color, false);
-                }
-            }
+            drawHud(g, state, age, charging);
         });
     }
+
+    static void drawHud(GuiGraphics g, EsperNetworking.Hud hud, int age, int pressedSlot) {
+        var font = Minecraft.getInstance().font;
+        boolean electric = hud.school() == Esper.School.ELECTRIC.ordinal();
+        int accent = electric ? 0xff78bdff : 0xffb1e9e6;
+        int right = g.guiWidth() - 8, left = right - 104, top = 8;
+        g.fill(left, top, right, top + 15, 0xd41a2530);
+        g.fill(left, top, left + 2, top + 15, accent);
+        String power = hud.power() + "/" + hud.capacity();
+        int powerX = right - font.width(power) - 4;
+        g.drawString(font, power, powerX, top + 3, 0xfff3f6f7, false);
+        String charge = electric ? "\u26A1" + hud.charge() : "";
+        int chargeX = powerX - font.width(charge) - 5;
+        int meter = Math.min(45, (electric ? chargeX : powerX) - left - 10);
+        if (meter > 0) {
+            int start = left + 6;
+            int fill = meter * Math.clamp(hud.power(), 0, Math.max(1, hud.capacity())) / Math.max(1, hud.capacity());
+            g.fill(start, top + 6, start + meter, top + 9, 0xff455565);
+            g.fill(start, top + 6, start + fill, top + 9, accent);
+        }
+        if (electric) g.drawString(font, charge, chargeX, top + 3, 0xffffcd79, false);
+        for (int i = 0; i < Esper.SLOTS; i++) {
+            int x = left + i * 27, y = top + 18;
+            var slot = hud.slots().get(i);
+            int ticks = Math.max(0, slot.ticks() - age);
+            g.fill(x, y, x + 23, y + 30, 0xd41a2530);
+            g.fill(x + 1, y + 1, x + 22, y + 21, i == pressedSlot ? 0xff3d666e : 0xc82a3a49);
+            if (slot.skill() >= 0 && slot.skill() < Esper.SKILLS.length) {
+                var skill = Esper.SKILLS[slot.skill()];
+                EsperSkillIcons.draw(g, skill, x + 4, y + 3);
+                if (ticks > 0) {
+                    int remaining = 19 * ticks / Math.max(ticks, skill.cooldownAt(slot.rank()));
+                    g.fill(x + 2, y + 2, x + 21, y + 2 + remaining, 0x98202b38);
+                    g.fill(x + 2, y + 19, x + 2 + remaining, y + 21, accent);
+                } else g.fill(x + 2, y + 20, x + 21, y + 21, accent);
+            } else g.fill(x + 10, y + 10, x + 13, y + 13, 0xff657784);
+            String key = font.plainSubstrByWidth(CAST[i].getTranslatedKeyMessage().getString(), 21);
+            g.drawString(font, key, x + (23 - font.width(key)) / 2, y + 22, 0xffc6d7e3, false);
+        }
+    }
+
     private EsperClient() {}
 }

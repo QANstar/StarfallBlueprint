@@ -5,7 +5,6 @@ import static cn.starfall.blueprint.EsperNetworking.Pattern.*;
 import java.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.*;
 import net.minecraft.sounds.*;
@@ -18,11 +17,8 @@ import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import org.joml.Vector3f;
 
 final class EsperEffects {
-    private static final DustParticleOptions CYAN = new DustParticleOptions(new Vector3f(.13F, .94F, 1F), 1.15F);
-    private static final DustParticleOptions WHITE = new DustParticleOptions(new Vector3f(.86F, .98F, 1F), .85F);
     private record Portal(UUID owner, Vec3 a, Vec3 b, long end, Set<UUID> inside) {}
     private static final class Harvest {
         final ServerPlayer caster;
@@ -30,7 +26,7 @@ final class EsperEffects {
         EsperStorage storage;
         Harvest(ServerPlayer caster, int cargoLevel) { this.caster = caster; this.cargoLevel = cargoLevel; }
     }
-    private record Binding(UUID owner, ServerLevel dimension, Vec3 anchor, long until) {}
+    private record Binding(UUID owner, ServerLevel dimension, Vec3 anchor, long until, Object source) {}
     private static final Map<ServerLevel, List<Portal>> PORTALS = new WeakHashMap<>();
     private static final Map<LivingEntity, Binding> BINDINGS = new WeakHashMap<>();
     private static final ThreadLocal<Harvest> HARVEST = new ThreadLocal<>();
@@ -65,28 +61,25 @@ final class EsperEffects {
             }
             case SLASH -> slash(p, level);
             case STORAGE -> new EsperStorage(p, level).open();
-            case COLLAPSE -> { return EsperCollapse.start(p, level); }
-            case SLING -> {
-                Vec3 v = p.getLookAngle().scale(.95 + .24 * level);
-                push(p, new Vec3(v.x, Math.max(.28, v.y + .23), v.z));
-                d.putLong("Sling", time + 100);
-                fracture(l, WAKE, at.add(0, .65, 0), v, 1.45F, 27);
-                sound(l, at, SoundEvents.BREEZE_JUMP, 1.25F);
-            }
+            case COLLAPSE -> { return false; }
+            case SLING -> { return EsperWarp.cast(p, level); }
             case SHIFT -> {
-                if (p.isFallFlying() || p.getAbilities().mayfly) return false;
-                d.putLong("Shift", time + 55 + level * 24);
-                d.putBoolean("ShiftGranted", true);
+                if (p.isFallFlying()) p.stopFallFlying();
+                d.putLong("Shift", Long.MAX_VALUE);
+                d.putLong("ShiftTakeoff", time + 6);
+                d.putBoolean("ShiftGranted", !p.getAbilities().mayfly);
+                d.putBoolean("ShiftWasFlying", p.getAbilities().flying);
                 p.getAbilities().mayfly = true;
                 p.getAbilities().flying = true;
-                p.resetFallDistance();
-                p.onUpdateAbilities();
-                push(p, new Vec3(0, .22, 0));
-                fracture(l, WAKE, at, new Vec3(0, 1, 0), 1.55F, 27);
-                sound(l, at, SoundEvents.BEACON_ACTIVATE, 1.5F);
+                if (p.onGround()) {
+                    p.setOnGround(false);
+                    push(p, p.getDeltaMovement().with(net.minecraft.core.Direction.Axis.Y, .28));
+                }
+                p.resetFallDistance(); p.onUpdateAbilities();
+                fracture(l, WAKE, at, new Vec3(0, 1, 0), 1.55F, 20);
             }
             case PULL -> {
-                Entity selected = target(p, trace(p, 7 + level * 3), e -> canAffect(p, e));
+                Entity selected = target(p, trace(p, 18 + level * 4), e -> canAffect(p, e));
                 if (!(selected instanceof LivingEntity target)) return false;
                 Vec3 destination = at.add(horizontal(p.getLookAngle()).scale(1.7));
                 if (!safe(l, target, destination, false) || !EsperDomain.allows(l, p, destination)
@@ -97,7 +90,7 @@ final class EsperEffects {
                 if (level >= 3) bind(p, target, 8 + level * 3);
             }
             case LOCK -> {
-                if (!(target(p, trace(p, 8 + level * 2), e -> canAffect(p, e)) instanceof LivingEntity target)) return false;
+                if (!(target(p, trace(p, 22 + level * 4), e -> canAffect(p, e)) instanceof LivingEntity target)) return false;
                 bind(p, target, 28 + level * 14);
                 fracture(l, BIND, target.getBoundingBox().getCenter(), p.getLookAngle(), .95F, 33);
                 sound(l, target.position(), SoundEvents.AMETHYST_BLOCK_RESONATE, .6F);
@@ -114,9 +107,9 @@ final class EsperEffects {
                 sound(l, old, SoundEvents.RESPAWN_ANCHOR_CHARGE, 1.3F);
             }
             case BARRIER -> {
-                d.putLong("Barrier", time + 70 + level * 24);
-                d.putInt("BarrierHits", level + 2);
-                EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, level + 2, 70 + level * 24);
+                if (d.getInt("Power") <= 0) return false;
+                d.putLong("Barrier", Long.MAX_VALUE);
+                EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, 1, 40);
                 sound(l, at, SoundEvents.AMETHYST_BLOCK_RESONATE, .85F);
             }
             default -> { return false; }
@@ -133,16 +126,8 @@ final class EsperEffects {
         for (int jump = 0; jump < 1 + level && current != null; jump++) {
             LivingEntity hit = current;
             Vec3 end = hit.getBoundingBox().getCenter();
-            Vec3 point = start;
-            for (int i = 1; i <= 8; i++) {
-                Vec3 next = start.lerp(end, i / 8.0);
-                if (i < 8) next = next.add(l.random.nextDouble() * .55 - .275, l.random.nextDouble() * .75 - .375,
-                        l.random.nextDouble() * .55 - .275);
-                beam(l, point, next, i % 2 == 0 ? WHITE : CYAN);
-                point = next;
-            }
-            burst(l, end, ParticleTypes.ELECTRIC_SPARK, 15, .3);
-            hit.hurt(p.damageSources().playerAttack(p), Math.max(2, 5 + level * 2F - jump * 1.5F));
+            EsperElectric.bolt(l, start, end);
+            EsperElectric.damage(p, hit, Math.max(2, 5 + level * 2F - jump * 1.5F));
             seen.add(hit);
             start = end;
             current = l.getEntitiesOfClass(LivingEntity.class, hit.getBoundingBox().inflate(3 + level * .5),
@@ -154,29 +139,25 @@ final class EsperEffects {
         return true;
     }
 
-    static double slashRadius(int level) { return 4.8 + level * .85; }
+    static double slashRadius(int level) { return 18 + level * 4; }
 
-    private static void slash(ServerPlayer player, int level) {
+    static void slash(ServerPlayer player, int level) {
         var world = player.serverLevel();
-        Vec3 from = player.getEyePosition();
-        Vec3 direction = Vec3.directionFromRotation(0, player.getYRot());
+        Vec3 from = player.getEyePosition(), direction = player.getLookAngle();
         double radius = slashRadius(level);
-        var area = new AABB(from, from).inflate(radius, 1.6, radius);
-        for (var target : world.getEntitiesOfClass(LivingEntity.class, area, e -> canAffect(player, e))) {
-            Vec3 center = target.getBoundingBox().getCenter();
-            Vec3 relative = center.subtract(from);
-            Vec3 horiz = new Vec3(relative.x, 0, relative.z);
-            double distance = horiz.length();
-            if (distance > radius || Math.abs(relative.y) > 1.65
-                    || horiz.dot(direction) < distance * Math.cos(Esper.SLASH_HALF_ANGLE)) continue;
+        int hits = 0;
+        for (var target : world.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(radius),
+                e -> canAffect(player, e) && !e.isInvisibleTo(player))) {
+            Vec3 center = target.getBoundingBox().getCenter(), relative = center.subtract(from);
+            double distance = relative.length();
+            if (distance > radius || relative.dot(direction) < distance * Math.cos(Esper.SLASH_HALF_ANGLE)) continue;
             if (world.clip(new ClipContext(from, center, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player))
                     .getType() != HitResult.Type.MISS) continue;
-            if (target.hurt(player.damageSources().playerAttack(player), 4.5F + level * 1.75F))
-                fracture(world, SHATTER, center, direction, .68F, 13);
+            target.hurt(player.damageSources().playerAttack(player), 4.5F + level * 1.75F);
+            fracture(world, TARGET_SLASH, center, direction, Math.max(.9F, target.getBbHeight() * .65F), 12);
+            if (++hits >= 32) break;
         }
-        fracture(world, SLICE, from.subtract(0, .42, 0), direction, (float) radius, 24);
-        sound(world, player.position(), SoundEvents.PLAYER_ATTACK_SWEEP, .67F);
-        sound(world, player.position(), SoundEvents.AMETHYST_BLOCK_BREAK, 1.2F);
+        if (hits > 0) sound(world, player.position(), SoundEvents.PLAYER_ATTACK_SWEEP, 1.2F);
     }
 
     static void withHarvest(ServerPlayer player, int level, Runnable work) {
@@ -300,10 +281,22 @@ final class EsperEffects {
     static void push(Entity e, Vec3 velocity) { e.setDeltaMovement(velocity); e.hurtMarked = true; }
 
     static void bind(ServerPlayer owner, LivingEntity target, int duration) {
+        bind(owner, target, duration, null);
+    }
+    static void bind(ServerPlayer owner, LivingEntity target, int duration, Object source) {
         if (target.isPassenger()) target.stopRiding();
-        BINDINGS.put(target, new Binding(owner.getUUID(), owner.serverLevel(), target.position(),
-                owner.serverLevel().getGameTime() + duration));
+        long now = owner.serverLevel().getGameTime();
+        Binding previous = BINDINGS.get(target);
+        if (source == null && previous != null && previous.source != null && previous.until > now) return;
+        Vec3 anchor = previous != null && previous.source == source
+                && previous.owner.equals(owner.getUUID()) && previous.dimension == owner.serverLevel()
+                && previous.until > now ? previous.anchor : target.position();
+        BINDINGS.put(target, new Binding(owner.getUUID(), owner.serverLevel(), anchor, now + duration, source));
         push(target, Vec3.ZERO);
+    }
+    static void unbind(LivingEntity target, Object source) {
+        Binding current = BINDINGS.get(target);
+        if (current != null && current.source == source) BINDINGS.remove(target);
     }
     static void tickBinding(net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof LivingEntity target) || !(target.level() instanceof ServerLevel level)) return;
@@ -322,9 +315,14 @@ final class EsperEffects {
     }
     static void endSchoolEffects(ServerPlayer player, CompoundTag data) {
         stopShift(player, data);
+        stopBarrier(player, data);
+        endModeEffects(player, data);
+    }
+
+    static void endModeEffects(ServerPlayer player, CompoundTag data) {
         EsperVolley.cancel(player);
-        if (data.getInt("BarrierHits") > 0) EsperNetworking.aura(player, EsperNetworking.Aura.GUARD, 0, 0);
-        for (String key : new String[]{"Sling", "Barrier", "BarrierHits", "Insulation", "InsulationHits", "Overdrive"})
+        EsperChannel.cancel(player);
+        for (String key : new String[]{"Sling", "Insulation", "InsulationHits", "Overdrive"})
             data.remove(key);
         List<Portal> portals = PORTALS.get(player.serverLevel());
         if (portals != null) portals.removeIf(portal -> portal.owner.equals(player.getUUID()));
@@ -333,24 +331,61 @@ final class EsperEffects {
 
     static void tickPlayer(ServerPlayer p, CompoundTag data, long now) {
         EsperElectric.tick(p, data, now);
-        if (now < data.getLong("Shift") && !p.isPassenger()) {
-            p.resetFallDistance();
-            if (now % 3 == 0) burst(p.serverLevel(), p.position().add(0, .3, 0), ParticleTypes.END_ROD, 3, .22);
-        } else if (data.contains("ShiftGranted")) {
-            stopShift(p, data);
-            data.putLong("Sling", now + 100);
+        if (data.contains("Shift")) {
+            if (p.isSpectator() || Esper.school(data) != Esper.School.SPACE
+                    || p.onGround() && now >= data.getLong("ShiftTakeoff")
+                    || data.getInt("Power") <= 0) stopShift(p, data);
+            else {
+                int interval = 2 + Esper.level(data, Esper.Skill.ANCHOR) / 2;
+                if (!p.getAbilities().flying || !p.getAbilities().mayfly) {
+                    p.getAbilities().flying = true;
+                    p.getAbilities().mayfly = true;
+                    p.onUpdateAbilities();
+                }
+                if (now % interval == 0) data.putInt("Power", data.getInt("Power") - 1);
+                p.resetFallDistance();
+                if (now % 10 == 0) fracture(p.serverLevel(), WAKE, p.position().add(0, -.25, 0),
+                        new Vec3(0, 1, 0), .65F, 12);
+            }
         }
-        if (now < data.getLong("Barrier") && data.getInt("BarrierHits") > 0 && now % 20 == 0)
-            EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, data.getInt("BarrierHits"), (int) (data.getLong("Barrier") - now));
+        if (p.isSpectator() || Esper.school(data) != Esper.School.SPACE || data.getInt("Power") <= 0)
+            stopBarrier(p, data);
+        if (data.contains("Barrier")) {
+            if (now % 20 == 0) EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, 1, 40);
+            for (var projectile : p.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.projectile.Projectile.class,
+                    p.getBoundingBox().inflate(3), shot -> shot.getOwner() != p && !(shot.getOwner() != null && p.isAlliedTo(shot.getOwner())))) {
+                Vec3 center = p.position().add(0, .96, 0);
+                var sphere = new AABB(center, center).inflate(Esper.BARRIER_RADIUS);
+                if (projectile.getDeltaMovement().lengthSqr() > .0001
+                        && (sphere.contains(projectile.position()) || sphere.clip(projectile.position(),
+                        projectile.position().add(projectile.getDeltaMovement().scale(2))).isPresent())) {
+                    if (barrierHit(p, data, 5, projectile.position(), false)) {
+                        if (projectile instanceof EsperProjectile shot) shot.recall();
+                        else projectile.discard();
+                    }
+                }
+            }
+        }
+    }
+    static void stopBarrier(ServerPlayer p, CompoundTag data) {
+        if (data.contains("Barrier") && p.connection != null)
+            EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, 0, 0);
+        data.remove("Barrier");
+        data.remove("BarrierHits");
     }
     static void stopShift(Player p, CompoundTag data) {
+        if (!data.contains("Shift") && !data.contains("ShiftGranted")) return;
+        boolean granted = data.getBoolean("ShiftGranted");
+        boolean wasFlying = data.getBoolean("ShiftWasFlying");
         data.remove("Shift");
-        if (!data.getBoolean("ShiftGranted")) return;
+        data.remove("ShiftTakeoff");
         data.remove("ShiftGranted");
-        if (p.isCreative() || p.isSpectator()) return;
-        p.getAbilities().mayfly = false;
-        p.getAbilities().flying = false;
+        data.remove("ShiftWasFlying");
+        if (p.isSpectator()) return;
+        if (granted && !p.isCreative()) p.getAbilities().mayfly = false;
+        p.getAbilities().flying = p.getAbilities().mayfly && wasFlying;
         p.resetFallDistance();
+        data.putLong("Sling", p.level().getGameTime() + 100);
         p.onUpdateAbilities();
     }
     static void protect(ServerPlayer p, LivingIncomingDamageEvent event) {
@@ -360,20 +395,28 @@ final class EsperEffects {
         if (event.getSource().is(DamageTypeTags.IS_FALL) && (now < data.getLong("Sling") || now < data.getLong("Shift"))) {
             event.setCanceled(true); data.remove("Sling"); return;
         }
-        if (now >= data.getLong("Barrier") || data.getInt("BarrierHits") <= 0
+        if (!data.contains("Barrier") || Esper.school(data) != Esper.School.SPACE
+                || event.getAmount() <= 0
                 || event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)
                 || (event.getSource().getDirectEntity() == null && !event.getSource().is(DamageTypeTags.IS_EXPLOSION))) return;
-        int hits = data.getInt("BarrierHits") - 1;
-        data.putInt("BarrierHits", hits);
-        EsperNetworking.aura(p, EsperNetworking.Aura.GUARD, hits, hits == 0 ? 0 : (int) (data.getLong("Barrier") - now));
-        event.setCanceled(true);
-        Vec3 center = p.position().add(0, 1, 0);
         Vec3 source = event.getSource().getSourcePosition();
-        Vec3 direction = source != null ? source.subtract(center).normalize() : p.getLookAngle();
-        fracture(p.serverLevel(), hits == 0 ? BUBBLE_IMPACT : SHATTER,
-                hits == 0 ? center : center.add(direction.scale(Esper.BARRIER_RADIUS)), direction,
-                hits == 0 ? Esper.BARRIER_RADIUS : .78F, 25);
-        sound(p.serverLevel(), center, SoundEvents.AMETHYST_BLOCK_BREAK, .8F);
+        boolean melee = event.getSource().getDirectEntity() instanceof LivingEntity
+                && !event.getSource().is(DamageTypeTags.IS_EXPLOSION);
+        if (barrierHit(p, data, Math.max(2, (int) Math.ceil(event.getAmount() * 2)), source, melee))
+            event.setCanceled(true);
+    }
+    static boolean barrierHit(ServerPlayer p, CompoundTag data, int cost, Vec3 source, boolean melee) {
+        if (!data.contains("Barrier") || data.getInt("Power") < cost) return false;
+        data.putInt("Power", data.getInt("Power") - cost);
+        Vec3 center = p.position().add(0, .96, 0);
+        Vec3 direction = source == null ? p.getLookAngle() : source.subtract(center).normalize();
+        if (direction.lengthSqr() < .01) direction = p.getLookAngle();
+        fracture(p.serverLevel(), melee ? GUARD_MELEE : GUARD,
+                center.add(direction.scale(Esper.BARRIER_RADIUS)), direction, melee ? .85F : .68F, melee ? 20 : 16);
+        sound(p.serverLevel(), center, SoundEvents.SHIELD_BLOCK, .9F);
+        p.serverLevel().broadcastEntityEvent(p, (byte) 29);
+        if (data.getInt("Power") == 0) stopBarrier(p, data);
+        return true;
     }
     static void tickPortals(LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel l)) return;
@@ -407,22 +450,5 @@ final class EsperEffects {
     }
     private static void fracture(ServerLevel l, EsperNetworking.Pattern pattern, Vec3 at, Vec3 normal, float radius, int life) {
         EsperNetworking.fracture(l, pattern, at, normal.normalize(), radius, life);
-    }
-    private static void dot(ServerLevel l, Vec3 at, ParticleOptions effect) {
-        l.sendParticles(effect, at.x, at.y, at.z, 1, 0, 0, 0, 0);
-    }
-    static void burst(ServerLevel l, Vec3 at, ParticleOptions effect, int count, double spread) {
-        l.sendParticles(effect, at.x, at.y, at.z, count, spread, spread, spread, .07);
-    }
-    static void ring(ServerLevel l, Vec3 at, double radius, ParticleOptions effect, boolean vertical) {
-        for (int i = 0; i < 24; i++) {
-            double angle = i * Math.PI / 12;
-            double x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
-            dot(l, vertical ? at.add(x, y, 0) : at.add(x, 0, y), effect);
-        }
-    }
-    static void beam(ServerLevel l, Vec3 a, Vec3 b, ParticleOptions effect) {
-        int count = Math.clamp((int) (a.distanceTo(b) * 5), 2, 55);
-        for (int i = 0; i <= count; i++) dot(l, a.lerp(b, (double) i / count), effect);
     }
 }

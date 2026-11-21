@@ -3,7 +3,6 @@ package cn.starfall.blueprint;
 import java.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.*;
 import net.minecraft.sounds.SoundEvents;
@@ -18,11 +17,8 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import org.joml.Vector3f;
 
 final class EsperElectric {
-    private static final DustParticleOptions GOLD = new DustParticleOptions(new Vector3f(1, .76F, .23F), 1.2F);
-    private static final DustParticleOptions BLUE = new DustParticleOptions(new Vector3f(.36F, .71F, 1), 1.3F);
     private static final Map<ServerLevel, List<Field>> FIELDS = new WeakHashMap<>();
     private static final int FE_PER_CHARGE = 90;
 
@@ -47,7 +43,7 @@ final class EsperElectric {
         Vec3 at = p.position();
         switch (skill) {
             case INDUCTION -> {
-                int charge = data.getInt("Charge"), capacity = 80 + 10 * level;
+                int charge = data.getInt("Charge"), capacity = capacity(data);
                 if (charge >= capacity) return false;
                 boolean circuit = BlockPos.withinManhattanStream(p.blockPosition(), 3, 2, 3)
                         .filter(world::hasChunkAt).anyMatch(world::hasNeighborSignal);
@@ -59,7 +55,7 @@ final class EsperElectric {
                     gain = 32 + 5 * level;
                 } else gain = 18 + 3 * level;
                 data.putInt("Charge", Math.min(capacity, charge + gain));
-                EsperEffects.ring(world, at.add(0, .8, 0), 1.15, GOLD, false);
+                ring(world, at.add(0, .8, 0), 1.15);
                 EsperEffects.sound(world, at, SoundEvents.BEACON_POWER_SELECT, 1.6F);
             }
             case SPARK, PARALYZE, IONIZE -> {
@@ -72,6 +68,8 @@ final class EsperElectric {
                     victim.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 35 + level * 15, 1), p);
                 }
                 if (skill == Esper.Skill.IONIZE) {
+                    victim.getPersistentData().putUUID("EsperIonOwner", p.getUUID());
+                    victim.getPersistentData().putLong("EsperIonUntil", world.getGameTime() + 80 + level * 30);
                     Field field = new Field(p, skill, victim.position(), level, victim.getUUID());
                     field.next += 21;
                     add(p, field);
@@ -82,8 +80,11 @@ final class EsperElectric {
                 Vec3 look = p.getLookAngle();
                 Vec3 forward = new Vec3(look.x, 0, look.z).normalize().scale(.8 + .18 * level);
                 EsperEffects.push(p, forward.add(0, .16, 0));
+                long conductors = world.getEntitiesOfClass(LivingEntity.class, p.getBoundingBox().inflate(4),
+                        e -> EsperEffects.canAffect(p,e) && e.getPersistentData().getLong("EsperIonUntil") > world.getGameTime()).size();
+                if (conductors > 0) gain(data, (int)Math.min(12, conductors * 4));
                 p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 26 + 12 * level, 0), p);
-                EsperEffects.burst(world, at, ParticleTypes.ELECTRIC_SPARK, 26, .45);
+                flash(world, at);
                 EsperEffects.sound(world, at, SoundEvents.BREEZE_JUMP, 1.6F);
             }
             case FEED, SURGE -> {
@@ -109,22 +110,22 @@ final class EsperElectric {
                 for (BlockPos pos : BlockPos.withinManhattan(center, radius, 3, radius)) {
                     if (!world.hasChunkAt(pos) || !visible(p, p.getEyePosition(), Vec3.atCenterOf(pos))) continue;
                     if (!world.hasNeighborSignal(pos) && port(world, pos, null) == null) continue;
-                    EsperEffects.burst(world, Vec3.atCenterOf(pos), ParticleTypes.ELECTRIC_SPARK, 5, .33);
+                    flash(world, Vec3.atCenterOf(pos));
                     if (++count == 24) break;
                 }
                 if (count == 0) return false;
                 p.sendSystemMessage(Esper.label("scan_result", count));
-                EsperEffects.ring(world, at.add(0, .2, 0), radius, BLUE, false);
+                ring(world, at.add(0, .2, 0), radius);
             }
             case INSULATE -> {
                 data.putLong("Insulation", time + 70 + level * 26);
                 data.putInt("InsulationHits", 2 + level);
-                EsperEffects.ring(world, at.add(0, 1, 0), 1.2, GOLD, true);
+                ring(world, at.add(0, 1, 0), 1.2);
             }
             case OVERDRIVE -> {
                 data.putLong("Overdrive", time + 110 + 30 * level);
                 data.putInt("OverdriveBonus", 3 + level * 2);
-                EsperEffects.ring(world, at.add(0, 1, 0), 1, BLUE, false);
+                ring(world, at.add(0, 1, 0), 1);
                 EsperEffects.sound(world, at, SoundEvents.BEACON_ACTIVATE, 1.65F);
             }
             case PULSE -> {
@@ -137,7 +138,7 @@ final class EsperElectric {
                 if (block == null && victim == null) return false;
                 Vec3 focus = victim == null ? block.getLocation() : victim.position();
                 add(p, new Field(p, skill, focus, level, null));
-                EsperEffects.ring(world, focus.add(0, .16, 0), 4 + .6 * level, GOLD, false);
+                ring(world, focus.add(0, .16, 0), 4 + .6 * level);
                 EsperEffects.sound(world, focus, SoundEvents.AMETHYST_BLOCK_CHIME, .57F);
             }
             case LANCE -> {
@@ -149,8 +150,7 @@ final class EsperElectric {
                 targets.sort(Comparator.comparingDouble(p::distanceToSqr));
                 for (int i = 0; i < Math.min(targets.size(), 2 + level); i++)
                     damage(p, targets.get(i), Math.max(3, 11 + 2.8F * level - 2.5F * i));
-                EsperEffects.beam(world, from, to, GOLD);
-                EsperEffects.beam(world, from.add(0, .12, 0), to.add(0, .12, 0), BLUE);
+                bolt(world, from, to);
                 EsperEffects.sound(world, from, SoundEvents.LIGHTNING_BOLT_IMPACT, .78F);
             }
             default -> { return false; }
@@ -160,11 +160,17 @@ final class EsperElectric {
 
     static void tick(ServerPlayer p, CompoundTag data, long now) {
         if (Esper.school(data) != Esper.School.ELECTRIC) return;
-        if (now % 8 == 0 && (now < data.getLong("Overdrive")
+        int passive = Esper.level(data, Esper.Skill.CAPACITOR);
+        if (p.tickCount % 20 == 0 && passive > 0) {
+            int cap = 12 + passive * 8;
+            if (data.getInt("Charge") < cap) data.putInt("Charge", Math.min(cap, data.getInt("Charge") + 1 + passive));
+        }
+        if (now % 12 == 0 && (now < data.getLong("Overdrive")
                 || now < data.getLong("Insulation") && data.getInt("InsulationHits") > 0))
-            EsperEffects.burst(p.serverLevel(), p.position().add(0, .8, 0), ParticleTypes.ELECTRIC_SPARK, 6, .52);
-        if (now < data.getLong("Overdrive") && p.tickCount % 20 == 0)
-            data.putInt("Power", Math.min(data.getInt("Max"), data.getInt("Power") + data.getInt("OverdriveBonus")));
+            flash(p.serverLevel(), p.position().add(0, .8, 0));
+        if (now < data.getLong("Overdrive") && p.tickCount % 20 == 0) {
+            gain(data, data.getInt("OverdriveBonus"));
+        }
     }
 
     static boolean protect(ServerPlayer p, CompoundTag data, long now, LivingIncomingDamageEvent event) {
@@ -173,7 +179,8 @@ final class EsperElectric {
                 || !(event.getSource().getDirectEntity() != null || event.getSource().is(DamageTypeTags.IS_LIGHTNING))) return false;
         data.putInt("InsulationHits", data.getInt("InsulationHits") - 1);
         event.setAmount(event.getAmount() * .4F);
-        EsperEffects.burst(p.serverLevel(), p.position().add(0, 1, 0), ParticleTypes.ELECTRIC_SPARK, 22, .52);
+        gain(data, 3 + Esper.level(data, Esper.Skill.RECYCLING));
+        flash(p.serverLevel(), p.position().add(0, 1, 0));
         return true;
     }
 
@@ -205,7 +212,7 @@ final class EsperElectric {
     private static boolean ionize(ServerPlayer p, Field f, long now) {
         if (!(p.serverLevel().getEntity(f.target) instanceof LivingEntity victim) || !EsperEffects.canAffect(p, victim))
             return true;
-        EsperEffects.burst(p.serverLevel(), victim.getBoundingBox().getCenter(), ParticleTypes.ELECTRIC_SPARK, 11, .24);
+        flash(p.serverLevel(), victim.getBoundingBox().getCenter());
         damage(p, victim, 2 + f.level);
         f.next = now + 21;
         return ++f.wave >= 2 + f.level;
@@ -215,8 +222,8 @@ final class EsperElectric {
         ServerLevel world = p.serverLevel();
         int waves = 4 + f.level;
         double radius = ++f.wave * 1.2;
-        EsperEffects.ring(world, f.anchor.add(0, .27, 0), radius, BLUE, false);
-        EsperEffects.ring(world, f.anchor.add(0, .62, 0), radius, GOLD, false);
+        ring(world, f.anchor.add(0, .27, 0), radius);
+        ring(world, f.anchor.add(0, .62, 0), radius);
         for (LivingEntity target : world.getEntitiesOfClass(LivingEntity.class, new AABB(f.anchor, f.anchor).inflate(radius, 2, radius),
                 victim -> EsperEffects.canAffect(p, victim) && !f.hit.contains(victim.getUUID()))) {
             Vec3 offset = target.position().subtract(f.anchor);
@@ -225,7 +232,7 @@ final class EsperElectric {
             f.hit.add(target.getUUID());
             damage(p, target, 8 + f.level * 2.3F);
             EsperEffects.push(target, new Vec3(offset.x, 0, offset.z).normalize().scale(.9).add(0, .3, 0));
-            EsperEffects.burst(world, target.position(), ParticleTypes.ELECTRIC_SPARK, 16, .38);
+            flash(world, target.position());
         }
         f.next = now + 3;
         return f.wave >= waves;
@@ -251,7 +258,7 @@ final class EsperElectric {
             Vec3 impact = i < targets.size() ? spot.add(0, .2, 0) : terrain.getType() == HitResult.Type.BLOCK ? terrain.getLocation() : spot;
             Vec3 ceiling = upward(p, impact.add(0, .25, 0), 14);
             bolt(world, ceiling, impact);
-            EsperEffects.burst(world, impact, ParticleTypes.ELECTRIC_SPARK, 14, .47);
+            flash(world, impact);
             if (i < targets.size()) damage(p, targets.get(i), 4 + 1.2F * f.level);
         }
         EsperEffects.sound(world, f.anchor, SoundEvents.LIGHTNING_BOLT_THUNDER, 1.25F);
@@ -263,13 +270,25 @@ final class EsperElectric {
         return p.serverLevel().clip(new ClipContext(at, at.add(0, height, 0), ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE, p)).getLocation();
     }
-    private static void bolt(ServerLevel world, Vec3 start, Vec3 end) {
-        Vec3 point = start;
-        for (int i = 1; i <= 4; i++) {
-            Vec3 next = start.lerp(end, i / 4.0);
-            if (i != 4) next = next.add(world.random.nextDouble() * .9 - .45, 0, world.random.nextDouble() * .9 - .45);
-            EsperEffects.beam(world, point, next, i % 2 == 0 ? GOLD : BLUE);
-            point = next;
+    static int capacity(CompoundTag d) { return 80 + 10 * Esper.level(d, Esper.Skill.INDUCTION) + 8 * Esper.level(d, Esper.Skill.CAPACITOR); }
+    static void gain(CompoundTag d, int amount) { d.putInt("Charge", Math.min(capacity(d), d.getInt("Charge") + amount)); }
+    static void ring(ServerLevel world, Vec3 at, double radius) {
+        EsperNetworking.fracture(world, EsperNetworking.Pattern.ELECTRIC_RING, at, new Vec3(0,1,0), (float) radius, 14);
+    }
+    static void flash(ServerLevel world, Vec3 at) {
+        EsperNetworking.fracture(world, EsperNetworking.Pattern.ELECTRIC_HIT, at, new Vec3(0,1,0), .65F, 10);
+    }
+    static void bolt(ServerLevel world, Vec3 start, Vec3 end) {
+        EsperNetworking.fracture(world, EsperNetworking.Pattern.LIGHTNING, start, end.subtract(start).normalize(),
+                (float) start.distanceTo(end), 9);
+    }
+    static void onHit(ServerPlayer p, LivingEntity target) {
+        CompoundTag d = Esper.data(p), mark = target.getPersistentData();
+        long now = p.serverLevel().getGameTime();
+        if (mark.hasUUID("EsperIonOwner") && mark.getUUID("EsperIonOwner").equals(p.getUUID())
+                && now < mark.getLong("EsperIonUntil") && now >= mark.getLong("EsperIonRefund")) {
+            gain(d, 2 + Esper.level(d, Esper.Skill.RECYCLING));
+            mark.putLong("EsperIonRefund", now + 10);
         }
     }
     private static boolean visible(ServerPlayer p, Vec3 start, Vec3 end) {
@@ -293,8 +312,15 @@ final class EsperElectric {
         IEnergyStorage port = port(l, p, face);
         return port == null || !port.canReceive() ? 0 : port.receiveEnergy(amount, false);
     }
-    private static void damage(ServerPlayer source, LivingEntity target, float damage) {
+    static void damage(ServerPlayer source, LivingEntity target, float damage) {
         target.hurt(source.damageSources().playerAttack(source), damage);
+        onHit(source, target);
+        var d = Esper.data(source);
+        if (!target.isAlive() && Esper.level(d, Esper.Skill.RECYCLING) > 0
+                && !target.getPersistentData().getBoolean("EsperChargeReclaimed")) {
+            target.getPersistentData().putBoolean("EsperChargeReclaimed", true);
+            gain(d, 4 + Esper.level(d, Esper.Skill.RECYCLING) * 2);
+        }
     }
     private EsperElectric() {}
 }

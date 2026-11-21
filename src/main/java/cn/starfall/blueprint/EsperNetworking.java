@@ -32,7 +32,7 @@ public final class EsperNetworking {
         @Override public Type<Hud> type() { return TYPE; }
     }
 
-    public enum Pattern { RIFT, SLICE, SHATTER, PORTAL, GUARD, BIND, WAKE, COLLAPSE, BUBBLE_IMPACT }
+    public enum Pattern { RIFT, SLICE, SHATTER, PORTAL, GUARD, BIND, WAKE, COLLAPSE, BUBBLE_IMPACT, LIGHTNING, ELECTRIC_RING, ELECTRIC_HIT, SINGULARITY, DETONATION, TARGET_SLASH, WARP, GUARD_MELEE }
 
     public record Fracture(Pattern pattern, Vec3 center, Vec3 normal, float radius, int life, long seed)
             implements CustomPacketPayload {
@@ -61,10 +61,16 @@ public final class EsperNetworking {
         registry.playToServer(Esper.Cast.TYPE, Esper.Cast.CODEC, (msg, ctx) -> ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer p)) return;
             if (msg.slot() == Esper.Cast.TOGGLE) Esper.toggleMode(p);
-            else if (msg.slot() == Esper.Cast.CANCEL_CHARGE) EsperVolley.cancel(p);
+            else if (msg.slot() == Esper.Cast.CANCEL_CHARGE) { EsperVolley.cancel(p); EsperChannel.cancel(p); }
+            else if (msg.slot() >= Esper.Cast.HOLD && msg.slot() < Esper.Cast.HOLD + Esper.SLOTS) {
+                long now = p.serverLevel().getServer().overworld().getGameTime();
+                EsperChannel.hold(p, msg.slot() - Esper.Cast.HOLD, now);
+                EsperVolley.hold(p, msg.slot() - Esper.Cast.HOLD, now);
+            }
             else if (msg.slot() >= Esper.Cast.RELEASE && msg.slot() < Esper.Cast.RELEASE + Esper.SLOTS) {
                 long now = p.serverLevel().getServer().overworld().getGameTime();
-                if (EsperVolley.release(p, msg.slot() - Esper.Cast.RELEASE, now)) sync(p, Esper.data(p), now);
+                if (EsperChannel.release(p, msg.slot() - Esper.Cast.RELEASE, now)
+                        || EsperVolley.release(p, msg.slot() - Esper.Cast.RELEASE, now)) sync(p, Esper.data(p), now);
             }
             else if (Esper.cast(p, msg.slot())) sync(p, Esper.data(p), p.serverLevel().getServer().overworld().getGameTime());
         }));

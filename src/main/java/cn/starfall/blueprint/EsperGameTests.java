@@ -149,109 +149,232 @@ public final class EsperGameTests {
         h.succeed();
     }
 
-    @GameTest(template = "empty", timeoutTicks = 100)
-    public static void collapse_expands_in_all_directions(GameTestHelper h) {
+    @GameTest(template = "empty", timeoutTicks = 110)
+    public static void collapse_aimed_growth_binding_and_detonation(GameTestHelper h) {
         var world = h.getLevel();
-        var p = player(h);
-        BlockPos origin = h.absolutePos(new BlockPos(1, 2, 1)).atY(214);
-        p.setPos(Vec3.atBottomCenterOf(origin));
-        p.setYRot(0);
-        p.setXRot(-75);
-        p.setNoGravity(true);
-        world.addNewPlayer(p);
-        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_PICKAXE));
-        var left = origin.offset(-2, 1, 6);
-        var right = origin.offset(2, 1, 6);
-        var behind = origin.offset(0, 1, -7);
-        var near = origin.offset(0, 1, -2);
-        var untouched = origin.offset(0, 1, -9);
-        var protectedBlock = origin.offset(2, 1, 0);
-        world.setBlockAndUpdate(left, Blocks.STONE.defaultBlockState());
-        world.setBlockAndUpdate(right, Blocks.STONE.defaultBlockState());
-        world.setBlockAndUpdate(behind, Blocks.STONE.defaultBlockState());
-        world.setBlockAndUpdate(near, Blocks.STONE.defaultBlockState());
-        world.setBlockAndUpdate(untouched, Blocks.STONE.defaultBlockState());
-        world.setBlockAndUpdate(protectedBlock, Blocks.CHEST.defaultBlockState());
-        activate(p, Esper.Skill.BLINK);
-        var data = Esper.data(p);
-        data.putInt("Rank_SPACE", 5);
-        for (var skill : Esper.School.SPACE.skills()) data.putInt("Level_" + skill.key, 3);
+        var p = spacePlayer(h, 214);
+        Vec3 focus = p.getEyePosition().add(0,0,13.5);
+        BlockPos loose = BlockPos.containing(focus.add(2, 0, 0));
+        BlockPos protectedBlock = loose.above();
+        world.setBlockAndUpdate(loose, Blocks.DIRT.defaultBlockState());
+        world.setBlockAndUpdate(protectedBlock, Blocks.BEDROCK.defaultBlockState());
+        var victim = target(world, focus.add(0,-.5,0));
+        var rear = target(world, p.position().add(0,0,-3));
         Esper.equip(p, Esper.Skill.COLLAPSE.ordinal(), 0);
-        h.assertTrue(Esper.cast(p, 0), "Collapse starts while the player is aiming at empty sky");
-        h.runAfterDelay(10, () -> h.assertTrue(world.getBlockState(near).isAir() && !world.getBlockState(behind).isAir(),
-                "The shock front reaches nearby terrain before the outer shell"));
-        h.runAfterDelay(45, () -> {
-            h.assertTrue(world.getBlockState(left).isAir() && world.getBlockState(right).isAir()
-                    && world.getBlockState(behind).isAir(), "Wave breaks terrain around the caster, including behind");
-            h.assertTrue(world.getBlockState(untouched).is(Blocks.STONE) && world.getBlockState(protectedBlock).is(Blocks.CHEST),
-                    "Wave preserves terrain beyond the radius and blocks with inventories");
-            p.discard();
-            h.succeed();
+        h.assertTrue(Esper.cast(p,0), "Collapse starts at the aimed location");
+        keepChannel(h,p,0,84,victim);
+        h.runAfterDelay(25, () -> {
+            h.assertTrue(victim.getHealth()<100 && rear.getHealth()==100, "Remote sphere ticks damage without hitting behind caster: victim="+victim.getHealth()+", rear="+rear.getHealth()+", active="+EsperChannel.active(p));
+            victim.setPos(victim.position().add(.75,0,0));
+            EsperEffects.tickBinding(new net.neoforged.neoforge.event.tick.EntityTickEvent.Post(victim));
+        });
+        h.runAfterDelay(28, () -> h.assertTrue(Math.abs(victim.getX()-focus.x)<.1, "Sphere binds its victims"));
+        h.runAfterDelay(84, () -> {
+            h.assertTrue(!EsperChannel.active(p) && victim.getHealth()<60, "Maximum sphere explodes strongly and ends its channel: "+victim.getHealth()+", active="+EsperChannel.active(p));
+            h.assertTrue(rear.getHealth()==100, "Caster location is not the explosion center");
+            h.assertTrue(world.getBlockState(loose).isAir() && world.getBlockState(protectedBlock).is(Blocks.BEDROCK),
+                    "Detonation breaks ordinary blocks inside the aimed sphere and preserves bedrock");
+            victim.discard(); rear.discard(); p.discard(); h.succeed();
+        });
+    }
+
+    @GameTest(template = "empty", timeoutTicks = 50)
+    public static void slash_hits_visible_remote_targets_and_holds(GameTestHelper h) {
+        var p=spacePlayer(h,220); var world=h.getLevel();
+        var left=target(world,p.position().add(-3,0,15));
+        var right=target(world,p.position().add(3,0,15));
+        var rear=target(world,p.position().add(0,0,-3));
+        var hidden=target(world,p.position().add(0,0,17));
+        for (int x=-1;x<=1;x++) for(int y=0;y<4;y++)
+            world.setBlockAndUpdate(p.blockPosition().offset(x,y,12),Blocks.STONE.defaultBlockState());
+        Esper.equip(p,Esper.Skill.SLASH.ordinal(),0);
+        h.assertTrue(Esper.cast(p,0) && left.getHealth()<100 && right.getHealth()<100
+                && rear.getHealth()==100 && hidden.getHealth()==100, "Remote slash respects view cone and walls");
+        keepChannel(h,p,0,24,left,right);
+        h.runAfterDelay(25,()->{
+            h.assertTrue(left.getHealth()<90 && right.getHealth()<90, "Holding repeats group slashes: "+left.getHealth()+" / "+right.getHealth()+", active="+EsperChannel.active(p));
+            h.assertTrue(EsperChannel.release(p,0,world.getGameTime()) && !EsperChannel.active(p), "Release ends slashes");
+            for(var e:java.util.List.of(left,right,rear,hidden,p))e.discard(); h.succeed();
+        });
+    }
+
+    @GameTest(template = "empty", timeoutTicks = 120)
+    public static void volley_launches_only_real_items_and_recalls(GameTestHelper h) {
+        var p=spacePlayer(h,230); var world=h.getLevel(); var data=Esper.data(p);
+        Esper.equip(p,Esper.Skill.VOLLEY.ordinal(),0);
+        var storage=new EsperStorage(p,1);
+        storage.setItem(45,Items.DIAMOND_SWORD.getDefaultInstance());
+        int power=data.getInt("Power");
+        h.assertTrue(Esper.cast(p,0) && data.getInt("Power")==power,"Press reserves a channel without paying");
+        h.assertTrue(EsperVolley.shotCount(1, 0) == 1 && EsperVolley.shotCount(1, 15) == 4,
+                "A tap fires once and holding adds one shot per five ticks");
+        h.runAfterDelay(2,()->{
+            h.assertTrue(!EsperVolley.release(p,1,world.getGameTime()) && EsperVolley.release(p,0,world.getGameTime())
+                    && !EsperVolley.release(p,0,world.getGameTime()),"Matching release fires once");
+            var shots=world.getEntitiesOfClass(EsperProjectile.class,p.getBoundingBox().inflate(10));
+            h.assertTrue(shots.size()==1 && shots.getFirst().getItem().is(Items.DIAMOND_SWORD),"No fake fallback projectiles");
+            h.assertTrue(Math.abs(shots.getFirst().getX() - p.getX()) > .5, "The first shot spawns to the side");
+            h.assertTrue(new EsperStorage(p,1).firstAmmo()<0,"Actual payload is in flight");
+        });
+        h.runAfterDelay(16,()->{
+            for(var shot:world.getEntitiesOfClass(EsperProjectile.class,p.getBoundingBox().inflate(500)))
+                for(int i=0;i<101&&!shot.isRemoved();i++)shot.tick();
+            h.assertTrue(new EsperStorage(p,1).getItem(45).is(Items.DIAMOND_SWORD),"Payload returns to its ammo slot on timeout: "+new EsperStorage(p,1).getItem(45)+" shots="+world.getEntitiesOfClass(EsperProjectile.class,p.getBoundingBox().inflate(500)).stream().map(e->e.tickCount+"@"+e.position()+" removed="+e.isRemoved()+" owner="+e.getOwner()).toList());
+            h.assertTrue(world.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,p.getBoundingBox().inflate(60), e->e.getItem().is(Items.DIAMOND_SWORD)).isEmpty(),
+                    "No dropped payload is emitted");
+            p.discard();h.succeed();
         });
     }
 
     @GameTest(template = "empty")
-    public static void slash_sweeps_both_sides_at_short_cooldown(GameTestHelper h) {
+    public static void passive_charge_cap_and_ionized_refunds(GameTestHelper h) {
+        var p=player(h); activate(p,Esper.Skill.INDUCTION); var d=Esper.data(p);
+        d.putInt("Level_capacitor",3); d.putInt("Level_recycling",2);d.putInt("Charge",35);
+        p.tickCount=20; EsperElectric.tick(p,d,20);
+        h.assertTrue(d.getInt("Charge")==36,"Passive accumulation cannot overshoot passive cap");
+        EsperElectric.tick(p,d,40);h.assertTrue(d.getInt("Charge")==36,"Passive charge stops at cap");
+        h.assertTrue(EsperElectric.cast(p,d,Esper.Skill.INDUCTION,1,40) && d.getInt("Charge")>36,"Active charge exceeds passive cap");
+        var victim=target(h.getLevel(),p.position().add(0,0,3));
+        victim.getPersistentData().putUUID("EsperIonOwner",p.getUUID());
+        victim.getPersistentData().putLong("EsperIonUntil",h.getLevel().getGameTime()+100);
+        d.putInt("Charge",10);EsperElectric.onHit(p,victim);EsperElectric.onHit(p,victim);
+        h.assertTrue(d.getInt("Charge")==14,"Ionized refund is limited once per target per ten ticks");
+        h.assertTrue(!Esper.equip(p,Esper.Skill.CAPACITOR.ordinal(),0),"Passives do not consume skill slots");
+        victim.discard();p.discard();h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void flight_drains_until_empty_and_barrier_only_pays_on_hit(GameTestHelper h) {
+        var p=spacePlayer(h,240);var d=Esper.data(p);long now=h.getLevel().getGameTime();
+        h.assertTrue(EsperEffects.cast(p,d,Esper.Skill.SHIFT,1)&&p.getAbilities().flying,"Flight starts immediately without a target");
+        d.putInt("Power",3);
+        for (int i = 0; i < 6; i++) EsperEffects.tickPlayer(p, d, now+i);
+        EsperEffects.tickPlayer(p,d,now+6);
+        h.assertTrue(!p.getAbilities().mayfly&&!p.getAbilities().flying&&!d.contains("Shift"),"Compute exhaustion revokes granted flight");
+        d.putInt("Power",30);EsperEffects.cast(p,d,Esper.Skill.BARRIER,1);
+        EsperEffects.tickPlayer(p,d,now+2000);
+        h.assertTrue(d.contains("Barrier")&&d.getInt("Power")==30,"Idle barrier persists without drain");
+        var attacker=target(h.getLevel(),p.position().add(0,0,4));
+        var arrow=net.minecraft.world.entity.EntityType.ARROW.create(h.getLevel());
+        arrow.setOwner(attacker);arrow.setPos(p.position().add(0,.96,2.5));arrow.setDeltaMovement(0,0,-1);
+        h.getLevel().addFreshEntity(arrow);EsperEffects.tickPlayer(p,d,now+2001);
+        h.assertTrue(arrow.isRemoved()&&d.getInt("Power")==25,"Approaching projectile is intercepted outside the player");
+        var incoming=new net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent(p,
+                new net.neoforged.neoforge.common.damagesource.DamageContainer(p.damageSources().mobAttack(attacker),4));
+        EsperEffects.protect(p,incoming);
+        h.assertTrue(incoming.isCanceled()&&d.getInt("Power")==17,"Actual melee event is blocked and charged once");
+        h.assertTrue(!EsperEffects.barrierHit(p,d,40,p.position().add(0,0,4),true)&&d.getInt("Power")==17,"Insufficient compute cannot block for free");
+        Esper.toggleMode(p);h.assertTrue(d.contains("Barrier"),"Leaving ability mode preserves the barrier");
+        d.putInt("Power", 5);
+        h.assertTrue(EsperEffects.barrierHit(p,d,5,p.position().add(0,0,4),false) && !d.contains("Barrier"),
+                "The final paid interception shuts down an exhausted barrier");
+        attacker.discard();p.discard();h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void channel_timeout_and_early_release(GameTestHelper h) {
+        var p=spacePlayer(h,250);var d=Esper.data(p);long now=h.getLevel().getGameTime();
+        Esper.equip(p,Esper.Skill.COLLAPSE.ordinal(),0);
+        h.assertTrue(Esper.cast(p,0),"Start channel");
+        EsperChannel.tick(p,d,now+13);h.assertTrue(!EsperChannel.active(p),"Missing input heartbeat cancels channel");
+        h.assertTrue(EsperChannel.begin(p,0,Esper.Skill.COLLAPSE,1,now+20),"Restart channel");
+        EsperChannel.hold(p,0,now+30);EsperChannel.tick(p,d,now+30);
+        h.assertTrue(EsperChannel.release(p,0,now+30)&&!EsperChannel.active(p),"Early release terminates and detonates once");
+        p.discard();h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void aimed_collapse_binds_immediately_and_cancels_cleanly(GameTestHelper h) {
+        var p = spacePlayer(h, 245);
+        var d = Esper.data(p);
         var world = h.getLevel();
-        var p = player(h);
-        Vec3 origin = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 1)).atY(220));
-        p.setPos(origin);
-        p.setYRot(0);
-        p.setXRot(-60);
-        var left = target(world, origin.add(-3, 0, 3));
-        var right = target(world, origin.add(3, 0, 3));
-        var rear = target(world, origin.add(0, 0, -3));
-        activate(p, Esper.Skill.BLINK);
-        var data = Esper.data(p);
-        data.putInt("Rank_SPACE", 2);
-        data.putInt("Level_slash", 1);
-        Esper.equip(p, Esper.Skill.SLASH.ordinal(), 0);
-        h.assertTrue(Esper.cast(p, 0) && left.getHealth() < 100 && right.getHealth() < 100 && rear.getHealth() == 100,
-                "The sweep hits both sides using yaw, preserves targets behind");
-        h.assertTrue(data.getLong("Ready_slash") - world.getGameTime() == 10, "Base slash cooldown is half a second");
-        left.discard();
-        right.discard();
-        rear.discard();
+        var selected = target(world, p.position().add(0, 0, 6));
+        var distant = target(world, p.position().add(0, 0, 13));
+        Vec3 anchor = selected.position();
+        p.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, selected.getBoundingBox().getCenter());
+        Esper.equip(p, Esper.Skill.COLLAPSE.ordinal(), 0);
+        h.assertTrue(Esper.cast(p, 0), "Aimed collapse starts");
+        selected.setPos(anchor.add(1, 0, 0));
+        EsperEffects.tickBinding(new net.neoforged.neoforge.event.tick.EntityTickEvent.Post(selected));
+        h.assertTrue(selected.position().distanceToSqr(anchor) < .02, "The selected target is pinned before the first growth tick");
+        long now = world.getGameTime() + 10;
+        EsperChannel.hold(p, 0, now);
+        EsperChannel.tick(p, d, now);
+        h.assertTrue(selected.getHealth() < 100 && distant.getHealth() == 100, "The sphere grows at the nearest aimed target");
+        EsperChannel.cancel(p);
+        selected.setPos(anchor.add(1, 0, 0));
+        EsperEffects.tickBinding(new net.neoforged.neoforge.event.tick.EntityTickEvent.Post(selected));
+        h.assertTrue(selected.position().distanceToSqr(anchor) > .9, "Cancel releases the exact channel binding immediately");
+        selected.discard();
+        distant.discard();
+        p.discard();
         h.succeed();
     }
 
-    @GameTest(template = "empty", timeoutTicks = 85)
-    public static void volley_release_spawns_and_ticks_swords(GameTestHelper h) {
-        var world = h.getLevel();
-        var p = player(h);
-        Vec3 origin = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 1)).atY(230));
-        p.setPos(origin);
-        p.setYRot(0);
-        p.setXRot(0);
-        p.setNoGravity(true);
-        world.addNewPlayer(p);
-        activate(p, Esper.Skill.BLINK);
-        var data = Esper.data(p);
-        data.putInt("Rank_SPACE", 5);
-        data.putInt("Level_storage", 3);
-        data.putInt("Level_volley", 3);
-        Esper.equip(p, Esper.Skill.VOLLEY.ordinal(), 0);
-        var box = new net.minecraft.world.phys.AABB(origin.add(-8, -3, -8), origin.add(8, 6, 12));
-        new EsperStorage(p, 3).setItem(45, Items.DIAMOND_SWORD.getDefaultInstance());
-        int power = data.getInt("Power");
-        h.assertTrue(Esper.cast(p, 0) && world.getEntitiesOfClass(EsperProjectile.class, box).isEmpty()
-                && data.getInt("Power") == power, "Pressing starts charging without paying or firing");
-        h.runAfterDelay(12, () -> {
-            long now = world.getServer().overworld().getGameTime();
-            h.assertTrue(!EsperVolley.release(p, 1, now) && EsperVolley.release(p, 0, now)
-                    && !EsperVolley.release(p, 0, now), "Only the matching release fires once");
-            var swords = world.getEntitiesOfClass(EsperProjectile.class, box);
-            h.assertTrue(swords.size() >= 7 && swords.stream().filter(s -> s.getItem().is(Items.DIAMOND_SWORD)).count() == 1,
-                    "Charged volley creates many swords and consumes the real sword once");
-            h.assertTrue(new EsperStorage(p, 3).firstAmmo() < 0 && Esper.mastery(data, Esper.Skill.VOLLEY) == 1
-                    && data.getLong("Ready_volley") - now == Esper.Skill.VOLLEY.cooldownAt(3), "Release pays the cast once");
-            h.runAfterDelay(3, () -> {
-                h.assertTrue(swords.stream().anyMatch(sword -> sword.tickCount > 0), "Spawned swords tick without crashing");
-                swords.forEach(net.minecraft.world.entity.Entity::discard);
-                p.discard();
-                h.succeed();
-            });
+    @GameTest(template = "empty")
+    public static void shift_takes_off_and_ends_on_landing(GameTestHelper h) {
+        var p = spacePlayer(h, 247);
+        var d = Esper.data(p);
+        long now = h.getLevel().getGameTime();
+        Esper.equip(p, Esper.Skill.SHIFT.ordinal(), 0);
+        p.setOnGround(true);
+        h.assertTrue(Esper.cast(p, 0) && p.getAbilities().flying && p.getDeltaMovement().y > 0,
+                "Casting from the ground immediately enables flight and lifts the player");
+        Esper.toggleMode(p);
+        p.getAbilities().flying = false;
+        EsperEffects.tickPlayer(p, d, now + 7);
+        h.assertTrue(d.contains("Shift") && p.getAbilities().flying, "Airborne shift survives mode changes and vanilla flight toggles");
+        p.setOnGround(true);
+        EsperEffects.tickPlayer(p, d, now + 8);
+        h.assertTrue(!d.contains("Shift") && !p.getAbilities().mayfly && !p.getAbilities().flying,
+                "Landing removes the temporary flight ability");
+        p.discard();
+        h.succeed();
+    }
+
+    @GameTest(template="empty",timeoutTicks=70)
+    public static void distortion_moves_blocks_without_duplication(GameTestHelper h) {
+        var p=spacePlayer(h,260);var world=h.getLevel();
+        BlockPos stone=BlockPos.containing(p.getEyePosition().add(0,0,5));
+        BlockPos chest=stone.south(2),bedrock=stone.south(4);
+        world.setBlockAndUpdate(stone,Blocks.DIAMOND_BLOCK.defaultBlockState());
+        world.setBlockAndUpdate(chest,Blocks.CHEST.defaultBlockState());
+        world.setBlockAndUpdate(bedrock,Blocks.BEDROCK.defaultBlockState());
+        var container=(net.minecraft.world.level.block.entity.ChestBlockEntity)world.getBlockEntity(chest);
+        container.setItem(0,Items.EMERALD.getDefaultInstance());
+        var victim=target(world,p.position().add(0,0,10));
+        h.assertTrue(EsperWarp.cast(p,1)&&victim.getHealth()<100,"Distortion damages along the line");
+        h.runAfterDelay(60,()->{
+            int diamonds=0;
+            for(var pos:BlockPos.betweenClosed(stone.offset(-6,-6,-3),stone.offset(6,6,10)))
+                if(world.getBlockState(pos).is(Blocks.DIAMOND_BLOCK))diamonds++;
+            h.assertTrue(world.getBlockState(stone).isAir()&&diamonds==1,"Distortion moves the actual block exactly once");
+            h.assertTrue(world.getBlockState(bedrock).is(Blocks.BEDROCK)&&world.getBlockEntity(chest)==container
+                    &&container.getItem(0).is(Items.EMERALD),"Unbreakable terrain and real inventory stay intact");
+            victim.discard();p.discard();h.succeed();
         });
+    }
+
+    private static void keepChannel(GameTestHelper h,ServerPlayer p,int slot,int ticks,net.minecraft.world.entity.LivingEntity... victims) {
+        long start=h.getLevel().getGameTime();
+        for(int i=1;i<=ticks;i++) {
+            final int elapsed=i;
+            h.runAfterDelay(i,()->{
+                long now=start+elapsed;
+                // Simulated players do not belong to the server connection tick list.
+                // Advance channel time and the victims' hit immunity explicitly.
+                if(elapsed%10==0)for(var victim:victims)victim.invulnerableTime=0;
+                EsperChannel.hold(p,slot,now);EsperChannel.tick(p,Esper.data(p),now);
+            });
+        }
+    }
+
+    private static ServerPlayer spacePlayer(GameTestHelper h,int y) {
+        var p=player(h);p.setPos(Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1,2,1)).atY(y)));
+        p.setYRot(0);p.setXRot(0);p.setNoGravity(true);h.getLevel().addNewPlayer(p);
+        activate(p,Esper.Skill.BLINK);var d=Esper.data(p);d.putInt("Rank_SPACE",7);
+        for(var skill:Esper.School.SPACE.skills())d.putInt("Level_"+skill.key,1);
+        Esper.refresh(p,d);d.putInt("Power",d.getInt("Max"));return p;
     }
 
     @GameTest(template = "empty")
@@ -365,7 +488,7 @@ public final class EsperGameTests {
         h.runAfterDelay(8, () -> h.assertTrue(victim.getHealth() <= 95 && victim.getHealth() > 94,
                 "First wave hits before the following waves; health " + victim.getHealth()));
         h.runAfterDelay(50, () -> {
-            h.assertTrue(victim.getHealth() < 77, "Later waves deal repeated damage; health " + victim.getHealth());
+            h.assertTrue(victim.getHealth() < 85, "Later waves deal repeated damage; health " + victim.getHealth());
             victim.discard();
             caster.discard();
             h.succeed();
@@ -393,7 +516,7 @@ public final class EsperGameTests {
         h.runAfterDelay(12, () -> {
             caster.setPos(Vec3.atBottomCenterOf(platform));
             caster.setYRot(0);
-            caster.setXRot(1);
+            caster.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES,victim.getEyePosition());
             victim.setYRot(180);
             assertBlinkAndLock(h, caster, platform, victim, d);
         });
@@ -417,8 +540,9 @@ public final class EsperGameTests {
             h.assertTrue(Esper.cast(caster, 1), "Lock on an aimed creature");
             Vec3 anchor = victim.position();
             victim.setPos(anchor.add(.75, 0, 0));
+            EsperEffects.tickBinding(new net.neoforged.neoforge.event.tick.EntityTickEvent.Post(victim));
             h.runAfterDelay(6, () -> {
-                h.assertTrue(victim.position().distanceToSqr(anchor) < .02, "Locked creature stays at its anchor");
+                h.assertTrue(victim.position().distanceToSqr(anchor) < .02, "Locked creature stays at its anchor: "+victim.position().subtract(anchor)+", tick="+victim.tickCount);
                 victim.discard();
                 caster.discard();
                 h.succeed();
@@ -447,6 +571,8 @@ public final class EsperGameTests {
 
     private static ServerPlayer player(GameTestHelper h) {
         var server = h.getLevel().getServer();
+        var chunk = new net.minecraft.world.level.ChunkPos(h.absolutePos(BlockPos.ZERO));
+        for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)h.getLevel().setChunkForced(chunk.x+x,chunk.z+z,true);
         UUID id = UUID.randomUUID();
         var profile = new GameProfile(id, "Baiwan_" + id.toString().substring(0, 8));
         var player = new ServerPlayer(server, h.getLevel(), profile, ClientInformation.createDefault());

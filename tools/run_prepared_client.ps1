@@ -9,6 +9,7 @@ param(
     [switch]$BlackDogLockMarkerCheck,
     [switch]$HaijiaVisualCheck,
     [switch]$ShowWindow,
+    [switch]$EsperVisualCheck,
     [switch]$HaijiaFlightCheck
 )
 $ErrorActionPreference = 'Stop'
@@ -53,6 +54,9 @@ try {
     }
     if ($HaijiaFlightCheck) {
         $arguments = @('-Dstarfall.haijiaFlightCheck=true') + $arguments + @('--width', '1440', '--height', '1000')
+    }
+    if ($EsperVisualCheck) {
+        $arguments = @('-Dstarfall.esperVisualCheck=true') + $arguments + @('--width', '1440', '--height', '1000')
     }
     $launchWindowStyle = if ($ShowWindow) { 'Normal' } else { 'Hidden' }
     $process = Start-Process -FilePath $JavaExecutable -ArgumentList $arguments -WorkingDirectory $gameDirectoryPath -WindowStyle $launchWindowStyle `

@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 
 public final class EsperMenu extends AbstractContainerMenu {
     private static final int COUNT = Esper.SKILLS.length;
-    public static final int PROMOTE = 28, EQUIP = 32, CLEAR = 96;
+    public static final int PROMOTE = 40, EQUIP = 48, CLEAR = 124;
     private final Inventory inventory;
     private final ContainerLevelAccess access;
     private final int[] info = new int[11 + 2 * COUNT + Esper.SLOTS];

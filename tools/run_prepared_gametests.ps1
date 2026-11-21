@@ -4,7 +4,7 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $vmArgs = Join-Path $projectRoot 'build/moddev/gameTestServerRunVmArgs.txt'
 $programArgs = Join-Path $projectRoot 'build/moddev/gameTestServerRunProgramArgs.txt'
 $legacyClasspath = Join-Path $projectRoot 'build/moddev/gameTestServerLegacyClasspath.txt'
-$gameJar = Join-Path $projectRoot 'build/moddev/artifacts/neoforge-21.1.262.jar'
+$gameJar = Join-Path $projectRoot 'build/moddev/artifacts/neoforge-21.1.228.jar'
 foreach ($required in @($vmArgs, $programArgs, $legacyClasspath, $gameJar)) {
     if (!(Test-Path -LiteralPath $required)) {
         throw "Missing prepared runtime: $required. Run the Gradle prepareGameTestServerRun task first."

@@ -21,7 +21,7 @@ def main():
     vm = prepared / 'gameTestServerRunVmArgs.txt'
     program = prepared / 'gameTestServerRunProgramArgs.txt'
     legacy = prepared / 'gameTestServerLegacyClasspath.txt'
-    game = prepared / 'artifacts/neoforge-21.1.262.jar'
+    game = prepared / 'artifacts/neoforge-21.1.228.jar'
     classes = ROOT / 'build/classes/java/main'
     resources = ROOT / 'build/resources/main'
     for required in (vm, program, legacy, game, classes, resources):

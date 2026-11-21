@@ -20,7 +20,7 @@ if (!$GameDirectory) { $GameDirectory = Join-Path $projectRoot 'run' }
 $vmArgs = Join-Path $projectRoot 'build/moddev/clientRunVmArgs.txt'
 $programArgs = Join-Path $projectRoot 'build/moddev/clientRunProgramArgs.txt'
 $legacyClasspath = Join-Path $projectRoot 'build/moddev/clientLegacyClasspath.txt'
-$gameJar = Join-Path $projectRoot 'build/moddev/artifacts/neoforge-21.1.262.jar'
+$gameJar = Join-Path $projectRoot 'build/moddev/artifacts/neoforge-21.1.228.jar'
 foreach ($required in @($vmArgs, $programArgs, $legacyClasspath, $gameJar)) {
     if (!(Test-Path -LiteralPath $required)) { throw "Missing prepared client runtime: $required. Run classes prepareClientRun first." }
 }

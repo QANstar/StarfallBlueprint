@@ -9,7 +9,7 @@ description='''共同原矿、通用晶料与营地整备。基于 RE_BFL 设定
 [[dependencies.starfall_blueprint]]
 modId="neoforge"
 type="required"
-versionRange="[21.1.262,21.2)"
+versionRange="[21.1.228,21.2)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.starfall_blueprint]]

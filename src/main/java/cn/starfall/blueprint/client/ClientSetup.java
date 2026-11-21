@@ -1,6 +1,11 @@
 package cn.starfall.blueprint.client;
 
+import cn.starfall.blueprint.BestMechProgression;
+import cn.starfall.blueprint.CatalogueContent;
 import cn.starfall.blueprint.StarfallBlueprint;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -54,7 +59,18 @@ public final class ClientSetup {
             public int getTintColor(){return switch(key){case "warm"->0xffbca88a;case "wastewater"->0xff837a61;case "bio"->0xffa6bf59;default->0xff699997;};}
         },entry.type().get()));
     }
+    private static void registerMechItemModels() {
+        for (String type : java.util.List.of(BestMechProgression.ENGINEERING, BestMechProgression.COMBAT, BestMechProgression.UNIVERSAL)) {
+            ItemProperties.register(CatalogueContent.item(BestMechProgression.itemKey(type)), StarfallBlueprint.id("creative_loadout"),
+                    (stack, level, entity, seed) -> {
+                        var name = stack.get(DataComponents.ITEM_NAME);
+                        return name != null && name.getContents() instanceof TranslatableContents translation
+                                && translation.getKey().equals("item.starfall_blueprint.creative_mech") ? 1 : 0;
+                    });
+        }
+    }
     @SubscribeEvent public static void setup(net.neoforged.fml.event.lifecycle.FMLClientSetupEvent event){event.enqueueWork(()->{
+        registerMechItemModels();
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(BlackDogClient::render);
         if(Boolean.getBoolean("starfall.lingchuanVisualCheck"))net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(LingchuanVisualCheck::tick);
         BlueprintScreen.installExamples();

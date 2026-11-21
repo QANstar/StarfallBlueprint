@@ -12,15 +12,19 @@ public final class BestMechCombatGameTests {
     @GameTest(template="combat_arena")
     public static void combatStateSanitizesAndPersistsCooldown(GameTestHelper h) {
         var mech=BestMechs.COMBAT_TYPE.get().create(h.getLevel());
-        var systems=new BestMechCombatSystems(mech);
+        var systems=mech.combatSystems();
         var root=new CompoundTag(); var state=new CompoundTag();
         state.putString("Weapon",BestMechCombatSystems.SNIPER); state.putString("Drone",BestMechCombatSystems.ATTACK_DRONE);
         state.putInt("Cooldown",40); state.putInt("DroneCooldown",30); root.put(BestMechCombatSystems.STATE,state);
         systems.load(root); var saved=new CompoundTag(); systems.save(saved);
         h.assertTrue(saved.equals(root),"Packing preserves physical components and cooldowns");
+        h.assertTrue(mech.visualWeaponKey().equals(BestMechCombatSystems.SNIPER)
+                && mech.visualDroneKey().equals(BestMechCombatSystems.ATTACK_DRONE), "Synced visual keys match the installed equipment");
         state.putString("Weapon","forged_weapon"); state.putString("Drone","forged_drone"); state.putInt("Cooldown",Integer.MAX_VALUE);
         systems.load(root); saved=new CompoundTag(); systems.save(saved);
         h.assertTrue(systems.weapon().equals(BestMechCombatSystems.LASER) && systems.drone().isEmpty(),"Unknown component IDs cannot grant abilities");
+        h.assertTrue(mech.visualWeaponKey().equals(BestMechCombatSystems.LASER)
+                && mech.visualDroneKey().isEmpty(), "Unknown equipment restores the default chassis appearance");
         h.assertTrue(saved.getCompound(BestMechCombatSystems.STATE).getInt("Cooldown")==100,"Cooldown bounded");
         h.assertTrue(BestMechCombatSystems.ammunition(BestMechCombatSystems.SNIPER).equals(BestMechCombatSystems.SNIPER_ROUND),"Sniper uses distinct real cargo ammunition");
         h.assertTrue(BestMechCombatSystems.ammunition(BestMechCombatSystems.LASER).isEmpty(),"Laser consumes energy instead of ammunition");

@@ -1,6 +1,8 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "starfall_blueprint:block/mech_maintenance_platform"
+    "top": "starfall_blueprint:block/mech_maintenance_platform",
+    "side": "starfall_blueprint:block/mech_maintenance_platform_side",
+    "bottom": "starfall_blueprint:block/mech_maintenance_platform_bottom"
   }
 }

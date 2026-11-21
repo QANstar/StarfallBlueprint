@@ -50,6 +50,9 @@ public final class BestMechEntity extends PathfinderMob {
     private static final EntityDataAccessor<String> LEGS = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
     private static final net.minecraft.resources.ResourceLocation CRUISE_STEP = StarfallBlueprint.id("best_mech_cruise_step");
     private static final EntityDataAccessor<Integer> UPGRADES = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<String> VISUAL_WEAPON = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> VISUAL_DRONE = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Boolean> VISUAL_WIRELESS = SynchedEntityData.defineId(BestMechEntity.class, EntityDataSerializers.BOOLEAN);
     private int weaponCooldown;
     private java.util.UUID mechId=java.util.UUID.randomUUID(), engineeringSource, combatSource;
     public String platformType() { return getType()==BestMechs.COMBAT_TYPE.get()?BestMechProgression.COMBAT:getType()==BestMechs.UNIVERSAL_TYPE.get()?BestMechProgression.UNIVERSAL:BestMechProgression.ENGINEERING; }
@@ -82,7 +85,22 @@ public final class BestMechEntity extends PathfinderMob {
         builder.define(ISOLATED, false); builder.define(LOCKED, false); builder.define(SUPPORT_DEPLOYED, false); builder.define(SILK_COLLECTION, false); builder.define(OPERATOR_QUALIFIED, false);
         builder.define(UTILITY_MODULE, ""); builder.define(ENGINEERING_ARM, BestMechArms.DRILL); builder.define(BODY, "");
         builder.define(CORE, ""); builder.define(CORE_FUEL_TICKS, 0); builder.define(LEGS, "");
+        builder.define(VISUAL_WEAPON, "");
+        builder.define(VISUAL_DRONE, "");
+        builder.define(VISUAL_WIRELESS, false);
     }
+    public boolean visualWirelessInstalled() { return entityData.get(VISUAL_WIRELESS); }
+    void syncCombatAppearance(String weapon, String drone) {
+        if (!level().isClientSide) {
+            entityData.set(VISUAL_WEAPON, combatCapable() ? weapon : "");
+            entityData.set(VISUAL_DRONE, combatCapable() ? drone : "");
+        }
+    }
+    public String visualWeaponKey() {
+        String installed = entityData.get(VISUAL_WEAPON);
+        return installed.isEmpty() && combatCapable() ? BestMechCombatSystems.LASER : installed;
+    }
+    public String visualDroneKey() { return entityData.get(VISUAL_DRONE); }
     public int energy() { return entityData.get(ENERGY); }
     public int heat() { return entityData.get(HEAT); }
     public int wear() { return entityData.get(WEAR); }
@@ -376,6 +394,20 @@ public final class BestMechEntity extends PathfinderMob {
         }
         super.tick();
     }
+    public double cockpitEyeHeight() {
+        return switch (platformType()) {
+            case BestMechProgression.COMBAT -> 3.94;
+            case BestMechProgression.UNIVERSAL -> 4.375;
+            default -> 3.45;
+        };
+    }
+    @Override protected void positionRider(Entity passenger, Entity.MoveFunction move) {
+        if (passenger instanceof Player) {
+            move.accept(passenger, getX(), getY() + cockpitEyeHeight() - passenger.getEyeHeight(), getZ());
+        } else {
+            super.positionRider(passenger, move);
+        }
+    }
     @Override public LivingEntity getControllingPassenger() { return getFirstPassenger() instanceof Player p ? p : null; }
     @Override protected boolean canAddPassenger(Entity passenger) { return getPassengers().isEmpty() && passenger instanceof Player; }
     /** The server runs vanilla riding input, collision and gravity; clients interpolate tracking updates. */
@@ -510,6 +542,7 @@ public final class BestMechEntity extends PathfinderMob {
         if(tag.hasUUID("BestSupportPilot")) getPersistentData().putUUID("BestSupportPilot",tag.getUUID("BestSupportPilot"));
         combatSystems.load(tag);
         powerSystems.load(tag);
+        if (!level().isClientSide) entityData.set(VISUAL_WIRELESS, powerSystems.wirelessInstalled());
         setHealth(tag.contains("Health") ? Math.clamp(tag.getFloat("Health"), 0, getMaxHealth()) : getMaxHealth());
         if(tag.contains("Name")) { try { setCustomName(Component.Serializer.fromJson(tag.getString("Name"), registryAccess())); } catch(RuntimeException ignored) {} }
     }
@@ -578,7 +611,36 @@ public final class BestMechEntity extends PathfinderMob {
     public boolean fireWeapon(Player player) {
         return combatSystems.fire(player);
     }
+    // Area effects may enumerate both occupants of the same space in either order.
+    // Pair only opposite routes in the same tick. Repeated hits on one route remain independent.
+    private record Impact(net.minecraft.world.damagesource.DamageType type, int direct, int attacker, Vec3 origin) {}
+    private final java.util.Map<Impact, Integer> cockpitHits = new java.util.HashMap<>();
+    private long impactTick = Long.MIN_VALUE;
+    private boolean duplicateImpact(DamageSource source, boolean viaPilot) {
+        long now = level().getGameTime();
+        if (impactTick != now) {
+            cockpitHits.clear();
+            impactTick = now;
+        }
+        var direct = source.getDirectEntity();
+        var attacker = source.getEntity();
+        var impact = new Impact(source.type(), direct == null ? -1 : direct.getId(),
+                attacker == null ? -1 : attacker.getId(), source.getSourcePosition());
+        int old = cockpitHits.getOrDefault(impact, 0);
+        int direction = viaPilot ? 1 : -1;
+        int balance = old + direction;
+        if (balance == 0) cockpitHits.remove(impact);
+        else cockpitHits.put(impact, balance);
+        return old * direction < 0;
+    }
     @Override public boolean hurt(DamageSource source,float damage) {
+        if (getControllingPassenger() != null && duplicateImpact(source, false)) return false;
+        return hurtHull(source, damage);
+    }
+    void hurtOccupant(DamageSource source, float damage) {
+        if (!duplicateImpact(source, true)) hurtHull(source, damage);
+    }
+    private boolean hurtHull(DamageSource source, float damage) {
         if(hasUpgrade(BestMechProgression.ARMOR)||hasUpgrade(BestMechProgression.ZHENYUAN)) damage*=.75f;
         return super.hurt(source,combatSystems.reduceDamage(source, damage));
     }
@@ -631,6 +693,7 @@ public final class BestMechEntity extends PathfinderMob {
         if(level().isClientSide) return InteractionResult.SUCCESS;
         if(held.is(CatalogueContent.item(BestMechPowerSystems.WIRELESS))) {
             if(hand==InteractionHand.MAIN_HAND && player.isShiftKeyDown() && canServiceModule(player) && powerSystems.installWireless()) {
+                entityData.set(VISUAL_WIRELESS, true);
                 held.shrink(1); player.getInventory().setChanged();
                 player.displayClientMessage(Component.literal("无线充能组件已安装：同主人平台8格内接通充电"),true);
             } else player.displayClientMessage(Component.literal("安装失败：须隔离停稳、无人乘坐，且无线槽为空"),true);
@@ -639,6 +702,7 @@ public final class BestMechEntity extends PathfinderMob {
         if(player.isShiftKeyDown() && hand==InteractionHand.MAIN_HAND && held.is(CatalogueContent.item("best_diagnostic_tool")) && player.getOffhandItem().is(Items.COPPER_INGOT)) {
             int slot=player.getInventory().getFreeSlot();
             if(canServiceModule(player) && slot>=0 && powerSystems.removeWireless()) {
+                entityData.set(VISUAL_WIRELESS, false);
                 player.getInventory().setItem(slot,CatalogueContent.stack(BestMechPowerSystems.WIRELESS,1)); player.getInventory().setChanged();
                 player.displayClientMessage(Component.literal("无线充能组件已拆回"),true);
             } else player.displayClientMessage(Component.literal("无法拆卸无线组件：检查隔离、停稳和背包空位"),true);

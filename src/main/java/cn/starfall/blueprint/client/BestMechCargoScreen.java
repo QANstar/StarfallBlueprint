@@ -24,13 +24,11 @@ public final class BestMechCargoScreen extends AbstractContainerScreen<BestMechC
     }
     @Override protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
-        graphics.fill(x, y, x + imageWidth, y + imageHeight, 0xff233a40);
-        graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + imageHeight - 2, 0xffdce5df);
-        graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + 20, 0xff344f55);
+        BestHangarTerminal.frame(graphics, font, x, y, imageWidth, imageHeight, "BAY / " + menu.cargoSlots());
+        graphics.fill(x+4,y+menu.inventoryTop()-27,x+imageWidth-4,y+menu.inventoryTop()-14,BestHangarTerminal.PANEL);
         for(var slot : menu.slots) {
             int sx = x + slot.x, sy = y + slot.y;
-            graphics.fill(sx - 1, sy - 1, sx + 17, sy + 17, 0xff485b55);
-            graphics.fill(sx, sy, sx + 16, sy + 16, 0xff96a79c);
+            BestHangarTerminal.well(graphics,sx,sy);
         }
     }
     @Override protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -39,8 +37,8 @@ public final class BestMechCargoScreen extends AbstractContainerScreen<BestMechC
         float scale = Math.min(1f, 160f / Math.max(1, font.width(hint)));
         graphics.pose().pushPose();
         graphics.pose().translate(8, menu.inventoryTop() - 24, 0); graphics.pose().scale(scale, scale, 1);
-        graphics.drawString(font, hint, 0, 0, 0xff435b50, false); graphics.pose().popPose();
-        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff344f43, false);
+        graphics.drawString(font, hint, 0, 0, 0xffbed4d9, false); graphics.pose().popPose();
+        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff85e0d1, false);
     }
     @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);

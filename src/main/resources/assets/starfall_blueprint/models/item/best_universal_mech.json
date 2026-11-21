@@ -2,5 +2,13 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "starfall_blueprint:item/best_universal_mech"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "starfall_blueprint:creative_loadout": 1.0
+      },
+      "model": "starfall_blueprint:item/best_universal_mech_loaded"
+    }
+  ]
 }

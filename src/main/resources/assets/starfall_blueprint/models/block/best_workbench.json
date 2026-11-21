@@ -2,13 +2,18 @@
   "parent": "minecraft:block/block",
   "ambientocclusion": true,
   "textures": {
-    "surface": "starfall_blueprint:block/preparation_side",
-    "top": "starfall_blueprint:block/preparation_top",
-    "control": "starfall_blueprint:item/best_workbench",
-    "particle": "starfall_blueprint:block/preparation_side"
+    "surface": "starfall_blueprint:block/best_workbench_structure",
+    "top": "starfall_blueprint:block/best_workbench_top",
+    "control": "starfall_blueprint:block/best_workbench_control",
+    "particle": "#surface"
   },
   "elements": [
     {
+      "from": [
+        0,
+        10,
+        0
+      ],
       "to": [
         16,
         12,
@@ -16,7 +21,7 @@
       ],
       "faces": {
         "north": {
-          "texture": "#top",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -25,7 +30,7 @@
           ]
         },
         "south": {
-          "texture": "#top",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -34,7 +39,7 @@
           ]
         },
         "east": {
-          "texture": "#top",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -43,7 +48,7 @@
           ]
         },
         "west": {
-          "texture": "#top",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -61,7 +66,7 @@
           ]
         },
         "down": {
-          "texture": "#top",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -69,14 +74,14 @@
             16
           ]
         }
-      },
-      "from": [
-        0,
-        10,
-        0
-      ]
+      }
     },
     {
+      "from": [
+        1,
+        0,
+        1
+      ],
       "to": [
         4,
         10,
@@ -137,14 +142,14 @@
             16
           ]
         }
-      },
-      "from": [
-        1,
-        0,
-        1
-      ]
+      }
     },
     {
+      "from": [
+        12,
+        0,
+        1
+      ],
       "to": [
         15,
         10,
@@ -205,14 +210,14 @@
             16
           ]
         }
-      },
-      "from": [
-        12,
-        0,
-        1
-      ]
+      }
     },
     {
+      "from": [
+        1,
+        0,
+        12
+      ],
       "to": [
         4,
         10,
@@ -273,14 +278,14 @@
             16
           ]
         }
-      },
-      "from": [
-        1,
-        0,
-        12
-      ]
+      }
     },
     {
+      "from": [
+        12,
+        0,
+        12
+      ],
       "to": [
         15,
         10,
@@ -341,14 +346,14 @@
             16
           ]
         }
-      },
-      "from": [
-        12,
-        0,
-        12
-      ]
+      }
     },
     {
+      "from": [
+        3,
+        2,
+        3
+      ],
       "to": [
         13,
         4,
@@ -392,7 +397,7 @@
           ]
         },
         "up": {
-          "texture": "#surface",
+          "texture": "#top",
           "uv": [
             0,
             0,
@@ -409,14 +414,14 @@
             16
           ]
         }
-      },
-      "from": [
-        3,
-        2,
-        3
-      ]
+      }
     },
     {
+      "from": [
+        3,
+        5,
+        1
+      ],
       "to": [
         13,
         9,
@@ -433,7 +438,7 @@
           ]
         },
         "south": {
-          "texture": "#control",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -442,7 +447,7 @@
           ]
         },
         "east": {
-          "texture": "#control",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -451,7 +456,7 @@
           ]
         },
         "west": {
-          "texture": "#control",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -460,7 +465,7 @@
           ]
         },
         "up": {
-          "texture": "#control",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -469,7 +474,7 @@
           ]
         },
         "down": {
-          "texture": "#control",
+          "texture": "#surface",
           "uv": [
             0,
             0,
@@ -477,14 +482,14 @@
             16
           ]
         }
-      },
-      "from": [
-        3,
-        5,
-        1
-      ]
+      }
     },
     {
+      "from": [
+        2,
+        12,
+        4
+      ],
       "to": [
         6,
         14,
@@ -545,14 +550,14 @@
             16
           ]
         }
-      },
-      "from": [
-        2,
-        12,
-        4
-      ]
+      }
     },
     {
+      "from": [
+        3,
+        14,
+        5
+      ],
       "to": [
         5,
         16,
@@ -613,12 +618,7 @@
             16
           ]
         }
-      },
-      "from": [
-        3,
-        14,
-        5
-      ]
+      }
     }
   ]
 }

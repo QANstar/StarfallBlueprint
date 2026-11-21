@@ -1,151 +1,231 @@
 package cn.starfall.blueprint.client;
 
-import cn.starfall.blueprint.BestMechEntity;
 import cn.starfall.blueprint.BestMechArms;
+import cn.starfall.blueprint.BestMechBodies;
+import cn.starfall.blueprint.BestMechCombatSystems;
+import cn.starfall.blueprint.BestMechCores;
+import cn.starfall.blueprint.BestMechEntity;
+import cn.starfall.blueprint.BestMechLegs;
+import cn.starfall.blueprint.BestMechModules;
+import cn.starfall.blueprint.BestMechProgression;
+import cn.starfall.blueprint.BestMechSupport;
 import cn.starfall.blueprint.StarfallBlueprint;
+import cn.starfall.blueprint.client.BestMechGeometry.Feature;
+import cn.starfall.blueprint.client.BestMechGeometry.Material;
+import cn.starfall.blueprint.client.BestMechGeometry.Shape;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.List;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 
-/** Original industrial walker: open cockpit, braced chassis and interchangeable right tool arm. */
+/** Three chassis on the same renderer, driven by tracked platform, upgrade and equipment state. */
 public final class BestMechModel extends EntityModel<BestMechEntity> {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID, "best_engineering_mech"), "main");
-    private final ModelPart root, leftLeg, rightLeg, leftArm, rightArm, drillHead, bucketHead, heavyDrillHead, heavyBucketHead, reinforcement, generator, wheels, heavyFrame;
-    private final ModelPart[] wheelRollers = new ModelPart[4];
+    public static final ModelLayerLocation LAYER = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID, "best_engineering_mech"), "main");
+    static final ResourceLocation PALETTE_TEXTURE = ResourceLocation.withDefaultNamespace("textures/misc/white.png");
+
+    public enum Platform {
+        ENGINEERING(BestMechProgression.ENGINEERING), COMBAT(BestMechProgression.COMBAT), UNIVERSAL(BestMechProgression.UNIVERSAL);
+
+        final String key;
+
+        Platform(String key) { this.key = key; }
+
+        static Platform fromKey(String key) {
+            return switch (key) {
+                case BestMechProgression.COMBAT -> COMBAT;
+                case BestMechProgression.UNIVERSAL -> UNIVERSAL;
+                default -> ENGINEERING;
+            };
+        }
+    }
+
+    private static final EnumMap<Platform, Shape> PLANS = new EnumMap<>(Platform.class);
+    static {
+        for (Platform platform : Platform.values()) PLANS.put(platform, BestMechGeometry.create(platform));
+    }
+
+    private final EnumMap<Platform, BakedShape> chassis = new EnumMap<>(Platform.class);
+    private final EnumSet<Feature> active = EnumSet.noneOf(Feature.class);
+    private Platform platform;
+    private float stride;
+    private float wheelRotation;
+    private boolean powered;
 
     public BestMechModel(ModelPart root) {
-        this.root = root;
-        heavyFrame = root.getChild("heavy_frame");
-        reinforcement = root.getChild("reinforcement");
-        generator = root.getChild("generator");
-        wheels = root.getChild("wheels");
-        for (int i = 0; i < wheelRollers.length; i++) wheelRollers[i] = wheels.getChild("roller_" + i);
-        leftLeg = root.getChild("left_leg"); rightLeg = root.getChild("right_leg");
-        leftArm = root.getChild("left_arm"); rightArm = root.getChild("right_arm");
-        drillHead = rightArm.getChild("drill_head"); bucketHead = rightArm.getChild("bucket_head"); heavyDrillHead = rightArm.getChild("heavy_drill_head"); heavyBucketHead = rightArm.getChild("heavy_bucket_head");
+        PLANS.forEach((platform, shape) -> chassis.put(platform, new BakedShape(shape, root.getChild(platform.key))));
+        posePreview(Platform.ENGINEERING, 0);
     }
 
     public static LayerDefinition createLayer() {
-        MeshDefinition mesh = new MeshDefinition();
-        var root = mesh.getRoot();
-        root.addOrReplaceChild("chassis", CubeListBuilder.create()
-                .texOffs(0,0).addBox(-9,-13,-6,18,9,12)
-                .texOffs(0,24).addBox(-7,-25,4,14,15,5)
-                .texOffs(80,0).addBox(-9,-27,-5,3,15,3)
-                .texOffs(80,0).addBox(6,-27,-5,3,15,3)
-                // Leave the center open above the 2.2-block passenger attachment.
-                .texOffs(48,0).addBox(-9,-27,-5,3,2,12)
-                .texOffs(48,0).addBox(6,-27,-5,3,2,12)
-                .texOffs(64,24).addBox(-7,-14,-8,14,3,2)
-                .texOffs(104,0).addBox(-11,-12,-5,2,6,10)
-                .texOffs(104,0).addBox(9,-12,-5,2,6,10), PartPose.ZERO);
-        // Rear cargo housing and side bracing keep the cockpit and passenger head space open.
-        root.addOrReplaceChild("reinforcement", CubeListBuilder.create()
-                .texOffs(0,24).addBox(-9,-23,9,18,17,5)
-                .texOffs(0,48).addBox(-10,-13,-7,3,10,14)
-                .texOffs(0,48).addBox(7,-13,-7,3,10,14)
-                .texOffs(64,24).addBox(-9,-7,-8,18,4,2), PartPose.ZERO);
-        // Broader shoulders and rear cargo structure distinguish the heavy platform while leaving the cockpit open.
-        root.addOrReplaceChild("heavy_frame", CubeListBuilder.create()
-                .texOffs(0,24).addBox(-10,-24,9,20,18,6)
-                .texOffs(64,40).addBox(-14,-23,-4,4,10,8)
-                .texOffs(64,40).addBox(10,-23,-4,4,10,8)
-                .texOffs(0,0).addBox(-10,-11,-9,20,5,3), PartPose.ZERO);
-        // Compact rear generator and twin exhausts; cockpit and the original collision box stay clear.
-        root.addOrReplaceChild("generator", CubeListBuilder.create()
-                .texOffs(64,84).addBox(-4,-25,9,8,8,5.25f)
-                .texOffs(80,0).addBox(-8,-26,10,3,11,3)
-                .texOffs(80,0).addBox(5,-26,10,3,11,3), PartPose.ZERO);
-        for (int side : new int[]{-1,1}) {
-            root.addOrReplaceChild(side < 0 ? "right_leg" : "left_leg", CubeListBuilder.create()
-                    .texOffs(0,48).addBox(-3,0,-3,6,14,6)
-                    .texOffs(28,48).addBox(-4,12,-4,8,4,8)
-                    .texOffs(0,72).addBox(-3,16,-3,6,9,6)
-                    .texOffs(28,72).addBox(-4,24,-7,8,4,12), PartPose.offset(side*6,-4,0));
-        }
-        // Four road wheels replace the visible walking struts, retaining the same vehicle envelope.
-        var wheelFrame = root.addOrReplaceChild("wheels", CubeListBuilder.create()
-                .texOffs(0,48).addBox(-8,-4,-2,4,24,4)
-                .texOffs(0,48).addBox(4,-4,-2,4,24,4)
-                .texOffs(28,48).addBox(-8,17,-7,16,3,14), PartPose.ZERO);
-        for (int i = 0; i < 4; i++) {
-            wheelFrame.addOrReplaceChild("roller_" + i, CubeListBuilder.create()
-                    .texOffs(0,72).addBox(-2,-4,-3,4,8,6)
-                    .texOffs(28,72).addBox(-2,-3,-4,4,6,8)
-                    .texOffs(64,24).addBox(-2.25f,-2,-2,4.5f,4,4),
-                    PartPose.offset(i < 2 ? -8 : 8,20,i % 2 == 0 ? -6 : 6));
-        }
-        root.addOrReplaceChild("left_arm", CubeListBuilder.create()
-                .texOffs(64,40).addBox(-3,-2,-4,6,7,8)
-                .texOffs(64,58).addBox(-2,5,-2,4,11,4)
-                .texOffs(84,58).addBox(-3,14,-4,6,7,7)
-                .texOffs(108,40).addBox(-3,19,-6,2,5,3)
-                .texOffs(108,40).addBox(1,19,-6,2,5,3), PartPose.offset(11,-19,0));
-        var toolArm = root.addOrReplaceChild("right_arm", CubeListBuilder.create()
-                .texOffs(64,40).addBox(-3,-2,-4,6,7,8)
-                .texOffs(64,58).addBox(-2,5,-2,4,9,4), PartPose.offset(-11,-19,0));
-        toolArm.addOrReplaceChild("drill_head", CubeListBuilder.create()
-                .texOffs(64,84).addBox(-4,12,-5,8,8,9)
-                .texOffs(100,84).addBox(-3,13,-11,6,6,6)
-                .texOffs(100,104).addBox(-2,14,-15,4,4,4)
-                .texOffs(116,104).addBox(-1,15,-18,2,2,3), PartPose.ZERO);
-        // Open bucket with two side cheeks, a back plate and four visible teeth.
-        var bucket = CubeListBuilder.create()
-                .texOffs(64,84).addBox(-3,12,-4,6,7,6)
-                .texOffs(28,72).addBox(-6,17,-7,12,7,2)
-                .texOffs(28,72).addBox(-6,22,-16,12,2,9)
-                .texOffs(0,48).addBox(-6,17,-16,2,5,9)
-                .texOffs(0,48).addBox(4,17,-16,2,5,9);
-        for (int tooth = 0; tooth < 4; tooth++)
-            bucket.texOffs(108,40).addBox(-6 + tooth * 3,22,-19,2,2,3);
-        toolArm.addOrReplaceChild("bucket_head", bucket, PartPose.ZERO);
-        var heavyDrill = CubeListBuilder.create()
-                .texOffs(64,84).addBox(-5,11,-7,10,11,7)
-                .texOffs(0,48).addBox(-6,12,-10,12,9,3);
-        for(int x : new int[]{-4,0,4}) {
-            heavyDrill.texOffs(100,84).addBox(x-1.75f,13,-15,3.5f,7,5)
-                    .texOffs(100,104).addBox(x-1.25f,14,-19,2.5f,5,4)
-                    .texOffs(116,104).addBox(x-.75f,15,-22,1.5f,3,3);
-        }
-        toolArm.addOrReplaceChild("heavy_drill_head", heavyDrill, PartPose.ZERO);
-        var heavyBucket = CubeListBuilder.create()
-                .texOffs(64,84).addBox(-4,11,-5,8,9,7)
-                .texOffs(28,72).addBox(-8,15,-8,16,9,2)
-                .texOffs(28,72).addBox(-8,22,-20,16,2,12)
-                .texOffs(0,48).addBox(-8,15,-20,2,7,12)
-                .texOffs(0,48).addBox(6,15,-20,2,7,12);
-        for(int tooth=0;tooth<6;tooth++)
-            heavyBucket.texOffs(108,40).addBox(-8+tooth*2.8f,22,-23,2,2,3);
-        toolArm.addOrReplaceChild("heavy_bucket_head", heavyBucket, PartPose.ZERO);
-        return LayerDefinition.create(mesh,128,128);
+        var mesh = new MeshDefinition();
+        PLANS.forEach((platform, shape) -> shape.bake(mesh.getRoot(), platform.key));
+        return LayerDefinition.create(mesh, 128, 128);
     }
 
-    @Override public void setupAnim(BestMechEntity entity, float limbSwing, float limbSwingAmount, float age, float yaw, float pitch) {
-        heavyFrame.visible = entity.supportsAreaTools();
-        reinforcement.visible = cn.starfall.blueprint.BestMechBodies.REINFORCED.equals(entity.bodyKey());
-        generator.visible = cn.starfall.blueprint.BestMechCores.GENERATOR.equals(entity.coreKey());
-        drillHead.visible = BestMechArms.DRILL.equals(entity.workArmKey());
-        bucketHead.visible = BestMechArms.EXCAVATOR.equals(entity.workArmKey());
-        heavyDrillHead.visible = BestMechArms.HEAVY_DRILL.equals(entity.workArmKey());
-        heavyBucketHead.visible = BestMechArms.HEAVY_EXCAVATOR.equals(entity.workArmKey());
-        boolean cruising = cn.starfall.blueprint.BestMechLegs.CRUISE.equals(entity.legsKey());
-        wheels.visible = cruising;
-        leftLeg.visible = !cruising; rightLeg.visible = !cruising;
-        for (ModelPart roller : wheelRollers) roller.xRot = limbSwing * 0.5f;
-        float stride = (cruising ? 0 : 1) * Mth.cos(limbSwing*0.65F)*Math.min(limbSwingAmount,0.65F);
-        leftLeg.xRot = stride; rightLeg.xRot = -stride;
-        leftArm.xRot = -stride*0.45F; rightArm.xRot = stride*0.25F;
+    @Override
+    public void setupAnim(BestMechEntity entity, float limbSwing, float limbSwingAmount, float age, float yaw, float pitch) {
+        Platform type = Platform.fromKey(entity.platformType());
+        configure(type, entity.upgradeMask(), entity.workArmKey(), entity.legsKey(), entity.bodyKey(), entity.coreKey(),
+                entity.moduleKey(), entity.visualWeaponKey(), entity.visualDroneKey(), entity.visualWirelessInstalled());
+        stride = Mth.cos(limbSwing * .6662f) * Mth.clamp(limbSwingAmount, 0f, .58f);
+        wheelRotation = limbSwing * .62f;
+        powered = !entity.isolated() && entity.energy() > 0;
     }
 
-    @Override public void renderToBuffer(PoseStack pose, VertexConsumer vertices, int light, int overlay, int color) {
-        root.render(pose,vertices,light,overlay,color);
+    /** Standalone rendering uses the same rig as the entity, including its default equipment. */
+    public void posePreview(Platform type, int upgrades) {
+        posePreview(type, upgrades, "", "", "", "", "", "", "");
+    }
+
+    /** Optional installed-item keys use the same resolution rules as live tracked equipment. */
+    public void posePreview(Platform type, int upgrades, String arm, String legs, String body, String core,
+                            String utility, String weapon, String drone) {
+        posePreview(type, upgrades, arm, legs, body, core, utility, weapon, drone, false);
+    }
+
+    public void posePreview(Platform type, int upgrades, String arm, String legs, String body, String core,
+                            String utility, String weapon, String drone, boolean wireless) {
+        int mask = BestMechProgression.sanitize(type.key, upgrades);
+        String effectiveArm = arm.isEmpty() ? defaultArm(type, mask) : arm;
+        configure(type, mask, effectiveArm, legs, body, core, utility, weapon, drone, wireless);
+        stride = 0;
+        wheelRotation = 0;
+        powered = true;
+    }
+
+    private static String defaultArm(Platform platform, int mask) {
+        if ((mask & (BestMechProgression.ENGINEERING_EXTENSION | BestMechProgression.ZHENYUAN)) != 0) {
+            return BestMechArms.HEAVY_DRILL;
+        }
+        return platform == Platform.UNIVERSAL ? BestMechArms.DRILL : "";
+    }
+
+    private void configure(Platform type, int upgrades, String workArm, String legs, String body, String core,
+                           String utility, String weapon, String drone, boolean wireless) {
+        platform = type;
+        active.clear();
+        if (wireless) active.add(Feature.WIRELESS);
+        int mask = BestMechProgression.sanitize(type.key, upgrades);
+        addUpgrade(mask, BestMechProgression.ENGINEERING_EXTENSION, Feature.EXTENSION);
+        addUpgrade(mask, BestMechProgression.MOBILITY, Feature.MOBILITY);
+        addUpgrade(mask, BestMechProgression.ENDURANCE, Feature.ENDURANCE);
+        addUpgrade(mask, BestMechProgression.FIRE_CONTROL, Feature.FIRE_CONTROL);
+        addUpgrade(mask, BestMechProgression.ARMOR, Feature.ARMOR);
+        addUpgrade(mask, BestMechProgression.SUSTAINED_FIRE, Feature.SUSTAINED_FIRE);
+        addUpgrade(mask, BestMechProgression.ZHENYUAN, Feature.ZHENYUAN);
+        addUpgrade(mask, BestMechProgression.TIANPU, Feature.TIANPU);
+        addUpgrade(mask, BestMechProgression.CHANGCHUAN, Feature.CHANGCHUAN);
+        active.add(BestMechLegs.CRUISE.equals(legs) ? Feature.CRUISE : Feature.WALK);
+        if (BestMechBodies.REINFORCED.equals(body)) active.add(Feature.REINFORCED);
+        if (BestMechCores.GENERATOR.equals(core)) active.add(Feature.GENERATOR);
+        if (BestMechCores.FUSION.equals(core)) active.add(Feature.FUSION);
+        addFeature(switch (utility) {
+            case BestMechModules.RADIATOR -> Feature.RADIATOR;
+            case BestMechModules.DRIVE -> Feature.DRIVE;
+            case BestMechSupport.REPAIR -> Feature.REPAIR;
+            case BestMechSupport.FRIENDLY_REPAIR -> Feature.FRIENDLY_REPAIR;
+            case BestMechSupport.MAINTENANCE_DRONE -> Feature.MAINTENANCE_DRONE;
+            case BestMechSupport.HEALING_DRONE -> Feature.HEALING_DRONE;
+            default -> null;
+        });
+        if (type != Platform.COMBAT) {
+            boolean armored = active.contains(Feature.ZHENYUAN);
+            active.add(switch (workArm) {
+                case BestMechArms.DRILL -> armored ? Feature.ARMORED_DRILL : Feature.DRILL;
+                case BestMechArms.EXCAVATOR -> Feature.EXCAVATOR;
+                case BestMechArms.HEAVY_DRILL -> armored ? Feature.ARMORED_DRILL : Feature.HEAVY_DRILL;
+                case BestMechArms.HEAVY_EXCAVATOR -> Feature.HEAVY_EXCAVATOR;
+                default -> Feature.TOOL_EMPTY;
+            });
+        }
+        if (type != Platform.ENGINEERING) {
+            active.add(switch (weapon) {
+                case BestMechCombatSystems.MELEE -> Feature.MELEE;
+                case BestMechCombatSystems.MACHINE_GUN -> Feature.MACHINE_GUN;
+                case BestMechCombatSystems.SNIPER -> Feature.SNIPER;
+                case BestMechCombatSystems.EXPLOSIVE -> Feature.EXPLOSIVE;
+                default -> Feature.LASER;
+            });
+            addFeature(switch (drone) {
+                case BestMechCombatSystems.ATTACK_DRONE -> Feature.ATTACK_DRONE;
+                case BestMechCombatSystems.DEFENSE_DRONE -> Feature.DEFENSE_DRONE;
+                default -> null;
+            });
+        }
+    }
+
+    private void addUpgrade(int mask, int bit, Feature feature) {
+        if ((mask & bit) != 0) active.add(feature);
+    }
+
+    private void addFeature(Feature feature) {
+        if (feature != null) active.add(feature);
+    }
+
+    public void render(PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
+        renderToBuffer(pose, buffers.getBuffer(renderType(PALETTE_TEXTURE)), light, overlay, -1);
+    }
+
+    @Override
+    public void renderToBuffer(PoseStack pose, VertexConsumer vertices, int light, int overlay, int color) {
+        draw(chassis.get(platform), pose, vertices, light, overlay, color);
+    }
+
+    private void draw(BakedShape baked, PoseStack pose, VertexConsumer vertices, int light, int overlay, int color) {
+        Shape shape = baked.shape;
+        if (shape.feature != null && !active.contains(shape.feature)) return;
+        float walking = active.contains(Feature.WALK) ? stride : 0;
+        baked.transform.xRot = shape.restPitch + switch (shape.motion) {
+            case STATIC -> 0;
+            case LEFT_LEG -> walking;
+            case RIGHT_LEG -> -walking;
+            case LEFT_ARM -> -.31f * walking;
+            case RIGHT_ARM -> .22f * walking;
+            case ROLLER -> wheelRotation;
+        };
+        pose.pushPose();
+        baked.transform.translateAndRotate(pose);
+        for (Surface surface : baked.surfaces) {
+            int tint = color == -1 ? surface.material.color : FastColor.ARGB32.multiply(color, surface.material.color);
+            int lit = light;
+            if (surface.material.lamp) {
+                if (powered) lit = LightTexture.FULL_BRIGHT;
+                else tint = FastColor.ARGB32.multiply(tint, 0xff65747a);
+            }
+            surface.model.render(pose, vertices, lit, overlay, tint);
+        }
+        for (BakedShape child : baked.children) draw(child, pose, vertices, light, overlay, color);
+        pose.popPose();
+    }
+
+    private record Surface(Material material, ModelPart model) {}
+
+    private static final class BakedShape {
+        final Shape shape;
+        final ModelPart transform;
+        final List<Surface> surfaces = new ArrayList<>();
+        final List<BakedShape> children = new ArrayList<>();
+
+        BakedShape(Shape shape, ModelPart transform) {
+            this.shape = shape;
+            this.transform = transform;
+            for (Material material : shape.materials.keySet()) surfaces.add(new Surface(material, transform.getChild(material.name())));
+            for (int i = 0; i < shape.children.size(); i++) {
+                children.add(new BakedShape(shape.children.get(i), transform.getChild("shape_" + i)));
+            }
+        }
     }
 }

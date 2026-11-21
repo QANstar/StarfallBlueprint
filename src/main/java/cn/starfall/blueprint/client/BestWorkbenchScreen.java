@@ -111,15 +111,11 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
 
     @Override protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
-        graphics.fill(x, y, x + imageWidth, y + imageHeight, 0xff233a40);
-        graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + imageHeight - 2, 0xffdce5df);
-        graphics.fill(x + 2, y + 2, x + imageWidth - 2, y + 19, 0xff344f55);
-        graphics.fill(x + 8, y + 173, x + imageWidth - 8, y + 174, 0xffa5b8ac);
+        BestHangarTerminal.frame(graphics, font, x, y, imageWidth, imageHeight, "FAB / " + (page + 1));
+        graphics.fill(x+5,y+114,x+imageWidth-5,y+173,BestHangarTerminal.PANEL);
         for (var slot : menu.slots) {
             int sx = x + slot.x, sy = y + slot.y;
-            graphics.fill(sx - 1, sy - 1, sx + 17, sy + 17, 0xff485b55);
-            graphics.fill(sx, sy, sx + 16, sy + 16, 0xff96a79c);
-            graphics.fill(sx, sy, sx + 16, sy + 1, 0xff71847b);
+            BestHangarTerminal.well(graphics,sx,sy);
         }
     }
 
@@ -127,19 +123,19 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         fitted(graphics, title, titleLabelX, titleLabelY, 280, 0xffedf4eb);
         if (page >= 3) {
             BestEngineering.Preview preview = menu.preview(materialAction());
-            fitted(graphics, text("materials_for", BestMechAssembly.handles(materialAction())?BestMechAssembly.label(materialAction()):text("material_action_" + materialAction()), preview.reason()), 10, 117, 280, preview.executable() ? 0xff27653f : 0xff88402f);
+            fitted(graphics, text("materials_for", BestMechAssembly.handles(materialAction())?BestMechAssembly.label(materialAction()):text("material_action_" + materialAction()), preview.reason()), 10, 117, 280, preview.executable() ? 0xffadf2c5 : 0xffffb377);
             List<BestEngineering.MaterialRequirement> materials = preview.materials();
             for (int i = 0; i < materials.size(); i++) {
                 var material = materials.get(i);
                 int x = 10 + i % 4 * 71, y = 126 + i / 4 * 14;
                 graphics.renderItem(material.item(), x, y);
                 fitted(graphics, text("material_count", material.available(), material.required()), x + 18, y + 4, 51,
-                        material.available() >= material.required() ? 0xff27653f : 0xffa3332c);
+                        material.available() >= material.required() ? 0xffadf2c5 : 0xffff998b);
             }
         }
         if(page<3||menu.preview(materialAction()).materials().size()<=8)
-            fitted(graphics, (page==3||page>=7)?Component.literal("主手持隔离收纳机体；材料从背包交付"):text("hint_" + page), 10, 164, 280, 0xff435b50);
-        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff344f43, false);
+            fitted(graphics, (page==3||page>=7)?Component.literal("主手持隔离收纳机体；材料从背包交付"):text("hint_" + page), 10, 164, 280, 0xffbed4d9);
+        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff85e0d1, false);
     }
 
     @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {

@@ -265,7 +265,7 @@ public final class BestMechBodyGameTests {
                 m.moveTo(start.x, start.y, start.z, 0, 0); m.setDeltaMovement(Vec3.ZERO); m.setOnGround(true); p.setShiftKeyDown(false);
                 h.assertTrue(p.startRiding(m), "Actual server player rides each configuration"); p.setPlayerInput(0, 1, false, false); m.tick(); m.positionRider(p);
                 int cost = body.isEmpty() ? module.isEmpty() ? 400 : 600 : module.isEmpty() ? 600 : 900;
-                int heat = body.isEmpty() ? module.isEmpty() ? 4 : 6 : module.isEmpty() ? 6 : 8;
+                int heat = module.isEmpty() ? 1 : 2;
                 double speed = body.isEmpty() ? module.isEmpty() ? .22 : .28 : module.isEmpty() ? .18 : .23;
                 double distance = m.getZ() - start.z; if(standardDistance == 0) standardDistance = distance;
                 h.assertTrue(distance > 0 && Math.abs(distance / standardDistance - speed / .22) < .001

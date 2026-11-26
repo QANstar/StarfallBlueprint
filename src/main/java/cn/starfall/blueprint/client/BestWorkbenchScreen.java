@@ -11,7 +11,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-/** Vanilla widgets and solid fills, with no external GUI texture. */
+/** Vanilla widgets and solid fills, organized into 4 readable hangar tabs while preserving page indices 0..9. */
 public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkbenchMenu> {
     private int page;
     private int selectedMechAction = 18;
@@ -29,7 +29,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         inventoryLabelY = 176;
     }
 
-    /** Fixture/accessibility entry point: 0 engineering, 1 mobility, 2 diagnostics, 3 mech, 4 tool arms, 5 power core, 6 locomotion. */
+    /** Fixture/accessibility entry point: 0..2 light engineering, 3 chassis & fusion, 4..6 parts, 7..9 upgrades. */
     public void selectPage(int page) {
         if (page < 0 || page > 9) throw new IllegalArgumentException("page must be 0..9");
         this.page = page;
@@ -43,13 +43,15 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     }
     public int selectedMechAction() { return selectedMechAction; }
     public void selectArmAction(int action) {
-        if ((action < 21 || action > 22) && action != 27 && action != 28) throw new IllegalArgumentException("arm action must be 21..22, 27 or 28");
+        if ((action < 21 || action > 22) && action != 27 && action != 28 && action != 24 && action != 25) {
+            throw new IllegalArgumentException("arm/part action must be 21..22, 24..25, 27 or 28");
+        }
         selectedArmAction = action;
     }
     private int materialAction() { return page == 6 ? 25 : page == 5 ? 24 : page == 4 ? selectedArmAction : selectedMechAction; }
     private void selectMaterialAction(int action) {
-        if (action == 24 || action == 25) return;
-        if(BestMechAssembly.handles(action)){selectedMechAction=action;return;}
+        if (action == 24 || action == 25) { selectedArmAction = action; return; }
+        if (BestMechAssembly.handles(action)) { selectedMechAction = action; return; }
         if (action == 21 || action == 22 || action == 27 || action == 28) selectArmAction(action);
         else selectMechAction(action);
     }
@@ -60,33 +62,50 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
     @Override protected void init() {
         super.init();
         actionButtons.clear();
-        for (int i = 0; i < 10; i++) {
-            final int target = i;
-            Button tab = addRenderableWidget(Button.builder(i<7?text("tab_" + i):Component.literal(i==7?"强化":i==8?"安装":"拆卸"), button -> selectPage(target))
-                    .bounds(leftPos + 8 + i * 29, topPos + 44, 27, 16).build());
-            tab.active = page != i;
+        String[] groupLabels = {"轻型工务", "机体与融合", "配装部件", "成长组件"};
+        int[] groupDefaults = {0, 3, 4, 7};
+        int activeGroup = page <= 2 ? 0 : page == 3 ? 1 : page <= 6 ? 2 : 3;
+        for (int g = 0; g < 4; g++) {
+            final int target = groupDefaults[g];
+            Button tab = addRenderableWidget(Button.builder(Component.literal(groupLabels[g]), button -> selectPage(target))
+                    .bounds(leftPos + 8 + g * 72, topPos + 43, 69, 15).build());
+            tab.active = activeGroup != g;
         }
         addRenderableWidget(Button.builder(ProgressionInventoryTab.text("open"), button -> ProgressionInventoryTab.open())
-                .bounds(leftPos + 8, topPos + 22, 284, 18).build());
-        int[] actions = switch(page) {
-            case 0 -> new int[]{2, 3, 6, 4, 7};
-            case 1 -> new int[]{9, 10, 11, 12};
-            case 2 -> new int[]{14, 15, 16};
-            case 3 -> new int[]{18, 54, 55, 52, 53, 29, 19, 20, 23};
-            case 7 -> new int[]{40,41,42,43,44,45,46,47,48,49,50,51};
-            case 8 -> new int[]{100,101,102,103,104,105,106,107,108};
-            case 9 -> new int[]{120,121,122,123,124,125,126,127,128};
-            case 4 -> new int[]{21, 22, 27, 28};
-            case 5 -> new int[]{24};
-            default -> new int[]{25};
+                .bounds(leftPos + 8, topPos + 22, 284, 17).build());
+        int gridTop = topPos + 61;
+        if (activeGroup == 3) {
+            String[] subLabels = {"制造组件", "主手安装", "主手拆卸"};
+            for (int s = 0; s < 3; s++) {
+                final int subPage = 7 + s;
+                Button sub = addRenderableWidget(Button.builder(Component.literal(subLabels[s]), button -> selectPage(subPage))
+                        .bounds(leftPos + 8 + s * 96, topPos + 60, 92, 12).build());
+                sub.active = page != subPage;
+            }
+            gridTop = topPos + 74;
+        }
+        int[] actions = switch (activeGroup) {
+            case 0 -> new int[]{2, 3, 6, 4, 7, 9, 10, 11, 12, 14, 15, 16};
+            case 1 -> new int[]{18, 54, 55, 52, 53, 29, 19, 20, 23};
+            case 2 -> new int[]{21, 22, 27, 28, 24, 25};
+            default -> switch (page) {
+                case 8 -> new int[]{100, 101, 102, 103, 104, 105, 106, 107, 108};
+                case 9 -> new int[]{120, 121, 122, 123, 124, 125, 126, 127, 128};
+                default -> new int[]{40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51};
+            };
         };
+        int cols = activeGroup == 2 ? 2 : 3;
+        int colStep = cols == 3 ? 96 : 146;
+        int btnWidth = cols == 3 ? 92 : 138;
+        int rowStep = activeGroup == 3 && actions.length > 9 ? 10 : 13;
+        int btnHeight = activeGroup == 3 && actions.length > 9 ? 9 : 12;
         for (int i = 0; i < actions.length; i++) {
             int action = actions[i];
-            Button button = addRenderableWidget(Button.builder(BestMechAssembly.handles(action)?BestMechAssembly.label(action):text("action_" + action), clicked -> {
+            Button button = addRenderableWidget(Button.builder(BestMechAssembly.handles(action) ? BestMechAssembly.label(action) : text("action_" + action), clicked -> {
                 if (action >= 17 && action != 29) selectMaterialAction(action);
                 if (minecraft != null && minecraft.gameMode != null && (action == 29 || menu.preview(action).executable()))
                     minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action);
-            }).bounds(leftPos + 8 + (i % ((page==3||page>=7)?3:2)) * ((page==3||page>=7)?96:146), topPos + 63 + (i / ((page==3||page>=7)?3:2)) * 13, (page==3||page>=7)?92:138, 12).build());
+            }).bounds(leftPos + 8 + (i % cols) * colStep, gridTop + (i / cols) * rowStep, btnWidth, btnHeight).build());
             actionButtons.add(new ActionButton(action, button));
         }
         updateActions();
@@ -100,7 +119,6 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
                 && mouseY >= button.getY() && mouseY < button.getY() + button.getHeight();
     }
     private void fitted(GuiGraphics graphics, Component value, int x, int y, int width, int color) {
-        // Scale only unusually long translations; keep every knowledge label visible at narrow GUI sizes.
         float scale = Math.min(1f, (float) width / Math.max(1, font.width(value)));
         graphics.pose().pushPose();
         graphics.pose().translate(x, y, 0);
@@ -111,11 +129,12 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
 
     @Override protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
-        BestHangarTerminal.frame(graphics, font, x, y, imageWidth, imageHeight, "FAB / " + (page + 1));
-        graphics.fill(x+5,y+114,x+imageWidth-5,y+173,BestHangarTerminal.PANEL);
+        int activeGroup = page <= 2 ? 1 : page == 3 ? 2 : page <= 6 ? 3 : 4;
+        BestHangarTerminal.frame(graphics, font, x, y, imageWidth, imageHeight, "FAB / " + activeGroup);
+        graphics.fill(x + 5, y + 114, x + imageWidth - 5, y + 173, BestHangarTerminal.PANEL);
         for (var slot : menu.slots) {
             int sx = x + slot.x, sy = y + slot.y;
-            BestHangarTerminal.well(graphics,sx,sy);
+            BestHangarTerminal.well(graphics, sx, sy);
         }
     }
 
@@ -123,7 +142,7 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         fitted(graphics, title, titleLabelX, titleLabelY, 280, 0xffedf4eb);
         if (page >= 3) {
             BestEngineering.Preview preview = menu.preview(materialAction());
-            fitted(graphics, text("materials_for", BestMechAssembly.handles(materialAction())?BestMechAssembly.label(materialAction()):text("material_action_" + materialAction()), preview.reason()), 10, 117, 280, preview.executable() ? 0xffadf2c5 : 0xffffb377);
+            fitted(graphics, text("materials_for", BestMechAssembly.handles(materialAction()) ? BestMechAssembly.label(materialAction()) : text("material_action_" + materialAction()), preview.reason()), 10, 117, 280, preview.executable() ? 0xffadf2c5 : 0xffffb377);
             List<BestEngineering.MaterialRequirement> materials = preview.materials();
             for (int i = 0; i < materials.size(); i++) {
                 var material = materials.get(i);
@@ -133,8 +152,8 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
                         material.available() >= material.required() ? 0xffadf2c5 : 0xffff998b);
             }
         }
-        if(page<3||menu.preview(materialAction()).materials().size()<=8)
-            fitted(graphics, (page==3||page>=7)?Component.literal("主手持隔离收纳机体；材料从背包交付"):text("hint_" + page), 10, 164, 280, 0xffbed4d9);
+        if (page < 3 || menu.preview(materialAction()).materials().size() <= 8)
+            fitted(graphics, page >= 3 ? Component.literal("也可潜行空手右键机甲，或驾驶时按 I 打开机甲终端换装与存取货舱") : text("hint_" + page), 10, 164, 280, 0xffbed4d9);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xff85e0d1, false);
     }
 
@@ -145,7 +164,6 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
         }
         super.render(graphics, mouseX, mouseY, partialTick);
         renderTooltip(graphics, mouseX, mouseY);
-        // Inactive vanilla buttons do not consistently expose tooltips; test bounds directly.
         for (ActionButton entry : actionButtons) {
             if (hovered(entry.button(), mouseX, mouseY)) {
                 if (entry.action() == 29) {
@@ -153,9 +171,9 @@ public final class BestWorkbenchScreen extends AbstractContainerScreen<BestWorkb
                     return;
                 }
                 var preview = menu.preview(entry.action());
-                Component tooltip = (BestMechAssembly.handles(entry.action())?BestMechAssembly.label(entry.action()):text("action_" + entry.action())).copy().append("\n").append(preview.reason());
+                Component tooltip = (BestMechAssembly.handles(entry.action()) ? BestMechAssembly.label(entry.action()) : text("action_" + entry.action())).copy().append("\n").append(preview.reason());
                 if (entry.action() == 26) tooltip = tooltip.copy().append("\n").append(BestEngineering.actionCostComponent(26));
-                if(entry.action()==55)tooltip=tooltip.copy().append("\n涓流与激湍各一台：须隔离、存活、货舱清空；两机与所列材料全部消耗，已装组件及配装返还。能源与损伤保留，返还空间不足则整笔不变。");
+                if (entry.action() == 55) tooltip = tooltip.copy().append("\n涓流与激湍各一台：须隔离、存活、货舱清空；两机与所列材料全部消耗，已装组件及配装返还。能源与损伤保留，返还空间不足则整笔不变。");
                 for (var material : preview.materials())
                     tooltip = tooltip.copy().append("\n").append(text("cost_entry", material.item().getHoverName(), material.available(), material.required()));
                 if (preview.materials().isEmpty()) tooltip = tooltip.copy().append("\n").append(text("no_materials"));

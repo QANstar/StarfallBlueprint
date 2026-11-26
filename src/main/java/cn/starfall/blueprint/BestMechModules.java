@@ -19,8 +19,8 @@ public final class BestMechModules {
         return "";
     }
     public static int movementCost(String key) { return DRIVE.equals(key) ? 600 : 400; }
-    public static int movementHeat(String key) { return DRIVE.equals(key) ? 6 : 4; }
-    public static int coolingRate(String key) { return RADIATOR.equals(key) ? 4 : 2; }
+    public static int movementHeat(String key) { return DRIVE.equals(key) ? 2 : 1; }
+    public static int coolingRate(String key) { return RADIATOR.equals(key) ? 6 : 3; }
     public static float speed(String key) { return DRIVE.equals(key) ? 0.28f : 0.22f; }
     public static Component name(String key) {
         String safe = sanitize(key);

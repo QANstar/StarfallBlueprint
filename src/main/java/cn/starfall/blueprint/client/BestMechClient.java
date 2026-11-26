@@ -2,21 +2,29 @@ package cn.starfall.blueprint.client;
 
 import cn.starfall.blueprint.BestMechEntity;
 import cn.starfall.blueprint.BestMechArms;
+import cn.starfall.blueprint.BestMechCombatSystems;
 import cn.starfall.blueprint.BestMechNetworking;
+import cn.starfall.blueprint.BestMechProgression;
 import cn.starfall.blueprint.StarfallBlueprint;
 import com.mojang.blaze3d.platform.InputConstants;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.client.settings.IKeyConflictContext;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
@@ -25,54 +33,104 @@ import java.util.Locale;
 /** Presentation only: all operation permission and resource costs are server authoritative. */
 @EventBusSubscriber(modid=StarfallBlueprint.ID,value=Dist.CLIENT)
 public final class BestMechClient {
-    private static final KeyMapping PANEL = new KeyMapping("key.starfall_blueprint.mech_controls",KeyConflictContext.IN_GAME,
+    private static final IKeyConflictContext MECH_PILOT = new IKeyConflictContext() {
+        @Override public boolean isActive() {
+            Minecraft mc = Minecraft.getInstance();
+            return mc.screen == null && mc.player != null && mc.player.getVehicle() instanceof BestMechEntity;
+        }
+        @Override public boolean conflicts(IKeyConflictContext other) { return other == this; }
+    };
+    private static final KeyMapping PANEL = new KeyMapping("key.starfall_blueprint.mech_controls",MECH_PILOT,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_B,"key.categories.starfall_blueprint");
-    private static final KeyMapping LIFT = new KeyMapping("key.starfall_blueprint.mech_lift",KeyConflictContext.IN_GAME,
+    private static final KeyMapping LOADOUT = new KeyMapping("key.starfall_blueprint.mech_loadout",MECH_PILOT,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_I,"key.categories.starfall_blueprint");
+    private static final KeyMapping LIFT = new KeyMapping("key.starfall_blueprint.mech_lift",MECH_PILOT,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H,"key.categories.starfall_blueprint");
-    private static final KeyMapping DRILL = new KeyMapping("key.starfall_blueprint.mech_drill",KeyConflictContext.IN_GAME,
+    private static final KeyMapping DRILL = new KeyMapping("key.starfall_blueprint.mech_drill",MECH_PILOT,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_G,"key.categories.starfall_blueprint");
-    private static final KeyMapping FIRE = new KeyMapping("key.starfall_blueprint.mech_fire",KeyConflictContext.IN_GAME,
+    private static final KeyMapping FIRE = new KeyMapping("key.starfall_blueprint.mech_fire",MECH_PILOT,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_V,"key.categories.starfall_blueprint");
-    private static final KeyMapping MINING_MODE = new KeyMapping("key.starfall_blueprint.mech_mining_mode",KeyConflictContext.IN_GAME,
+    private static final KeyMapping MINING_MODE = new KeyMapping("key.starfall_blueprint.mech_mining_mode",MECH_PILOT,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_J,"key.categories.starfall_blueprint");
-    private static final KeyMapping FRIENDLY_FIRE = new KeyMapping("key.starfall_blueprint.mech_friendly_fire",KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_K,"key.categories.starfall_blueprint");
-    private static final KeyMapping TERRAIN_DAMAGE = new KeyMapping("key.starfall_blueprint.mech_terrain_damage",KeyConflictContext.IN_GAME,
+    private static final KeyMapping FRIENDLY_FIRE = new KeyMapping("key.starfall_blueprint.mech_friendly_fire",MECH_PILOT,
+            InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_U,"key.categories.starfall_blueprint");
+    private static final KeyMapping TERRAIN_DAMAGE = new KeyMapping("key.starfall_blueprint.mech_terrain_damage",MECH_PILOT,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_L,"key.categories.starfall_blueprint");
-    private static final KeyMapping LINGCHUAN_SUPPORT = new KeyMapping("key.starfall_blueprint.mech_lingchuan_support",KeyConflictContext.IN_GAME,
+    private static final KeyMapping LINGCHUAN_SUPPORT = new KeyMapping("key.starfall_blueprint.mech_lingchuan_support",MECH_PILOT,
             InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_UNKNOWN,"key.categories.starfall_blueprint");
-    // This rate-limits requests, not successful server work. No unsynchronized entity fields are read.
-    private static int requestTicks;
     private static BestMechEntity lastVehicle;
+    private static boolean leftHeld, rightHeld;
+    private static int lastSentBits = -1, inputHeartbeat;
 
     private BestMechClient() {}
     public static void keys(RegisterKeyMappingsEvent event) {
-        event.register(PANEL); event.register(DRILL); event.register(FIRE); event.register(LIFT);
+        event.register(PANEL); event.register(LOADOUT); event.register(DRILL); event.register(FIRE); event.register(LIFT);
         event.register(MINING_MODE); event.register(FRIENDLY_FIRE); event.register(TERRAIN_DAMAGE); event.register(LINGCHUAN_SUPPORT);
     }
     public static void layers(RegisterGuiLayersEvent event) {
         event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(StarfallBlueprint.ID,"mech_status"),(graphics,delta)->render(graphics));
     }
+    private static boolean piloting() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.player != null && mc.screen == null && !mc.isPaused() && mc.player.getVehicle() instanceof BestMechEntity;
+    }
+    @SubscribeEvent public static void mouse(InputEvent.MouseButton.Pre event) {
+        if (!piloting()) {
+            if (event.getAction() == GLFW.GLFW_RELEASE) {
+                if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) leftHeld = false;
+                else if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) rightHeld = false;
+            }
+            return;
+        }
+        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+            leftHeld = event.getAction() != GLFW.GLFW_RELEASE;
+            event.setCanceled(true);
+        } else if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+            rightHeld = event.getAction() != GLFW.GLFW_RELEASE;
+            event.setCanceled(true);
+        }
+    }
+    @SubscribeEvent public static void interaction(InputEvent.InteractionKeyMappingTriggered event) {
+        if (piloting()) {
+            event.setCanceled(true);
+            event.setSwingHand(false);
+        }
+    }
     @SubscribeEvent public static void tick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         BestMechEntity mech = mc.player != null && mc.player.getVehicle() instanceof BestMechEntity vehicle ? vehicle : null;
-        if (mech != lastVehicle) { requestTicks=0; lastVehicle=mech; }
-        if (!mc.isPaused() && requestTicks>0) requestTicks--;
+        if (mech != lastVehicle) {
+            lastVehicle = mech; leftHeld = false; rightHeld = false; lastSentBits = -1; inputHeartbeat = 0;
+        }
+        if (mech == null || mc.screen != null || mc.isPaused()) {
+            leftHeld = false; rightHeld = false;
+            if (mech != null && lastSentBits > 0) {
+                PacketDistributor.sendToServer(new BestMechNetworking.PilotInput(0));
+                lastSentBits = 0;
+            }
+            if (mech == null) return;
+        }
         while (PANEL.consumeClick()) {
-            if (mech != null && mc.screen == null && !mc.isPaused()) mc.setScreen(new ControlsScreen());
+            if (mc.screen == null && !mc.isPaused()) mc.setScreen(new ControlsScreen());
         }
-        while (DRILL.consumeClick()) {
-            if (mech != null && mc.screen == null && !mc.isPaused() && requestTicks == 0) {
-                PacketDistributor.sendToServer(new BestMechNetworking.Action(0));
-                requestTicks=20;
+        if (mc.screen == null && !mc.isPaused()) {
+            // Drain single-press clicks so vanilla/other handlers never leak them; holding drives continuous input.
+            while (DRILL.consumeClick()) {}
+            while (FIRE.consumeClick()) {}
+            int bits = 0;
+            if (mc.options.keyJump.isDown()) bits |= BestMechEntity.INPUT_JUMP;
+            if (mc.options.keySprint.isDown()) bits |= BestMechEntity.INPUT_SPRINT;
+            boolean primary = leftHeld || (mech.combatCapable() ? FIRE.isDown() : DRILL.isDown());
+            boolean secondary = rightHeld || (mech.combatCapable() && mech.engineeringCapable() && DRILL.isDown());
+            if (primary) bits |= BestMechEntity.INPUT_PRIMARY;
+            if (secondary) bits |= BestMechEntity.INPUT_SECONDARY;
+            if (bits != lastSentBits || (bits != 0 && ++inputHeartbeat >= 4)) {
+                PacketDistributor.sendToServer(new BestMechNetworking.PilotInput(bits));
+                lastSentBits = bits;
+                inputHeartbeat = 0;
             }
         }
-        while (FIRE.consumeClick()) {
-            if(mech != null && mech.combatCapable() && mc.screen == null && !mc.isPaused() && requestTicks == 0) {
-                PacketDistributor.sendToServer(new BestMechNetworking.Action(2));
-                requestTicks=5;
-            }
-        }
+        toggleClicks(LOADOUT, 8, mech, mc);
         toggleClicks(LIFT, 7, mech, mc);
         toggleClicks(MINING_MODE, 3, mech, mc);
         toggleClicks(FRIENDLY_FIRE, 4, mech, mc);
@@ -140,19 +198,21 @@ public final class BestMechClient {
         Minecraft mc=Minecraft.getInstance();
         if(mc.options.hideGui || mc.player==null || !(mc.player.getVehicle() instanceof BestMechEntity mech))return;
         Snapshot sample = new Snapshot(mech.getHealth(), mech.getMaxHealth(), mech.energy(), mech.heat(), mech.wear(),
-                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), requestTicks, mech.movementCost(), mech.engineeringCapable() ? mech.workArmKey() : "combat", mech.engineeringCapable() ? mech.workCost() : 12000, mech.capacity(), mech.supportsParkingSupport(), mech.supportDeployed());
+                mech.isAlive(), mech.isolated(), mech.thermalLocked(), mech.operatorQualified(), mech.drillCooldown(), mech.movementCost(), mech.engineeringCapable() ? mech.workArmKey() : "combat", mech.engineeringCapable() ? mech.workCost() : 12000, mech.capacity(), mech.supportsParkingSupport(), mech.supportDeployed());
         if (mc.screen != null) return;
         int width = graphics.guiWidth(), height = graphics.guiHeight();
         int center = width / 2, horizon = height / 2;
         var state = status(sample);
         int lamp = state.color();
-        // Shallow canopy braces leave the sight picture clear at every GUI scale.
-        for (int strip = 0; strip < 15; strip++) {
-            int span = (15-strip)*3;
-            graphics.fill(0,strip,span,strip+1,0xff23333d);
-            graphics.fill(width-span,strip,width,strip+1,0xff23333d);
-            graphics.fill(0,height-strip-1,span,height-strip,0xff192b37);
-            graphics.fill(width-span,height-strip-1,width,height-strip,0xff192b37);
+        // Shallow canopy braces appear only inside the first-person cockpit; third-person stays unobstructed.
+        if (mc.options.getCameraType().isFirstPerson()) {
+            for (int strip = 0; strip < 15; strip++) {
+                int span = (15-strip)*3;
+                graphics.fill(0,strip,span,strip+1,0xff23333d);
+                graphics.fill(width-span,strip,width,strip+1,0xff23333d);
+                graphics.fill(0,height-strip-1,span,height-strip,0xff192b37);
+                graphics.fill(width-span,height-strip-1,width,height-strip,0xff192b37);
+            }
         }
         graphics.fillGradient(center-70,0,center+70,24,0xe113212b,0x92203341);
         int heading = Math.floorMod(Math.round(mc.player.getYRot()) + 180, 360);
@@ -161,30 +221,122 @@ public final class BestMechClient {
             int tickX=center+i*8-Math.floorMod(heading,5);
             graphics.fill(tickX,17,tickX+1,i%2==0?23:20,0xffa4d2d1);
         }
+        // Crosshair brackets tint bright cyan when an engineering block or hostile target is in active range.
+        int bracketColor = crosshairColor(mc, mech);
         for (int side : new int[]{-1,1}) {
             int x=center+side*12;
-            graphics.fill(x,horizon-4,x+1,horizon+5,0xffb0e4d9);
-            graphics.fill(Math.min(x,x+side*5),horizon,Math.max(x,x+side*5),horizon+1,0xffb0e4d9);
+            graphics.fill(x,horizon-4,x+1,horizon+5,bracketColor);
+            graphics.fill(Math.min(x,x+side*5),horizon,Math.max(x,x+side*5),horizon+1,bracketColor);
         }
         float scale = Math.min(1f, Math.min(width / 390f,height / 240f));
+        // Left SYS panel: Chassis, Hull, Energy, Speed / Boost
         graphics.pose().pushPose();
-        graphics.pose().translate(6,height-8-67*scale,0);
+        graphics.pose().translate(6,height-8-82*scale,0);
         graphics.pose().scale(scale,scale,1);
-        BestHangarTerminal.frame(graphics,mc.font,0,0,142,67,"SYS");
-        drawFit(graphics,mech.getName(),8,6,101,TEXT);
-        meter(graphics,24,"health",decimal(sample.health())+" / "+decimal(sample.maxHealth()),sample.health(),sample.maxHealth(),NORMAL);
-        meter(graphics,45,"energy",compactEnergy(sample.energy())+" XH",sample.energy(),sample.capacity(),NORMAL);
+        BestHangarTerminal.frame(graphics,mc.font,0,0,150,82,"SYS");
+        drawFit(graphics,mech.getName(),8,6,108,TEXT);
+        meter(graphics,24,"health",decimal(sample.health())+" / "+decimal(sample.maxHealth()),sample.health(),sample.maxHealth(),sample.health()<=sample.maxHealth()*0.25f?DANGER:NORMAL);
+        meter(graphics,45,"energy",compactEnergy(sample.energy())+" XH",sample.energy(),sample.capacity(),sample.energy()<sample.movementCost()?DANGER:NORMAL);
+        double speedBps = mech.getDeltaMovement().horizontalDistance() * 20.0;
+        String speedLabel = String.format(Locale.ROOT, "%.1f m/s%s", speedBps, mech.boosting() ? "  [BOOST]" : "");
+        drawFit(graphics, Component.literal(speedLabel), 8, 66, 134, mech.boosting() ? WARNING : MUTED);
         graphics.pose().popPose();
+
+        // Right OPS & Loadout panel: Readiness, Heat, Wear, Active Arm/Weapon, Cooldown & Ammo
         graphics.pose().pushPose();
-        graphics.pose().translate(width-6-142*scale,height-8-67*scale,0);
+        graphics.pose().translate(width-6-156*scale,height-8-88*scale,0);
         graphics.pose().scale(scale,scale,1);
-        BestHangarTerminal.frame(graphics,mc.font,0,0,142,67,"OPS");
-        drawFit(graphics,label(state.key()),8,6,101,lamp);
-        meter(graphics,24,"heat",Integer.toString(sample.heat()),sample.heat(),BestMechEntity.MAX_HEAT,sample.thermalLocked()?DANGER:WARNING);
+        BestHangarTerminal.frame(graphics,mc.font,0,0,156,88,"OPS");
+        drawFit(graphics,label(state.key()),8,6,112,lamp);
+        int heatTint = sample.thermalLocked() || sample.heat() >= 850 ? DANGER : WARNING;
+        meter(graphics,24,"heat",Integer.toString(sample.heat()),sample.heat(),BestMechEntity.MAX_HEAT,heatTint);
         meter(graphics,45,"wear",Integer.toString(sample.wear()),sample.wear(),BestMechEntity.MAX_WEAR,WORN);
+        drawEquipmentReadout(graphics, mech, 65);
         graphics.pose().popPose();
-        drawFit(graphics,Component.translatableWithFallback("hud.starfall_blueprint.mech.open_controls","%s: Controls",PANEL.getTranslatedKeyMessage()),8,20,86,TEXT);
+
+        // Top-center compact mode badges below compass
+        renderStatusBadges(graphics, mc, mech, center, 27);
+
+        String quickHint = mech.combatCapable() && mech.engineeringCapable()
+                ? "左键 开火 · 右键 钻掘 · 空格 跃升 · F5 视角 · " + LOADOUT.getTranslatedKeyMessage().getString() + " 终端 · " + PANEL.getTranslatedKeyMessage().getString() + " 键位"
+                : mech.combatCapable()
+                ? "左键 开火 · 空格 跃升 · F5 视角 · " + LOADOUT.getTranslatedKeyMessage().getString() + " 终端 · " + PANEL.getTranslatedKeyMessage().getString() + " 键位"
+                : "左键 钻掘 · 空格 跃升 · F5 视角 · " + LOADOUT.getTranslatedKeyMessage().getString() + " 终端 · " + PANEL.getTranslatedKeyMessage().getString() + " 键位";
+        drawFit(graphics, Component.literal(quickHint), 8, 20, Math.min(220, center - 78), MUTED);
     }
+
+    private static int crosshairColor(Minecraft mc, BestMechEntity mech) {
+        if (mc.level == null || mc.player == null) return 0xffb0e4d9;
+        if (mech.engineeringCapable() && !mech.workArmKey().isEmpty()) {
+            Vec3 from = mc.player.getEyePosition();
+            double reach = Math.max(mech.workReach(), mc.player.blockInteractionRange());
+            var hit = mc.level.clip(new ClipContext(from, from.add(mc.player.getLookAngle().scale(reach)),
+                    ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, mc.player));
+            if (hit.getType() == HitResult.Type.BLOCK) return 0xff6df5d8;
+        }
+        if (mech.combatCapable() && mech.weaponCooldownSynced() == 0) return 0xffffca6b;
+        return 0xffb0e4d9;
+    }
+
+    private static void drawEquipmentReadout(GuiGraphics graphics, BestMechEntity mech, int y) {
+        Component toolName;
+        int cd, maxCd;
+        String suffix = "";
+        int suffixColor = NORMAL;
+        if (mech.combatCapable()) {
+            String w = mech.visualWeaponKey();
+            toolName = Component.translatable("item.starfall_blueprint." + w);
+            cd = mech.weaponCooldownSynced();
+            maxCd = Math.max(1, mech.maxWeaponCooldown());
+            int ammo = mech.syncedAmmo();
+            suffix = ammo < 0 ? "∞" : Integer.toString(ammo);
+            if (ammo == 0) suffixColor = DANGER;
+        } else {
+            toolName = BestMechArms.name(mech.workArmKey());
+            cd = mech.drillCooldown();
+            maxCd = Math.max(1, mech.workCooldown());
+            suffix = mech.areaEngineeringCapable() ? "3×3" : "1×1";
+        }
+        drawFit(graphics, toolName, 8, y, 102, TEXT);
+        drawFit(graphics, Component.literal(suffix), 114, y, 34, suffixColor);
+        double readyFraction = 1.0 - Math.clamp((double) cd / maxCd, 0.0, 1.0);
+        int fill = (int) Math.round(140 * readyFraction);
+        graphics.fill(8, y + 11, 148, y + 14, 0xff263742);
+        if (fill > 0) graphics.fill(8, y + 11, 8 + fill, y + 14, cd > 0 ? WARNING : NORMAL);
+    }
+
+    private static void renderStatusBadges(GuiGraphics graphics, Minecraft mc, BestMechEntity mech, int center, int y) {
+        List<Badge> badges = new ArrayList<>();
+        if (mech.hasUpgrade(BestMechProgression.ZHENYUAN)) {
+            badges.add(new Badge(mech.silkCollection() ? "精准采集" : "时运 III", mech.silkCollection() ? 0xff9ec7ff : NORMAL));
+        }
+        if (mech.hasUpgrade(BestMechProgression.TIANPU)) {
+            badges.add(new Badge(mech.friendlyFireSynced() ? "友伤:开" : "友伤:关", mech.friendlyFireSynced() ? DANGER : MUTED));
+            badges.add(new Badge(mech.terrainDamageSynced() ? "爆破:开" : "爆破:关", mech.terrainDamageSynced() ? WARNING : MUTED));
+        }
+        if (mech.hasUpgrade(BestMechProgression.CHANGCHUAN)) {
+            badges.add(new Badge(mech.changchuanSynced() ? "长川支援:开" : "长川支援:关", mech.changchuanSynced() ? NORMAL : MUTED));
+        }
+        int liftId = mech.liftTargetId();
+        if (liftId >= 0 && mc.level != null) {
+            var carried = mc.level.getEntity(liftId);
+            if (carried != null) badges.add(new Badge("吊运: " + carried.getDisplayName().getString(), WARNING));
+        }
+        if (badges.isEmpty()) return;
+        int totalWidth = 0;
+        for (Badge b : badges) totalWidth += mc.font.width(b.text) + 10;
+        totalWidth += (badges.size() - 1) * 4;
+        int x = center - totalWidth / 2;
+        for (Badge b : badges) {
+            int w = mc.font.width(b.text) + 10;
+            graphics.fill(x, y, x + w, y + 12, 0xc0101e27);
+            graphics.fill(x, y + 11, x + w, y + 12, b.color);
+            graphics.drawString(mc.font, b.text, x + 5, y + 2, b.color, false);
+            x += w + 4;
+        }
+    }
+
+    private record Badge(String text, int color) {}
 
     private static void meter(GuiGraphics graphics,int y,String key,String value,double current,double maximum,int tint) {
         drawFit(graphics,label(key),8,y,48,MUTED);
@@ -238,11 +390,11 @@ public final class BestMechClient {
         }
 
         @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            int x = Math.max(4, (width - 260) / 2), y = Math.max(4, (height - 150) / 2);
+            int x = Math.max(4, (width - 260) / 2), y = Math.max(4, (height - 165) / 2);
             int panelWidth = Math.min(260, width - 8);
-            BestHangarTerminal.frame(graphics,font,x,y,panelWidth,150,"CTRL");
+            BestHangarTerminal.frame(graphics,font,x,y,panelWidth,165,"CTRL");
             drawFit(graphics, title, x + 8, y + 7, panelWidth - 16, TEXT);
-            KeyMapping[] keys = {DRILL, FIRE, LIFT, MINING_MODE, FRIENDLY_FIRE, TERRAIN_DAMAGE, LINGCHUAN_SUPPORT};
+            KeyMapping[] keys = {LOADOUT, DRILL, FIRE, LIFT, MINING_MODE, FRIENDLY_FIRE, TERRAIN_DAMAGE, LINGCHUAN_SUPPORT};
             for (int i = 0; i < keys.length; i++) {
                 KeyMapping key = keys[i];
                 if ((i & 1) == 0) graphics.fill(x+4,y+20+i*15,x+panelWidth-4,y+34+i*15,BestHangarTerminal.PANEL);
@@ -250,8 +402,8 @@ public final class BestMechClient {
                         .append(Component.translatable(key.getName()));
                 drawFit(graphics, line, x + 8, y + 23 + i * 15, panelWidth - 16, TEXT);
             }
-            drawFit(graphics, label("controls", minecraft.options.keyUp.getTranslatedKeyMessage(), minecraft.options.keyShift.getTranslatedKeyMessage()),
-                    x + 8, y + 130, panelWidth - 16, MUTED);
+            drawFit(graphics, Component.literal("鼠标左键/右键 作业与开火 · 空格 跳跃/推进 · Ctrl 冲刺 · F5 切换视角"),
+                    x + 8, y + 145, panelWidth - 16, MUTED);
             super.render(graphics, mouseX, mouseY, partialTick);
         }
     }

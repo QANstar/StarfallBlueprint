@@ -32,7 +32,7 @@ public final class BestCockpitCheck {
             mc.setScreen(null);
             mc.options.pauseOnLostFocus = false;
             mc.options.hideGui = false;
-            mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            mc.options.setCameraType(CameraType.FIRST_PERSON);
             server.execute(() -> {
                 var p = server.getPlayerList().getPlayer(id);
                 var level = p.serverLevel();
@@ -51,24 +51,27 @@ public final class BestCockpitCheck {
             });
             phase++;
         } else if (phase == 1 && mc.player.getVehicle() instanceof BestMechEntity mech && ++ticks > 45) {
-            if (!mc.options.getCameraType().isFirstPerson()) throw new IllegalStateException("View did not enter cockpit");
+            if (mc.options.getCameraType() != CameraType.THIRD_PERSON_BACK) throw new IllegalStateException("Mount did not default to third-person view");
+            Screenshot.grab(mc.gameDirectory,"cockpit-third-person.png",mc.getMainRenderTarget(),msg -> LogUtils.getLogger().info("{}",msg.getString()));
+            mc.options.setCameraType(CameraType.FIRST_PERSON);
+            phase++; ticks=0;
+        } else if (phase == 2 && mc.player.getVehicle() instanceof BestMechEntity mech && ++ticks > 15) {
+            if (!mc.options.getCameraType().isFirstPerson()) throw new IllegalStateException("F5/first-person toggle was overridden");
             double height = mc.gameRenderer.getMainCamera().getPosition().y - mech.getY();
             if (height < 2.5 || height > 4.4) throw new IllegalStateException("Unexpected combat camera height " + height);
             Screenshot.grab(mc.gameDirectory,"cockpit-live.png",mc.getMainRenderTarget(),msg -> LogUtils.getLogger().info("{}",msg.getString()));
-            phase++; ticks=0;
-        } else if (phase == 2 && ++ticks > 20) {
             server.execute(() -> server.getPlayerList().getPlayer(id).stopRiding());
             phase++; ticks=0;
         } else if (phase == 3 && mc.player.getVehicle()==null && ++ticks > 10) {
-            if (mc.options.getCameraType()!=CameraType.THIRD_PERSON_BACK) throw new IllegalStateException("Prior view not restored");
+            if (mc.options.getCameraType()!=CameraType.FIRST_PERSON) throw new IllegalStateException("Prior view not restored");
             var previewMech = BestMechs.COMBAT_TYPE.get().create(mc.level);
             previewMech.loadState(BestMechItem.state(BestMechItem.creativeStack(BestMechProgression.COMBAT)));
             var inventory = mc.player.getInventory();
-            var menu = new BestMechCargoMenu(0, inventory, previewMech);
-            mc.setScreen(new BestMechCargoScreen(menu, inventory, net.minecraft.network.chat.Component.translatable("menu.starfall_blueprint.best_mech_cargo")));
+            var menu = new BestMechLoadoutMenu(0, inventory, previewMech);
+            mc.setScreen(new BestMechLoadoutScreen(menu, inventory, net.minecraft.network.chat.Component.translatable("menu.starfall_blueprint.best_mech_loadout")));
             phase++; ticks=0;
         } else if (phase == 4 && ++ticks > 20) {
-            Screenshot.grab(mc.gameDirectory,"cargo-panel.png",mc.getMainRenderTarget(),msg -> LogUtils.getLogger().info("{}",msg.getString()));
+            Screenshot.grab(mc.gameDirectory,"loadout-panel.png",mc.getMainRenderTarget(),msg -> LogUtils.getLogger().info("{}",msg.getString()));
             var inventory = mc.player.getInventory();
             var screen = new BestWorkbenchScreen(new BestWorkbenchMenu(0, inventory), inventory, net.minecraft.network.chat.Component.translatable("block.starfall_blueprint.best_workbench"));
             mc.setScreen(screen); screen.selectPage(3);

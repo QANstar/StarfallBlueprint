@@ -25,6 +25,8 @@ public final class BestMechs {
             () -> EntityType.Builder.of(BestMechEntity::new, MobCategory.MISC).sized(2.6f,4.64f).passengerAttachments(3.1f).clientTrackingRange(12).updateInterval(1).build(StarfallBlueprint.id("best_universal_mech").toString()));
     public static final DeferredHolder<net.minecraft.world.inventory.MenuType<?>, net.minecraft.world.inventory.MenuType<BestMechCargoMenu>> CARGO_MENU = StarfallBlueprint.MENUS.register("best_mech_cargo",
             () -> net.neoforged.neoforge.common.extensions.IMenuTypeExtension.create(BestMechCargoMenu::new));
+    public static final DeferredHolder<net.minecraft.world.inventory.MenuType<?>, net.minecraft.world.inventory.MenuType<BestMechLoadoutMenu>> LOADOUT_MENU = StarfallBlueprint.MENUS.register("best_mech_loadout",
+            () -> net.neoforged.neoforge.common.extensions.IMenuTypeExtension.create(BestMechLoadoutMenu::new));
     private static final String LOGOUT_SLOW_FALL = "BestMechLogoutSlowFall";
     public static void initialize() {}
     public static void register(IEventBus bus) {

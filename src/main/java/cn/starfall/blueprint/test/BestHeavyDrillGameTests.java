@@ -202,8 +202,10 @@ public final class BestHeavyDrillGameTests {
                 h.assertTrue(m.work(p) && events.equals(List.of(center)) && m.energy() == 952000
                         && (thermal ? m.thermalLocked() && m.heat() == 1000 : m.wear() == BestMechEntity.MAX_WEAR), "Stop after successful thermal/wear boundary");
             }
-            fill(h, positions); reset(m, 96000, 0, 0); aim(p, m, center, Direction.Axis.Z); p.moveTo(p.getX(), p.getY(), center.getZ() - p.blockInteractionRange() + .01, 0, 0); events.clear();
-            h.assertTrue(m.work(p) && events.equals(List.of(center)) && m.energy() == 48000 && positions.subList(1, 9).stream().allMatch(pos -> h.getLevel().getBlockState(pos).is(Blocks.OBSIDIAN)), "Each corner independently obeys eye-to-unit-AABB actual reach");
+            var reachCenter = h.absolutePos(new BlockPos(6, 5, 10)); var reachPlane = plane(reachCenter, Direction.Axis.Z);
+            fill(h, reachPlane); reset(m, 96000, 0, 0); aim(p, m, reachCenter, Direction.Axis.Z); p.moveTo(p.getX(), p.getY(), reachCenter.getZ() - m.workReach() + .01, 0, 0); events.clear();
+            h.assertTrue(m.work(p) && events.equals(List.of(reachCenter)) && m.energy() == 48000 && reachPlane.subList(1, 9).stream().allMatch(pos -> h.getLevel().getBlockState(pos).is(Blocks.OBSIDIAN)), "Each corner independently obeys eye-to-unit-AABB actual reach");
+            reachPlane.forEach(pos -> h.getLevel().setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()));
             service(p, m); p.setItemInHand(InteractionHand.MAIN_HAND, CatalogueContent.stack("best_diagnostic_tool", 1)); p.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(Items.IRON_PICKAXE)); m.interact(p, InteractionHand.MAIN_HAND);
             p.setItemInHand(InteractionHand.MAIN_HAND, CatalogueContent.stack(BestMechArms.DRILL, 1)); h.assertTrue(m.installArm(p, InteractionHand.MAIN_HAND), "Install normal drill after isolated removal");
             h.assertTrue(m.stateTag().getInt("DrillCooldown") == 40 && m.workCooldown() == 20 && m.workCost() == 32000 && m.workHeat() == 120, "Swap retains40 shared cooldown while normal drill keeps20 economics");
@@ -213,7 +215,7 @@ public final class BestHeavyDrillGameTests {
             reset(m, 1_000_000, 0, 0); aim(p, m, center, Direction.Axis.Z); before = m.stateTag();
             h.assertTrue(!m.work(stranger) && before.equals(m.stateTag()), "Nonrider rejected without mutation");
             p.getPersistentData().putBoolean("BestMechOperation", false); h.assertTrue(!m.work(p) && before.equals(m.stateTag()), "Unqualified rider rejected"); p.getPersistentData().putBoolean("BestMechOperation", true);
-            p.setGameMode(GameType.CREATIVE); h.assertTrue(!m.work(p) && before.equals(m.stateTag()), "Creative rider rejected"); p.setGameMode(GameType.ADVENTURE); h.assertTrue(!m.work(p) && before.equals(m.stateTag()), "Cannot-build rider rejected"); p.setGameMode(GameType.SURVIVAL);
+            p.setGameMode(GameType.ADVENTURE); h.assertTrue(!m.work(p) && before.equals(m.stateTag()), "Cannot-build rider rejected"); p.setGameMode(GameType.SURVIVAL);
             m.setOnGround(false); h.assertTrue(!m.work(p) && before.equals(m.stateTag()), "Airborne chassis rejected"); m.setOnGround(true);
             p.stopRiding(); before = m.stateTag(); h.assertTrue(!m.work(p) && before.equals(m.stateTag()), "Dismounted operator rejected");
             aim(p, light, center, Direction.Axis.Z); before = light.stateTag(); h.assertTrue(!light.work(p) && before.equals(light.stateTag()) && BestMechArms.HEAVY_DRILL.equals(light.armKey()), "Actual light rider cannot use loaded heavy key");

@@ -1,23 +1,28 @@
 package cn.starfall.blueprint.client;
 
 import cn.starfall.blueprint.BestMechEntity;
+import cn.starfall.blueprint.BestMechProgression;
 import cn.starfall.blueprint.StarfallBlueprint;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.CalculateDetachedCameraDistanceEvent;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 
-/** The pilot's eye at the internal seat is also the origin for server-side aiming. */
+/** Defaults to a zoomed-out third-person camera on mount, while allowing free F5 switching to the enclosed cockpit. */
 @EventBusSubscriber(modid = StarfallBlueprint.ID, value = Dist.CLIENT)
 public final class BestCockpitCamera {
     private static CameraType previousView;
+    private static BestMechEntity activeVehicle;
+    private static float detachedDistance = 7.0f;
 
     private static BestMechEntity cockpit(Player player) {
         return player != null && player.isAlive() && player.getVehicle() instanceof BestMechEntity mech
@@ -27,12 +32,37 @@ public final class BestCockpitCamera {
     @SubscribeEvent
     public static void tick(ClientTickEvent.Post event) {
         var mc = Minecraft.getInstance();
-        if (cockpit(mc.player) == null) {
+        var mech = cockpit(mc.player);
+        if (mech == null) {
+            activeVehicle = null;
             restoreView();
-        } else {
+        } else if (activeVehicle != mech) {
+            activeVehicle = mech;
             if (previousView == null) previousView = mc.options.getCameraType();
-            if (!mc.options.getCameraType().isFirstPerson()) mc.options.setCameraType(CameraType.FIRST_PERSON);
+            detachedDistance = baseDistance(mech);
+            // Switch once on mount so the player can immediately see their mech, while F5 remains freely toggleable.
+            if (mc.options.getCameraType() != CameraType.THIRD_PERSON_BACK) {
+                mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            }
         }
+    }
+
+    private static float baseDistance(BestMechEntity mech) {
+        return switch (mech.platformType()) {
+            case BestMechProgression.UNIVERSAL -> 8.5f;
+            case BestMechProgression.COMBAT -> 7.2f;
+            default -> 6.5f;
+        };
+    }
+
+    @SubscribeEvent
+    public static void detachedDistance(CalculateDetachedCameraDistanceEvent event) {
+        var mc = Minecraft.getInstance();
+        var mech = cockpit(mc.player);
+        if (mech == null) return;
+        float target = baseDistance(mech) + (mech.boosting() ? 1.0f : 0.0f);
+        detachedDistance = Mth.lerp(0.15f, detachedDistance, target);
+        event.setDistance(detachedDistance);
     }
 
     private static void restoreView() {
@@ -43,7 +73,10 @@ public final class BestCockpitCamera {
     }
 
     @SubscribeEvent
-    public static void logout(ClientPlayerNetworkEvent.LoggingOut event) { restoreView(); }
+    public static void logout(ClientPlayerNetworkEvent.LoggingOut event) {
+        activeVehicle = null;
+        restoreView();
+    }
 
     @SubscribeEvent
     public static void hidePilot(RenderPlayerEvent.Pre event) {

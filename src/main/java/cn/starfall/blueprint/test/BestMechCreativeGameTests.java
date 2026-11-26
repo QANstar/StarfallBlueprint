@@ -77,10 +77,10 @@ public final class BestMechCreativeGameTests {
                     h.assertTrue(mech.interact(p, InteractionHand.MAIN_HAND).consumesAction() && p.getVehicle() == mech,
                             type + " creative player mounts without knowledge");
                     mech.setOnGround(true);
-                    int before = mech.energy();
+                    double startZ = mech.getZ();
                     p.setPlayerInput(0, 1, false, false);
                     mech.tick();
-                    h.assertTrue(mech.energy() < before, type + " creative player can drive without knowledge");
+                    h.assertTrue(mech.getZ() > startZ, type + " creative player drives without knowledge");
                 } finally { p.stopRiding(); mech.discard(); }
             }
         } finally { p.stopRiding(); p.getInventory().clearContent(); }

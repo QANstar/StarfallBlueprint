@@ -134,13 +134,13 @@ public final class BestMechLegGameTests {
             var step = m.getAttribute(Attributes.STEP_HEIGHT); var other = StarfallBlueprint.id("legs_test_other_step");
             step.addTransientModifier(new AttributeModifier(other, .15, AttributeModifier.Operation.ADD_VALUE));
             var t = m.stateTag(); t.putString(BestMechLegs.STATE, BestMechLegs.CRUISE); m.loadState(t); m.loadState(t);
-            h.assertTrue(Math.abs(step.getValue() - .75) < 1e-6 && step.hasModifier(other), "Repeated load applies only one wheel modifier and preserves unrelated modifier");
+            h.assertTrue(Math.abs(step.getValue() - 1.15) < 1e-6 && step.hasModifier(other), "Repeated load applies only one wheel modifier and preserves unrelated modifier");
             t.putString(BestMechLegs.STATE, "unknown"); m.loadState(t);
-            h.assertTrue(m.legsKey().isEmpty() && Math.abs(step.getValue() - 1.15) < 1e-6 && step.hasModifier(other), "Unknown legs restore walking without deleting other modifiers");
+            h.assertTrue(m.legsKey().isEmpty() && Math.abs(step.getValue() - 1.40) < 1e-6 && step.hasModifier(other), "Unknown legs restore walking without deleting other modifiers");
             t.remove(BestMechLegs.STATE); m.loadState(t); h.assertTrue(m.legsKey().isEmpty(), "Old state keeps original walking legs");
             service(p, m); p.setItemInHand(InteractionHand.MAIN_HAND, CatalogueContent.stack(BestMechLegs.CRUISE, 1));
-            h.assertTrue(m.installLegs(p, InteractionHand.MAIN_HAND) && Math.abs(step.getValue() - .75) < 1e-6, "Install applies dedicated step modifier");
-            h.assertTrue(m.removeLegs(p) && Math.abs(step.getValue() - 1.15) < 1e-6 && step.hasModifier(other), "Removal preserves unrelated modifier");
+            h.assertTrue(m.installLegs(p, InteractionHand.MAIN_HAND) && Math.abs(step.getValue() - 1.15) < 1e-6, "Install applies dedicated step modifier");
+            h.assertTrue(m.removeLegs(p) && Math.abs(step.getValue() - 1.40) < 1e-6 && step.hasModifier(other), "Removal preserves unrelated modifier");
             step.removeModifier(other); clear(p); service(p, m); t = m.stateTag(); t.putString(BestMechLegs.STATE, BestMechLegs.CRUISE);
             t.putString(BestMechBodies.STATE, BestMechBodies.REINFORCED); t.putString(BestMechCores.STATE, BestMechCores.GENERATOR);
             t.putString(BestMechArms.STATE, BestMechArms.EXCAVATOR); t.putString(BestMechModules.STATE, BestMechModules.RADIATOR);
@@ -149,14 +149,14 @@ public final class BestMechLegGameTests {
             t.putLong("ChargeTick", h.getLevel().getGameTime()); t.putInt("ChargeUsed", 123); m.loadState(t);
             m.setCustomName(Component.literal("Persistent wheels")); m.cargo().setItem(17, new ItemStack(Items.DIAMOND, 7)); var before = m.stateTag();
             var saved = new CompoundTag(); m.saveWithoutId(saved); var loaded = BestMechs.TYPE.get().create(h.getLevel()); loaded.load(saved);
-            h.assertTrue(loaded.stateTag().equals(before) && Math.abs(loaded.getAttributeValue(Attributes.STEP_HEIGHT) - .6) < 1e-6, "Real entity save restores full wheel state and transient modifier"); loaded.discard();
+            h.assertTrue(loaded.stateTag().equals(before) && Math.abs(loaded.getAttributeValue(Attributes.STEP_HEIGHT) - 1.0) < 1e-6, "Real entity save restores full wheel state and transient modifier"); loaded.discard();
             h.assertTrue(m.pack(p) && BestMechItem.state(p.getMainHandItem()).equals(before), "Actual packing preserves exact state");
             p.setShiftKeyDown(false); var pos = h.absolutePos(new BlockPos(6, 0, 6));
             h.assertTrue(p.getMainHandItem().getItem().useOn(new UseOnContext(p, InteractionHand.MAIN_HAND,
                     new BlockHitResult(Vec3.atCenterOf(pos).add(0, .5, 0), Direction.UP, pos, false))).consumesAction() && p.getMainHandItem().isEmpty(), "Actual packed item deploys once");
             var area = new AABB(Vec3.atLowerCornerOf(h.absolutePos(BlockPos.ZERO)), Vec3.atLowerCornerOf(h.absolutePos(new BlockPos(12, 10, 12))));
             m = h.getLevel().getEntitiesOfClass(BestMechEntity.class, area, e -> !e.isRemoved()).stream().findFirst().orElseThrow();
-            h.assertTrue(m.stateTag().equals(before) && Math.abs(m.getAttributeValue(Attributes.STEP_HEIGHT) - .6) < 1e-6, "Deploy restores wheels and every independent state");
+            h.assertTrue(m.stateTag().equals(before) && Math.abs(m.getAttributeValue(Attributes.STEP_HEIGHT) - 1.0) < 1e-6, "Deploy restores wheels and every independent state");
             var deathBox = m.getBoundingBox().inflate(3); m.setHealth(0); m.die(h.getLevel().damageSources().generic()); m.die(h.getLevel().damageSources().generic());
             var loot = h.getLevel().getEntitiesOfClass(ItemEntity.class, deathBox); var packed = loot.stream().filter(e -> e.getItem().is(CatalogueContent.item("best_mech"))).toList();
             h.assertTrue(packed.size() == 1 && loot.stream().filter(e -> e.getItem().is(Items.DIAMOND)).mapToInt(e -> e.getItem().getCount()).sum() == 7
@@ -178,9 +178,9 @@ public final class BestMechLegGameTests {
                 m.moveTo(start.x, start.y, start.z, 0, 0); m.setDeltaMovement(Vec3.ZERO); m.setOnGround(true); p.setShiftKeyDown(false);
                 h.assertTrue(p.startRiding(m), "Actual server operator mounts each configuration"); p.setPlayerInput(0, 1, false, false); m.tick(); m.positionRider(p);
                 int cost = body.isEmpty() ? module.isEmpty() ? 400 : 600 : module.isEmpty() ? 600 : 900;
-                int heat = body.isEmpty() ? module.isEmpty() ? 4 : 6 : module.isEmpty() ? 6 : 8;
+                int heat = module.isEmpty() ? 1 : 2;
                 double speed = body.isEmpty() ? module.isEmpty() ? .22 : .28 : module.isEmpty() ? .18 : .23;
-                if(!legs.isEmpty()) { cost = cost * 3 / 4; heat--; speed *= 1.25; }
+                if(!legs.isEmpty()) { cost = cost * 3 / 4; heat = Math.max(1, heat - 1); speed *= 1.25; }
                 double distance = m.getZ() - start.z; if(baseline == 0) baseline = distance;
                 h.assertTrue(distance > 0 && Math.abs(distance / baseline - speed / .22) < .001 && Math.abs(m.movementSpeed() - speed) < 1e-6
                         && m.energy() == 100000 - cost && m.heat() == heat && m.wear() == 1 && m.stateTag().getInt("WorkTicks") == 0
@@ -204,12 +204,11 @@ public final class BestMechLegGameTests {
                 t = m.stateTag(); t.putString(BestMechLegs.STATE, legs); m.loadState(t);
                 m.moveTo(start.x, start.y, start.z, 0, 0); m.setDeltaMovement(Vec3.ZERO); m.setOnGround(true);
                 m.move(MoverType.SELF, new Vec3(0, -.01, 4));
-                h.assertTrue(legs.isEmpty() ? m.getY() > start.y + .99 && m.getZ() > wall.getZ()
-                        : Math.abs(m.getY() - start.y) < 1e-6 && m.getZ() < wall.getZ(), "Standing vanilla collision: walking passes one block, wheels stay blocked");
+                h.assertTrue(m.getY() > start.y + .99 && m.getZ() > wall.getZ(), "Both walking legs (1.25) and cruise wheels (1.0) pass a single-block step");
             }
             for(int x = 2; x <= 8; x++) h.setBlock(new BlockPos(x, 1, 6), Blocks.STONE_SLAB);
             m.moveTo(start.x, start.y, start.z, 0, 0); m.setDeltaMovement(Vec3.ZERO); m.setOnGround(true); m.move(MoverType.SELF, new Vec3(0, -.01, 4));
-            h.assertTrue(Math.abs(m.getY() - start.y - .5) < 1e-6 && m.getZ() > wall.getZ(), "Actual wheel collision passes a half slab with 0.6 step height");
+            h.assertTrue(Math.abs(m.getY() - start.y - .5) < 1e-6 && m.getZ() > wall.getZ(), "Actual wheel collision passes a half slab smoothly");
         } finally { clear(p); m.discard(); }
         h.succeed();
     }

@@ -27,6 +27,14 @@ public final class BestMechLifting {
     private static final Map<BestMechEntity, UUID> HELD = new WeakHashMap<>();
     private BestMechLifting() {}
 
+    public static int heldEntityId(BestMechEntity mech) {
+        if (!(mech.level() instanceof ServerLevel level)) return -1;
+        UUID id = HELD.get(mech);
+        if (id == null) return -1;
+        Entity target = level.getEntity(id);
+        return target != null && target.isAlive() ? target.getId() : -1;
+    }
+
     private static boolean operator(BestMechEntity mech, Player player) {
         return !mech.level().isClientSide && mech.isAlive() && mech.getControllingPassenger()==player
                 && mech.qualifiedFor(player) && mech.ready(0) && mech.level().mayInteract(player,mech.blockPosition());

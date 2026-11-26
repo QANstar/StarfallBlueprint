@@ -42,7 +42,9 @@ public final class BestMechGameTests {
         var p = new ServerPlayer(h.getLevel().getServer(), h.getLevel(), profile, ClientInformation.createDefault());
         var connection = new Connection(PacketFlow.SERVERBOUND);
         new EmbeddedChannel(connection);
-        p.connection = new ServerGamePacketListenerImpl(h.getLevel().getServer(), connection, p, CommonListenerCookie.createInitial(profile, false));
+        p.connection = new ServerGamePacketListenerImpl(h.getLevel().getServer(), connection, p, CommonListenerCookie.createInitial(profile, false)) {
+            @Override public void send(net.minecraft.network.protocol.Packet<?> packet) {}
+        };
         p.setGameMode(GameType.SURVIVAL); p.getInventory().clearContent(); p.getInventory().selected = 0;
         p.getPersistentData().putInt("BestEngineeringResearch", 3);
         p.getPersistentData().putBoolean("BestDiagnostics", true);
@@ -234,13 +236,17 @@ public final class BestMechGameTests {
             var anchor = m.getType().getDimensions().attachments().get(EntityAttachment.PASSENGER, 0, 0);
             h.assertTrue(Math.abs(anchor.y - 2.2) < 1E-5 && m.getMaxHealth() == 100
                     && Math.abs(m.getBbWidth() - 1.8) < 1E-5 && Math.abs(m.getBbHeight() - 3.68) < 1E-5
-                    && m.getAttributeValue(Attributes.STEP_HEIGHT) <= 1, "Industrial size, health, step ceiling and explicit seat anchor match the registered entity");
+                    && Math.abs(m.getAttributeValue(Attributes.STEP_HEIGHT) - 1.25) < 1E-5, "Industrial size, health, step ceiling and explicit seat anchor match the registered entity");
             m.positionRider(p); double initialSeat = p.getY() - m.getY();
             var start = m.position(); tickRider(m, p, 0, 1);
-            h.assertTrue(m.getZ() > start.z && m.energy() == 99_600 && m.heat() == 4 && Math.abs(p.getY() - m.getY() - initialSeat) < 1E-5,
+            h.assertTrue(m.getZ() > start.z && m.energy() == 99_600 && m.heat() == 1 && Math.abs(p.getY() - m.getY() - initialSeat) < 1E-5,
                     "Actual vanilla riding tick reads server player input, moves through collision, spends 400 and keeps the rider on its seat");
-            tickRider(m, p, 0, 0); int energy = m.energy(); var stopped = m.position();
-            h.assertTrue(m.getDeltaMovement().horizontalDistanceSqr() == 0 && m.energy() == energy && m.heat() == 2, "Idle has no powered horizontal momentum or cruise drain and passively cools");
+            double speedBeforeStop = m.getDeltaMovement().horizontalDistance();
+            tickRider(m, p, 0, 0); int energy = m.energy();
+            h.assertTrue(m.getDeltaMovement().horizontalDistance() < speedBeforeStop && m.energy() == energy && m.heat() == 0, "Idle decelerates smoothly without cruise drain and passively cools");
+            for(int i = 0; i < 4; i++) tickRider(m, p, 0, 0);
+            var stopped = m.position();
+            h.assertTrue(m.getDeltaMovement().horizontalDistanceSqr() == 0 && m.energy() == energy, "Idle comes to a complete stop on a real floor");
             tickRider(m, p, 0, 0); h.assertTrue(m.position().distanceToSqr(stopped) < .01 && m.energy() == energy, "Idle stays stationary on a real floor");
             p.setYRot(-90); tickRider(m, p, 0, 1);
             h.assertTrue(m.getX() > stopped.x && Math.abs(m.getYRot() + 90) < .001, "Turning uses controlling player yaw and vanilla movement direction");
@@ -317,26 +323,26 @@ public final class BestMechGameTests {
         try {
             var packed = CatalogueContent.stack("best_mech", 1); var itemPort = packed.getCapability(Capabilities.EnergyStorage.ITEM);
             var original = packed.copy();
-            h.assertTrue(itemPort != null && itemPort.receiveEnergy(9000, true) == 5000 && ItemStack.matches(original, packed), "Packed capability simulation is read-only and capped at 5000");
-            h.assertTrue(itemPort.receiveEnergy(9000, false) == 5000 && BestMechItem.energy(packed).receiveEnergy(9000, false) == 0,
-                    "New capability wrappers cannot reset the shared 5000-per-tick budget");
+            h.assertTrue(itemPort != null && itemPort.receiveEnergy(90000, true) == 50000 && ItemStack.matches(original, packed), "Packed capability simulation is read-only and capped at 50000");
+            h.assertTrue(itemPort.receiveEnergy(90000, false) == 50000 && BestMechItem.energy(packed).receiveEnergy(90000, false) == 0,
+                    "New capability wrappers cannot reset the shared 50000-per-tick budget");
             m.loadState(BestMechItem.state(packed)); var entityPort = m.getCapability(Capabilities.EnergyStorage.ENTITY, null);
-            h.assertTrue(entityPort != null && entityPort.receiveEnergy(512, false) == 0, "Item-to-entity conversion preserves the already spent tick budget");
+            h.assertTrue(entityPort != null && entityPort.receiveEnergy(20000, false) == 0, "Item-to-entity conversion preserves the already spent tick budget");
             var t = m.stateTag(); t.putLong("ChargeTick", h.getLevel().getGameTime() - 1); t.putInt("ChargeUsed", 0); m.loadState(t);
-            h.assertTrue(entityPort.receiveEnergy(1000, true) == 512 && m.energy() == 5000 && entityPort.receiveEnergy(1000, false) == 512
-                    && m.energyPort().receiveEnergy(1, false) == 0 && !entityPort.canExtract(), "Entity capability simulations and all wrappers enforce one 512-per-tick allowance");
+            h.assertTrue(entityPort.receiveEnergy(25000, true) == 20000 && m.energy() == 50000 && entityPort.receiveEnergy(25000, false) == 20000
+                    && m.energyPort().receiveEnergy(1, false) == 0 && !entityPort.canExtract(), "Entity capability simulations and all wrappers enforce one 20000-per-tick allowance");
             m.setIsolated(true); var before = m.stateTag();
-            h.assertTrue(!entityPort.canReceive() && entityPort.receiveEnergy(512, true) == 0 && entityPort.receiveEnergy(512, false) == 0 && m.stateTag().equals(before), "Previously acquired ports immediately honor isolation");
+            h.assertTrue(!entityPort.canReceive() && entityPort.receiveEnergy(20000, true) == 0 && entityPort.receiveEnergy(20000, false) == 0 && m.stateTag().equals(before), "Previously acquired ports immediately honor isolation");
             var cell = CatalogueContent.stack("s01", 1); var c = CatalogueEquipment.getData(cell); c.putInt("Energy", 8000); CatalogueEquipment.setData(cell, c);
             p.setItemInHand(InteractionHand.MAIN_HAND, cell); p.setShiftKeyDown(true); var sourceBefore = cell.copy();
             m.interact(p, InteractionHand.MAIN_HAND); h.assertTrue(ItemStack.matches(sourceBefore, cell), "An isolated cell interaction never drains its source");
             m.setIsolated(false); t = m.stateTag(); t.putLong("ChargeTick", h.getLevel().getGameTime() - 1); t.putInt("ChargeUsed", 0); m.loadState(t);
             int energy = m.energy(); m.interact(p, InteractionHand.MAIN_HAND); m.interact(p, InteractionHand.MAIN_HAND);
             h.assertTrue(m.energy() == energy + 512 && CatalogueEquipment.getData(cell).getInt("Energy") == 7488,
-                    "Repeated cell interactions in one tick transfer exactly 512 with equal source loss and receiver gain");
+                    "Repeated cell interactions respect the cell's own 512 discharge cap with equal source loss and receiver gain");
             m.setIsolated(true); m.setDeltaMovement(Vec3.ZERO); p.getInventory().clearContent(); h.assertTrue(m.pack(p), "Budget test packs the same physical entity");
             packed = p.getMainHandItem(); t = BestMechItem.state(packed); t.putBoolean("Isolated", false); BestMechItem.setState(packed, t);
-            h.assertTrue(BestMechItem.energy(packed).receiveEnergy(9000, false) == 4488, "Entity-to-item conversion retains the spent 512 and leaves exactly 4488 of the packed allowance");
+            h.assertTrue(BestMechItem.energy(packed).receiveEnergy(90000, false) == 49488, "Entity-to-item conversion retains the spent 512 and leaves exactly 49488 of the packed 50k allowance");
             baseChargingRespectsProtection(h, p);
         } finally { clear(p); if(!m.isRemoved()) m.discard(); }
         h.succeed();
@@ -358,7 +364,7 @@ public final class BestMechGameTests {
         } finally { NeoForge.EVENT_BUS.unregister(protection); }
         packed.getItem().use(h.getLevel(), p, InteractionHand.MAIN_HAND);
         packed.getItem().onUseTick(h.getLevel(), p, packed, 71999); int received = BestMechItem.energy(packed).getEnergyStored();
-        h.assertTrue(received > 0 && received <= 5000 && source.getPower() == 10000 - received,
+        h.assertTrue(received > 0 && received <= 50000 && source.getPower() == 10000 - received,
                 "An allowed real source transfers equal extracted and received energy through the held packed-item charging path");
         var tag = BestMechItem.state(packed); tag.putBoolean("Isolated", true); BestMechItem.setState(packed, tag);
         long remaining = source.getPower(); packed.getItem().onUseTick(h.getLevel(), p, packed, 71998);
@@ -391,15 +397,18 @@ public final class BestMechGameTests {
                         "Block entities, negative hardness and unsupported diamond tier are rejected before spending: " + block);
             }
             h.getLevel().setBlockAndUpdate(target, Blocks.AIR.defaultBlockState());
-            BlockPos far = BlockPos.containing(p.getEyePosition().add(0, 0, 7)); h.getLevel().setBlockAndUpdate(far, Blocks.STONE.defaultBlockState());
-            h.assertTrue(!m.drill(p) && m.energy() == energy && h.getLevel().getBlockState(far).is(Blocks.STONE), "A server eye ray cannot reach an arbitrary distant target");
+            BlockPos far = BlockPos.containing(p.getEyePosition().add(0, 0, 12)); h.getLevel().setBlockAndUpdate(far, Blocks.STONE.defaultBlockState());
+            h.assertTrue(!m.drill(p) && m.energy() == energy && h.getLevel().getBlockState(far).is(Blocks.STONE), "A server eye ray cannot reach an arbitrary distant target beyond mech work reach");
             h.getLevel().setBlockAndUpdate(far, Blocks.AIR.defaultBlockState()); h.getLevel().setBlockAndUpdate(target, Blocks.STONE.defaultBlockState());
             p.getAbilities().mayBuild = false; h.assertTrue(!m.drill(p) && m.energy() == energy, "Adventure/build permission refusal consumes no power"); p.getAbilities().mayBuild = true;
             NeoForge.EVENT_BUS.addListener(protection); listener = true;
             h.assertTrue(!m.drill(p) && h.getLevel().getBlockState(target).is(Blocks.STONE) && m.energy() == energy && p.getMainHandItem() == held,
                     "A real NeoForge protection BreakEvent cancels destruction and still restores the exact held item");
+            p.setGameMode(GameType.CREATIVE);
+            h.assertTrue(!m.drill(p) && h.getLevel().getBlockState(target).is(Blocks.STONE) && m.energy() == energy, "Creative drilling still honors BreakEvent protection");
             NeoForge.EVENT_BUS.unregister(protection); listener = false;
-            p.setGameMode(GameType.CREATIVE); h.assertTrue(!m.drill(p) && m.energy() == energy, "Creative never bypasses survival drop/protection semantics"); p.setGameMode(GameType.SURVIVAL);
+            h.assertTrue(m.drill(p) && h.getLevel().getBlockState(target).isAir() && m.energy() == energy, "Creative drilling breaks allowed blocks without draining energy");
+            p.setGameMode(GameType.SURVIVAL); setState(m, "DrillCooldown", 0);
             p.stopRiding(); h.assertTrue(!m.drill(p), "Only the actual controlling rider can activate the intrinsic drill");
         } finally {
             if(listener) NeoForge.EVENT_BUS.unregister(protection);
@@ -518,7 +527,7 @@ public final class BestMechGameTests {
         boolean drops = h.getLevel().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS);
         h.getLevel().getGameRules().getRule(GameRules.RULE_DOENTITYDROPS).set(true, h.getLevel().getServer());
         try {
-            var t = m.stateTag(); t.putInt("Heat", 402); t.putBoolean("ThermalLock", true); m.loadState(t);
+            var t = m.stateTag(); t.putInt("Heat", 403); t.putBoolean("ThermalLock", true); m.loadState(t);
             h.assertTrue(!m.ready(400), "Thermal hysteresis remains locked above 400 even below maximum heat");
             m.tick(); h.assertTrue(m.heat() == 400 && m.ready(400), "Passive cooling recovers the thermal latch exactly at 400");
             m.tick();
@@ -541,6 +550,182 @@ public final class BestMechGameTests {
         } finally {
             h.getLevel().getGameRules().getRule(GameRules.RULE_DOENTITYDROPS).set(drops, h.getLevel().getServer()); clear(p); if(!m.isRemoved()) m.discard();
         }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void sustainedWalkingNeverThermalLocksWhileSprintAndWorkHeatUp(GameTestHelper h) {
+        for(int x = 0; x < 12; x++) for(int z = 0; z < 48; z++) h.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
+        var p = player(h, true); var m = mech(h, 5_000_000);
+        try {
+            h.assertTrue(p.startRiding(m), "Qualified pilot mounts mech");
+            for(int i = 0; i < 80; i++) {
+                if(i % 15 == 0) {
+                    var resetPos = h.absolutePos(new BlockPos(5, 1, 3));
+                    m.moveTo(resetPos.getX() + .5, resetPos.getY(), resetPos.getZ() + .5, 0, 0);
+                }
+                tickRider(m, p, 0, 1);
+            }
+            h.assertTrue(!m.thermalLocked() && m.heat() <= 5, "Sustained regular walking never accumulates heat toward thermal lock: heat=" + m.heat());
+            int heatBeforeSprint = m.heat();
+            for(int i = 0; i < 20; i++) {
+                if(i % 10 == 0) {
+                    var resetPos = h.absolutePos(new BlockPos(5, 1, 3));
+                    m.moveTo(resetPos.getX() + .5, resetPos.getY(), resetPos.getZ() + .5, 0, 0);
+                }
+                m.setPilotInput(p, BestMechEntity.INPUT_SPRINT);
+                tickRider(m, p, 0, 1);
+            }
+            h.assertTrue(m.heat() > heatBeforeSprint + 10 && m.boosting(), "Sprinting raises heat meaningfully and sets boosting state");
+        } finally { clear(p); m.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void mechCanJumpOverTwoBlockLedgeAndWadeThroughWater(GameTestHelper h) {
+        floor(h);
+        var p = player(h, true); var m = mech(h, 1_000_000);
+        try {
+            h.assertTrue(p.startRiding(m), "Pilot mounts mech for jump and water test");
+            double startY = m.getY();
+            m.setPilotInput(p, BestMechEntity.INPUT_JUMP);
+            double peakY = startY;
+            for(int i = 0; i < 14; i++) {
+                m.setPilotInput(p, BestMechEntity.INPUT_JUMP);
+                tickRider(m, p, 0, 0);
+                peakY = Math.max(peakY, m.getY());
+            }
+            h.assertTrue(peakY >= startY + 2.0, "Jump plus short thruster hold lifts mech by at least two blocks: gain=" + (peakY - startY));
+            m.setPilotInput(p, 0);
+            for(int x = 3; x <= 7; x++) for(int z = 2; z <= 8; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.WATER);
+            var waterStart = h.absolutePos(new BlockPos(5, 1, 3));
+            m.moveTo(waterStart.getX() + .5, waterStart.getY(), waterStart.getZ() + .5, 0, 0);
+            m.setDeltaMovement(Vec3.ZERO); m.setOnGround(true);
+            double beforeZ = m.getZ();
+            for(int i = 0; i < 6; i++) tickRider(m, p, 0, 1);
+            h.assertTrue(m.getZ() > beforeZ + 0.5, "Mech wades forward through water without stalling: deltaZ=" + (m.getZ() - beforeZ));
+        } finally { clear(p); m.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void reachScalesWithChassisEyeHeightAndPilotInputDrivesContinuousWork(GameTestHelper h) {
+        floor(h);
+        var p = player(h, true);
+        var tag = p.getPersistentData().getCompound("BestModuleKnowledge");
+        tag.putBoolean("confluence", true);
+        p.getPersistentData().put("BestModuleKnowledge", tag);
+        var u = BestMechs.UNIVERSAL_TYPE.get().create(h.getLevel());
+        var uTag = new CompoundTag(); uTag.putInt("Energy", 2_000_000); u.loadState(uTag);
+        var pos = h.absolutePos(new BlockPos(5, 1, 2));
+        u.moveTo(pos.getX() + .5, pos.getY(), pos.getZ() + .5, 0, 0);
+        u.setOnGround(true); h.getLevel().addFreshEntity(u);
+        try {
+            h.assertTrue(p.startRiding(u), "Pilot mounts Guihai universal mech");
+            u.positionRider(p);
+            p.setYRot(0); p.setXRot(0);
+            BlockPos target1 = BlockPos.containing(p.getEyePosition().add(0, 0, 8));
+            BlockPos target2 = BlockPos.containing(p.getEyePosition().add(0, 0, 9));
+            h.getLevel().setBlockAndUpdate(target1, Blocks.STONE.defaultBlockState());
+            h.getLevel().setBlockAndUpdate(target2, Blocks.STONE.defaultBlockState());
+            u.setPilotInput(p, BestMechEntity.INPUT_SECONDARY);
+            u.tick();
+            h.assertTrue(h.getLevel().getBlockState(target1).isAir() && u.drillCooldown() > 0, "Continuous secondary input breaks block at 8-block universal reach and syncs cooldown");
+            h.assertTrue(h.getLevel().getBlockState(target2).is(Blocks.STONE), "Second block waits for server drill cooldown");
+            for(int i = 0; i < 22; i++) { u.setPilotInput(p, BestMechEntity.INPUT_SECONDARY); u.tick(); }
+            h.assertTrue(h.getLevel().getBlockState(target2).isAir(), "Holding secondary input automatically breaks next block once cooldown expires");
+        } finally { clear(p); u.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void hudSyncsWeaponCooldownAmmoAndSwitchStates(GameTestHelper h) {
+        floor(h);
+        var p = player(h, true);
+        var tag = p.getPersistentData().getCompound("BestModuleKnowledge");
+        tag.putBoolean("confluence", true);
+        p.getPersistentData().put("BestModuleKnowledge", tag);
+        var u = BestMechs.UNIVERSAL_TYPE.get().create(h.getLevel());
+        var state = new CompoundTag();
+        state.putInt("Energy", 1_000_000);
+        var combat = new CompoundTag();
+        combat.putString("Weapon", BestMechCombatSystems.MACHINE_GUN);
+        state.put(BestMechCombatSystems.STATE, combat);
+        u.loadState(state);
+        var pos = h.absolutePos(new BlockPos(5, 1, 3));
+        u.moveTo(pos.getX() + .5, pos.getY(), pos.getZ() + .5, 0, 0);
+        u.setOnGround(true);
+        h.getLevel().addFreshEntity(u);
+        try {
+            h.assertTrue(p.startRiding(u), "Pilot mounts universal mech");
+            u.cargo().setItem(0, CatalogueContent.stack(BestMechCombatSystems.BULLET, 7));
+            u.tick();
+            h.assertTrue(u.syncedAmmo() == 7 && u.weaponCooldownSynced() == 0, "HUD syncs live cargo ammunition count");
+            u.fireWeapon(p);
+            u.tick();
+            h.assertTrue(u.syncedAmmo() == 6 && u.weaponCooldownSynced() > 0, "Firing decrements synced ammo and exposes server weapon cooldown");
+            u.combatSystems().setFriendlyFire(true);
+            u.combatSystems().setTerrainDamage(true);
+            BestMechSupport.setChangchuanEnabled(u, false);
+            u.tick();
+            h.assertTrue(u.friendlyFireSynced() && u.terrainDamageSynced() && !u.changchuanSynced(), "All combat and support switches sync to client HUD");
+        } finally { clear(p); u.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void loadoutMenuInstallsRemovesComponentsAndPreservesAtomicSafety(GameTestHelper h) {
+        floor(h);
+        var p = player(h, true);
+        var m = mech(h, 500_000);
+        try {
+            var pos = m.position();
+            p.moveTo(pos.x + 2, pos.y, pos.z, 0, 0);
+            p.setShiftKeyDown(true);
+            p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            h.assertTrue(m.interact(p, InteractionHand.MAIN_HAND).consumesAction() && p.containerMenu instanceof BestMechLoadoutMenu,
+                    "Sneak empty-hand right click opens the unified mech terminal");
+            var menu = (BestMechLoadoutMenu) p.containerMenu;
+            h.assertTrue(!menu.hardwareEditable(), "Hardware slots stay locked while mech is connected");
+            h.assertTrue(menu.clickMenuButton(p, BestMechLoadoutMenu.ACTION_TOGGLE_ISOLATION) && m.isolated() && menu.hardwareEditable(),
+                    "Terminal toggle button isolates mech and unlocks hardware slots");
+            p.getInventory().setItem(0, CatalogueContent.stack(BestMechModules.RADIATOR, 1));
+            menu.quickMoveStack(p, BestMechLoadoutMenu.HARDWARE_SLOTS + menu.cargoSlots() + 27);
+            h.assertTrue(BestMechModules.RADIATOR.equals(m.moduleKey()) && p.getInventory().getItem(0).isEmpty(),
+                    "Shift-clicking radiator in terminal installs it into utility hardware slot");
+            m.cargo().setItem(0, new ItemStack(Items.COBBLESTONE, 16));
+            h.assertTrue(menu.clickMenuButton(p, BestMechLoadoutMenu.ACTION_TRANSFER_CARGO)
+                    && m.cargo().getItem(0).isEmpty() && p.getInventory().countItem(Items.COBBLESTONE) == 16,
+                    "Cargo transfer button moves mech cargo to player inventory");
+            h.assertTrue(menu.clickMenuButton(p, BestMechLoadoutMenu.ACTION_PACK_MECH) && m.isRemoved() && count(p, "best_mech") == 1,
+                    "One-click pack button safely packs the mech into player inventory");
+        } finally { p.closeContainer(); clear(p); if (!m.isRemoved()) m.discard(); }
+        h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void deployAllowsReplaceableFoliageAndRejectsFluidsCleanly(GameTestHelper h) {
+        floor(h);
+        var p = player(h, true);
+        try {
+            var stacked = CatalogueContent.stack("best_mech", 1);
+            p.setItemInHand(InteractionHand.MAIN_HAND, stacked);
+            h.setBlock(new BlockPos(5, 0, 5), Blocks.GRASS_BLOCK);
+            h.setBlock(new BlockPos(6, 0, 5), Blocks.GRASS_BLOCK);
+            h.setBlock(new BlockPos(5, 1, 5), Blocks.SHORT_GRASS);
+            h.setBlock(new BlockPos(6, 1, 5), Blocks.DANDELION);
+            h.assertTrue(deploy(h, p, new BlockPos(5, 0, 5)).consumesAction() && p.getMainHandItem().isEmpty(),
+                    "Deployment clears replaceable grass/flowers instead of failing silently");
+            var deployedMech = deployed(h);
+            deployedMech.setIsolated(true);
+            deployedMech.setOnGround(true);
+            deployedMech.setDeltaMovement(Vec3.ZERO);
+            h.assertTrue(deployedMech.pack(p), "Repack deployed mech for fluid rejection test");
+            h.setBlock(new BlockPos(5, 1, 5), Blocks.WATER);
+            var before = p.getMainHandItem().copy();
+            h.assertTrue(!deploy(h, p, new BlockPos(5, 0, 5)).consumesAction() && ItemStack.matches(before, p.getMainHandItem()),
+                    "Fluid in deployment footprint still rejects cleanly without consuming item");
+        } finally { clear(p); }
         h.succeed();
     }
 }

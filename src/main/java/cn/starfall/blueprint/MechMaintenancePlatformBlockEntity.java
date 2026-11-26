@@ -15,7 +15,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
 public final class MechMaintenancePlatformBlockEntity extends BlockEntity implements BestMechPowerSystems.WirelessSource {
-    public static final int CAPACITY=2_000_000, OUTPUT=20_000;
+    public static final int CAPACITY=10_000_000, OUTPUT=100_000;
     private BlockPos center;
     private UUID owner;
     private int energy, steel, outputUsed;
@@ -87,7 +87,7 @@ public final class MechMaintenancePlatformBlockEntity extends BlockEntity implem
         } else {
             IEnergyStorage source=stack.getCapability(Capabilities.EnergyStorage.ITEM);
             if(source!=null && source.canExtract()) {
-                int n=energyPort().receiveEnergy(source.extractEnergy(20000,true),true);
+                int n=energyPort().receiveEnergy(source.extractEnergy(100_000,true),true);
                 if(n>0) energyPort().receiveEnergy(source.extractEnergy(n,false),false);
             }
         }

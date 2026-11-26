@@ -116,8 +116,8 @@ public final class BestMechModuleGameTests {
             m.setDeltaMovement(.2, 0, 0); h.assertTrue(!m.installModule(p, InteractionHand.MAIN_HAND), "Moving installation fails"); m.setDeltaMovement(Vec3.ZERO);
             m.setIsolated(false); h.assertTrue(!m.installModule(p, InteractionHand.MAIN_HAND), "Connected installation fails"); m.setIsolated(true);
             h.assertTrue(m.interact(p, InteractionHand.MAIN_HAND).consumesAction() && module.isEmpty()
-                    && m.moduleKey().equals(BestMechModules.RADIATOR) && m.coolingRate() == 4
-                    && m.movementCost() == 400 && m.movementHeat() == 4 && operationalState(m).equals(before), "One physical radiator changes only the shared slot");
+                    && m.moduleKey().equals(BestMechModules.RADIATOR) && m.coolingRate() == 6
+                    && m.movementCost() == 400 && m.movementHeat() == 1 && operationalState(m).equals(before), "One physical radiator changes only the shared slot");
             for(String key : List.of(BestMechModules.RADIATOR, BestMechModules.DRIVE)) {
                 p.setItemInHand(InteractionHand.MAIN_HAND, CatalogueContent.stack(key, 1)); inv = inventory(p);
                 h.assertTrue(m.interact(p, InteractionHand.MAIN_HAND).consumesAction() && unchanged(p, inv)
@@ -150,7 +150,7 @@ public final class BestMechModuleGameTests {
         h.getLevel().getGameRules().getRule(GameRules.RULE_DOENTITYDROPS).set(true, h.getLevel().getServer());
         try {
             var legacy = m.stateTag(); legacy.remove(BestMechModules.STATE); m.loadState(legacy);
-            h.assertTrue(m.moduleKey().isEmpty() && m.movementCost() == 400 && m.coolingRate() == 2, "Old state defaults to an empty slot and base stats");
+            h.assertTrue(m.moduleKey().isEmpty() && m.movementCost() == 400 && m.coolingRate() == 3, "Old state defaults to an empty slot and base stats");
             legacy.putString(BestMechModules.STATE, "unknown_module"); m.loadState(legacy);
             h.assertTrue(m.moduleKey().isEmpty() && m.stateTag().getString(BestMechModules.STATE).isEmpty(), "Unknown persisted module is sanitized to empty");
             for(String key : List.of(BestMechModules.RADIATOR, BestMechModules.DRIVE)) {
@@ -187,13 +187,13 @@ public final class BestMechModuleGameTests {
         try {
             h.assertTrue(p.startRiding(m), "Real embedded-connection server player controls vanilla riding");
             var start = m.position(); tickRider(m, p, 1); double baseDistance = m.getZ() - start.z;
-            h.assertTrue(baseDistance > 0 && m.energy() == 99_600 && m.heat() == 4, "Base movement remains 400 XH and four heat");
+            h.assertTrue(baseDistance > 0 && m.energy() == 99_600 && m.heat() == 1, "Base movement uses 400 XH and one heat");
             var t = m.stateTag(); t.putString(BestMechModules.STATE, BestMechModules.DRIVE); t.putInt("Energy", 100_000); t.putInt("Heat", 0); m.loadState(t);
             m.moveTo(start.x, start.y, start.z, 0, 0); m.setOnGround(true); m.setDeltaMovement(Vec3.ZERO); tickRider(m, p, 1);
             double driveDistance = m.getZ() - start.z;
-            h.assertTrue(Math.abs(driveDistance / baseDistance - .28 / .22) < .001 && m.energy() == 99_400 && m.heat() == 6,
-                    "Actual drive riding uses speed .28 and spends exactly 600 XH/six heat for displacement");
-            tickRider(m, p, 0); h.assertTrue(m.energy() == 99_400 && m.heat() == 4, "Idle drive has no cruise cost and retains base two-per-tick cooling");
+            h.assertTrue(Math.abs(driveDistance / baseDistance - .28 / .22) < .001 && m.energy() == 99_400 && m.heat() == 2,
+                    "Actual drive riding uses speed .28 and spends exactly 600 XH/two heat for displacement");
+            tickRider(m, p, 0); h.assertTrue(m.energy() == 99_400 && m.heat() == 0, "Idle drive has no cruise cost and cools cleanly");
             t = m.stateTag(); t.putInt("Energy", 599); m.loadState(t); var stopped = m.position(); tickRider(m, p, 1);
             h.assertTrue(m.energy() == 599 && m.position().distanceToSqr(stopped) < .01, "Drive refuses a command below its actual 600 threshold");
             t = m.stateTag(); t.putInt("Energy", 600); m.loadState(t); tickRider(m, p, 1);
@@ -202,12 +202,12 @@ public final class BestMechModuleGameTests {
             for(int x = 3; x <= 7; x++) for(int y = 1; y <= 6; y++) h.setBlock(new BlockPos(x, y, 5), Blocks.STONE);
             for(int i = 0; i < 20; i++) tickRider(m, p, 1);
             int energy = m.energy(), heat = m.heat(); tickRider(m, p, 1);
-            h.assertTrue(energy < 100_000 && m.energy() == energy && m.heat() == Math.max(0, heat - 2)
+            h.assertTrue(energy < 100_000 && m.energy() == energy && m.heat() == Math.max(0, heat - 3)
                     && m.getBoundingBox().maxZ <= h.absolutePos(new BlockPos(0, 0, 5)).getZ() + 1E-5, "Wall-blocked drive has no movement cost or movement heat");
             p.stopRiding(); t = m.stateTag(); t.putString(BestMechModules.STATE, BestMechModules.RADIATOR);
-            t.putInt("Heat", 405); t.putBoolean("ThermalLock", true); m.loadState(t);
-            m.tick(); h.assertTrue(m.heat() == 401 && m.thermalLocked(), "Radiator cools four per tick while recovery remains locked above 400");
-            m.tick(); h.assertTrue(m.heat() == 397 && !m.thermalLocked() && m.movementCost() == 400 && m.movementHeat() == 4,
+            t.putInt("Heat", 407); t.putBoolean("ThermalLock", true); m.loadState(t);
+            m.tick(); h.assertTrue(m.heat() == 401 && m.thermalLocked(), "Radiator cools six per tick while recovery remains locked above 400");
+            m.tick(); h.assertTrue(m.heat() == 395 && !m.thermalLocked() && m.movementCost() == 400 && m.movementHeat() == 1,
                     "Radiator unlocks at the existing 400 boundary and retains base movement costs");
         } finally { clear(p); m.discard(); }
         h.succeed();

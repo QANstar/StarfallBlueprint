@@ -72,10 +72,10 @@ public final class MechMaintenancePlatformGameTests {
     @GameTest(template="empty",timeoutTicks=20)
     public static void sharedBudgetAndSimulation(GameTestHelper h) {
         var be=platform(h);
-        be.energyPort().receiveEnergy(100000,false);
-        h.assertTrue(be.extractWirelessEnergy(20000,true)==20000 && be.storedEnergy()==100000,"Simulation must not spend energy");
-        h.assertTrue(be.extractWirelessEnergy(15000,false)==15000 && be.extractWirelessEnergy(15000,false)==5000,"All consumers share per tick budget");
+        be.energyPort().receiveEnergy(500000,false);
+        h.assertTrue(be.extractWirelessEnergy(100000,true)==100000 && be.storedEnergy()==500000,"Simulation must not spend energy");
+        h.assertTrue(be.extractWirelessEnergy(75000,false)==75000 && be.extractWirelessEnergy(75000,false)==25000,"All consumers share per tick budget");
         h.assertTrue(be.energyPort().extractEnergy(1000,false)==0,"Capability cannot steal stored power");
-        h.runAfterDelay(1,()->{h.assertTrue(be.extractWirelessEnergy(20000,false)==20000,"Next tick restores output budget");h.succeed();});
+        h.runAfterDelay(1,()->{h.assertTrue(be.extractWirelessEnergy(100000,false)==100000,"Next tick restores output budget");h.succeed();});
     }
 }

@@ -61,11 +61,11 @@ public final class BestMechPowerSystems {
         mech.spendSystems(0, HEAT, wear);
     }
 
-    /** Existing receiving port enforces the shared 512 XH/tick external charging budget. */
+    /** Existing receiving port enforces the shared external charging budget; wireless caps at 10,000 XH/tick. */
     public void tickWireless(BestMechEntity mech, UUID owner) {
         if (!wireless || owner == null || mech.level().isClientSide || !mech.ready(0)) return;
         var target = mech.energyPort();
-        int needed = target.receiveEnergy(512, true);
+        int needed = target.receiveEnergy(10_000, true);
         if (needed <= 0) return;
         BlockPos center = mech.blockPosition();
         Vec3 start = mech.position().add(0, 1, 0);
@@ -94,7 +94,7 @@ public final class BestMechPowerSystems {
             if (offered == 0) continue;
             int extracted = Math.clamp(source.extractWirelessEnergy(offered, false), 0, offered);
             if (extracted > 0) target.receiveEnergy(extracted, false);
-            needed = target.receiveEnergy(512, true);
+            needed = target.receiveEnergy(10_000, true);
             if (needed <= 0) return;
         }
     }

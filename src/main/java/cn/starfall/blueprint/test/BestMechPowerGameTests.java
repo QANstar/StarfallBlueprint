@@ -39,22 +39,24 @@ public final class BestMechPowerGameTests {
             ((MechMaintenancePlatformBlockEntity) h.getLevel().getBlockEntity(pos)).configure(center, owner);
         }
         var source = (MechMaintenancePlatformBlockEntity) h.getLevel().getBlockEntity(center);
-        source.energyPort().receiveEnergy(4096, false);
+        source.energyPort().receiveEnergy(30000, false);
         var mech = BestMechs.UNIVERSAL_TYPE.get().create(h.getLevel());
         mech.moveTo(center.getX() + 4.5, center.getY() + 5, center.getZ() + .5, 0, 0);
         var power = new BestMechPowerSystems(); power.installWireless();
         power.tickWireless(mech, java.util.UUID.randomUUID());
-        h.assertTrue(mech.energy() == 0 && source.storedEnergy() == 4096, "Stranger cannot drain private platform");
+        h.assertTrue(mech.energy() == 0 && source.storedEnergy() == 30000, "Stranger cannot drain private platform");
         for (int y = 0; y <= 6; y++) for (int z = -2; z <= 2; z++)
             h.getLevel().setBlock(center.offset(2, y, z), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
         power.tickWireless(mech, owner);
-        h.assertTrue(mech.energy() == 0 && source.storedEnergy() == 4096, "Solid wall blocks wireless");
+        h.assertTrue(mech.energy() == 0 && source.storedEnergy() == 30000, "Solid wall blocks wireless");
         for (int y = 0; y <= 6; y++) for (int z = -2; z <= 2; z++)
             h.getLevel().setBlock(center.offset(2, y, z), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
         power.tickWireless(mech, owner);
-        h.assertTrue(mech.energy() == 512 && source.storedEnergy() == 3584, "Real platform debit equals mech credit");
+        h.assertTrue(mech.energy() == 10000 && source.storedEnergy() == 20000, "Real platform debit equals mech credit");
         power.tickWireless(mech, owner);
-        h.assertTrue(mech.energy() == 512 && source.storedEnergy() == 3584, "Repeated same-tick calls respect receiving budget");
+        h.assertTrue(mech.energy() == 20000 && source.storedEnergy() == 10000, "Second call fills remaining 20k receiving budget");
+        power.tickWireless(mech, owner);
+        h.assertTrue(mech.energy() == 20000 && source.storedEnergy() == 10000, "Repeated same-tick calls respect 20k receiving budget");
         mech.discard(); h.succeed();
     }
     @GameTest(template = "empty")

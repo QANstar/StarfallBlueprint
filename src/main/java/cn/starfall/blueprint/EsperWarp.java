@@ -40,7 +40,7 @@ final class EsperWarp {
             if(((int)(d*2))%3==0)EsperNetworking.fracture(world,EsperNetworking.Pattern.WARP,point,axis,1.15F,24);
         }
         if(cells.isEmpty())return false;
-        jobs.addLast(new Job(p,from,axis,List.copyOf(cells)));
+        if(PlayerManual.allows(p,PlayerManual.ESPER))jobs.addLast(new Job(p,from,axis,List.copyOf(cells)));
         Vec3 stop=end;
         for(var target:world.getEntitiesOfClass(LivingEntity.class,new AABB(from,stop).inflate(1),
                 e->EsperEffects.canAffect(p,e)&&e.getBoundingBox().inflate(.7).clip(from,stop).isPresent())) {
@@ -56,7 +56,7 @@ final class EsperWarp {
         for(int i=0;i<count;i++) {
             Job job=jobs.removeFirst();
             if(world.getPlayerByUUID(job.owner) instanceof ServerPlayer owner && owner.isAlive() && !owner.isSpectator()
-                    && Esper.school(Esper.data(owner))==Esper.School.SPACE && world.getGameTime()<job.until
+                    && PlayerManual.allows(owner,PlayerManual.ESPER) && Esper.school(Esper.data(owner))==Esper.School.SPACE && world.getGameTime()<job.until
                     && !advance(owner,job))jobs.addLast(job);
         }
         if(jobs.isEmpty())JOBS.remove(world);

@@ -8,6 +8,12 @@ import net.minecraft.world.item.WrittenBookItem;
 import net.minecraft.world.item.component.WrittenBookContent;
 
 public final class FieldManualItem extends WrittenBookItem {
+    @Override public net.minecraft.world.InteractionResultHolder<net.minecraft.world.item.ItemStack> use(
+            net.minecraft.world.level.Level level, net.minecraft.world.entity.player.Player player,
+            net.minecraft.world.InteractionHand hand) {
+        if (!level.isClientSide) Progression.open(player);
+        return net.minecraft.world.InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
+    }
     public FieldManualItem(Properties p) {
         super(p.stacksTo(1).component(DataComponents.WRITTEN_BOOK_CONTENT, new WrittenBookContent(
                 Filterable.passThrough("星落蓝图 · 营地手册"), "游子独立团 · 工务组", 0, List.of(

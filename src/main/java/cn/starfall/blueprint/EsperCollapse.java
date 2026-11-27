@@ -29,6 +29,7 @@ final class EsperCollapse {
     }
 
     static void enqueue(ServerPlayer player, Vec3 center, double radius, int skillLevel) {
+        if (!PlayerManual.allows(player, PlayerManual.ESPER)) return;
         var queue = PENDING.computeIfAbsent(player.serverLevel(), world -> new ArrayDeque<>());
         if (queue.size() < 64) queue.addLast(new Excavation(player, center, radius, skillLevel));
     }
@@ -41,7 +42,7 @@ final class EsperCollapse {
         for (int i = queue.size(); i > 0 && budget.available(System.nanoTime()); i--) {
             var work = queue.removeFirst();
             if (!(world.getPlayerByUUID(work.owner) instanceof ServerPlayer player)
-                    || !player.isAlive() || player.isSpectator()) continue;
+                    || !player.isAlive() || player.isSpectator() || !PlayerManual.allows(player, PlayerManual.ESPER)) continue;
             long start = System.nanoTime();
             try {
                 EsperEffects.withHarvest(player, work.skillLevel, () -> excavate(player, work, budget, start));

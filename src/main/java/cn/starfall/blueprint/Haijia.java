@@ -43,7 +43,7 @@ public final class Haijia {
     public static ItemStack stack(String key,int count){return new ItemStack(item(key),count);}
     public static Component text(String key,Object...args){return Component.translatable("hj."+key,args);}
     public static final String[] KNOWLEDGE={"power","orbit","charge","laser","kinetic","weather","flight"};
-    public static boolean knows(Player p,String key){return p.isCreative()||p.getPersistentData().getCompound("HaijiaKnowledge").getBoolean(key);}
+    public static boolean knows(Player p,String key){return java.util.Arrays.asList(KNOWLEDGE).contains(key);}
     public static void register(IEventBus bus){
         TYPES.register(bus);HaijiaSounds.SOUNDS.register(bus);bus.addListener(OrbitalNetworking::register);
         bus.addListener((RegisterCapabilitiesEvent e)->{

@@ -13,7 +13,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
-/** Personal progression uses the original knowledge as its only source of truth. */
+/** Former progression nodes retained as an informational manufacturing guide. */
 public final class Progression {
     public static final DeferredHolder<MenuType<?>, MenuType<ProgressionMenu>> MENU = StarfallBlueprint.MENUS.register(
             "progression", () -> new MenuType<>(ProgressionMenu::new, net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS));
@@ -97,8 +97,8 @@ public final class Progression {
         }
     }
     private static void best(int action,String icon,int xp,List<String> parents,List<Cost> costs,Reward reward,Predicate<Player> learned,Consumer<Player> grant) {
-        register(new Node(BEST.get(action),"best",BestEngineering.actionLabelComponent(action),
-                BestEngineering.actionCostComponent(action),parents,costs,xp,()->CatalogueContent.stack(icon,1),learned,grant,reward));
+        register(new Node(BEST.get(action),"best",Component.translatable("manual.starfall_blueprint.best.title."+action),
+                Component.translatable("manual.starfall_blueprint.best.description."+action),parents,costs,xp,()->CatalogueContent.stack(icon,1),learned,grant,reward));
     }
     static {
         moduleNode("combat_operation","激湍武装控制", "best_combat_mech",List.of("best:servicing"),5);
@@ -109,7 +109,7 @@ public final class Progression {
         moduleNode("changchuan","长川最终强化",BestMechAssembly.MODULES.get(8),List.of("best:confluence","best:engineering_mobility","best:combat_armor"),15);
     }
     private static void moduleNode(String key,String title,String icon,List<String> parents,int xp){
-        register(new Node("best:"+key,"best",Component.literal(title),Component.literal("学习制造及安装权限；实物需在工务装配台另行制作"),parents,
+        register(new Node("best:"+key,"best",Component.literal(title),Component.translatable("manual.starfall_blueprint.component"),parents,
                 List.of(new Cost("load",xp),new Cost("conductor",4),new Cost("sensor",2),new Cost("board",4)),xp,
                 ()->CatalogueContent.stack(icon,1),
                 p->p.getPersistentData().getCompound("BestModuleKnowledge").getBoolean(key),
@@ -125,75 +125,24 @@ public final class Progression {
         return index>=0&&index<Lingchuan.RESEARCH.size()?"lingchuan:"+Lingchuan.RESEARCH.get(index).key():"";
     }
     public static boolean isLearned(Player player,String id) {
-        Node node=BY_ID.get(id); return node!=null&&node.learned().test(player);
+        Node node=BY_ID.get(id); return node!=null;
     }
     public static Set<String> learned(Player player) {
         Set<String> result=new HashSet<>();
-        for(Node node:NODES)if(node.learned().test(player))result.add(node.id());
+        for(Node node:NODES)result.add(node.id());
         return result;
-    }
-    private record Plan(Preview preview,List<ItemStack> inventory) {}
-    private static Plan reject(Status status,String key,Object... args) {
-        return new Plan(new Preview(status,Component.translatable("growth.starfall_blueprint."+key,args)),List.of());
     }
     public static boolean usableMaterial(ItemStack stack) {
         if(stack.isDamageableItem()&&stack.getDamageValue()>=stack.getMaxDamage())return false;
         MaterialBatch batch=stack.get(StarfallBlueprint.BATCH.get());
         return MaterialQuality.of(stack).contamination()==0&&(batch==null||batch.contamination()==0);
     }
-    private static Plan plan(Inventory inventory,String id,Set<String> learned,int xp) {
-        Node node=BY_ID.get(id);
-        if(node==null)return reject(Status.INVALID,"invalid");
-        if(learned.contains(id))return reject(Status.ALREADY_LEARNED,"already_learned");
-        if(!learned.containsAll(node.prerequisites()))return reject(Status.PREREQUISITE,"prerequisite");
-        if(xp<node.experienceLevels())return reject(Status.EXPERIENCE,"experience",node.experienceLevels());
-        List<ItemStack> copies=new ArrayList<>();
-        for(int slot=0;slot<36;slot++)copies.add(inventory.getItem(slot).copy());
-        for(Cost cost:node.costs()) {
-            int remaining=cost.count();
-            for(ItemStack stack:copies)if(CatalogueContent.matches(cost.key(),stack)&&usableMaterial(stack)) {
-                int taken=Math.min(remaining,stack.getCount());stack.shrink(taken);remaining-=taken;
-                if(remaining==0)break;
-            }
-            if(remaining>0)return reject(Status.MATERIALS,"materials");
-        }
-        for(Cost reward:node.reward().items()) {
-            ItemStack output=CatalogueContent.stack(reward.key(),reward.count());
-            for(ItemStack existing:copies) {
-                if(!existing.isEmpty()&&ItemStack.isSameItemSameComponents(existing,output)) {
-                    int moved=Math.min(output.getCount(),Math.max(0,Math.min(inventory.getMaxStackSize(),existing.getMaxStackSize())-existing.getCount()));
-                    existing.grow(moved);output.shrink(moved);
-                    if(output.isEmpty())break;
-                }
-            }
-            for(int slot=0;slot<36&&!output.isEmpty();slot++)if(copies.get(slot).isEmpty()) {
-                int moved=Math.min(output.getCount(),Math.min(inventory.getMaxStackSize(),output.getMaxStackSize()));
-                copies.set(slot,output.copyWithCount(moved));output.shrink(moved);
-            }
-            if(!output.isEmpty())return reject(Status.REWARD_SPACE,"reward_space");
-        }
-        return new Plan(new Preview(Status.READY,Component.translatable("growth.starfall_blueprint.ready",node.experienceLevels())),copies);
-    }
     public static Preview preview(Inventory inventory,String id,Set<String> learned,int xp) {
-        Player player=inventory.player;
-        if(!player.isAlive()||player.isSpectator())return reject(Status.INVALID,"unavailable").preview();
-        return plan(inventory,id,learned,xp).preview();
+        return new Preview(Status.ALREADY_LEARNED,Component.translatable("growth.starfall_blueprint.manual_hint"));
     }
     /** Shared by menus and legacy entry points. Never accepts client prices or knowledge. */
     public static boolean learn(Player player,String id) {
-        if(player.level().isClientSide||!player.isAlive()||player.isSpectator())return false;
-        Plan transaction=plan(player.getInventory(),id,learned(player),player.experienceLevel);
-        if(!transaction.preview().executable()) {
-            player.displayClientMessage(transaction.preview().reason(),true);return false;
-        }
-        Node node=BY_ID.get(id);
-        for(int slot=0;slot<36;slot++)player.getInventory().setItem(slot,transaction.inventory().get(slot));
-        player.giveExperienceLevels(-node.experienceLevels());
-        node.grant().accept(player);
-        player.giveExperiencePoints(node.reward().experiencePoints());
-        player.getInventory().setChanged();player.inventoryMenu.broadcastChanges();player.containerMenu.broadcastChanges();
-        player.displayClientMessage(Component.translatable("growth.starfall_blueprint.learned",node.title()),true);
-        return true;
+        return false; // Legacy research packets cannot charge materials or grant rewards.
     }
     public static void open(Player player) {
         if(!(player instanceof ServerPlayer server)||!player.isAlive()||player.isSpectator())return;

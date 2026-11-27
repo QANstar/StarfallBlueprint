@@ -91,7 +91,7 @@ public final class StarfallBlueprint {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("industry", () -> CreativeModeTab.builder()
             .title(net.minecraft.network.chat.Component.translatable("itemGroup.starfall_blueprint"))
             .icon(() -> new ItemStack(CRYSTAL.get())).displayItems((parameters, output) -> {
-                output.accept(GUIDE.get()); output.accept(Blueprints.BUILDER_ITEM.get());output.accept(Blueprints.PLAN.get());output.accept(Blueprints.SURVEYOR.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get()); output.accept(SUPPLY_TERMINAL_ITEM.get());
+                output.accept(PlayerManual.ITEM.get()); output.accept(GUIDE.get()); output.accept(Blueprints.BUILDER_ITEM.get());output.accept(Blueprints.PLAN.get());output.accept(Blueprints.SURVEYOR.get()); output.accept(BENCH_ITEM.get()); output.accept(TANK_ITEM.get()); output.accept(RAIN_ITEM.get()); output.accept(SUPPLY_TERMINAL_ITEM.get());
                 for (int grade : new int[]{6,12,24}) {
                     ItemStack ore = new ItemStack(RAW.get()); ore.set(BATCH.get(), MaterialBatch.ore(grade, 40)); output.accept(ore);
                 }
@@ -128,7 +128,7 @@ public final class StarfallBlueprint {
         bus.addListener(BlackDogNetworking::register);
         CatalogueContent.initialize(); CatalogueEquipment.initialize(); RopeSystem.initialize();Blueprints.initialize();AggregateMachines.initialize();BestEngineering.initialize();Lingchuan.initialize();
         MechMaintenancePlatforms.initialize();
-        BestMechs.initialize(); BestMechs.register(bus); Progression.initialize(); Haijia.register(bus);
+        BestMechs.initialize(); BestMechs.register(bus); Progression.initialize(); PlayerManual.initialize(); Haijia.register(bus);
         bus.addListener(ProgressionNetworking::register);
         Esper.register(bus);
         CatalogueFluids.register(bus);
@@ -147,6 +147,8 @@ public final class StarfallBlueprint {
         NeoForge.EVENT_BUS.addListener(BlackDogArmor::clonePlayer);
         NeoForge.EVENT_BUS.addListener(BestEngineering::breakSpeed);
         NeoForge.EVENT_BUS.addListener(BestEngineering::clonePlayer);
+        NeoForge.EVENT_BUS.addListener(PlayerManual::login);
+        NeoForge.EVENT_BUS.addListener(PlayerManual::clonePlayer);
         NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST,BestEngineering::breakBlock);
         if (System.getProperty("starfall.verifyRestart") != null)
             cn.starfall.blueprint.test.RestartVerification.register(NeoForge.EVENT_BUS);

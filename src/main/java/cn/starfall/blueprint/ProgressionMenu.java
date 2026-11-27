@@ -19,10 +19,12 @@ public final class ProgressionMenu extends AbstractContainerMenu {
         super(Progression.MENU.get(),id);
         this.inventory=inventory;
         nodeCount=Progression.NODES.size();
-        final int[] mirror=new int[nodeCount+2];
+        final int[] mirror=new int[nodeCount+4];
         data=new ContainerData() {
             @Override public int get(int index) {
                 if(inventory.player.level().isClientSide)return mirror[index];
+                if(index==nodeCount+2)return PlayerManual.allows(inventory.player,PlayerManual.ESPER)?1:0;
+                if(index==nodeCount+3)return PlayerManual.allows(inventory.player,PlayerManual.BLACK_DOG)?1:0;
                 if(index<nodeCount)return Progression.isLearned(inventory.player,Progression.NODES.get(index).id())?1:0;
                 return index==nodeCount?inventory.player.experienceLevel&65535:(inventory.player.experienceLevel>>>16)&65535;
             }
@@ -34,6 +36,7 @@ public final class ProgressionMenu extends AbstractContainerMenu {
         for(int col=0;col<9;col++)addSlot(new Slot(inventory,col,100+col*18,232));
         addDataSlots(data);
     }
+    public boolean allows(int setting) { return data.get(nodeCount+(setting==PlayerManual.ESPER?2:3))!=0; }
     public boolean isLearned(String id) {
         for(int i=0;i<nodeCount;i++)if(Progression.NODES.get(i).id().equals(id))return data.get(i)!=0;
         return false;
@@ -49,9 +52,9 @@ public final class ProgressionMenu extends AbstractContainerMenu {
         return !closed&&player==inventory.player&&player.isAlive()&&!player.isSpectator();
     }
     @Override public boolean clickMenuButton(Player player,int index) {
-        if(player.level().isClientSide||player.containerMenu!=this||!stillValid(player)||index<0||index>=nodeCount)return false;
-        boolean result=Progression.learn(player,Progression.NODES.get(index).id());
-        broadcastChanges();return result;
+        if(player.level().isClientSide||player.containerMenu!=this||!stillValid(player))return false;
+        if(index!=PlayerManual.ESPER&&index!=PlayerManual.BLACK_DOG)return false;
+        PlayerManual.toggle(player,index);broadcastChanges();return true;
     }
     @Override public void removed(Player player) { closed=true;super.removed(player); }
     @Override public ItemStack quickMoveStack(Player player,int index) {

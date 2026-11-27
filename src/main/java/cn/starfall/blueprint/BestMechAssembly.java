@@ -35,7 +35,6 @@ public final class BestMechAssembly {
     public static Component label(int a){a=normalized(a);return Component.literal(a>=120?"拆卸 "+RECIPES.get(a-120).title():a>=100?"安装 "+RECIPES.get(a-100).title():"制造 "+RECIPES.get(a-40).title());}
     public static boolean knows(Player p,String key){return Progression.isLearned(p,"best:"+key);}
     public static int knowledgeMask(Player p){int mask=BestEngineering.hasMechOperation(p)?1<<11:0;for(int i=0;i<KNOWLEDGE.size();i++)if(knows(p,KNOWLEDGE.get(i)))mask|=1<<i;return mask;}
-    private static boolean learned(Player p,String key,int mask){int index=KNOWLEDGE.indexOf(key);return index<0?(mask&(1<<11))!=0:(mask&(1<<index))!=0;}
     private record Plan(BestEngineering.Preview preview,List<ItemStack> inventory) {}
     private static Plan reject(String text,List<BestEngineering.MaterialRequirement> materials){return new Plan(new BestEngineering.Preview(BestEngineering.Status.TARGET,Component.literal(text),materials),List.of());}
     public static BestEngineering.Preview preview(Player p,int action,int knowledge){return plan(p,normalized(action),knowledge).preview();}
@@ -56,7 +55,6 @@ public final class BestMechAssembly {
         if(action>=100){
             int index=action>=120?action-120:action-100;boolean remove=action>=120;ItemStack held=inv.get(p.getInventory().selected);
             if(!ready(held))return reject("主手须持已隔离、存活的收纳机甲",materials);
-            if(!learned(p,KNOWLEDGE.get(index),knowledge))return reject("请先在成长中学习对应组件知识",materials);
             String type=BestMechProgression.type(held);var state=BestMechItem.state(held);int bit=1<<index,mask=BestMechProgression.mask(state);
             if(!BestMechProgression.compatible(type,bit))return reject("组件与机体不兼容",materials);
             if(remove?(mask&bit)==0:(mask&bit)!=0)return reject(remove?"尚未安装":"已经安装",materials);
@@ -76,7 +74,6 @@ public final class BestMechAssembly {
                     materials.add(new BestEngineering.MaterialRequirement(CatalogueContent.stack(type.equals("engineering")?"best_mech":"best_combat_mech",1),1,available));
                 }
             }
-            if(!learned(p,recipe.knowledge(),knowledge))return reject("请先在成长中学习对应知识",materials);
             for(var c:recipe.cost().entrySet()){int need=c.getValue();for(ItemStack s:inv)if(CatalogueContent.matches(c.getKey(),s)&&pristine(s)){int n=Math.min(need,s.getCount());s.shrink(n);need-=n;if(need==0)break;}if(need>0)return reject("材料不足；工具须完好且未储能",materials);}
             ItemStack out=CatalogueContent.stack(recipe.output(),1);
             if(action==55){String error=fuse(inv,out);if(error!=null)return reject(error,materials);}

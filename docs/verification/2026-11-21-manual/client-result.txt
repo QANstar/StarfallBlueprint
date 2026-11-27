@@ -1,0 +1,1 @@
+PASS: both books open the registered manual; articles, visible settings and both real server toggles verified.

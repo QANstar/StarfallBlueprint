@@ -60,7 +60,7 @@ public final class BlackDogPlaytest {
             }
             else if(phase==3&&ticks==4){screenshot("blackdog-laser.png");shot("cannon");phase=4;ticks=0;}
             else if(phase==4&&ticks==5){screenshot("blackdog-mining-cannon.png");server(Progression::open);phase=5;ticks=0;}
-            else if(phase==5&&ticks>=30&&mc.screen instanceof ProgressionTreeScreen){
+            else if(phase==5&&ticks>=30&&mc.screen instanceof ProgressionScreen){
                 screenshot("growth-tree-all.png");
                 for(var child:mc.screen.children())if(child instanceof Button button&&button.getMessage().getString().equals(Component.translatable("growth.starfall_blueprint.category.lingchuan").getString())){button.onPress();break;}
                 phase=6;ticks=0;

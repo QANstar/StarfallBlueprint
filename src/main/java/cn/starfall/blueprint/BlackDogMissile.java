@@ -25,7 +25,7 @@ public final class BlackDogMissile extends Projectile {
         if(!level().isClientSide&&hit.getType()!=HitResult.Type.MISS){
             setPos(hit.getLocation());
             if(hit instanceof EntityHitResult entityHit)entityHit.getEntity().hurt(damageSources().thrown(this,getOwner()),18);
-            level().explode(this,getX(),getY(),getZ(),2f,Level.ExplosionInteraction.MOB);
+            level().explode(this,getX(),getY(),getZ(),2f,getOwner() instanceof net.minecraft.world.entity.player.Player player && PlayerManual.allows(player,PlayerManual.BLACK_DOG) ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE);
             BlackDogWeapons.beam((net.minecraft.server.level.ServerLevel)level(),position(),position(),4);discard();return;
         }
         setPos(position().add(motion));

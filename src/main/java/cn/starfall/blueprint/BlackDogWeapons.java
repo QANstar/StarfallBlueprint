@@ -70,7 +70,9 @@ public final class BlackDogWeapons {
     }
     /** 48 m, five by five bore, at most 1536 successful breaks; each ray stops at protected blocks. */
     public static Vec3 mine(ServerPlayer player,ItemStack watch,Vec3 from,Vec3 direction){
-        var level=player.serverLevel();var checked=new HashSet<BlockPos>();
+        var level=player.serverLevel();
+        if(!PlayerManual.allows(player,PlayerManual.BLACK_DOG))return level.clip(new ClipContext(from,from.add(direction.scale(48)),ClipContext.Block.COLLIDER,ClipContext.Fluid.NONE,player)).getLocation();
+        var checked=new HashSet<BlockPos>();
         Vec3 right=direction.cross(new Vec3(0,1,0)).normalize();if(right.lengthSqr()<.01)right=new Vec3(1,0,0);
         Vec3 up=right.cross(direction).normalize();int broken=0;double range=48;
         var offsets=new ArrayList<int[]>();offsets.add(new int[]{0,0});

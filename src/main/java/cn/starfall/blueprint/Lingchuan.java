@@ -77,7 +77,7 @@ public final class Lingchuan {
             });
         }
     };}
-    public static int knowledge(Player player){return player.getPersistentData().getInt("LingchuanResearch")&65535;}
+    public static int knowledge(Player player){return 65535;}
     public static boolean knows(Player player,int node){return node>=0&&node<RESEARCH.size()&&(knowledge(player)&(1<<node))!=0;}
     public static boolean prerequisites(int mask,int index){
         if(index<0||index>=RESEARCH.size())return false;

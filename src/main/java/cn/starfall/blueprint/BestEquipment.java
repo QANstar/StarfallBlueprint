@@ -61,7 +61,7 @@ public final class BestEquipment {
         lines.add(Component.literal("过热后冷却至400恢复；装配台持主手维修，1钢恢复200耐久"));
         lines.add(Component.literal(stack.getItem() instanceof Frame?"腿部穿戴；基础工务；地面疾跑速度+15%，16XH/刻":"工程钻切；铁级单点采掘；每块256XH、热量120、耐久1"));
         if(stack.getItem() instanceof Frame){
-            lines.add(Component.literal("轻载通行：本人学习后于工位安装、切档或拆回；脱下即停用"));
+            lines.add(Component.literal("轻载通行：在工位安装、切档或拆回；脱下即停用"));
             lines.add(Component.literal("持续地面跨步档：跨步高度+0.4；24XH、热4/刻，站立也耗能"));
             lines.add(Component.literal("跨步档与疾跑助力互斥；地面非疾跑、非潜行且未涉水、骑乘或飞行时工作"));
         }
